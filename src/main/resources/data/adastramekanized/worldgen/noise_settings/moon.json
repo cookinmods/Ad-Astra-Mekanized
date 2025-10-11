@@ -116,54 +116,81 @@
       "argument": {
         "type": "minecraft:blend_density",
         "argument": {
-          "type": "minecraft:add",
+          "type": "minecraft:min",
           "argument1": {
-            "type": "minecraft:mul",
-            "argument1": {
-              "type": "minecraft:y_clamped_gradient",
-              "from_y": -64,
-              "to_y": 320,
-              "from_value": 2.0,
-              "to_value": -2.0
-            },
-            "argument2": 0.8
-          },
-          "argument2": {
             "type": "minecraft:add",
-            "argument1": -0.4,
-            "argument2": {
+            "argument1": {
               "type": "minecraft:mul",
               "argument1": {
-                "type": "minecraft:add",
-                "argument2": {
-                  "type": "minecraft:mul",
-                  "argument1": {
-                    "type": "minecraft:shifted_noise",
-                    "noise": "minecraft:continentalness",
-                    "xz_scale": 0.25,
-                    "y_scale": 0,
-                    "shift_x": "minecraft:shift_x",
-                    "shift_y": 0,
-                    "shift_z": "minecraft:shift_z"
-                  },
-                  "argument2": 0.3
-                },
-                "argument1": {
-                  "type": "minecraft:mul",
-                  "argument1": {
-                    "type": "minecraft:shifted_noise",
-                    "noise": "minecraft:erosion",
-                    "xz_scale": 0.25,
-                    "y_scale": 0,
-                    "shift_x": "minecraft:shift_x",
-                    "shift_y": 0,
-                    "shift_z": "minecraft:shift_z"
-                  },
-                  "argument2": 0.2
-                }
+                "type": "minecraft:y_clamped_gradient",
+                "from_y": -64,
+                "to_y": 320,
+                "from_value": 2.0,
+                "to_value": -2.0
               },
-              "argument2": 0.2
+              "argument2": 0.8
+            },
+            "argument2": {
+              "type": "minecraft:add",
+              "argument1": -0.4,
+              "argument2": {
+                "type": "minecraft:mul",
+                "argument1": {
+                  "type": "minecraft:add",
+                  "argument2": {
+                    "type": "minecraft:mul",
+                    "argument1": {
+                      "type": "minecraft:shifted_noise",
+                      "noise": "minecraft:continentalness",
+                      "xz_scale": 0.25,
+                      "y_scale": 0,
+                      "shift_x": "minecraft:shift_x",
+                      "shift_y": 0,
+                      "shift_z": "minecraft:shift_z"
+                    },
+                    "argument2": 0.3
+                  },
+                  "argument1": {
+                    "type": "minecraft:mul",
+                    "argument1": {
+                      "type": "minecraft:shifted_noise",
+                      "noise": "minecraft:erosion",
+                      "xz_scale": 0.25,
+                      "y_scale": 0,
+                      "shift_x": "minecraft:shift_x",
+                      "shift_y": 0,
+                      "shift_z": "minecraft:shift_z"
+                    },
+                    "argument2": 0.2
+                  }
+                },
+                "argument2": 0.2
+              }
             }
+          },
+          "argument2": {
+            "type": "minecraft:range_choice",
+            "input": "minecraft:y",
+            "min_inclusive": -64.0,
+            "max_exclusive": 64.0,
+            "when_in_range": {
+              "type": "minecraft:add",
+              "argument1": -0.02250000089406967,
+              "argument2": {
+                "type": "minecraft:mul",
+                "argument1": 1.5,
+                "argument2": {
+                  "type": "minecraft:abs",
+                  "argument": {
+                    "type": "minecraft:noise",
+                    "noise": "minecraft:noodle",
+                    "xz_scale": 1.3333333333333333,
+                    "y_scale": 2.6666666666666665
+                  }
+                }
+              }
+            },
+            "when_out_of_range": 64.0
           }
         }
       }

@@ -1,0 +1,26 @@
+{
+  "name": "Ribbits Swamp",
+  "icon": "minecraft:lily_pad",
+  "category": "adastramekanized:known_planets",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(bold)Ribbits Swamp$() is a peaceful swamp world inhabited by the $(o)Ribbits$(), a species of intelligent frog-like villagers who live in charming swamp villages.$(br2)This world features flat, waterlogged terrain perfect for the Ribbits' amphibious lifestyle."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Environment",
+      "text": "$(li)$(bold)Gravity:$() 1.0g (Earth-like)$(li)$(bold)Atmosphere:$() Breathable$(li)$(bold)Temperature:$() Moderate, humid$(li)$(bold)Terrain:$() Flat swamplands with water pools$(li)$(bold)Biomes:$() Swamp, Mangrove Swamp"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Native Life",
+      "text": "$(bold)Ribbits$()$(br)Small frog villagers who:$(li)Build swamp villages$(li)Trade with players$(li)Fish in swamp waters$(li)Cast beneficial magic$(li)Water crops$(li)Play music together$(br2)Also home to vanilla frogs, slimes, and witches."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Resources",
+      "text": "$(li)$(bold)Structures:$() Ribbit swamp villages with unique architecture$(li)$(bold)Trading:$() Ribbits offer plant blocks, maracas, and other swamp goods$(li)$(bold)Caves:$() Flooded cave systems filled with water"
+    }
+  ]
+}

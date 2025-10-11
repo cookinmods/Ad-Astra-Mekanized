@@ -257,6 +257,7 @@ public class PlanetMaker {
         // Mob spawning configuration
         private java.util.Map<String, java.util.List<MobSpawnEntry>> mobSpawns = new java.util.HashMap<>();
         private java.util.Map<String, SpawnCost> spawnCosts = new java.util.HashMap<>();
+        private java.util.Set<String> usedModNamespaces = new java.util.HashSet<>();  // Track mod namespaces for spawn control
         private boolean allowHostileMobs = true;
         private boolean allowPeacefulMobs = true;
         private boolean enableDeepslateOres = true;
@@ -665,6 +666,15 @@ public class PlanetMaker {
         public PlanetBuilder addMobSpawn(String category, String mobId, int weight, int minGroup, int maxGroup) {
             mobSpawns.computeIfAbsent(category, k -> new java.util.ArrayList<>())
                     .add(new MobSpawnEntry(mobId, weight, minGroup, maxGroup));
+
+            // Track mod namespace for spawn control (if not minecraft)
+            if (mobId.contains(":")) {
+                String namespace = mobId.substring(0, mobId.indexOf(":"));
+                if (!namespace.equals("minecraft")) {
+                    usedModNamespaces.add(namespace);
+                }
+            }
+
             return this;
         }
 
@@ -852,6 +862,218 @@ public class PlanetMaker {
         public PlanetBuilder addMowziesMob(String mobName, int weight, int minGroup, int maxGroup) {
             String mobId = "mowziesmobs:" + mobName.toLowerCase();
             return addMobSpawn("monster", mobId, weight, minGroup, maxGroup);
+        }
+
+        /**
+         * Enable Kobolds structure generation (kobold dens) for this planet.
+         * This will allow kobold_den and kobold_den_pirate structures to generate.
+         * Note: Kobolds naturally spawn in forests/taigas at Y=12-32, so ensure your
+         * planet has appropriate biomes if you want structures to actually generate.
+         */
+        public PlanetBuilder enableKoboldsStructures() {
+            com.hecookin.adastramekanized.common.events.ModdedStructureController
+                .whitelistModStructures(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                        AdAstraMekanized.MOD_ID, this.name),
+                    "kobolds");
+            return this;
+        }
+
+        /**
+         * Add Kobolds mobs to this planet with default spawning.
+         * Adds kobold, kobold_warrior, kobold_enchanter, kobold_engineer variants.
+         * @param weight Base spawn weight (recommended: 20-40)
+         */
+        public PlanetBuilder addKoboldsMobs(int weight) {
+            addMobSpawn("monster", "kobolds:kobold", weight, 2, 4);
+            addMobSpawn("monster", "kobolds:kobold_warrior", weight / 2, 1, 2);
+            addMobSpawn("monster", "kobolds:kobold_enchanter", weight / 3, 1, 1);
+            addMobSpawn("monster", "kobolds:kobold_engineer", weight / 2, 1, 2);
+            return this;
+        }
+
+        /**
+         * Add hostile kobold variants (zombies, skeletons, witherbolds).
+         * @param weight Base spawn weight (recommended: 10-20)
+         */
+        public PlanetBuilder addHostileKobolds(int weight) {
+            addMobSpawn("monster", "kobolds:kobold_zombie", weight, 2, 4);
+            addMobSpawn("monster", "kobolds:kobold_skeleton", weight, 2, 4);
+            addMobSpawn("monster", "kobolds:witherbold", weight / 3, 1, 2);
+            return this;
+        }
+
+        /**
+         * Enable Ribbits structure generation (swamp villages) for this planet.
+         * This will allow ribbit swamp villages to generate in swamp biomes.
+         * Note: Ribbits villages spawn in swamp and mangrove swamp biomes.
+         */
+        public PlanetBuilder enableRibbitsStructures() {
+            com.hecookin.adastramekanized.common.events.ModdedStructureController
+                .whitelistModStructures(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                        AdAstraMekanized.MOD_ID, this.name),
+                    "ribbits");
+            return this;
+        }
+
+        /**
+         * Add Ribbits mobs (frog villagers) to this planet.
+         * Ribbits are peaceful creature mobs that live in swamp villages.
+         * @param weight Base spawn weight (recommended: 40-60 for dedicated planet)
+         */
+        public PlanetBuilder addRibbitsMobs(int weight) {
+            // Ribbits spawn as passive creatures (they're villagers, not monsters)
+            addMobSpawn("creature", "ribbits:ribbit", weight, 2, 5);
+            return this;
+        }
+
+        /**
+         * Add MCDoom demons to this planet.
+         * @param preset Choose from: "fodder", "heavy", "super_heavy", "boss", "nether", "end"
+         */
+        public PlanetBuilder addMCDoomPreset(String preset) {
+            switch (preset.toLowerCase()) {
+                case "fodder":
+                    // Weak demons
+                    addMobSpawn("monster", "doom:imp", 20, 2, 4);
+                    addMobSpawn("monster", "doom:zombieman", 15, 2, 3);
+                    addMobSpawn("monster", "doom:shotgunguy", 10, 1, 2);
+                    break;
+                case "heavy":
+                    // Medium demons
+                    addMobSpawn("monster", "doom:pinky", 15, 1, 2);
+                    addMobSpawn("monster", "doom:cacodemon", 10, 1, 2);
+                    addMobSpawn("monster", "doom:revenant", 8, 1, 2);
+                    addMobSpawn("monster", "doom:mancubus", 6, 1, 1);
+                    break;
+                case "super_heavy":
+                    // Strong demons
+                    addMobSpawn("monster", "doom:baron", 8, 1, 2);
+                    addMobSpawn("monster", "doom:archvile", 4, 1, 1);
+                    addMobSpawn("monster", "doom:marauder", 3, 1, 1);
+                    break;
+                case "boss":
+                    // Boss demons (very rare)
+                    addMobSpawn("monster", "doom:cyberdemon", 1, 1, 1);
+                    addMobSpawn("monster", "doom:spidermastermind", 1, 1, 1);
+                    break;
+                case "nether":
+                    // Nether-themed demons
+                    addMobSpawn("monster", "doom:imp", 20, 2, 4);
+                    addMobSpawn("monster", "doom:baron", 10, 1, 2);
+                    addMobSpawn("monster", "doom:mancubus", 8, 1, 1);
+                    addMobSpawn("monster", "doom:lost_soul", 25, 3, 6);
+                    break;
+                case "end":
+                    // End-themed demons (Maykr entities)
+                    addMobSpawn("monster", "doom:maykr_drone", 20, 2, 4);
+                    addMobSpawn("monster", "doom:blood_maykr", 10, 1, 2);
+                    addMobSpawn("monster", "doom:arch_maykr", 2, 1, 1);
+                    break;
+                default:
+                    AdAstraMekanized.LOGGER.warn("Unknown MCDoom preset: {}", preset);
+            }
+            return this;
+        }
+
+        /**
+         * Add individual MCDoom demon.
+         * @param mobName Demon name (e.g., "imp", "baron", "cyberdemon")
+         * @param weight Spawn weight
+         * @param minGroup Minimum group size
+         * @param maxGroup Maximum group size
+         */
+        public PlanetBuilder addMCDoomDemon(String mobName, int weight, int minGroup, int maxGroup) {
+            String mobId = "doom:" + mobName.toLowerCase();
+            return addMobSpawn("monster", mobId, weight, minGroup, maxGroup);
+        }
+
+        /**
+         * Add generic modded mob spawn.
+         * Use this for any mod that isn't specifically supported with helper methods.
+         * @param modNamespace The mod namespace (e.g., "mobs_of_mythology")
+         * @param mobName The mob name without namespace (e.g., "cyclops")
+         * @param category Spawn category (usually "monster" or "creature")
+         * @param weight Spawn weight
+         * @param minGroup Minimum group size
+         * @param maxGroup Maximum group size
+         */
+        public PlanetBuilder addModdedMob(String modNamespace, String mobName, String category, int weight, int minGroup, int maxGroup) {
+            String mobId = modNamespace + ":" + mobName.toLowerCase();
+            return addMobSpawn(category, mobId, weight, minGroup, maxGroup);
+        }
+
+        /**
+         * Add Mobs of Mythology creature.
+         * Namespace: mobs_of_mythology
+         * @param mobName Name like "cyclops", "minotaur", "harpy", etc.
+         * @param weight Spawn weight
+         * @param minGroup Minimum group size
+         * @param maxGroup Maximum group size
+         */
+        public PlanetBuilder addMythologyMob(String mobName, int weight, int minGroup, int maxGroup) {
+            return addModdedMob("mobs_of_mythology", mobName, "monster", weight, minGroup, maxGroup);
+        }
+
+        /**
+         * Add Luminous World creature.
+         * Namespace: luminousworld
+         * @param mobName Name of luminous creature
+         * @param weight Spawn weight
+         * @param minGroup Minimum group size
+         * @param maxGroup Maximum group size
+         */
+        public PlanetBuilder addLuminousMob(String mobName, int weight, int minGroup, int maxGroup) {
+            return addModdedMob("luminousworld", mobName, "creature", weight, minGroup, maxGroup);
+        }
+
+        /**
+         * Add Undead Revamp creature.
+         * Namespace: undead_revamp2
+         * @param mobName Name of undead variant
+         * @param weight Spawn weight
+         * @param minGroup Minimum group size
+         * @param maxGroup Maximum group size
+         */
+        public PlanetBuilder addUndeadRevampMob(String mobName, int weight, int minGroup, int maxGroup) {
+            return addModdedMob("undead_revamp2", mobName, "monster", weight, minGroup, maxGroup);
+        }
+
+        /**
+         * Add Rotten Creatures mob.
+         * Namespace: rottencreatures
+         * @param mobName Name like "burned", "frostbitten", "swampy", "mummy", etc.
+         * @param weight Spawn weight
+         * @param minGroup Minimum group size
+         * @param maxGroup Maximum group size
+         */
+        public PlanetBuilder addRottenCreature(String mobName, int weight, int minGroup, int maxGroup) {
+            return addModdedMob("rottencreatures", mobName, "monster", weight, minGroup, maxGroup);
+        }
+
+        /**
+         * Add Prehistoric Expansion mod creature to this planet.
+         * Namespace: shineals_prehistoric_expansion
+         * @param mobName Name like "tyrannosaurus", "velociraptor", "triceratops", etc.
+         * @param weight Spawn weight
+         * @param minGroup Minimum group size
+         * @param maxGroup Maximum group size
+         */
+        public PlanetBuilder addPrehistoricCreature(String mobName, int weight, int minGroup, int maxGroup) {
+            return addModdedMob("shineals_prehistoric_expansion", mobName, "creature", weight, minGroup, maxGroup);
+        }
+
+        /**
+         * Add Reptilian mod creature to this planet.
+         * Namespace: reptilian
+         * @param mobName Name like "lizard", "chameleon", "iguana", etc.
+         * @param weight Spawn weight
+         * @param minGroup Minimum group size
+         * @param maxGroup Maximum group size
+         */
+        public PlanetBuilder addReptilianCreature(String mobName, int weight, int minGroup, int maxGroup) {
+            return addModdedMob("reptilian", mobName, "creature", weight, minGroup, maxGroup);
         }
 
         /**
@@ -1736,6 +1958,42 @@ public class PlanetMaker {
          */
         public PlanetBuilder addCavePreset(String preset) {
             switch (preset.toLowerCase()) {
+                // ========== NEW VANILLA-ACCURATE PRESETS ==========
+
+                case "minimal_airless":
+                    // For airless planets (Moon, Mercury) - sparse underground tunnels only
+                    caveConfig(0.3f, 2.0f);  // Low frequency, larger scale = rarer
+                    cheeseCaves(false);       // No large caverns
+                    spaghettiCaves(false);    // No winding tunnels
+                    noodleCaves(true);        // Only thin passages
+                    caveHeightRange(-64, 64); // Deep underground only
+                    ravineConfig(0.01f, 1.5f); // Very rare surface cracks
+                    break;
+
+                case "balanced_vanilla":
+                    // Vanilla-accurate cave generation for habitable planets
+                    caveConfig(1.0f, 1.0f);   // Standard frequency and size
+                    caveYScale(0.5f);         // Vanilla vertical scale
+                    cheeseCaves(true);        // Large caverns
+                    spaghettiCaves(true);     // Winding tunnels
+                    noodleCaves(true);        // Thin passages
+                    caveHeightRange(-64, 320); // Full world height
+                    ravineConfig(0.1f, 3.0f);  // Standard ravines
+                    break;
+
+                case "dramatic_alien":
+                    // Enhanced cave systems for alien worlds
+                    caveConfig(1.5f, 0.8f);   // Higher frequency, tighter scale = more caves
+                    caveYScale(0.4f);         // More vertical caves
+                    cheeseCaves(true);        // Large dramatic caverns
+                    spaghettiCaves(true);     // Dense tunnel networks
+                    noodleCaves(true);        // Many thin passages
+                    caveHeightRange(-64, 256); // Extended range
+                    ravineConfig(0.2f, 4.0f);  // Frequent deep ravines
+                    break;
+
+                // ========== LEGACY PRESETS (KEPT FOR COMPATIBILITY) ==========
+
                 case "standard":
                     caveConfig(1.0f, 1.0f);
                     cheeseCaves(true);
@@ -2060,7 +2318,28 @@ public class PlanetMaker {
             // Generate Patchouli entry and unlock advancement
             generatePatchouliEntry();
             generateUnlockAdvancement();
+            // Register modded mob spawn whitelist
+            registerModdedMobWhitelist();
             return this;
+        }
+
+        /**
+         * Register this planet's modded mob whitelist with the spawn controller
+         */
+        private void registerModdedMobWhitelist() {
+            if (usedModNamespaces.isEmpty()) {
+                return; // No modded mobs, nothing to register
+            }
+
+            net.minecraft.resources.ResourceLocation dimensionId =
+                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                    AdAstraMekanized.MOD_ID, this.name);
+
+            // Register each used mod namespace for this dimension
+            for (String modNamespace : usedModNamespaces) {
+                com.hecookin.adastramekanized.common.events.ModdedMobSpawnController
+                    .registerPlanetMobWhitelist(dimensionId, modNamespace);
+            }
         }
 
         /**
@@ -2782,40 +3061,53 @@ public class PlanetMaker {
     }
 
     /**
-     * Create cave density functions for carving
+     * Create cave density functions for carving (vanilla-accurate implementation)
+     * Cave density should be NEGATIVE where caves form, positive where solid.
+     * The final_density uses min() operation to carve caves into terrain.
      */
     private static JsonObject createCaveDensity(PlanetBuilder planet) {
-        JsonObject caves = new JsonObject();
-
         if (planet.caveFrequency <= 0) {
-            // No caves - return a constant 0 (no carving)
-            caves.addProperty("type", "minecraft:constant");
-            caves.addProperty("argument", 0.0);
-            return caves;
+            // No caves - return very high positive value (always solid)
+            JsonObject noCaves = new JsonObject();
+            noCaves.addProperty("type", "minecraft:constant");
+            noCaves.addProperty("argument", 64.0);  // High positive = no carving
+            return noCaves;
         }
 
-        // Create combined cave carving function
-        caves.addProperty("type", "minecraft:max");
+        // Build cave system using vanilla-style min/max combinations
+        JsonObject caveSystem = new JsonObject();
 
-        JsonArray caveTypes = new JsonArray();
+        // Start with the innermost cave type and work outward
+        JsonObject currentLayer = null;
 
-        // Cheese caves (large open caverns)
+        // Cheese caves (large open caverns) - vanilla-accurate
         if (planet.enableCheeseCaves) {
             JsonObject cheese = new JsonObject();
-            cheese.addProperty("type", "minecraft:mul");
+            cheese.addProperty("type", "minecraft:add");
 
+            // Base threshold for cheese caves (vanilla uses 0.27)
+            double cheeseThreshold = 0.27 * planet.caveFrequency;
+            cheese.addProperty("argument1", cheeseThreshold);
+
+            // Cheese noise
             JsonObject cheeseNoise = new JsonObject();
             cheeseNoise.addProperty("type", "minecraft:noise");
             cheeseNoise.addProperty("noise", "minecraft:cave_cheese");
             cheeseNoise.addProperty("xz_scale", 1.0 / planet.caveSize);
-            cheeseNoise.addProperty("y_scale", 1.0 / (planet.caveSize * planet.caveYScale));
-            cheese.add("argument1", cheeseNoise);
+            cheeseNoise.addProperty("y_scale", (2.0/3.0) / (planet.caveSize * planet.caveYScale));  // Vanilla uses 0.6666...
+            cheese.add("argument2", cheeseNoise);
 
-            cheese.addProperty("argument2", -planet.caveFrequency * 0.15);  // Reduced from 0.3 to prevent cheese terrain
-            caveTypes.add(cheese);
+            // Clamp cheese caves between -1 and 1
+            JsonObject clampedCheese = new JsonObject();
+            clampedCheese.addProperty("type", "minecraft:clamp");
+            clampedCheese.add("input", cheese);
+            clampedCheese.addProperty("min", -1.0);
+            clampedCheese.addProperty("max", 1.0);
+
+            currentLayer = clampedCheese;
         }
 
-        // Spaghetti caves (winding tunnels)
+        // Spaghetti caves (winding tunnels) - combine with cheese using min
         if (planet.enableSpaghettiCaves) {
             JsonObject spaghetti = new JsonObject();
             spaghetti.addProperty("type", "minecraft:add");
@@ -2827,39 +3119,85 @@ public class PlanetMaker {
             spaghettiNoise.addProperty("y_scale", 1.0 / (planet.caveSize * planet.caveYScale));
             spaghetti.add("argument1", spaghettiNoise);
 
-            JsonObject spaghettiModulator = new JsonObject();
-            spaghettiModulator.addProperty("type", "minecraft:noise");
-            spaghettiModulator.addProperty("noise", "minecraft:spaghetti_roughness");
-            spaghettiModulator.addProperty("xz_scale", 1.0 / planet.caveSize);
-            spaghettiModulator.addProperty("y_scale", 1.0 / (planet.caveSize * planet.caveYScale));
-            spaghetti.add("argument2", spaghettiModulator);
+            JsonObject spaghettiRoughness = new JsonObject();
+            spaghettiRoughness.addProperty("type", "minecraft:noise");
+            spaghettiRoughness.addProperty("noise", "minecraft:spaghetti_roughness");
+            spaghettiRoughness.addProperty("xz_scale", 1.0 / planet.caveSize);
+            spaghettiRoughness.addProperty("y_scale", 1.0 / (planet.caveSize * planet.caveYScale));
+            spaghetti.add("argument2", spaghettiRoughness);
 
-            caveTypes.add(spaghetti);
-        }
-
-        // Noodle caves (thin winding tunnels)
-        if (planet.enableNoodleCaves) {
-            JsonObject noodle = new JsonObject();
-            noodle.addProperty("type", "minecraft:noise");
-            noodle.addProperty("noise", "minecraft:noodle");
-            noodle.addProperty("xz_scale", 0.1 / (planet.caveSize * 0.5));
-            noodle.addProperty("y_scale", 0.1 / (planet.caveSize * planet.caveYScale * 0.5));
-            caveTypes.add(noodle);
-        }
-
-        if (caveTypes.size() == 0) {
-            caves.addProperty("type", "minecraft:constant");
-            caves.addProperty("argument", 0.0);
-        } else if (caveTypes.size() == 1) {
-            return caveTypes.get(0).getAsJsonObject();
-        } else {
-            caves.add("argument1", caveTypes.get(0));
-            if (caveTypes.size() > 1) {
-                caves.add("argument2", caveTypes.get(1));
+            // Combine with previous layer
+            if (currentLayer != null) {
+                JsonObject combined = new JsonObject();
+                combined.addProperty("type", "minecraft:min");
+                combined.add("argument1", currentLayer);
+                combined.add("argument2", spaghetti);
+                currentLayer = combined;
+            } else {
+                currentLayer = spaghetti;
             }
         }
 
-        return caves;
+        // Noodle caves (thin winding tunnels) - vanilla-accurate with ridge noise
+        if (planet.enableNoodleCaves) {
+            JsonObject noodle = new JsonObject();
+            noodle.addProperty("type", "minecraft:add");
+
+            // Base thickness (vanilla: -0.075)
+            noodle.addProperty("argument1", -0.075 * planet.caveFrequency);
+
+            // Ridge-based noodle generation (vanilla uses two ridge noises)
+            JsonObject noodleRidges = new JsonObject();
+            noodleRidges.addProperty("type", "minecraft:mul");
+            noodleRidges.addProperty("argument1", 1.5);  // Vanilla multiplier
+
+            JsonObject ridgeA = new JsonObject();
+            ridgeA.addProperty("type", "minecraft:abs");
+            JsonObject ridgeANoise = new JsonObject();
+            ridgeANoise.addProperty("type", "minecraft:noise");
+            ridgeANoise.addProperty("noise", "minecraft:noodle");
+            ridgeANoise.addProperty("xz_scale", 2.6666666666666665 / planet.caveSize);  // Vanilla scale
+            ridgeANoise.addProperty("y_scale", 2.6666666666666665 / (planet.caveSize * planet.caveYScale));
+            ridgeA.add("argument", ridgeANoise);
+
+            noodleRidges.add("argument2", ridgeA);
+            noodle.add("argument2", noodleRidges);
+
+            // Combine with previous layer
+            if (currentLayer != null) {
+                JsonObject combined = new JsonObject();
+                combined.addProperty("type", "minecraft:min");
+                combined.add("argument1", currentLayer);
+                combined.add("argument2", noodle);
+                currentLayer = combined;
+            } else {
+                currentLayer = noodle;
+            }
+        }
+
+        // Apply Y-range limits if configured
+        if (planet.caveMinY > -64 || planet.caveMaxY < 320) {
+            JsonObject rangeChoice = new JsonObject();
+            rangeChoice.addProperty("type", "minecraft:range_choice");
+            rangeChoice.addProperty("input", "minecraft:y");
+            rangeChoice.addProperty("min_inclusive", (double) planet.caveMinY);
+            rangeChoice.addProperty("max_exclusive", (double) planet.caveMaxY);
+            rangeChoice.add("when_in_range", currentLayer != null ? currentLayer : new JsonObject());
+            rangeChoice.addProperty("when_out_of_range", 64.0);  // No caves outside range
+            currentLayer = rangeChoice;
+        }
+
+        return currentLayer != null ? currentLayer : createNoCaveDensity();
+    }
+
+    /**
+     * Create a density function that prevents all cave generation
+     */
+    private static JsonObject createNoCaveDensity() {
+        JsonObject noCaves = new JsonObject();
+        noCaves.addProperty("type", "minecraft:constant");
+        noCaves.addProperty("argument", 64.0);
+        return noCaves;
     }
 
     /**
@@ -2938,24 +3276,16 @@ public class PlanetMaker {
         argument2.add("argument2", mulArgument2);
         blendArgument.add("argument2", argument2);
 
-        // Now subtract cave density if caves are enabled
+        // Carve caves using vanilla min() pattern
         if (planet.caveFrequency > 0 &&
             (planet.enableCheeseCaves || planet.enableSpaghettiCaves || planet.enableNoodleCaves)) {
 
-            // Use min operation to carve out caves properly
+            // Use min operation to carve caves (vanilla pattern)
+            // Cave density is already negative where caves form
             JsonObject withCaves = new JsonObject();
             withCaves.addProperty("type", "minecraft:min");
-            withCaves.add("argument1", blendArgument);
-
-            // Wrap cave density in multiplication by -1 to make it negative for carving
-            JsonObject negativeCaves = new JsonObject();
-            negativeCaves.addProperty("type", "minecraft:mul");
-
-            JsonObject caveDensity = createCaveDensity(planet);
-            negativeCaves.add("argument1", caveDensity);
-            negativeCaves.addProperty("argument2", -1.0);
-
-            withCaves.add("argument2", negativeCaves);
+            withCaves.add("argument1", blendArgument);  // Terrain density
+            withCaves.add("argument2", createCaveDensity(planet));  // Cave density (negative = air)
 
             argument.add("argument", withCaves);
         } else {

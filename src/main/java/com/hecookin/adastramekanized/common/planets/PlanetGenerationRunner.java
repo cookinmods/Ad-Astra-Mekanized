@@ -362,11 +362,8 @@ public class PlanetGenerationRunner {
             .veinToggle(0.7f)  // Enable ore veins
             .veinRidged(0.5f)  // Some ridged veins
             .veinGap(0.4f)     // Moderate vein gaps
-            // CAVES DISABLED for stable terrain
-            .caveConfig(.1f, .5f)  // No caves
-            .cheeseCaves(false)      // Disabled
-            .spaghettiCaves(false)   // Disabled
-            .noodleCaves(false)      // Disabled
+            // MINIMAL CAVES for airless moon
+            .addCavePreset("minimal_airless")  // Sparse underground tunnels only
             // Custom Moon biomes (will be properly created)
             .clearBiomes()  // Clear default biomes
             .addBiome("adastramekanized:moon_highlands", -0.8f, -0.9f, 0.4f, 0.2f, 0.0f, 0.1f, "Lunar Highlands")
@@ -432,14 +429,8 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)  // Enable water in caves
             .oreVeinsEnabled(true)
-            // EXTREME CAVE SETTINGS
-            .caveConfig(1.0f, 3.0f)  // Maximum frequency and size
-            .caveYScale(0.2f)  // Tall caves
-            .caveHeightRange(-64, 50)  // Caves throughout world
-            .cheeseCaves(false)  // Enable all cave types
-            .spaghettiCaves(true)
-            .noodleCaves(true)
-            .ravineConfig(0.2f, 2.0f)  // Maximum ravines
+            // EXTREME DRAMATIC CAVES for testing
+            .addCavePreset("dramatic_alien")  // Maximum cave generation
             // Add cave decorations
             .addCaveDecoration("minecraft:glowstone", 0.1f, -64, 256, true)  // Light sources
             .addCaveDecoration("minecraft:amethyst_block", 0.05f, -64, 128, false)
@@ -516,16 +507,18 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // CAVES DISABLED for stable terrain
-            .caveConfig(0.0f, 0.0f)  // No caves for now
-            .cheeseCaves(false)      // Disabled
-            .spaghettiCaves(false)   // Disabled
-            .noodleCaves(false)      // Disabled
-            // Mob spawning - Mars hostile environment
+            // DRAMATIC CAVES for alien Mars
+            .addCavePreset("dramatic_alien")  // Enhanced cave networks
+            // Mob spawning - Mars hostile environment with MCDoom demons
             .addMobSpawn("monster", "minecraft:husk", 50, 2, 4)  // Desert zombies common on Mars
             .addMobSpawn("monster", "minecraft:spider", 30, 1, 2)  // Cave spiders in Martian caves
             .addMobSpawn("monster", "minecraft:phantom", 10, 1, 2)  // Flying threats in thin atmosphere
             .addMobSpawn("monster", "minecraft:enderman", 15, 1, 1)  // Dimensional visitors
+            // MCDoom entities - Hell on Mars (TESTING)
+            .addMCDoomPreset("fodder")         // Imps, zombiemen, shotgunguys
+            .addMCDoomDemon("pinky", 12, 1, 2)      // Charging demons
+            .addMCDoomDemon("cacodemon", 8, 1, 2)   // Flying demons
+            .addMCDoomDemon("baron", 5, 1, 1)       // Baron of Hell (rare)
             // Add custom biomes for Mars
             .clearBiomes()
             .addBiome("adastramekanized:mars_highlands", -0.2f, -0.7f, 0.6f, -0.1f, 0.5f, 0.0f, "Martian Highlands")
@@ -627,11 +620,8 @@ public class PlanetGenerationRunner {
                 .noiseSize(4, 4)                // MAX: Highest resolution noise (4,4 is maximum)
                 .seaLevel(0)                    // MIN: No sea level (all lava)
 
-                // ========== CAVES DISABLED for stable terrain ==========
-                .caveConfig(0.0f, 0.0f)         // No caves for now
-                .cheeseCaves(false)             // Disabled
-                .spaghettiCaves(false)          // Disabled
-                .noodleCaves(false)             // Disabled
+                // ========== DRAMATIC CAVES for hellish terrain ==========
+                .addCavePreset("dramatic_alien")  // Maximum cave drama for Hemphy
 
                 // ========== EXTREME GENERATION CONTROLS ==========
                 .disableMobGeneration(false)    // Enable mobs for hellish world
@@ -769,11 +759,8 @@ public class PlanetGenerationRunner {
                 .noiseSize(2, 1)                // AVERAGE: Standard noise resolution
                 .seaLevel(64)                   // AVERAGE: Normal sea level
 
-                // ========== CAVE GENERATION FOR TEST PLANET ==========
-                .caveConfig(0.2f, 0.7f)         // TESTING: Lower for stable terrain
-                .cheeseCaves(true)              // TESTING: Some large caverns
-                .spaghettiCaves(false)          // TESTING: Disabled to prevent spaghetti
-                .noodleCaves(false)             // TESTING: Simplified cave system
+                // ========== BALANCED VANILLA CAVES FOR TESTING ==========
+                .addCavePreset("balanced_vanilla")  // Standard Earth-like cave generation
 
                 // ========== BALANCED GENERATION ==========
                 .disableMobGeneration(false)    // AVERAGE: Allow mobs
@@ -920,10 +907,8 @@ public class PlanetGenerationRunner {
                 .addMobSpawn("monster", "minecraft:spider", 30, 1, 2)
                 .addMobSpawn("monster", "minecraft:witch", 10, 1, 1)
 
-                // ========== CAVES WITH GROTTOL ==========
-                .caveConfig(0.125f, 0.3f)        // Standard cave generation
-                .cheeseCaves(true)               // Large open caves
-                .spaghettiCaves(true)            // Winding cave systems
+                // ========== DRAMATIC JUNGLE CAVES ==========
+                .addCavePreset("dramatic_alien")  // Enhanced caves for jungle world
 
                 // Underground Mowzie's Mobs
                 .addMowziesMob("grottol", 40, 1, 1)  // Cave dwellers
@@ -936,10 +921,10 @@ public class PlanetGenerationRunner {
 
                 // ========== CUSTOM JUNGLE BIOMES ==========
                 .clearBiomes()
-                .addBiome("minecraft:jungle", 0.40f)
-                .addBiome("minecraft:sparse_jungle", 0.25f)
-                .addBiome("minecraft:bamboo_jungle", 0.20f)
-                .addBiome("minecraft:swamp", 0.15f)
+                .addBiome("adastramekanized:primal_jungle", 0.8f, 0.8f, 0.1f, -0.2f, 0.0f, 0.0f, "Primal Jungle")
+                .addBiome("adastramekanized:primal_jungle_sparse", 0.7f, 0.5f, 0.2f, -0.1f, 0.1f, 0.0f, "Primal Sparse Jungle")
+                .addBiome("adastramekanized:primal_bamboo", 0.8f, 0.7f, 0.0f, -0.3f, 0.0f, 0.1f, "Primal Bamboo")
+                .addBiome("adastramekanized:primal_swamp", 0.7f, 0.9f, -0.2f, -0.1f, 0.2f, 0.0f, "Primal Swamp")
 
                 .generate();
 
@@ -995,10 +980,8 @@ public class PlanetGenerationRunner {
                 .addMobSpawn("creature", "minecraft:donkey", 8, 1, 2)
                 .addMobSpawn("monster", "minecraft:husk", 30, 2, 4)
 
-                // ========== MINIMAL CAVES ==========
-                .caveConfig(0.05f, 0.1f)         // Few caves
-                .cheeseCaves(false)              // No large caves
-                .spaghettiCaves(true)            // Some winding caves
+                // ========== BALANCED SAVANNA CAVES ==========
+                .addCavePreset("balanced_vanilla")  // Standard caves for tribal world
 
                 // ========== ATMOSPHERIC EFFECTS ==========
                 .skyColor(0xFFD700)              // Golden savanna sky
@@ -1008,9 +991,147 @@ public class PlanetGenerationRunner {
 
                 // ========== SAVANNA BIOMES ==========
                 .clearBiomes()
-                .addBiome("minecraft:savanna", 0.50f)
-                .addBiome("minecraft:savanna_plateau", 0.30f)
-                .addBiome("minecraft:desert", 0.20f)
+                .addBiome("adastramekanized:tribal_savanna", 0.8f, -0.4f, 0.3f, 0.0f, 0.0f, 0.0f, "Tribal Savanna")
+                .addBiome("adastramekanized:tribal_plateau", 0.7f, -0.5f, 0.5f, 0.2f, 0.3f, 0.1f, "Tribal Plateau")
+                .addBiome("adastramekanized:tribal_desert", 0.9f, -0.9f, 0.6f, 0.3f, 0.1f, -0.1f, "Tribal Desert")
+
+                .generate();
+
+        // CRETACEOUS - Prehistoric Expansion test planet (Jurassic/Cretaceous era)
+        registerPlanet("cretaceous")
+                .gravity(1.0f)  // Earth-like gravity
+
+                // ========== LUSH PREHISTORIC TERRAIN ==========
+                .continentalScale(10.0f)         // Large landmasses for roaming
+                .erosionScale(6.0f)              // Moderate erosion
+                .ridgeScale(4.0f)                // Some mountain ranges
+                .heightVariation(10.0f, 6.0f, 4.0f, 2.0f)  // Varied elevation
+
+                // ========== TROPICAL CLIMATE ==========
+                .temperatureScale(4.0f)          // Warm climate
+                .humidityScale(5.0f)             // Very humid
+                .weirdnessScale(2.0f)            // Some variety
+                .densityFactor(1.2f)             // Denser terrain
+                .densityOffset(0.1f)             // Slight elevation
+
+                // ========== ROLLING HILLS ==========
+                .jaggednessScale(0.25f)          // Gentle hills
+                .jaggednessNoiseScale(500.0f)    // Medium features
+                .depthFactor(1.0f)
+                .depthOffset(0.0f)
+                .terrainFactor(1.1f)             // Slightly elevated
+
+                // ========== PREHISTORIC SURFACE ==========
+                .surfaceBlock("minecraft:grass_block")
+                .subsurfaceBlock("minecraft:dirt")
+                .deepBlock("minecraft:stone")
+                .defaultBlock("minecraft:stone")
+                .bedrockBlock("minecraft:bedrock")
+
+                // ========== WORLD STRUCTURE ==========
+                .worldDimensions(-64, 256)
+                .seaLevel(63)
+                .disableMobGeneration(false)
+
+                // ========== PREHISTORIC CREATURES ==========
+                .clearAllMobSpawns()
+
+                // Herbivores (common)
+                .addPrehistoricCreature("amargasaurus", 25, 1, 3)
+                .addPrehistoricCreature("dodo", 30, 2, 4)
+
+                // Carnivores (less common)
+                .addPrehistoricCreature("carnotaurus", 8, 1, 1)
+
+                // Flying reptiles
+                .addPrehistoricCreature("dimorphadon", 20, 1, 3)
+
+                // Aquatic prehistoric (if in water)
+                .addPrehistoricCreature("dunkleosteus", 15, 1, 2)
+                .addPrehistoricCreature("anomalocaris", 12, 1, 2)
+
+                // ========== BALANCED CAVES ==========
+                .addCavePreset("balanced_vanilla")  // Standard cave generation
+
+                // ========== ATMOSPHERIC EFFECTS ==========
+                .skyColor(0x87CEEB)              // Clear blue sky
+                .fogColor(0x90EE90)              // Light green fog
+                .hasAtmosphere(true)
+                .ambientLight(0.9f)              // Bright sunlight
+
+                // ========== PREHISTORIC BIOMES ==========
+                .clearBiomes()
+                .addBiome("adastramekanized:cretaceous_jungle", 0.8f, 0.7f, 0.2f, -0.1f, 0.0f, 0.0f, "Cretaceous Jungle")
+                .addBiome("adastramekanized:cretaceous_plains", 0.6f, 0.4f, 0.0f, 0.0f, 0.0f, 0.0f, "Cretaceous Plains")
+                .addBiome("adastramekanized:cretaceous_swamp", 0.7f, 0.8f, -0.2f, -0.1f, 0.1f, 0.0f, "Cretaceous Swamp")
+                .addBiome("adastramekanized:cretaceous_forest", 0.5f, 0.5f, 0.1f, -0.1f, 0.0f, 0.0f, "Cretaceous Forest")
+
+                .generate();
+
+        // SCALELAND - Reptilian test planet (modern reptile world)
+        registerPlanet("scaleland")
+                .gravity(0.9f)  // Slightly lighter
+
+                // ========== DIVERSE TERRAIN ==========
+                .continentalScale(8.0f)          // Medium landmasses
+                .erosionScale(5.0f)              // Moderate erosion
+                .ridgeScale(3.0f)                // Some ridges
+                .heightVariation(7.0f, 4.0f, 2.0f, 1.0f)  // Varied elevation
+
+                // ========== WARM CLIMATE ==========
+                .temperatureScale(4.5f)          // Warm
+                .humidityScale(3.0f)             // Moderate humidity
+                .weirdnessScale(2.5f)            // Varied terrain
+                .densityFactor(1.0f)
+                .densityOffset(0.0f)
+
+                // ========== MODERATE HILLS ==========
+                .jaggednessScale(0.3f)           // Some jaggedness
+                .jaggednessNoiseScale(450.0f)    // Medium features
+                .depthFactor(1.0f)
+                .depthOffset(0.0f)
+                .terrainFactor(1.0f)
+
+                // ========== ROCKY SURFACE ==========
+                .surfaceBlock("minecraft:grass_block")
+                .subsurfaceBlock("minecraft:coarse_dirt")
+                .deepBlock("minecraft:stone")
+                .defaultBlock("minecraft:stone")
+                .bedrockBlock("minecraft:bedrock")
+
+                // ========== WORLD STRUCTURE ==========
+                .worldDimensions(-64, 256)
+                .seaLevel(63)
+                .disableMobGeneration(false)
+
+                // ========== REPTILIAN CREATURES ==========
+                .clearAllMobSpawns()
+
+                // Various reptilian species (verified entity IDs from mod)
+                .addReptilianCreature("gecko", 40, 2, 5)
+                .addReptilianCreature("chameleon", 25, 1, 2)
+                .addReptilianCreature("alligator", 20, 1, 2)
+                .addReptilianCreature("caiman", 20, 1, 2)
+                .addReptilianCreature("crocodile", 15, 1, 2)
+                .addReptilianCreature("komodo_dragon", 10, 1, 1)
+                .addReptilianCreature("giant_tortoise", 15, 1, 2)
+
+                // ========== BALANCED CAVES ==========
+                .addCavePreset("balanced_vanilla")  // Standard cave generation
+
+                // ========== ATMOSPHERIC EFFECTS ==========
+                .skyColor(0xFFD700)              // Golden sky
+                .fogColor(0xDDA15E)              // Warm fog
+                .hasAtmosphere(true)
+                .ambientLight(0.85f)             // Bright
+
+                // ========== REPTILIAN BIOMES ==========
+                .clearBiomes()
+                .addBiome("adastramekanized:scaleland_desert", 0.9f, -0.8f, 0.5f, 0.2f, 0.0f, -0.1f, "Scaleland Desert")
+                .addBiome("adastramekanized:scaleland_savanna", 0.7f, -0.4f, 0.3f, 0.0f, 0.0f, 0.1f, "Scaleland Savanna")
+                .addBiome("adastramekanized:scaleland_badlands", 0.8f, -0.6f, 0.6f, 0.3f, 0.2f, -0.2f, "Scaleland Badlands")
+                .addBiome("adastramekanized:scaleland_plains", 0.5f, 0.2f, 0.1f, -0.1f, 0.0f, 0.0f, "Scaleland Plains")
+                .addBiome("adastramekanized:scaleland_thicket", 0.6f, 0.5f, 0.0f, -0.2f, 0.1f, 0.0f, "Scaleland Thicket")
 
                 .generate();
 
@@ -1034,10 +1155,7 @@ public class PlanetGenerationRunner {
                 .disableMobGeneration(true)  // No spawning in orbit
                 .aquifersEnabled(false)
                 .oreVeinsEnabled(false)
-                .caveConfig(0.0f, 0.0f)
-                .cheeseCaves(false)
-                .spaghettiCaves(false)
-                .noodleCaves(false)
+                .addCavePreset("none")  // No caves in void space
                 // ========== NO LIQUIDS ==========
                 .oceanConfig("minecraft:air", 0, 0.0f)          // No oceans
                 .lakeConfig("minecraft:air", 0.0f)              // No lakes
@@ -1090,6 +1208,7 @@ public class PlanetGenerationRunner {
                 .cloudsEnabled(true)
                 .rainEnabled(true)
                 .starsVisibleDuringDay(false)
+                .addCavePreset("dramatic_alien")  // Volcanic-like caves for Venus
                 .generate();
 
         // MERCURY - Airless metallic world
@@ -1106,6 +1225,18 @@ public class PlanetGenerationRunner {
                 .starsVisibleDuringDay(true)
                 .starCount(30000)
                 .starBrightness(2.0f)
+                // Minimal caves for airless Mercury
+                .addCavePreset("minimal_airless")  // Sparse underground tunnels
+                // Kobolds structures and mobs - Underground hostile mobs on Mercury (TESTING)
+                .enableKoboldsStructures()     // Allow kobold dens to generate
+                .addKoboldsMobs(25)            // Hostile kobolds (monster spawns)
+                .addMobSpawn("monster", "kobolds:kobold_rascal", 15, 1, 2)  // Special rascals
+                .addMobSpawn("monster", "kobolds:kobold_pirate", 10, 1, 2)  // Pirate kobolds
+                // Custom Mercury biomes for kobold structures
+                .clearBiomes()
+                .addBiome("adastramekanized:mercury_caverns", 0.4f, -0.3f, 0.2f, 0.1f, 0.0f, 0.0f, "Mercury Caverns")
+                .addBiome("adastramekanized:mercury_tunnels", 0.2f, -0.2f, -0.1f, -0.2f, 0.1f, 0.1f, "Mercury Tunnels")
+                .addBiome("adastramekanized:mercury_wastes", -0.5f, -0.8f, 0.8f, 0.3f, 0.0f, -0.2f, "Mercury Wastes")
                 .generate();
 
         // GLACIO - Icy world with thin atmosphere
@@ -1121,6 +1252,7 @@ public class PlanetGenerationRunner {
                 .rainEnabled(false)
                 .snowEnabled(true)
                 .starsVisibleDuringDay(false)
+                .addCavePreset("frozen")  // Ice caves
                 .generate();
 
         // EARTH_EXAMPLE - Earth-like breathable world
@@ -1135,6 +1267,7 @@ public class PlanetGenerationRunner {
                 .cloudsEnabled(true)
                 .rainEnabled(true)
                 .starsVisibleDuringDay(false)
+                .addCavePreset("balanced_vanilla")  // Standard Earth caves
                 .generate();
 
         // BINARY_WORLD - Toxic atmosphere with dual stars
@@ -1149,7 +1282,165 @@ public class PlanetGenerationRunner {
                 .cloudsEnabled(true)
                 .rainEnabled(true)
                 .starsVisibleDuringDay(false)
+                .addCavePreset("dramatic_alien")  // Alien cave networks
                 .generate();
+
+        // ========== RIBBITS TEST PLANET ==========
+        // RIBBITS_SWAMP - Frog villager test planet with swamp villages
+        registerPlanet("ribbits_swamp")
+                .gravity(1.0f)
+                .surfaceBlock("minecraft:grass_block")
+                .subsurfaceBlock("minecraft:mud")
+                .deepBlock("minecraft:deepslate")
+                .skyColor(0x87CEEB)          // Clear blue sky
+                .fogColor(0x90C090)          // Swamp green fog
+                .hasAtmosphere(true)
+                .ambientLight(0.7f)
+                .cloudsEnabled(true)
+                .rainEnabled(true)
+                .starsVisibleDuringDay(false)
+
+                // Terrain configuration - swampy lowlands
+                .continentalScale(3.0f)      // Flatter terrain
+                .erosionScale(2.0f)          // Smooth erosion
+                .ridgeScale(0.5f)            // Minimal ridges
+                .heightVariation(0.3f, 0.2f, 0.1f, 0.05f)  // Very gentle hills
+                .jaggednessScale(0.05f)      // Almost flat
+                .jaggednessNoiseScale(800.0f)
+
+                // World dimensions
+                .worldDimensions(-32, 256)
+                .seaLevel(62)                // Slightly lower for swamp pools
+                .disableMobGeneration(false)
+                .aquifersEnabled(true)
+                .oreVeinsEnabled(false)
+
+                // Swamp caves with water
+                .addCavePreset("flooded")    // Flooded caves for swamp feel
+
+                // Swamp biomes for Ribbits villages
+                .clearBiomes()
+                .addBiome("minecraft:swamp", 0.0f, -0.3f, 0.0f, 0.0f, 0.0f, 0.0f, "Ribbit Swamp")
+                .addBiome("minecraft:mangrove_swamp", -0.3f, -0.5f, 0.1f, 0.1f, 0.1f, 0.1f, "Ribbit Mangroves")
+
+                // Enable Ribbits structures and mobs
+                .enableRibbitsStructures()   // Enable swamp village generation
+                .addRibbitsMobs(60)          // High spawn weight for ribbits
+
+                // Vanilla swamp mobs
+                .addMobSpawn("creature", "minecraft:frog", 25, 2, 5)
+                .addMobSpawn("monster", "minecraft:slime", 20, 2, 4)
+                .addMobSpawn("monster", "minecraft:witch", 5, 1, 1)
+
+                .generate();
+
+        // ========== MOB TESTING PLANETS ==========
+        // Note: Olympus, Glowworld, Necropolis, Decay disabled - required mods not installed
+
+        /*// OLYMPUS - Mobs of Mythology test planet (Greek/Roman creatures) - REQUIRES mobs_of_mythology mod
+        registerPlanet("olympus")
+                .gravity(1.0f)
+                .surfaceBlock("minecraft:white_terracotta")
+                .subsurfaceBlock("minecraft:smooth_stone")
+                .deepBlock("minecraft:stone")
+                .skyColor(0x87CEEB)
+                .fogColor(0xE0E0E0)
+                .hasAtmosphere(true)
+                .ambientLight(1.0f)  // Bright godly light
+                .cloudsEnabled(true)
+                .rainEnabled(false)
+                .starsVisibleDuringDay(false)
+                // Mobs of Mythology creatures (TESTING)
+                .addMythologyMob("cyclops", 20, 1, 2)        // Giant one-eyed creatures
+                .addMythologyMob("minotaur", 15, 1, 1)       // Bull-headed warriors
+                .addMythologyMob("harpy", 25, 2, 4)          // Flying bird-women
+                .addMythologyMob("centaur", 18, 1, 3)        // Horse-human hybrids
+                .addMythologyMob("medusa", 5, 1, 1)          // Rare gorgon
+                // Mountain and plains for mythological setting
+                .clearBiomes()
+                .addBiome("minecraft:plains", 0.3f, 0.2f, 0.1f, 0.0f, 0.0f, 0.0f, "Olympus Plains")
+                .addBiome("minecraft:windswept_hills", 0.0f, -0.3f, 0.5f, 0.3f, 0.4f, 0.2f, "Mount Olympus")
+                .generate();
+
+        // GLOWWORLD - Luminous World test planet (Bioluminescent creatures) - REQUIRES luminousworld mod
+        registerPlanet("glowworld")
+                .gravity(0.9f)
+                .surfaceBlock("minecraft:moss_block")
+                .subsurfaceBlock("minecraft:deepslate")
+                .skyColor(0x1A1A2E)  // Dark blue-purple
+                .fogColor(0x0F3460)  // Deep blue
+                .hasAtmosphere(true)
+                .ambientLight(0.2f)  // Very dim for glow effects
+                .cloudsEnabled(false)
+                .rainEnabled(false)
+                .starsVisibleDuringDay(true)
+                .starCount(15000)
+                .starBrightness(1.5f)
+                // Luminous World creatures (TESTING)
+                .addLuminousMob("glowbug", 40, 4, 8)              // Glowing fireflies
+                .addLuminousMob("luminescent_zombie", 25, 2, 4)   // Glowing zombies
+                .addLuminousMob("radiant_spider", 30, 1, 3)       // Glowing spiders
+                .addLuminousMob("shimmer_creeper", 15, 1, 2)      // Bioluminescent creepers
+                // Dark caves and mushroom forests for glow aesthetic
+                .clearBiomes()
+                .addBiome("minecraft:mushroom_fields", 0.4f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, "Glowing Mushroom Fields")
+                .addBiome("minecraft:dark_forest", 0.0f, 0.4f, -0.2f, 0.1f, 0.2f, -0.1f, "Bioluminescent Forest")
+                .generate();
+
+        // NECROPOLIS - The Undead Revamped test planet (Enhanced undead) - REQUIRES undead_revamp2 mod
+        registerPlanet("necropolis")
+                .gravity(1.0f)
+                .surfaceBlock("minecraft:soul_soil")
+                .subsurfaceBlock("minecraft:blackstone")
+                .deepBlock("minecraft:deepslate")
+                .skyColor(0x2C1E31)  // Dark purple
+                .fogColor(0x4A4458)  // Gray purple
+                .hasAtmosphere(true)
+                .ambientLight(0.1f)  // Very dark
+                .cloudsEnabled(false)
+                .rainEnabled(false)
+                .starsVisibleDuringDay(true)
+                .starCount(20000)
+                .starBrightness(0.8f)
+                // The Undead Revamped creatures (TESTING)
+                .addUndeadRevampMob("skeleton_vanguard", 20, 2, 3)    // Elite skeletons
+                .addUndeadRevampMob("zombie_brute", 18, 1, 2)         // Strong zombies
+                .addUndeadRevampMob("wither_knight", 10, 1, 1)        // Wither warriors
+                .addUndeadRevampMob("phantom_knight", 15, 1, 2)       // Flying undead
+                .addUndeadRevampMob("necromancer", 5, 1, 1)           // Rare magic users
+                // Wasteland biomes
+                .clearBiomes()
+                .addBiome("minecraft:soul_sand_valley", 0.4f, -0.5f, 0.2f, 0.0f, 0.0f, 0.0f, "Necropolis Valley")
+                .addBiome("minecraft:basalt_deltas", -0.3f, -0.6f, 0.3f, 0.2f, 0.1f, -0.2f, "Tomb Wastes")
+                .generate();
+
+        // DECAY - Rotten Creatures test planet (Environmental zombies) - REQUIRES rottencreatures mod
+        registerPlanet("decay")
+                .gravity(1.0f)
+                .surfaceBlock("minecraft:coarse_dirt")
+                .subsurfaceBlock("minecraft:dirt")
+                .deepBlock("minecraft:stone")
+                .skyColor(0x5C4033)  // Brown-gray
+                .fogColor(0x7B6853)  // Dusty brown
+                .hasAtmosphere(true)
+                .ambientLight(0.4f)  // Gloomy
+                .cloudsEnabled(true)
+                .rainEnabled(true)
+                .starsVisibleDuringDay(false)
+                // Rotten Creatures mobs (TESTING)
+                .addRottenCreature("burned", 20, 4, 4)           // Fire zombies
+                .addRottenCreature("frostbitten", 25, 4, 4)      // Ice zombies
+                .addRottenCreature("swampy", 30, 4, 4)           // Swamp zombies (most common)
+                .addRottenCreature("mummy", 15, 1, 3)            // Desert mummies
+                .addRottenCreature("undead_miner", 20, 1, 4)     // Underground miners
+                .addRottenCreature("dead_beard", 8, 1, 1)        // Pirate boss (rare)
+                .addRottenCreature("glacial_hunter", 12, 1, 2)   // Ice hunters
+                // Mixed biomes for variety
+                .clearBiomes()
+                .addBiome("minecraft:swamp", 0.3f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f, "Rotting Swamp")
+                .addBiome("minecraft:desert", 0.5f, -0.8f, 0.2f, 0.1f, 0.0f, -0.1f, "Decayed Desert")
+                .addBiome("minecraft:ice_spikes", -0.8f, -0.5f, 0.4f, 0.0f, 0.3f, 0.2f, "Frozen Decay")
+                .generate();*/
 
     }
 }
