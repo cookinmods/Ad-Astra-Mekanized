@@ -188,11 +188,13 @@ public class PlanetMaker {
         private float smearScaleMultiplier = 8.0f;         // Terrain smoothing factor
 
         // Y-gradient parameters for vertical density
+        // NOTE: Vanilla uses complex multi-gradient system, but PlanetMaker uses simplified single gradient
+        // This gradient spans most of world height to provide vertical structure
         private int gradientFromY = -64;
-        private int gradientToY = 320;
-        private float gradientFromValue = 1.5f;
-        private float gradientToValue = -1.5f;
-        private float gradientMultiplier = 0.64f;
+        private int gradientToY = 256;  // Span most of world (not full 320 to avoid sky issues)
+        private float gradientFromValue = 1.0f;  // Positive at bottom (solid)
+        private float gradientToValue = -1.0f;   // Negative at top (air)
+        private float gradientMultiplier = 0.64f; // Vanilla-like multiplier for reasonable terrain
 
         // Advanced terrain shaping
         private float initialDensityOffset = -0.234375f;
@@ -230,8 +232,9 @@ public class PlanetMaker {
         // World height and structure
         private int minY = -64;
         private int worldHeight = 384;
-        private int horizontalNoiseSize = 2;
-        private int verticalNoiseSize = 1;
+        // VANILLA-ACCURATE: horizontal=1, vertical=2 (opposite of previous default!)
+        private int horizontalNoiseSize = 1;
+        private int verticalNoiseSize = 2;
 
         // Surface rules and generation
         private String defaultBlock = "minecraft:stone";
@@ -1961,35 +1964,48 @@ public class PlanetMaker {
                 // ========== NEW VANILLA-ACCURATE PRESETS ==========
 
                 case "minimal_airless":
-                    // For airless planets (Moon, Mercury) - sparse underground tunnels only
-                    caveConfig(0.3f, 2.0f);  // Low frequency, larger scale = rarer
-                    cheeseCaves(false);       // No large caverns
-                    spaghettiCaves(false);    // No winding tunnels
-                    noodleCaves(true);        // Only thin passages
-                    caveHeightRange(-64, 64); // Deep underground only
-                    ravineConfig(0.01f, 1.5f); // Very rare surface cracks
+                    // VERY SPARSE caves for airless planets (Moon, Mercury)
+                    // With proper thresholding, all cave types can be rare
+                    caveConfig(0.1f, 1.0f);    // 10% frequency with high thresholds = sparse caves
+                    cheeseCaves(true);         // Large caverns (but rare due to high threshold)
+                    spaghettiCaves(true);      // Winding tunnels (rare)
+                    noodleCaves(true);         // Thin passages (rare)
+                    caveHeightRange(-64, 128); // Throughout most of the world
+                    ravineConfig(0.01f, 1.5f); // Rare surface cracks
                     break;
 
                 case "balanced_vanilla":
-                    // Vanilla-accurate cave generation for habitable planets
-                    caveConfig(1.0f, 1.0f);   // Standard frequency and size
-                    caveYScale(0.5f);         // Vanilla vertical scale
-                    cheeseCaves(true);        // Large caverns
-                    spaghettiCaves(true);     // Winding tunnels
-                    noodleCaves(true);        // Thin passages
-                    caveHeightRange(-64, 320); // Full world height
-                    ravineConfig(0.1f, 3.0f);  // Standard ravines
+                    // NORMAL cave generation - not too crazy
+                    // Still less than vanilla to avoid swiss cheese planets
+                    caveConfig(0.5f, 1.0f);    // 50% of vanilla frequency
+                    cheeseCaves(true);
+                    spaghettiCaves(true);
+                    noodleCaves(true);
+                    caveHeightRange(-64, 256);
+                    ravineConfig(0.05f, 2.5f); // Reduced ravines
                     break;
 
                 case "dramatic_alien":
-                    // Enhanced cave systems for alien worlds
-                    caveConfig(1.5f, 0.8f);   // Higher frequency, tighter scale = more caves
-                    caveYScale(0.4f);         // More vertical caves
-                    cheeseCaves(true);        // Large dramatic caverns
-                    spaghettiCaves(true);     // Dense tunnel networks
-                    noodleCaves(true);        // Many thin passages
-                    caveHeightRange(-64, 256); // Extended range
-                    ravineConfig(0.2f, 4.0f);  // Frequent deep ravines
+                    // Enhanced caves but still reasonable
+                    // This is 100% of vanilla frequency (not more!)
+                    caveConfig(1.0f, 1.0f);    // Standard vanilla frequency
+                    cheeseCaves(true);
+                    spaghettiCaves(true);
+                    noodleCaves(true);
+                    caveHeightRange(-64, 256);
+                    ravineConfig(0.1f, 3.0f);  // Standard ravines
+                    break;
+
+                case "insane_vertical":
+                    // ACTUALLY INSANE - this one should be crazy
+                    // Only for dedicated test worlds
+                    caveConfig(1.5f, 0.9f);    // 150% frequency
+                    caveYScale(0.3f);          // Extreme vertical stretching
+                    cheeseCaves(true);
+                    spaghettiCaves(true);
+                    noodleCaves(true);
+                    caveHeightRange(-64, 320);
+                    ravineConfig(0.2f, 4.0f);  // Frequent ravines
                     break;
 
                 // ========== LEGACY PRESETS (KEPT FOR COMPATIBILITY) ==========
@@ -3086,15 +3102,25 @@ public class PlanetMaker {
             cheese.addProperty("type", "minecraft:add");
 
             // Base threshold for cheese caves (vanilla uses 0.27)
-            double cheeseThreshold = 0.27 * planet.caveFrequency;
+            // IMPORTANT: Higher threshold = FEWER caves (noise must exceed threshold to create air)
+            // For sparse caves, push threshold very close to 1.0 (noise range is -1 to 1)
+            double cheeseThreshold = 0.27 + (1.0 - planet.caveFrequency) * 0.7;  // 0.27 at freq=1.0, up to 0.97 at freq=0.0
             cheese.addProperty("argument1", cheeseThreshold);
 
-            // Cheese noise
+            // Cheese noise - VANILLA-ACCURATE y_scale = 0.6666...
+            // Apply caveYScale for vertical stretching effects (lower = more vertical)
             JsonObject cheeseNoise = new JsonObject();
             cheeseNoise.addProperty("type", "minecraft:noise");
             cheeseNoise.addProperty("noise", "minecraft:cave_cheese");
+            // FIXED: xz_scale should NOT be affected by frequency (only size)
+            // Frequency affects threshold, not scale!
             cheeseNoise.addProperty("xz_scale", 1.0 / planet.caveSize);
-            cheeseNoise.addProperty("y_scale", (2.0/3.0) / (planet.caveSize * planet.caveYScale));  // Vanilla uses 0.6666...
+            double cheeseYScale = 0.6666666666666666 / planet.caveSize;
+            // Apply vertical scaling for non-vanilla presets (lower caveYScale = more vertical stretching)
+            if (planet.caveYScale != 0.5f) {
+                cheeseYScale = cheeseYScale * (planet.caveYScale / 0.5);
+            }
+            cheeseNoise.addProperty("y_scale", cheeseYScale);
             cheese.add("argument2", cheeseNoise);
 
             // Clamp cheese caves between -1 and 1
@@ -3109,32 +3135,51 @@ public class PlanetMaker {
 
         // Spaghetti caves (winding tunnels) - combine with cheese using min
         if (planet.enableSpaghettiCaves) {
+            JsonObject spaghettiOuter = new JsonObject();
+            spaghettiOuter.addProperty("type", "minecraft:add");
+
+            // Add threshold for spaghetti caves (vanilla has implicit threshold through combination)
+            // For rare caves, push threshold toward positive values
+            double spaghettiThreshold = -0.05 + (1.0 - planet.caveFrequency) * 0.15;  // -0.05 at freq=1.0, 0.10 at freq=0.0
+            spaghettiOuter.addProperty("argument1", spaghettiThreshold);
+
             JsonObject spaghetti = new JsonObject();
             spaghetti.addProperty("type", "minecraft:add");
 
+            // VANILLA-ACCURATE spaghetti_2d noise
+            // Apply caveYScale for vertical stretching effects
             JsonObject spaghettiNoise = new JsonObject();
             spaghettiNoise.addProperty("type", "minecraft:noise");
             spaghettiNoise.addProperty("noise", "minecraft:spaghetti_2d");
+            // FIXED: xz_scale should NOT be affected by frequency (only size)
             spaghettiNoise.addProperty("xz_scale", 1.0 / planet.caveSize);
-            spaghettiNoise.addProperty("y_scale", 1.0 / (planet.caveSize * planet.caveYScale));
+            double spaghettiYScale = 2.0 / planet.caveSize;  // Vanilla uses 2.0
+            if (planet.caveYScale != 0.5f) {
+                spaghettiYScale = spaghettiYScale * (planet.caveYScale / 0.5);
+            }
+            spaghettiNoise.addProperty("y_scale", spaghettiYScale);
             spaghetti.add("argument1", spaghettiNoise);
 
+            // VANILLA-ACCURATE spaghetti_roughness noise
             JsonObject spaghettiRoughness = new JsonObject();
             spaghettiRoughness.addProperty("type", "minecraft:noise");
             spaghettiRoughness.addProperty("noise", "minecraft:spaghetti_roughness");
+            // FIXED: xz_scale should NOT be affected by frequency (only size)
             spaghettiRoughness.addProperty("xz_scale", 1.0 / planet.caveSize);
-            spaghettiRoughness.addProperty("y_scale", 1.0 / (planet.caveSize * planet.caveYScale));
+            spaghettiRoughness.addProperty("y_scale", spaghettiYScale);  // Same as spaghetti_2d
             spaghetti.add("argument2", spaghettiRoughness);
+
+            spaghettiOuter.add("argument2", spaghetti);
 
             // Combine with previous layer
             if (currentLayer != null) {
                 JsonObject combined = new JsonObject();
                 combined.addProperty("type", "minecraft:min");
                 combined.add("argument1", currentLayer);
-                combined.add("argument2", spaghetti);
+                combined.add("argument2", spaghettiOuter);
                 currentLayer = combined;
             } else {
-                currentLayer = spaghetti;
+                currentLayer = spaghettiOuter;
             }
         }
 
@@ -3144,7 +3189,10 @@ public class PlanetMaker {
             noodle.addProperty("type", "minecraft:add");
 
             // Base thickness (vanilla: -0.075)
-            noodle.addProperty("argument1", -0.075 * planet.caveFrequency);
+            // IMPORTANT: More negative = EASIER to form caves (inverse logic!)
+            // For rare caves, push toward positive values
+            double noodleThreshold = -0.075 + (1.0 - planet.caveFrequency) * 0.15;  // -0.075 at freq=1.0, 0.075 at freq=0.0
+            noodle.addProperty("argument1", noodleThreshold);
 
             // Ridge-based noodle generation (vanilla uses two ridge noises)
             JsonObject noodleRidges = new JsonObject();
@@ -3153,11 +3201,18 @@ public class PlanetMaker {
 
             JsonObject ridgeA = new JsonObject();
             ridgeA.addProperty("type", "minecraft:abs");
+            // VANILLA-ACCURATE noodle noise (y_scale: 5.333...)
+            // Apply caveYScale for vertical stretching effects
             JsonObject ridgeANoise = new JsonObject();
             ridgeANoise.addProperty("type", "minecraft:noise");
             ridgeANoise.addProperty("noise", "minecraft:noodle");
-            ridgeANoise.addProperty("xz_scale", 2.6666666666666665 / planet.caveSize);  // Vanilla scale
-            ridgeANoise.addProperty("y_scale", 2.6666666666666665 / (planet.caveSize * planet.caveYScale));
+            // FIXED: xz_scale should NOT be affected by frequency (only size)
+            ridgeANoise.addProperty("xz_scale", 2.6666666666666665 / planet.caveSize);  // Vanilla xz_scale
+            double noodleYScale = 5.333333333333333 / planet.caveSize;  // Vanilla y_scale (2x xz_scale)
+            if (planet.caveYScale != 0.5f) {
+                noodleYScale = noodleYScale * (planet.caveYScale / 0.5);
+            }
+            ridgeANoise.addProperty("y_scale", noodleYScale);
             ridgeA.add("argument", ridgeANoise);
 
             noodleRidges.add("argument2", ridgeA);

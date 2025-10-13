@@ -22,6 +22,25 @@
     "minecraft:iron_golem",
     "minecraft:snow_golem",
     "#minecraft:skeletons",
-    "#minecraft:zombies"
+    "#minecraft:zombies",
+    "kobolds:kobold",
+    "kobolds:kobold_warrior",
+    "kobolds:kobold_enchanter",
+    "kobolds:kobold_engineer",
+    "kobolds:kobold_child",
+    "kobolds:kobold_rascal",
+    "kobolds:kobold_pirate",
+    "kobolds:kobold_captain",
+    "mowziesmobs:foliaath",
+    "mowziesmobs:baby_foliaath",
+    "mowziesmobs:umvuthana",
+    "mowziesmobs:umvuthana_raptor",
+    "mowziesmobs:umvuthana_crane",
+    "mowziesmobs:umvuthi",
+    "mowziesmobs:grottol",
+    "mowziesmobs:bluff",
+    "mowziesmobs:lantern",
+    "mowziesmobs:naga",
+    "mowziesmobs:frostmaw"
   ]
 }

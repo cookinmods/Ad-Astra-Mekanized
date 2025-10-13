@@ -325,14 +325,14 @@ public class PlanetGenerationRunner {
             .temperatureScale(0.5f)
             .humidityScale(0.2f)
             .weirdnessScale(1.5f)
-            .densityFactor(1.2f)
-            .densityOffset(-0.1f)
-            // Custom vertical gradient for sharper craters
-            .verticalGradient(-64, 320, 2.0f, -2.0f)
-            .gradientMultiplier(0.8f)
+            .densityFactor(2.0f)           // MASSIVELY INCREASED: Very dense terrain
+            .densityOffset(0.5f)           // MASSIVELY INCREASED: Strong solid baseline
+            // Moderate gradient for crater-like terrain (not too stretched)
+            .verticalGradient(-64, 256, 1.0f, -1.0f)
+            .gradientMultiplier(0.8f)      // INCREASED: Stronger gradient effect
             // Enhanced terrain shaping for lunar features
-            .initialDensityOffset(-0.3f)
-            .terrainShapingFactor(0.2f)
+            .initialDensityOffset(0.5f)    // MASSIVELY INCREASED: Very positive offset
+            .terrainShapingFactor(0.1f)    // REDUCED: Less aggressive shaping
             // Hill/mountain generation for crater rims and lunar highlands
             .jaggednessScale(0.3f)          // Moderate jaggedness for crater rims
             .jaggednessNoiseScale(800.0f)   // Medium-scale for crater features
@@ -708,6 +708,83 @@ public class PlanetGenerationRunner {
                 .addCaveDecoration("minecraft:nether_gold_ore", 0.05f, -128, 128, false)  // Gold ore pockets
                 .generate();
 
+        // ========== EXTREME VERTICAL CAVE TEST PLANET ==========
+        // Tests the new "insane_vertical" cave preset with 200% frequency + vertical stretching
+        registerPlanet("verticaltest")
+                .gravity(0.8f)  // Lower gravity enhances vertical feeling
+                // ========== STANDARD TERRAIN FOR CAVE TESTING ==========
+                .continentalScale(2.0f)
+                .erosionScale(2.5f)
+                .ridgeScale(1.0f)
+                .heightVariation(0.6f, 0.4f, 0.2f, 0.1f)  // Moderate terrain for clear cave visibility
+
+                // ========== MINIMAL TERRAIN NOISE ==========
+                .barrierNoise(0.0f)
+                .fluidLevelFloodedness(0.2f)
+                .fluidLevelSpread(0.15f)
+                .lavaNoise(0.02f)  // Occasional lava for dramatic effect
+                .temperatureNoise(0.2f)
+                .vegetationNoise(0.4f)
+
+                // ========== STANDARD WORLD DIMENSIONS ==========
+                .worldDimensions(-64, 320)  // Full height for vertical caves
+                .seaLevel(64)
+
+                // ========== SURFACE BLOCKS ==========
+                .surfaceBlock("minecraft:grass_block")
+                .subsurfaceBlock("minecraft:dirt")
+                .deepBlock("minecraft:deepslate")
+                .bedrockBlock("minecraft:bedrock")
+
+                // ========== ATMOSPHERE & VISUALS ==========
+                .skyColor(0x78A8FF)       // Sky blue
+                .fogColor(0xC0D8FF)       // Light blue fog
+                .hasAtmosphere(true)
+                .ambientLight(0.6f)       // Slightly dimmer to see cave lighting
+
+                // ========== WEATHER ==========
+                .cloudsEnabled(true)
+                .rainEnabled(true)
+                .starsVisibleDuringDay(false)
+
+                // ========== BIOMES - SIMPLE FOR TESTING ==========
+                .clearBiomes()
+                .addBiome("minecraft:plains", 0.30f)
+                .addBiome("minecraft:forest", 0.25f)
+                .addBiome("minecraft:taiga", 0.20f)
+                .addBiome("minecraft:birch_forest", 0.15f)
+                .addBiome("minecraft:dark_forest", 0.10f)
+
+                // ========== THE STAR OF THE SHOW: INSANE VERTICAL CAVES ==========
+                .addCavePreset("insane_vertical")  // 200% frequency + 0.3x vertical scale
+
+                // ========== CAVE DECORATIONS FOR VISUAL TESTING ==========
+                .addCaveDecoration("minecraft:glowstone", 0.15f, -64, 320, true)  // Ceiling lights
+                .addCaveDecoration("minecraft:amethyst_block", 0.05f, -64, 100, false)  // Floor crystals
+                .addCaveDecoration("minecraft:dripstone_block", 0.2f, -64, 320, true)  // Stalactites
+
+                // ========== STRUCTURES & FEATURES ==========
+                .addStructure("minecraft:mineshaft")  // See how mineshafts interact
+                .addFeature("minecraft:grass", 0.5f)
+                .addTrees("oak", 0.2f)
+
+                // ========== ORE GENERATION ==========
+                .oreVeinsEnabled(true)
+                .configureOre("diamond", 4)
+                .configureOre("iron", 50)
+                .configureOre("coal", 80)
+                .configureOre("copper", 60)
+                .configureOre("gold", 3)
+                .configureOre("redstone", 20)
+                .configureOre("lapis", 5)
+                .configureOre("emerald", 2)
+
+                // ========== MOB SPAWNING ==========
+                .addHostileMobPreset("overworld")
+                .addPassiveMobPreset("overworld")
+
+                .generate();
+
         // ========== ORE TEST PLANET - OVERWORLD-LIKE SETTINGS ==========
         // Adjusted for realistic Overworld-style terrain with proper ore generation
         registerPlanet("oretest")
@@ -726,11 +803,11 @@ public class PlanetGenerationRunner {
                 .temperatureNoise(0.2f)         // Mild temperature variation
                 .vegetationNoise(0.3f)          // More vegetation
 
-                // ========== OVERWORLD-LIKE GRADIENTS ==========
-                .verticalGradient(-64, 320, 1.5f, -1.5f) // Standard gradient
-                .gradientMultiplier(0.64f)      // Vanilla-like multiplier
-                .initialDensityOffset(-0.15f)   // Slight negative offset for caves
-                .terrainShapingFactor(0.25f)    // Reduced for more variation
+                // ========== STANDARD GRADIENTS (simplified but functional) ==========
+                .verticalGradient(-64, 256, 1.0f, -1.0f) // Standard gradient across world
+                .gradientMultiplier(0.8f)                // MASSIVELY INCREASED: Strong gradient
+                .initialDensityOffset(0.5f)              // MASSIVELY INCREASED: Very solid terrain
+                .terrainShapingFactor(0.1f)              // MASSIVELY REDUCED: Minimal variation
 
                 // ========== NATURAL HILLS AND MOUNTAINS ==========
                 .jaggednessScale(0.15f)         // Gentle mountain jaggedness
@@ -839,7 +916,7 @@ public class PlanetGenerationRunner {
                 .enableGlowLichen()                              // Cave glow lichen
 
                 // ========== CAVE SYSTEM - STANDARD OVERWORLD CAVES ==========
-                .addCavePreset("standard")                       // Normal Earth-like caves
+                // Cave preset already set above with balanced_vanilla
                 .floodedCaves("minecraft:water", 10f)           // Water-filled caves below Y=10
                 .addCaveDecoration("minecraft:stone", 0.5f, -64, 256, false)              // Stone floor patches
                 .addCaveDecoration("minecraft:dripstone_block", 0.1f, -64, 64, true)      // Dripstone ceiling
