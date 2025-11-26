@@ -13,227 +13,25 @@
   "noise": {
     "min_y": -64,
     "height": 320,
-    "size_horizontal": 2,
-    "size_vertical": 1
+    "size_horizontal": 1,
+    "size_vertical": 2
   },
   "noise_router": {
-    "barrier": 0.0,
-    "fluid_level_floodedness": 0.0,
-    "fluid_level_spread": 0.020000001,
-    "lava": 0.0,
-    "temperature": 0.0,
-    "vegetation": 0.0,
-    "continents": {
-      "type": "minecraft:shifted_noise",
-      "noise": "minecraft:continentalness",
-      "xz_scale": 8.0,
-      "y_scale": 1,
-      "shift_x": "minecraft:shift_x",
-      "shift_y": 0,
-      "shift_z": "minecraft:shift_z"
-    },
-    "erosion": {
-      "type": "minecraft:shifted_noise",
-      "noise": "minecraft:erosion",
-      "xz_scale": 15.0,
-      "y_scale": 0,
-      "shift_x": "minecraft:shift_x",
-      "shift_y": 0,
-      "shift_z": "minecraft:shift_z"
-    },
-    "depth": 0,
-    "ridges": {
-      "type": "minecraft:shifted_noise",
-      "noise": "minecraft:ridge",
-      "xz_scale": 5.0,
-      "y_scale": 0,
-      "shift_x": "minecraft:shift_x",
-      "shift_y": 0,
-      "shift_z": "minecraft:shift_z"
-    },
-    "jaggedness": {
-      "type": "minecraft:shifted_noise",
-      "noise": "minecraft:jagged",
-      "xz_scale": 600.0,
-      "y_scale": 0,
-      "shift_x": "minecraft:shift_x",
-      "shift_y": 0,
-      "shift_z": "minecraft:shift_z"
-    },
-    "initial_density_without_jaggedness": {
-      "type": "minecraft:add",
-      "argument1": {
-        "type": "minecraft:mul",
-        "argument1": {
-          "type": "minecraft:y_clamped_gradient",
-          "from_y": -64,
-          "to_y": 320,
-          "from_value": 1.5,
-          "to_value": -1.5
-        },
-        "argument2": 0.64
-      },
-      "argument2": {
-        "type": "minecraft:add",
-        "argument1": -0.234375,
-        "argument2": {
-          "type": "minecraft:mul",
-          "argument1": {
-            "type": "minecraft:add",
-            "argument2": {
-              "type": "minecraft:mul",
-              "argument1": {
-                "type": "minecraft:shifted_noise",
-                "noise": "minecraft:continentalness",
-                "xz_scale": 0.25,
-                "y_scale": 0,
-                "shift_x": "minecraft:shift_x",
-                "shift_y": 0,
-                "shift_z": "minecraft:shift_z"
-              },
-              "argument2": 23.4
-            },
-            "argument1": {
-              "type": "minecraft:mul",
-              "argument1": {
-                "type": "minecraft:shifted_noise",
-                "noise": "minecraft:erosion",
-                "xz_scale": 0.25,
-                "y_scale": 0,
-                "shift_x": "minecraft:shift_x",
-                "shift_y": 0,
-                "shift_z": "minecraft:shift_z"
-              },
-              "argument2": 15.599999
-            }
-          },
-          "argument2": 0.175
-        }
-      }
-    },
-    "final_density": {
-      "type": "minecraft:interpolated",
-      "argument": {
-        "type": "minecraft:blend_density",
-        "argument": {
-          "type": "minecraft:min",
-          "argument1": {
-            "type": "minecraft:add",
-            "argument1": {
-              "type": "minecraft:mul",
-              "argument1": {
-                "type": "minecraft:y_clamped_gradient",
-                "from_y": -64,
-                "to_y": 320,
-                "from_value": 1.5,
-                "to_value": -1.5
-              },
-              "argument2": 0.64
-            },
-            "argument2": {
-              "type": "minecraft:add",
-              "argument1": -0.234375,
-              "argument2": {
-                "type": "minecraft:mul",
-                "argument1": {
-                  "type": "minecraft:add",
-                  "argument2": {
-                    "type": "minecraft:mul",
-                    "argument1": {
-                      "type": "minecraft:shifted_noise",
-                      "noise": "minecraft:continentalness",
-                      "xz_scale": 0.25,
-                      "y_scale": 0,
-                      "shift_x": "minecraft:shift_x",
-                      "shift_y": 0,
-                      "shift_z": "minecraft:shift_z"
-                    },
-                    "argument2": 4.0
-                  },
-                  "argument1": {
-                    "type": "minecraft:mul",
-                    "argument1": {
-                      "type": "minecraft:shifted_noise",
-                      "noise": "minecraft:erosion",
-                      "xz_scale": 0.25,
-                      "y_scale": 0,
-                      "shift_x": "minecraft:shift_x",
-                      "shift_y": 0,
-                      "shift_z": "minecraft:shift_z"
-                    },
-                    "argument2": 2.0
-                  }
-                },
-                "argument2": 0.175
-              }
-            }
-          },
-          "argument2": {
-            "type": "minecraft:range_choice",
-            "input": "minecraft:y",
-            "min_inclusive": -64.0,
-            "max_exclusive": 256.0,
-            "when_in_range": {
-              "type": "minecraft:min",
-              "argument1": {
-                "type": "minecraft:min",
-                "argument1": {
-                  "type": "minecraft:clamp",
-                  "input": {
-                    "type": "minecraft:add",
-                    "argument1": 0.405,
-                    "argument2": {
-                      "type": "minecraft:noise",
-                      "noise": "minecraft:cave_cheese",
-                      "xz_scale": 1.2499999813735487,
-                      "y_scale": 2.083333185873936
-                    }
-                  },
-                  "min": -1.0,
-                  "max": 1.0
-                },
-                "argument2": {
-                  "type": "minecraft:add",
-                  "argument1": {
-                    "type": "minecraft:noise",
-                    "noise": "minecraft:spaghetti_2d",
-                    "xz_scale": 1.2499999813735487,
-                    "y_scale": 3.124999778810904
-                  },
-                  "argument2": {
-                    "type": "minecraft:noise",
-                    "noise": "minecraft:spaghetti_roughness",
-                    "xz_scale": 1.2499999813735487,
-                    "y_scale": 3.124999778810904
-                  }
-                }
-              },
-              "argument2": {
-                "type": "minecraft:add",
-                "argument1": -0.11249999999999999,
-                "argument2": {
-                  "type": "minecraft:mul",
-                  "argument1": 1.5,
-                  "argument2": {
-                    "type": "minecraft:abs",
-                    "argument": {
-                      "type": "minecraft:noise",
-                      "noise": "minecraft:noodle",
-                      "xz_scale": 3.3333332836627965,
-                      "y_scale": 8.333332743495744
-                    }
-                  }
-                }
-              }
-            },
-            "when_out_of_range": 64.0
-          }
-        }
-      }
-    },
-    "vein_toggle": 0.0,
-    "vein_ridged": 0.0,
-    "vein_gap": 0.0
+    "barrier": "minecraft:overworld/noise_router/barrier",
+    "fluid_level_floodedness": "minecraft:overworld/noise_router/fluid_level_floodedness",
+    "fluid_level_spread": "minecraft:overworld/noise_router/fluid_level_spread",
+    "lava": "minecraft:overworld/noise_router/lava",
+    "temperature": "minecraft:overworld/noise_router/temperature",
+    "vegetation": "minecraft:overworld/noise_router/vegetation",
+    "continents": "minecraft:overworld/noise_router/continents",
+    "erosion": "minecraft:overworld/noise_router/erosion",
+    "depth": "minecraft:overworld/noise_router/depth",
+    "ridges": "minecraft:overworld/noise_router/ridges",
+    "initial_density_without_jaggedness": "minecraft:overworld/noise_router/initial_density_without_jaggedness",
+    "final_density": "minecraft:overworld/noise_router/final_density",
+    "vein_toggle": "minecraft:overworld/noise_router/vein_toggle",
+    "vein_ridged": "minecraft:overworld/noise_router/vein_ridged",
+    "vein_gap": "minecraft:overworld/noise_router/vein_gap"
   },
   "surface_rule": {
     "type": "minecraft:sequence",
@@ -328,7 +126,7 @@
         "then_run": {
           "type": "minecraft:block",
           "result_state": {
-            "Name": "minecraft:stone"
+            "Name": "minecraft:dirt"
           }
         }
       }

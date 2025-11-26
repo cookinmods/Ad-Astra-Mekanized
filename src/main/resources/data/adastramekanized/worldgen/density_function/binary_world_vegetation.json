@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:noise",
+  "noise": "adastramekanized:binary_world_vegetation",
+  "xz_scale": 0.25,
+  "y_scale": 0.0
+}

@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:noise",
+  "noise": "adastramekanized:mercury_erosion",
+  "xz_scale": 5.0E-4,
+  "y_scale": 0.0
+}

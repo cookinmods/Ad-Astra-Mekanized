@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:noise",
+  "noise": "adastramekanized:scaleland_ridges",
+  "xz_scale": 0.005,
+  "y_scale": 0.0
+}

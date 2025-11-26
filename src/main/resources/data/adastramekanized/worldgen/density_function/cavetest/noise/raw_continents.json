@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:noise",
+  "noise": "adastramekanized:cavetest_continents",
+  "xz_scale": 0.003,
+  "y_scale": 0.0
+}

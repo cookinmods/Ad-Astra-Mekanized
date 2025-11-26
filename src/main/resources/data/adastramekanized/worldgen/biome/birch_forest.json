@@ -1,0 +1,114 @@
+{
+  "temperature": 0.2,
+  "downfall": 0.3,
+  "has_precipitation": true,
+  "effects": {
+    "fog_color": 12638463,
+    "sky_color": 7907583,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:zombie",
+        "minCount": 4,
+        "maxCount": 4,
+        "weight": 95
+      },
+      {
+        "type": "minecraft:skeleton",
+        "minCount": 4,
+        "maxCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:spider",
+        "minCount": 4,
+        "maxCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:creeper",
+        "minCount": 4,
+        "maxCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "minecraft:enderman",
+        "minCount": 1,
+        "maxCount": 4,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:witch",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 5
+      }
+    ],
+    "creature": [
+      {
+        "type": "minecraft:sheep",
+        "minCount": 4,
+        "maxCount": 4,
+        "weight": 12
+      },
+      {
+        "type": "minecraft:pig",
+        "minCount": 4,
+        "maxCount": 4,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:chicken",
+        "minCount": 4,
+        "maxCount": 4,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:cow",
+        "minCount": 4,
+        "maxCount": 4,
+        "weight": 8
+      }
+    ],
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "minCount": 8,
+        "maxCount": 8,
+        "weight": 10
+      }
+    ],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "adastramekanized:verticaltest_ore_gold_simple",
+      "adastramekanized:verticaltest_ore_diamond_simple",
+      "adastramekanized:verticaltest_ore_iron_simple",
+      "adastramekanized:verticaltest_ore_coal_simple",
+      "adastramekanized:verticaltest_ore_copper_simple",
+      "adastramekanized:verticaltest_ore_lapis_simple",
+      "adastramekanized:verticaltest_ore_redstone_simple",
+      "adastramekanized:verticaltest_ore_emerald_simple"
+    ],
+    [],
+    [],
+    [],
+    []
+  ],
+  "carvers": {
+    "air": []
+  }
+}

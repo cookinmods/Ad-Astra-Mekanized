@@ -356,7 +356,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
+          "block": "adastramekanized:mars_stone"
         },
         "state": {
           "Name": "mekanism:lead_ore"
@@ -365,7 +365,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
+          "block": "adastramekanized:mars_stone"
         },
         "state": {
           "Name": "mekanism:lead_ore"
@@ -373,6 +373,6 @@
       }
     ],
     "size": 12,
-    "discard_chance_on_air_exposure": 0.99
+    "discard_chance_on_air_exposure": 0.0
   }
 }

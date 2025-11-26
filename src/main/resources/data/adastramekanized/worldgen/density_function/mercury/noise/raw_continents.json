@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:noise",
+  "noise": "adastramekanized:mercury_continents",
+  "xz_scale": 0.006,
+  "y_scale": 0.0
+}

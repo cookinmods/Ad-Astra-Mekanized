@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:noise",
+  "noise": "adastramekanized:mars_ridges",
+  "xz_scale": 0.008,
+  "y_scale": 0.0
+}

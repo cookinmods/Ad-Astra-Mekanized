@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:noise",
+  "noise": "adastramekanized:tectonic_demo_continents",
+  "xz_scale": 0.003,
+  "y_scale": 0.0
+}

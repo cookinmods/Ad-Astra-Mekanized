@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hecookin.adastramekanized.AdAstraMekanized;
+import com.hecookin.adastramekanized.worldgen.config.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -22,6 +23,213 @@ public class PlanetMaker {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String RESOURCES_PATH = "src/main/resources/data/adastramekanized/";
     private static final List<PlanetBuilder> PLANETS = new ArrayList<>();
+
+    // Vanilla Overworld density function templates for custom terrain generation
+    // These are used as base templates and modified to reference planet-specific noise
+    private static final String VANILLA_FINAL_DENSITY_TEMPLATE = """
+{
+  "type": "minecraft:min",
+  "argument1": {
+    "type": "minecraft:squeeze",
+    "argument": {
+      "type": "minecraft:mul",
+      "argument1": 0.64,
+      "argument2": {
+        "type": "minecraft:interpolated",
+        "argument": {
+          "type": "minecraft:blend_density",
+          "argument": {
+            "type": "minecraft:add",
+            "argument1": 0.1171875,
+            "argument2": {
+              "type": "minecraft:mul",
+              "argument1": {
+                "type": "minecraft:y_clamped_gradient",
+                "from_value": 0.0,
+                "from_y": -64,
+                "to_value": 1.0,
+                "to_y": -40
+              },
+              "argument2": {
+                "type": "minecraft:add",
+                "argument1": -0.1171875,
+                "argument2": {
+                  "type": "minecraft:add",
+                  "argument1": -0.078125,
+                  "argument2": {
+                    "type": "minecraft:mul",
+                    "argument1": {
+                      "type": "minecraft:y_clamped_gradient",
+                      "from_value": 1.0,
+                      "from_y": 240,
+                      "to_value": 0.0,
+                      "to_y": 256
+                    },
+                    "argument2": {
+                      "type": "minecraft:add",
+                      "argument1": 0.078125,
+                      "argument2": {
+                        "type": "minecraft:range_choice",
+                        "input": "minecraft:overworld/sloped_cheese",
+                        "max_exclusive": 1.5625,
+                        "min_inclusive": -1000000.0,
+                        "when_in_range": {
+                          "type": "minecraft:min",
+                          "argument1": "minecraft:overworld/sloped_cheese",
+                          "argument2": {
+                            "type": "minecraft:mul",
+                            "argument1": 5.0,
+                            "argument2": "minecraft:overworld/caves/entrances"
+                          }
+                        },
+                        "when_out_of_range": {
+                          "type": "minecraft:max",
+                          "argument1": {
+                            "type": "minecraft:min",
+                            "argument1": {
+                              "type": "minecraft:min",
+                              "argument1": {
+                                "type": "minecraft:add",
+                                "argument1": {
+                                  "type": "minecraft:mul",
+                                  "argument1": 4.0,
+                                  "argument2": {
+                                    "type": "minecraft:square",
+                                    "argument": {
+                                      "type": "minecraft:noise",
+                                      "noise": "minecraft:cave_layer",
+                                      "xz_scale": 1.0,
+                                      "y_scale": 8.0
+                                    }
+                                  }
+                                },
+                                "argument2": {
+                                  "type": "minecraft:add",
+                                  "argument1": {
+                                    "type": "minecraft:clamp",
+                                    "input": {
+                                      "type": "minecraft:add",
+                                      "argument1": 0.27,
+                                      "argument2": {
+                                        "type": "minecraft:noise",
+                                        "noise": "minecraft:cave_cheese",
+                                        "xz_scale": 1.0,
+                                        "y_scale": 0.6666666666666666
+                                      }
+                                    },
+                                    "max": 1.0,
+                                    "min": -1.0
+                                  },
+                                  "argument2": {
+                                    "type": "minecraft:clamp",
+                                    "input": {
+                                      "type": "minecraft:add",
+                                      "argument1": 1.5,
+                                      "argument2": {
+                                        "type": "minecraft:mul",
+                                        "argument1": -0.64,
+                                        "argument2": "minecraft:overworld/sloped_cheese"
+                                      }
+                                    },
+                                    "max": 0.5,
+                                    "min": 0.0
+                                  }
+                                }
+                              },
+                              "argument2": "minecraft:overworld/caves/entrances"
+                            },
+                            "argument2": {
+                              "type": "minecraft:add",
+                              "argument1": "minecraft:overworld/caves/spaghetti_2d",
+                              "argument2": "minecraft:overworld/caves/spaghetti_roughness_function"
+                            }
+                          },
+                          "argument2": {
+                            "type": "minecraft:range_choice",
+                            "input": "minecraft:overworld/caves/pillars",
+                            "max_exclusive": 0.03,
+                            "min_inclusive": -1000000.0,
+                            "when_in_range": -1000000.0,
+                            "when_out_of_range": "minecraft:overworld/caves/pillars"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "argument2": "minecraft:overworld/caves/noodle"
+}
+""";
+
+    private static final String VANILLA_INITIAL_DENSITY_TEMPLATE = """
+{
+  "type": "minecraft:add",
+  "argument1": 0.1171875,
+  "argument2": {
+    "type": "minecraft:mul",
+    "argument1": {
+      "type": "minecraft:y_clamped_gradient",
+      "from_value": 0.0,
+      "from_y": -64,
+      "to_value": 1.0,
+      "to_y": -40
+    },
+    "argument2": {
+      "type": "minecraft:add",
+      "argument1": -0.1171875,
+      "argument2": {
+        "type": "minecraft:add",
+        "argument1": -0.078125,
+        "argument2": {
+          "type": "minecraft:mul",
+          "argument1": {
+            "type": "minecraft:y_clamped_gradient",
+            "from_value": 1.0,
+            "from_y": 240,
+            "to_value": 0.0,
+            "to_y": 256
+          },
+          "argument2": {
+            "type": "minecraft:add",
+            "argument1": 0.078125,
+            "argument2": {
+              "type": "minecraft:clamp",
+              "input": {
+                "type": "minecraft:add",
+                "argument1": -0.703125,
+                "argument2": {
+                  "type": "minecraft:mul",
+                  "argument1": 4.0,
+                  "argument2": {
+                    "type": "minecraft:quarter_negative",
+                    "argument": {
+                      "type": "minecraft:mul",
+                      "argument1": "minecraft:overworld/depth",
+                      "argument2": {
+                        "type": "minecraft:cache_2d",
+                        "argument": "minecraft:overworld/factor"
+                      }
+                    }
+                  }
+                }
+              },
+              "max": 64.0,
+              "min": -64.0
+            }
+          }
+        }
+      }
+    }
+  }
+}
+""";
 
     /**
      * Start building a new planet with the given name
@@ -145,13 +353,103 @@ public class PlanetMaker {
     /**
      * Fluent builder for planet configuration
      */
+    /**
+     * Terrain tweaks for per-planet terrain character customization
+     * These multipliers adjust the vanilla-style density functions to create unique terrain personalities
+     */
+    public static class TerrainTweaks {
+        private PlanetBuilder parent;
+
+        public double jaggednessMultiplier = 1.0;    // Mountain sharpness (Moon: 1.5 for craters, Mars: 0.8 for gentle)
+        public double erosionIntensity = 1.0;        // Erosion effect (Moon: 0.7 less erosion, Mars: 1.3 more canyons)
+        public double heightVariation = 1.0;         // Overall height range (Moon: 0.8 for flatter, Mars: 1.2 for dramatic)
+        public double ridgeStrength = 1.0;           // Ridge prominence (affects mountain ridges)
+        public double factorScale = 1.0;             // Terrain variation scale (affects hills vs plains ratio)
+
+        TerrainTweaks(PlanetBuilder parent) {
+            this.parent = parent;
+        }
+
+        public TerrainTweaks jaggedness(double mult) {
+            this.jaggednessMultiplier = mult;
+            return this;
+        }
+
+        public TerrainTweaks erosion(double intensity) {
+            this.erosionIntensity = intensity;
+            return this;
+        }
+
+        public TerrainTweaks height(double variation) {
+            this.heightVariation = variation;
+            return this;
+        }
+
+        public TerrainTweaks ridges(double strength) {
+            this.ridgeStrength = strength;
+            return this;
+        }
+
+        public TerrainTweaks factor(double scale) {
+            this.factorScale = scale;
+            return this;
+        }
+
+        // Return to parent builder after configuring tweaks
+        public PlanetBuilder done() {
+            return parent;
+        }
+    }
+
     public static class PlanetBuilder {
         private final String name;
 
         // Unique seed for this planet's terrain generation
         private long seed;
 
-        // Noise configuration - Primary terrain shaping
+        // Terrain character tweaks for vanilla-quality generation
+        private TerrainTweaks terrainTweaks;
+
+        // Vanilla noise reference system (NEW: use proven vanilla generation)
+        private boolean useVanillaNoise = false;
+        private String vanillaNoiseReference = "minecraft:overworld"; // Default to Overworld terrain
+
+        // Identical vanilla terrain mode - bypasses ALL custom density function generation
+        // When true, uses direct vanilla noise router references for terrain identical to vanilla
+        private boolean useIdenticalVanillaTerrain = false;
+
+        // Vanilla-QUALITY terrain mode - copies full vanilla density function set with coordinate shifting
+        // This produces terrain with vanilla quality (splines, factor, offset, jaggedness) but unique per planet
+        // When true, generates full vanilla density function files with planet-specific references
+        private boolean useVanillaQualityTerrain = false;
+
+        // Vanilla caves mode - when true, adds vanilla carvers to biomes for full cave generation
+        // Automatically enabled when useIdenticalVanillaTerrain is true
+        private boolean useVanillaCaves = false;
+
+        // Vanilla underground features - when true, adds vanilla ore/geode/dungeon features to biomes
+        private boolean useVanillaUndergroundFeatures = false;
+
+        // Frequency modulation for vanilla noise (multiply vanilla noise values to create distinct terrain)
+        private double continentsMultiplier = 1.0;
+        private double erosionMultiplier = 1.0;
+        private double ridgesMultiplier = 1.0;
+        private double depthMultiplier = 1.0;
+
+        // Noise offsets to shift sampling position (makes planets sample different parts of noise space)
+        private double continentsNoiseOffset = 0.0;
+        private double erosionNoiseOffset = 0.0;
+        private double ridgesNoiseOffset = 0.0;
+        private double depthNoiseOffset = 0.0;
+
+        // Coordinate transformation for unique terrain (NEW: proper coordinate shifting)
+        private int coordinateShiftX = 0;
+        private int coordinateShiftZ = 0;
+        private double noiseScaleXZ = 1.0;
+        private double noiseScaleY = 1.0;
+        private Integer customSalt = null;  // If null, auto-generate from planet ID
+
+        // Noise configuration - Primary terrain shaping (LEGACY: only used if useVanillaNoise = false)
         private float continentalScale = 1.0f;
         private float erosionScale = 0.25f;
         private float ridgeScale = 0.25f;
@@ -209,6 +507,7 @@ public class PlanetMaker {
         private String shallowUnderwaterBlock = "minecraft:stone";
         private String deepUnderwaterBlock = "minecraft:stone";
         private String bedrockBlock = "minecraft:bedrock";
+        private String deepslateBlock = "minecraft:deepslate";  // Block to use below Y=0 (replaces vanilla deepslate)
 
         // Advanced surface controls
         private boolean enableCustomSurfaceRules = true;
@@ -322,10 +621,36 @@ public class PlanetMaker {
         private boolean enableIceCaves = false; // Ice-themed cave generation
         private java.util.List<CaveDecorationEntry> caveDecorations = new java.util.ArrayList<>();
 
+        // Tectonic-inspired terrain features
+        private float verticalTerrainScale = 1.0f; // 0.5-2.0, stretches terrain vertically (Tectonic default: 1.125)
+        private boolean undergroundRivers = false; // Generate underground water channels
+        private boolean rollingHills = false; // Add gentle terrain variation
+        private boolean junglePillars = false; // Generate dramatic vertical spires
+        private boolean lavaTunnels = false; // Generate underground lava channels
+        private float flatTerrainSkew = 0.0f; // 0.0-1.0, controls amount of flat terrain (0=none, 1=mostly flat)
+        private float oceanOffset = -0.8f; // -1.0 to 1.0, controls ocean vs land ratio (negative=more ocean)
+        private float caveDepthCutoffStart = 0.1f; // 0.0-1.0, where caves start to fade out
+        private float caveDepthCutoffSize = 0.1f; // 0.0-1.0, size of cave cutoff gradient
+        private float cheeseCaveAdditive = 0.27f; // -1.0 to 1.0, controls large cave intensity
+        private float noodleCaveAdditive = -0.075f; // -1.0 to 1.0, controls small cave intensity
+        private boolean enableIncreasedHeight = false; // Increase world height limits (experimental)
+        private boolean enableUltrasmooth = false; // Ultra-smooth terrain generation (less dramatic)
+        private int snowStartOffset = 128; // Y level offset where snow starts forming
+
+        // Full Tectonic generation mode
+        private boolean useTectonicGeneration = false; // Enable complete Tectonic worldgen system
+        private boolean enableIslands = false; // Enable island generation in Tectonic mode
+        private float mountainSharpness = 1.0f; // Mountain sharpness multiplier for Tectonic
+        private boolean enableDesertDunes = false; // Enable desert dune features
+        private float duneHeight = 10.0f; // Height of desert dunes
+        private float duneWavelength = 200.0f; // Wavelength of dune patterns
+        private float pillarHeight = 30.0f; // Height of jungle pillars
+
         // Dimension properties
         private int skyColor = 0x78A7FF;
         private int fogColor = 0xC0D8FF;
         private boolean hasAtmosphere = true;
+        private boolean atmosphereBreathable = true;  // Separate flag for breathable atmosphere
         private float ambientLight = 0.1f;
 
         // Planet physical properties
@@ -349,10 +674,28 @@ public class PlanetMaker {
         private boolean acidRainDamage = false;
         private float acidRainDamageAmount = 1.0f;
 
+        // Tectonic worldgen configuration system
+        private CraterConfig craterConfig = null;
+        private CanyonConfig canyonConfig = null;
+        private VolcanoConfig volcanoConfig = null;
+        private PolarCapConfig polarCapConfig = null;
+        private DuneConfig duneConfig = null;
+        private MariaConfig mariaConfig = null;
+        private AtmosphereConfig atmosphereEffectsConfig = null;
+        private ScarpConfig scarpConfig = null;
+        private BasinConfig basinConfig = null;
+        private RegolithConfig regolithConfig = null;
+        private java.util.List<BiomeConfigEntry> biomeConfigs = new java.util.ArrayList<>();
+        private BiomeZoneConfig biomeZoneConfig = null;
+        private TectonicNoiseConfig tectonicNoiseConfig = null;
+        private SurfaceRuleConfig surfaceRuleConfig = null;
+
         private PlanetBuilder(String name) {
             this.name = name;
             // Generate unique seed from planet name hash + constant offset for deterministic results
             this.seed = name.hashCode() + 1000000L; // Offset to avoid negative hash values being too small
+            // Initialize terrain tweaks with reference to this builder for fluent chaining
+            this.terrainTweaks = new TerrainTweaks(this);
         }
 
         // Noise parameter configuration methods
@@ -367,6 +710,445 @@ public class PlanetMaker {
          */
         public PlanetBuilder gravity(float gravity) {
             this.gravity = Math.max(0.01f, Math.min(10.0f, gravity)); // Clamp between 0.01 and 10.0
+            return this;
+        }
+
+        /**
+         * Use vanilla Overworld terrain generation (continents, mountains, oceans, caves)
+         * This is the RECOMMENDED approach - proven, tested, and works perfectly.
+         * Only customize surface blocks, not terrain shape.
+         */
+        public PlanetBuilder useOverworldTerrain() {
+            this.useVanillaNoise = true;
+            this.vanillaNoiseReference = "minecraft:overworld";
+            return this;
+        }
+
+        /**
+         * Use vanilla Nether terrain generation (floating islands, lava lakes, pillars)
+         */
+        public PlanetBuilder useNetherTerrain() {
+            this.useVanillaNoise = true;
+            this.vanillaNoiseReference = "minecraft:nether";
+            return this;
+        }
+
+        /**
+         * Use vanilla End terrain generation (single large island with void)
+         */
+        public PlanetBuilder useEndTerrain() {
+            this.useVanillaNoise = true;
+            this.vanillaNoiseReference = "minecraft:the_end";
+            return this;
+        }
+
+        /**
+         * Use IDENTICAL vanilla Overworld terrain generation.
+         * This uses direct references to all vanilla noise router entries including:
+         * - continents, erosion, depth, ridges (terrain shape)
+         * - initial_density_without_jaggedness, final_density (caves and 3D terrain)
+         *
+         * The terrain will be byte-for-byte identical to vanilla Overworld.
+         * Only surface blocks, biomes, and spawning differ.
+         *
+         * This is the RECOMMENDED approach for planets that should have vanilla-quality terrain.
+         */
+        public PlanetBuilder useIdenticalVanillaTerrain() {
+            this.useVanillaNoise = true;
+            this.useIdenticalVanillaTerrain = true;
+            this.vanillaNoiseReference = "minecraft:overworld";
+            // Enable vanilla caves and underground features for full vanilla experience
+            this.useVanillaCaves = true;
+            this.useVanillaUndergroundFeatures = true;
+            // Reset any coordinate shifting that would create custom density functions
+            this.coordinateShiftX = 0;
+            this.coordinateShiftZ = 0;
+            this.noiseScaleXZ = 1.0;
+            this.noiseScaleY = 1.0;
+            this.customSalt = null;
+            // Reset noise modulation
+            this.continentsMultiplier = 1.0;
+            this.erosionMultiplier = 1.0;
+            this.ridgesMultiplier = 1.0;
+            this.depthMultiplier = 1.0;
+            this.continentsNoiseOffset = 0.0;
+            this.erosionNoiseOffset = 0.0;
+            this.ridgesNoiseOffset = 0.0;
+            this.depthNoiseOffset = 0.0;
+            return this;
+        }
+
+        /**
+         * Use vanilla-QUALITY terrain generation with coordinate shifting.
+         * This copies the full vanilla density function set (offset, factor, jaggedness splines)
+         * and replaces references to create planet-specific versions.
+         *
+         * Unlike useIdenticalVanillaTerrain(), this produces UNIQUE terrain per planet
+         * that still has vanilla-quality spline-based terrain shaping.
+         *
+         * Configurable parameters:
+         * - coordinateShift(x, z): Shifts noise sampling position for unique terrain
+         * - base3dNoiseScale(xz, y): Controls terrain frequency
+         * - base3dNoiseFactor(xz, y): Controls terrain amplitude
+         * - slopedCheeseMultiplier(mult): Controls overall terrain scale (default 4.0)
+         * - jaggedNoiseScale(scale): Controls mountain peak spacing (default 1500.0)
+         */
+        public PlanetBuilder useVanillaQualityTerrain() {
+            this.useVanillaNoise = true;
+            this.useVanillaQualityTerrain = true;
+            this.useIdenticalVanillaTerrain = false;  // Mutually exclusive
+            this.vanillaNoiseReference = "minecraft:overworld";
+            // Enable vanilla caves and underground features for full vanilla experience
+            this.useVanillaCaves = true;
+            this.useVanillaUndergroundFeatures = true;
+            // Set default coordinate shift based on planet name hash
+            if (this.coordinateShiftX == 0 && this.coordinateShiftZ == 0) {
+                this.coordinateShiftX = generateCoordinateShift(this.name, 0);
+                this.coordinateShiftZ = generateCoordinateShift(this.name, 1);
+            }
+            return this;
+        }
+
+        /**
+         * Configure sloped_cheese terrain multiplier (default 4.0).
+         * Higher values create more dramatic terrain.
+         */
+        public PlanetBuilder slopedCheeseMultiplier(float multiplier) {
+            this.terrainFactor = multiplier;
+            return this;
+        }
+
+        /**
+         * Configure jagged noise scale for mountain peaks (default 1500.0).
+         * Higher values create larger, more spaced mountains.
+         */
+        public PlanetBuilder jaggedNoiseScale(float scale) {
+            this.jaggednessNoiseScale = scale;
+            return this;
+        }
+
+        /**
+         * Enable vanilla cave carvers in biomes (cave, cave_extra_underground, canyon)
+         */
+        public PlanetBuilder useVanillaCaves(boolean enabled) {
+            this.useVanillaCaves = enabled;
+            return this;
+        }
+
+        /**
+         * Enable vanilla underground features in biomes (ores, geodes, monster rooms, etc.)
+         */
+        public PlanetBuilder useVanillaUndergroundFeatures(boolean enabled) {
+            this.useVanillaUndergroundFeatures = enabled;
+            return this;
+        }
+
+        // ========== TERRAIN PRESETS ==========
+        // These configure the noise multipliers to create different terrain characters
+        // while still using vanilla-quality algorithms. Requires coordinateShift() to take effect.
+
+        /**
+         * FLAT terrain - minimal height variation, good for plains-style planets
+         * continents: 0.3x, erosion: 0.3x, ridges: 0.2x
+         */
+        public PlanetBuilder terrainFlat() {
+            this.continentsMultiplier = 0.3;
+            this.erosionMultiplier = 0.3;
+            this.ridgesMultiplier = 0.2;
+            return this;
+        }
+
+        /**
+         * ROLLING HILLS terrain - gentle undulation, pastoral feel
+         * continents: 0.6x, erosion: 0.5x, ridges: 0.4x
+         */
+        public PlanetBuilder terrainRollingHills() {
+            this.continentsMultiplier = 0.6;
+            this.erosionMultiplier = 0.5;
+            this.ridgesMultiplier = 0.4;
+            return this;
+        }
+
+        /**
+         * NORMAL terrain - vanilla-like balance (default)
+         * continents: 1.0x, erosion: 1.0x, ridges: 1.0x
+         */
+        public PlanetBuilder terrainNormal() {
+            this.continentsMultiplier = 1.0;
+            this.erosionMultiplier = 1.0;
+            this.ridgesMultiplier = 1.0;
+            return this;
+        }
+
+        /**
+         * MOUNTAINOUS terrain - dramatic peaks and valleys
+         * continents: 1.2x, erosion: 0.6x, ridges: 2.5x
+         */
+        public PlanetBuilder terrainMountainous() {
+            this.continentsMultiplier = 1.2;
+            this.erosionMultiplier = 0.6;  // Less erosion = taller features
+            this.ridgesMultiplier = 2.5;   // More ridges = more peaks
+            return this;
+        }
+
+        /**
+         * CANYON terrain - deep valleys and plateaus
+         * continents: 0.8x, erosion: 2.5x, ridges: 1.5x
+         */
+        public PlanetBuilder terrainCanyons() {
+            this.continentsMultiplier = 0.8;
+            this.erosionMultiplier = 2.5;   // High erosion = carved terrain
+            this.ridgesMultiplier = 1.5;
+            return this;
+        }
+
+        /**
+         * CHAOTIC terrain - extreme, alien landscapes
+         * continents: 2.0x, erosion: 2.0x, ridges: 3.0x
+         */
+        public PlanetBuilder terrainChaotic() {
+            this.continentsMultiplier = 2.0;
+            this.erosionMultiplier = 2.0;
+            this.ridgesMultiplier = 3.0;
+            return this;
+        }
+
+        /**
+         * ARCHIPELAGO terrain - many islands and water bodies
+         * continents: 0.4x (less land), erosion: 0.8x, ridges: 0.6x
+         */
+        public PlanetBuilder terrainArchipelago() {
+            this.continentsMultiplier = 0.4;  // Less continental = more ocean
+            this.erosionMultiplier = 0.8;
+            this.ridgesMultiplier = 0.6;
+            return this;
+        }
+
+        /**
+         * VOLCANIC terrain - tall peaks with flat surroundings
+         * continents: 0.5x, erosion: 0.3x, ridges: 4.0x
+         */
+        public PlanetBuilder terrainVolcanic() {
+            this.continentsMultiplier = 0.5;
+            this.erosionMultiplier = 0.3;
+            this.ridgesMultiplier = 4.0;  // Extreme ridges = isolated peaks
+            return this;
+        }
+
+        /**
+         * CRATERED terrain - good for moons, pockmarked surface
+         * continents: 0.7x, erosion: 1.8x, ridges: 0.8x
+         */
+        public PlanetBuilder terrainCratered() {
+            this.continentsMultiplier = 0.7;
+            this.erosionMultiplier = 1.8;   // Erosion creates depressions
+            this.ridgesMultiplier = 0.8;
+            return this;
+        }
+
+        /**
+         * Custom terrain multipliers - full control
+         * @param continents Continental influence (0.1-3.0, default 1.0)
+         * @param erosion Erosion influence (0.1-3.0, default 1.0)
+         * @param ridges Ridge/peak influence (0.1-5.0, default 1.0)
+         */
+        public PlanetBuilder terrainCustom(double continents, double erosion, double ridges) {
+            this.continentsMultiplier = continents;
+            this.erosionMultiplier = erosion;
+            this.ridgesMultiplier = ridges;
+            return this;
+        }
+
+        // ========== VANILLA-QUALITY TERRAIN PRESETS ==========
+        // These configure the sloped_cheese and base_3d_noise parameters for vanilla-quality mode.
+        // Use with .useVanillaQualityTerrain() for best results.
+
+        /**
+         * VANILLA-QUALITY: Standard Overworld terrain (default settings)
+         * Uses vanilla's exact terrain algorithm with coordinate shifting for unique terrain.
+         */
+        public PlanetBuilder vanillaQualityStandard() {
+            this.useVanillaQualityTerrain = true;
+            this.useVanillaNoise = true;
+            this.useVanillaCaves = true;
+            this.useVanillaUndergroundFeatures = true;
+            this.terrainFactor = 4.0f;
+            this.jaggednessNoiseScale = 1500.0f;
+            this.base3DNoiseXZFactor = 80.0f;
+            this.base3DNoiseYFactor = 160.0f;
+            this.smearScaleMultiplier = 8.0f;
+            return this;
+        }
+
+        /**
+         * VANILLA-QUALITY: Flat terrain with gentle rolling hills
+         * Reduced terrain factor and amplitude for a calmer landscape.
+         */
+        public PlanetBuilder vanillaQualityFlat() {
+            vanillaQualityStandard();
+            this.terrainFactor = 2.0f;       // Less dramatic terrain
+            this.base3DNoiseXZFactor = 40.0f; // Smaller features
+            this.jaggednessNoiseScale = 2000.0f;  // Larger mountain spacing
+            return this;
+        }
+
+        /**
+         * VANILLA-QUALITY: Mountainous terrain with dramatic peaks
+         * Increased terrain factor and jaggedness for extreme landscapes.
+         */
+        public PlanetBuilder vanillaQualityMountainous() {
+            vanillaQualityStandard();
+            this.terrainFactor = 6.0f;        // More dramatic terrain
+            this.jaggednessNoiseScale = 1000.0f;  // Closer mountain peaks
+            this.base3DNoiseXZFactor = 120.0f;    // Larger features
+            return this;
+        }
+
+        /**
+         * VANILLA-QUALITY: Alien terrain with shifted noise and modified parameters
+         * Coordinate shifted with adjusted noise for otherworldly feel.
+         */
+        public PlanetBuilder vanillaQualityAlien() {
+            vanillaQualityStandard();
+            this.terrainFactor = 5.0f;
+            this.base3DNoiseXZFactor = 60.0f;
+            this.base3DNoiseYFactor = 140.0f;
+            this.smearScaleMultiplier = 6.0f;  // Less smooth terrain
+            this.jaggednessNoiseScale = 1200.0f;
+            return this;
+        }
+
+        /**
+         * VANILLA-QUALITY: Cratered terrain for moons
+         * Good for airless bodies with impact crater-like features.
+         */
+        public PlanetBuilder vanillaQualityCratered() {
+            vanillaQualityStandard();
+            this.terrainFactor = 3.0f;
+            this.base3DNoiseXZFactor = 100.0f;
+            this.jaggednessNoiseScale = 800.0f;  // Frequent peaks (crater rims)
+            this.smearScaleMultiplier = 4.0f;    // Sharper features
+            return this;
+        }
+
+        /**
+         * VANILLA-QUALITY: Archipelago terrain with lots of water
+         * Good for ocean worlds with island chains.
+         */
+        public PlanetBuilder vanillaQualityArchipelago() {
+            vanillaQualityStandard();
+            this.terrainFactor = 4.0f;
+            this.base3DNoiseXZFactor = 50.0f;  // Smaller landmasses
+            return this;
+        }
+
+        /**
+         * Configure terrain character tweaks for vanilla-quality generation
+         * Returns TerrainTweaks object for chaining tweak configuration
+         * Example: .terrainTweaks().jaggedness(1.5).erosion(0.7).height(0.8)
+         */
+        public TerrainTweaks terrainTweaks() {
+            return this.terrainTweaks;
+        }
+
+        /**
+         * Modulate vanilla continents noise by multiplier (e.g., 1.3 for more dramatic landmasses)
+         */
+        public PlanetBuilder modulateContinents(double multiplier) {
+            this.continentsMultiplier = multiplier;
+            return this;
+        }
+
+        /**
+         * Modulate vanilla erosion noise by multiplier (e.g., 1.4 for more erosion features)
+         */
+        public PlanetBuilder modulateErosion(double multiplier) {
+            this.erosionMultiplier = multiplier;
+            return this;
+        }
+
+        /**
+         * Modulate vanilla ridges noise by multiplier (e.g., 1.5 for sharper ridges)
+         */
+        public PlanetBuilder modulateRidges(double multiplier) {
+            this.ridgesMultiplier = multiplier;
+            return this;
+        }
+
+        /**
+         * Modulate vanilla depth noise by multiplier (e.g., 0.8 for less vertical variation)
+         */
+        public PlanetBuilder modulateDepth(double multiplier) {
+            this.depthMultiplier = multiplier;
+            return this;
+        }
+
+        /**
+         * Offset continents noise sampling (shifts where planet samples the noise space)
+         */
+        public PlanetBuilder offsetContinents(double offset) {
+            this.continentsNoiseOffset = offset;
+            return this;
+        }
+
+        /**
+         * Offset erosion noise sampling (shifts where planet samples the noise space)
+         */
+        public PlanetBuilder offsetErosion(double offset) {
+            this.erosionNoiseOffset = offset;
+            return this;
+        }
+
+        /**
+         * Offset ridges noise sampling (shifts where planet samples the noise space)
+         */
+        public PlanetBuilder offsetRidges(double offset) {
+            this.ridgesNoiseOffset = offset;
+            return this;
+        }
+
+        /**
+         * Offset depth noise sampling (shifts where planet samples the noise space)
+         */
+        public PlanetBuilder offsetDepth(double offset) {
+            this.depthNoiseOffset = offset;
+            return this;
+        }
+
+        /**
+         * Set coordinate shift for sampling different regions of noise space.
+         * This makes each planet sample a different "location" in the noise function,
+         * creating unique terrain as if using a different world seed.
+         *
+         * @param x X-axis shift (recommended range: 0-5000)
+         * @param z Z-axis shift (recommended range: 0-5000)
+         */
+        public PlanetBuilder coordinateShift(int x, int z) {
+            this.coordinateShiftX = x;
+            this.coordinateShiftZ = z;
+            return this;
+        }
+
+        /**
+         * Set noise scaling factors for terrain frequency control.
+         *
+         * @param xz Horizontal (XZ) scale factor (0.8-1.3 recommended)
+         * @param y Vertical (Y) scale factor (1.5-2.5 recommended)
+         */
+        public PlanetBuilder noiseScale(double xz, double y) {
+            this.noiseScaleXZ = xz;
+            this.noiseScaleY = y;
+            return this;
+        }
+
+        /**
+         * Set custom salt for noise generation. If not set, salt will be
+         * automatically generated from planet ID hash.
+         *
+         * @param salt Unique integer salt for this planet's noise
+         */
+        public PlanetBuilder terrainSalt(int salt) {
+            this.customSalt = salt;
             return this;
         }
 
@@ -557,6 +1339,16 @@ public class PlanetMaker {
 
         public PlanetBuilder bedrockBlock(String block) {
             this.bedrockBlock = block;
+            return this;
+        }
+
+        /**
+         * Set the block to use below Y=0 (replaces vanilla deepslate layer).
+         * This creates a transition from defaultBlock (above Y=0) to deepslateBlock (below Y=0),
+         * mimicking vanilla's stone->deepslate transition.
+         */
+        public PlanetBuilder deepslateBlock(String block) {
+            this.deepslateBlock = block;
             return this;
         }
 
@@ -1154,6 +1946,15 @@ public class PlanetMaker {
 
         public PlanetBuilder hasAtmosphere(boolean atmosphere) {
             this.hasAtmosphere = atmosphere;
+            // If no atmosphere, it can't be breathable
+            if (!atmosphere) {
+                this.atmosphereBreathable = false;
+            }
+            return this;
+        }
+
+        public PlanetBuilder breathableAtmosphere(boolean breathable) {
+            this.atmosphereBreathable = breathable;
             return this;
         }
 
@@ -2095,6 +2896,298 @@ public class PlanetMaker {
             return this;
         }
 
+        // ========== TECTONIC-INSPIRED TERRAIN FEATURES ==========
+
+        /**
+         * Set vertical terrain scaling (Tectonic-inspired)
+         * Stretches terrain vertically for more dramatic height variation
+         * @param scale Vertical scale multiplier (0.5-2.0, default 1.0, Tectonic default 1.125)
+         */
+        public PlanetBuilder verticalTerrainScale(float scale) {
+            this.verticalTerrainScale = Math.max(0.5f, Math.min(2.0f, scale));
+            return this;
+        }
+
+        /**
+         * Enable underground river generation (Tectonic-inspired)
+         * Creates underground water channels for interesting cave systems
+         * @param enabled True to enable underground rivers
+         */
+        public PlanetBuilder undergroundRivers(boolean enabled) {
+            this.undergroundRivers = enabled;
+            return this;
+        }
+
+        /**
+         * Enable rolling hills terrain variation (Tectonic-inspired)
+         * Adds gentle undulating terrain for more natural landscapes
+         * @param enabled True to enable rolling hills
+         */
+        public PlanetBuilder rollingHills(boolean enabled) {
+            this.rollingHills = enabled;
+            return this;
+        }
+
+        /**
+         * Enable jungle pillar generation (Tectonic-inspired)
+         * Creates dramatic vertical stone spires in suitable biomes
+         * @param enabled True to enable jungle pillars
+         */
+        public PlanetBuilder junglePillars(boolean enabled) {
+            this.junglePillars = enabled;
+            return this;
+        }
+
+        /**
+         * Enable lava tunnel generation (Tectonic-inspired)
+         * Creates underground lava channels and tubes
+         * @param enabled True to enable lava tunnels
+         */
+        public PlanetBuilder lavaTunnels(boolean enabled) {
+            this.lavaTunnels = enabled;
+            return this;
+        }
+
+        /**
+         * Set flat terrain skew (Tectonic-inspired)
+         * Controls the amount of flat terrain vs varied terrain
+         * @param skew Flat terrain amount (0.0=no flat terrain, 1.0=mostly flat, default 0.0)
+         */
+        public PlanetBuilder flatTerrainSkew(float skew) {
+            this.flatTerrainSkew = Math.max(0.0f, Math.min(1.0f, skew));
+            return this;
+        }
+
+        /**
+         * Set ocean offset (Tectonic-inspired)
+         * Controls the ocean vs land ratio
+         * @param offset Ocean amount (-1.0=all ocean, 1.0=all land, default -0.8)
+         */
+        public PlanetBuilder oceanOffset(float offset) {
+            this.oceanOffset = Math.max(-1.0f, Math.min(1.0f, offset));
+            return this;
+        }
+
+        /**
+         * Configure cave depth cutoff (Tectonic-inspired)
+         * Controls where caves fade out vertically
+         * @param start Where cave cutoff starts (0.0-1.0, default 0.1)
+         * @param size Size of cutoff gradient (0.0-1.0, default 0.1)
+         */
+        public PlanetBuilder caveDepthCutoff(float start, float size) {
+            this.caveDepthCutoffStart = Math.max(0.0f, Math.min(1.0f, start));
+            this.caveDepthCutoffSize = Math.max(0.0f, Math.min(1.0f, size));
+            return this;
+        }
+
+        /**
+         * Configure cheese cave intensity (Tectonic-inspired)
+         * Controls large open cave system generation
+         * @param additive Cave intensity (-1.0 to 1.0, default 0.27)
+         */
+        public PlanetBuilder cheeseCaveIntensity(float additive) {
+            this.cheeseCaveAdditive = Math.max(-1.0f, Math.min(1.0f, additive));
+            return this;
+        }
+
+        /**
+         * Configure noodle cave intensity (Tectonic-inspired)
+         * Controls small winding tunnel generation
+         * @param additive Cave intensity (-1.0 to 1.0, default -0.075)
+         */
+        public PlanetBuilder noodleCaveIntensity(float additive) {
+            this.noodleCaveAdditive = Math.max(-1.0f, Math.min(1.0f, additive));
+            return this;
+        }
+
+        /**
+         * Enable increased world height (Tectonic-inspired)
+         * Experimental feature to increase world height limits
+         * @param enabled True to enable increased height
+         */
+        public PlanetBuilder increasedHeight(boolean enabled) {
+            this.enableIncreasedHeight = enabled;
+            if (enabled) {
+                // Automatically adjust world height when enabled
+                this.minY = -128;
+                this.worldHeight = 512;
+            }
+            return this;
+        }
+
+        /**
+         * Enable ultrasmooth terrain (Tectonic-inspired)
+         * Creates smoother, less dramatic terrain
+         * @param enabled True to enable ultrasmooth
+         */
+        public PlanetBuilder ultrasmooth(boolean enabled) {
+            this.enableUltrasmooth = enabled;
+            return this;
+        }
+
+        /**
+         * Set snow start offset (Tectonic-inspired)
+         * Y level offset where snow begins forming
+         * @param offset Snow start Y offset (default 128)
+         */
+        public PlanetBuilder snowStartOffset(int offset) {
+            this.snowStartOffset = offset;
+            return this;
+        }
+
+        /**
+         * Apply a Tectonic-inspired preset configuration
+         * Combines multiple features for common terrain styles
+         * @param preset Preset name: "enhanced_earth", "alien_world", "volcanic", "frozen"
+         */
+        public PlanetBuilder tectonicPreset(String preset) {
+            switch (preset.toLowerCase()) {
+                case "enhanced_earth":
+                    // Earth-like with Tectonic enhancements
+                    verticalTerrainScale(1.125f);
+                    undergroundRivers(true);
+                    rollingHills(true);
+                    flatTerrainSkew(0.1f);
+                    oceanOffset(-0.8f);
+                    break;
+
+                case "alien_world":
+                    // Dramatic alien terrain
+                    verticalTerrainScale(1.4f);
+                    rollingHills(false);
+                    flatTerrainSkew(0.0f);
+                    oceanOffset(-0.5f);
+                    junglePillars(true);
+                    cheeseCaveIntensity(0.4f);
+                    break;
+
+                case "volcanic":
+                    // Volcanic world with lava features
+                    verticalTerrainScale(1.3f);
+                    lavaTunnels(true);
+                    undergroundRivers(false);
+                    flatTerrainSkew(0.05f);
+                    oceanOffset(-0.3f);
+                    cheeseCaveIntensity(0.35f);
+                    break;
+
+                case "frozen":
+                    // Icy world with smooth terrain
+                    verticalTerrainScale(1.1f);
+                    ultrasmooth(true);
+                    rollingHills(true);
+                    flatTerrainSkew(0.2f);
+                    oceanOffset(-0.9f);
+                    snowStartOffset(64);
+                    break;
+
+                case "extreme_mountains":
+                    // Maximum vertical drama
+                    verticalTerrainScale(1.8f);
+                    rollingHills(false);
+                    flatTerrainSkew(0.0f);
+                    oceanOffset(0.3f);
+                    junglePillars(true);
+                    break;
+
+                case "flat_plains":
+                    // Mostly flat with gentle variation
+                    verticalTerrainScale(0.8f);
+                    ultrasmooth(true);
+                    rollingHills(true);
+                    flatTerrainSkew(0.7f);
+                    oceanOffset(-0.6f);
+                    break;
+            }
+            return this;
+        }
+
+        /**
+         * Enable full Tectonic worldgen system with advanced density functions.
+         * This uses the complete NoiseRouterBuilder for Tectonic-quality terrain.
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withTectonicGeneration() {
+            this.useTectonicGeneration = true;
+            return this;
+        }
+
+        /**
+         * Configure islands in Tectonic generation mode.
+         * @param enable Whether to generate islands
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withIslands(boolean enable) {
+            this.enableIslands = enable;
+            return this;
+        }
+
+        /**
+         * Configure mountain sharpness for Tectonic generation.
+         * @param sharpness Sharpness multiplier (0.1-2.0, default 1.0)
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withMountainSharpness(float sharpness) {
+            this.mountainSharpness = sharpness;
+            return this;
+        }
+
+        /**
+         * Enable desert dune generation.
+         * @param height Dune height in blocks
+         * @param wavelength Dune wavelength in blocks
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withDesertDunes(float height, float wavelength) {
+            this.enableDesertDunes = true;
+            this.duneHeight = height;
+            this.duneWavelength = wavelength;
+            return this;
+        }
+
+        /**
+         * Enable jungle pillars with specified height.
+         * @param height Pillar height in blocks
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withJunglePillars(float height) {
+            this.junglePillars = true;
+            this.pillarHeight = height;
+            return this;
+        }
+
+        /**
+         * Configure complete Tectonic terrain using preset.
+         * @param config TectonicConfig preset
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withTectonicConfig(com.hecookin.adastramekanized.worldgen.builder.NoiseRouterBuilder.TectonicConfig config) {
+            this.useTectonicGeneration = true;
+            this.continentalScale = config.continentScale;
+            this.erosionScale = config.erosionScale;
+            this.ridgeScale = config.ridgeScale;
+            this.mountainSharpness = config.mountainSharpness;
+            this.enableIslands = config.enableIslands;
+            this.enableCheeseCaves = config.cheeseCaves;
+            this.enableNoodleCaves = config.noodleCaves;
+            this.undergroundRivers = config.undergroundRivers;
+            this.lavaTunnels = config.lavaTunnels;
+            this.enableDesertDunes = config.desertDunes;
+            this.duneHeight = config.duneHeight;
+            this.duneWavelength = config.duneWavelength;
+            this.junglePillars = config.junglePillars;
+            this.pillarHeight = config.pillarHeight;
+            return this;
+        }
+
+        /**
+         * Check if this planet uses full Tectonic generation.
+         * @return true if Tectonic generation is enabled
+         */
+        public boolean usesTectonicGeneration() {
+            return useTectonicGeneration;
+        }
+
         // ========== GETTERS FOR DIMENSION EFFECTS FALLBACK ==========
 
         /**
@@ -2111,6 +3204,14 @@ public class PlanetMaker {
          */
         public boolean hasAtmosphere() {
             return hasAtmosphere;
+        }
+
+        /**
+         * Check if planet atmosphere is breathable
+         * @return True if atmosphere is breathable
+         */
+        public boolean isAtmosphereBreathable() {
+            return atmosphereBreathable;
         }
 
         /**
@@ -2324,6 +3425,149 @@ public class PlanetMaker {
             return result.toString().trim();
         }
 
+        // Tectonic worldgen configuration methods
+
+        /**
+         * Configure crater generation for this planet
+         * @param config Crater configuration with frequency, size, depth, rim properties
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withCraters(CraterConfig config) {
+            this.craterConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure canyon generation for this planet
+         * @param config Canyon configuration with depth, width, sinuosity, branching
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withCanyons(CanyonConfig config) {
+            this.canyonConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure volcano generation for this planet
+         * @param config Volcano configuration with height, slope, caldera, lava flows
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withVolcanoes(VolcanoConfig config) {
+            this.volcanoConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure polar cap generation for this planet
+         * @param config Polar cap configuration with size, thickness, composition
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withPolarCaps(PolarCapConfig config) {
+            this.polarCapConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure dune generation for this planet
+         * @param config Dune configuration with wavelength, height, orientation
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withDunes(DuneConfig config) {
+            this.duneConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure maria (dark plains) generation for this planet
+         * @param config Maria configuration with size, depth, composition
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withMaria(MariaConfig config) {
+            this.mariaConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure atmospheric visual effects for this planet
+         * @param config Atmosphere configuration with haze, fog, color effects
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withAtmosphericEffects(AtmosphereConfig config) {
+            this.atmosphereEffectsConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure scarp (cliff face) generation for this planet
+         * @param config Scarp configuration with height, steepness, frequency
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withScarps(ScarpConfig config) {
+            this.scarpConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure basin generation for this planet
+         * @param config Basin configuration with size, depth, features
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withBasins(BasinConfig config) {
+            this.basinConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure regolith layer depth for this planet
+         * @param config Regolith configuration with min/max depth, variation
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withRegolithDepth(RegolithConfig config) {
+            this.regolithConfig = config;
+            return this;
+        }
+
+        /**
+         * Add a custom biome with detailed configuration
+         * @param biomeName Biome identifier (will be prefixed with planet name)
+         * @param config Biome configuration with temperature, colors, blocks, features
+         * @return this builder for chaining
+         */
+        public PlanetBuilder addBiome(String biomeName, BiomeConfig config) {
+            this.biomeConfigs.add(new BiomeConfigEntry(biomeName, config));
+            return this;
+        }
+
+        /**
+         * Configure biome distribution zones (altitude, noise-based, feature-based)
+         * @param config Biome zone configuration with zone definitions
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withBiomeZones(BiomeZoneConfig config) {
+            this.biomeZoneConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure Tectonic noise integration
+         * @param config Tectonic noise configuration with continents, erosion, ridges
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withTectonicNoise(TectonicNoiseConfig config) {
+            this.tectonicNoiseConfig = config;
+            return this;
+        }
+
+        /**
+         * Configure custom surface rules for terrain generation
+         * @param config Surface rule configuration with biome-specific rules
+         * @return this builder for chaining
+         */
+        public PlanetBuilder withSurfaceRules(SurfaceRuleConfig config) {
+            this.surfaceRuleConfig = config;
+            return this;
+        }
+
         /**
          * Generate this planet and add it to the generation queue
          */
@@ -2511,6 +3755,19 @@ public class PlanetMaker {
         }
 
         /**
+         * Inner class for biome configuration entries
+         */
+        private static class BiomeConfigEntry {
+            final String biomeName;
+            final BiomeConfig config;
+
+            BiomeConfigEntry(String biomeName, BiomeConfig config) {
+                this.biomeName = biomeName;
+                this.config = config;
+            }
+        }
+
+        /**
          * Inner class for sun configuration
          */
         private static class SunConfig {
@@ -2585,6 +3842,8 @@ public class PlanetMaker {
         new File(RESOURCES_PATH + "worldgen/placed_feature").mkdirs();
         new File(RESOURCES_PATH + "worldgen/biome").mkdirs();
         new File(RESOURCES_PATH + "advancement/planets").mkdirs();
+        new File(RESOURCES_PATH + "tags/worldgen/biome").mkdirs();  // For biome tags per planet
+        new File(RESOURCES_PATH + "neoforge/biome_modifier").mkdirs();  // For NeoForge biome modifiers
         new File("src/main/resources/assets/adastramekanized/patchouli_books/journal/en_us/entries/known_planets").mkdirs();
     }
 
@@ -2595,6 +3854,21 @@ public class PlanetMaker {
         generatePlanetData(planet);
         generateDimensionData(planet);
         generateDimensionType(planet);
+
+        // Generate custom noise and density functions if coordinate shifting is enabled
+        // This must happen BEFORE generateNoiseSettings, as noise settings reference these files
+        boolean useCustomDensityFunctions = planet.coordinateShiftX != 0 ||
+                                            planet.coordinateShiftZ != 0 ||
+                                            planet.customSalt != null ||
+                                            planet.noiseScaleXZ != 1.0 ||
+                                            planet.noiseScaleY != 1.0;
+
+        if (useCustomDensityFunctions) {
+            AdAstraMekanized.LOGGER.info("Generating custom terrain for planet '{}' with coordinate-shifted noise", planet.name);
+            generateCustomNoiseFiles(planet);           // Generate custom noise sources
+            generateCustomDensityFunctions(planet);     // Generate shifted_noise wrappers
+        }
+
         generateNoiseSettings(planet);
 
         // Generate ore features if enabled
@@ -2604,6 +3878,12 @@ public class PlanetMaker {
 
         // Generate custom biomes with features
         generateCustomBiomes(planet);
+
+        // Generate biome tag for this planet (groups all planet biomes for biome_modifiers)
+        generateBiomeTag(planet);
+
+        // Generate biome modifier for mob spawning (NeoForge system)
+        generateBiomeModifier(planet);
     }
 
     /**
@@ -2628,9 +3908,9 @@ public class PlanetMaker {
         // Atmosphere
         JsonObject atmosphere = new JsonObject();
         atmosphere.addProperty("has_atmosphere", planet.hasAtmosphere);
-        atmosphere.addProperty("breathable", planet.hasAtmosphere);
+        atmosphere.addProperty("breathable", planet.atmosphereBreathable);
         atmosphere.addProperty("pressure", planet.hasAtmosphere ? 1.0f : 0.0f);
-        atmosphere.addProperty("oxygen_level", planet.hasAtmosphere ? 0.21f : 0.0f);
+        atmosphere.addProperty("oxygen_level", planet.atmosphereBreathable ? 0.21f : 0.0f);
         atmosphere.addProperty("type", planet.hasAtmosphere ? "NORMAL" : "NONE");
         planetJson.add("atmosphere", atmosphere);
 
@@ -2860,6 +4140,808 @@ public class PlanetMaker {
     }
 
     /**
+     * Generate a deterministic salt value from planet ID for unique noise generation.
+     * Uses hash code to ensure each planet gets a unique but reproducible salt.
+     *
+     * @param planetId The planet identifier
+     * @return Positive integer salt value
+     */
+    private static int generateSaltFromPlanetId(String planetId) {
+        // Use hash code for deterministic salt generation
+        int hash = planetId.hashCode();
+        // Ensure positive value and keep in reasonable range
+        return Math.abs(hash % 100000);
+    }
+
+    /**
+     * Get the salt for a planet, using custom salt if set, otherwise auto-generate.
+     *
+     * @param planet The planet builder
+     * @return Salt value for noise generation
+     */
+    private static int getPlanetSalt(PlanetBuilder planet) {
+        if (planet.customSalt != null) {
+            return planet.customSalt;
+        }
+        return generateSaltFromPlanetId(planet.name);
+    }
+
+    /**
+     * Generate coordinate shift for a planet. If not explicitly set, derive from planet ID hash.
+     * Ensures each planet samples a different region of noise space.
+     *
+     * @param planetId The planet identifier
+     * @param axis Which axis (0 for X, 1 for Z)
+     * @return Coordinate shift value (0-5000 range)
+     */
+    private static int generateCoordinateShift(String planetId, int axis) {
+        // Combine planet ID with axis to get different values for X and Z
+        int hash = (planetId + "_axis" + axis).hashCode();
+        // Map to 0-5000 range
+        return Math.abs(hash % 5000);
+    }
+
+    /**
+     * Create a simplified final_density that directly uses planet-specific noise
+     * instead of vanilla's complex intermediate functions
+     */
+    private static com.google.gson.JsonElement createSimplifiedFinalDensity(String planetId) {
+        JsonObject finalDensity = new JsonObject();
+        finalDensity.addProperty("type", "minecraft:add");
+
+        // Base terrain from depth * factor
+        JsonObject terrainBase = new JsonObject();
+        terrainBase.addProperty("type", "minecraft:mul");
+        terrainBase.addProperty("argument1", "adastramekanized:" + planetId + "/depth");
+        terrainBase.addProperty("argument2", "adastramekanized:" + planetId + "/factor");
+
+        // Y-gradient for height limits
+        JsonObject yGradient = new JsonObject();
+        yGradient.addProperty("type", "minecraft:y_clamped_gradient");
+        yGradient.addProperty("from_value", 1.0);
+        yGradient.addProperty("from_y", -64);
+        yGradient.addProperty("to_value", -1.0);
+        yGradient.addProperty("to_y", 320);
+
+        // Combine terrain with Y gradient
+        JsonObject combined = new JsonObject();
+        combined.addProperty("type", "minecraft:mul");
+        combined.add("argument1", terrainBase);
+        combined.add("argument2", yGradient);
+
+        finalDensity.add("argument1", combined);
+        finalDensity.addProperty("argument2", 0.0);
+
+        return finalDensity;
+    }
+
+    /**
+     * Create simplified initial_density using planet-specific depth and factor
+     */
+    private static com.google.gson.JsonElement createSimplifiedInitialDensity(String planetId) {
+        JsonObject initialDensity = new JsonObject();
+        initialDensity.addProperty("type", "minecraft:mul");
+        initialDensity.addProperty("argument1", "adastramekanized:" + planetId + "/depth");
+
+        // Scale by factor
+        JsonObject scaled = new JsonObject();
+        scaled.addProperty("type", "minecraft:mul");
+        scaled.addProperty("argument1", 4.0);
+        scaled.addProperty("argument2", "adastramekanized:" + planetId + "/factor");
+
+        initialDensity.add("argument2", scaled);
+        return initialDensity;
+    }
+
+    // ========== VANILLA-QUALITY TERRAIN SYSTEM ==========
+    // Based on vanilla's terrain shaping architecture but with planet-specific noise
+
+    /**
+     * Create enhanced factor function using continents, erosion, and ridges
+     * This replaces the simple continents × erosion multiplication with
+     * vanilla-inspired multi-layer composition for better terrain variety
+     */
+    private static com.google.gson.JsonElement createEnhancedFactor(String planetId, TerrainTweaks tweaks) {
+        // Factor combines multiple noise sources for terrain variation
+        // Base: continents × erosion (continental shape + weathering)
+        JsonObject base = new JsonObject();
+        base.addProperty("type", "minecraft:mul");
+        base.addProperty("argument1", "adastramekanized:" + planetId + "/continents");
+
+        // Apply erosion intensity tweak
+        JsonObject erosionScaled = new JsonObject();
+        erosionScaled.addProperty("type", "minecraft:mul");
+        erosionScaled.addProperty("argument1", tweaks.erosionIntensity);
+        erosionScaled.addProperty("argument2", "adastramekanized:" + planetId + "/erosion");
+
+        base.add("argument2", erosionScaled);
+
+        // Add ridges influence for mountain/valley variation
+        JsonObject withRidges = new JsonObject();
+        withRidges.addProperty("type", "minecraft:add");
+        withRidges.add("argument1", base);
+
+        // Scale ridges with tweak and add to base
+        JsonObject scaledRidges = new JsonObject();
+        scaledRidges.addProperty("type", "minecraft:mul");
+        scaledRidges.addProperty("argument1", 0.3 * tweaks.ridgeStrength);  // Ridge influence with tweak
+        scaledRidges.addProperty("argument2", "adastramekanized:" + planetId + "/ridges");
+
+        withRidges.add("argument2", scaledRidges);
+
+        // Apply factor scale tweak and clamp
+        JsonObject scaled = new JsonObject();
+        scaled.addProperty("type", "minecraft:mul");
+        scaled.addProperty("argument1", tweaks.factorScale);
+        scaled.add("argument2", withRidges);
+
+        // Clamp to reasonable range
+        JsonObject clamped = new JsonObject();
+        clamped.addProperty("type", "minecraft:clamp");
+        clamped.add("input", scaled);
+        clamped.addProperty("min", -1.0);
+        clamped.addProperty("max", 1.0);
+
+        return clamped;
+    }
+
+    /**
+     * Create vanilla-style initial_density_without_jaggedness using enhanced factor
+     * Based on upside_down.json lines 181-240 structure
+     */
+    private static com.google.gson.JsonElement createVanillaStyleInitialDensity(String planetId, TerrainTweaks tweaks) {
+        // Vanilla's initial_density structure with planet-specific noise
+        JsonObject initialDensity = new JsonObject();
+        initialDensity.addProperty("type", "minecraft:add");
+        initialDensity.addProperty("argument1", 0.1171875);
+
+        // Vertical gradient from bedrock to surface
+        JsonObject lowerGradient = new JsonObject();
+        lowerGradient.addProperty("type", "minecraft:y_clamped_gradient");
+        lowerGradient.addProperty("from_value", 0.0);
+        lowerGradient.addProperty("from_y", -64);
+        lowerGradient.addProperty("to_value", 1.0);
+        lowerGradient.addProperty("to_y", -40);
+
+        // Upper gradient for build limit
+        JsonObject upperGradient = new JsonObject();
+        upperGradient.addProperty("type", "minecraft:y_clamped_gradient");
+        upperGradient.addProperty("from_value", 1.0);
+        upperGradient.addProperty("from_y", 240);
+        upperGradient.addProperty("to_value", 0.0);
+        upperGradient.addProperty("to_y", 256);
+
+        // Terrain shape from depth × factor
+        JsonObject terrainShape = new JsonObject();
+        terrainShape.addProperty("type", "minecraft:mul");
+        terrainShape.addProperty("argument1", "adastramekanized:" + planetId + "/depth");
+
+        // Cache factor for performance (vanilla uses cache_2d)
+        JsonObject cachedFactor = new JsonObject();
+        cachedFactor.addProperty("type", "minecraft:cache_2d");
+        cachedFactor.add("argument", createEnhancedFactor(planetId, tweaks));
+        terrainShape.add("argument2", cachedFactor);
+
+        // Apply quarter_negative (vanilla terrain shaping operation)
+        JsonObject quarterNeg = new JsonObject();
+        quarterNeg.addProperty("type", "minecraft:quarter_negative");
+        quarterNeg.add("argument", terrainShape);
+
+        // Scale terrain shape
+        JsonObject scaledShape = new JsonObject();
+        scaledShape.addProperty("type", "minecraft:mul");
+        scaledShape.addProperty("argument1", 4.0);
+        scaledShape.add("argument2", quarterNeg);
+
+        // Offset and clamp
+        JsonObject offset = new JsonObject();
+        offset.addProperty("type", "minecraft:add");
+        offset.addProperty("argument1", -0.703125);
+        offset.add("argument2", scaledShape);
+
+        JsonObject clamped = new JsonObject();
+        clamped.addProperty("type", "minecraft:clamp");
+        clamped.add("input", offset);
+        clamped.addProperty("min", -64.0);
+        clamped.addProperty("max", 64.0);
+
+        // Combine with upper gradient
+        JsonObject withUpper = new JsonObject();
+        withUpper.addProperty("type", "minecraft:add");
+        withUpper.addProperty("argument1", 0.078125);
+        withUpper.add("argument2", clamped);
+
+        JsonObject mulUpper = new JsonObject();
+        mulUpper.addProperty("type", "minecraft:mul");
+        mulUpper.add("argument1", upperGradient);
+        mulUpper.add("argument2", withUpper);
+
+        // Combine lower gradient
+        JsonObject subUpper = new JsonObject();
+        subUpper.addProperty("type", "minecraft:add");
+        subUpper.addProperty("argument1", -0.078125);
+        subUpper.add("argument2", mulUpper);
+
+        JsonObject subLower = new JsonObject();
+        subLower.addProperty("type", "minecraft:add");
+        subLower.addProperty("argument1", -0.1171875);
+        subLower.add("argument2", subUpper);
+
+        JsonObject mulLower = new JsonObject();
+        mulLower.addProperty("type", "minecraft:mul");
+        mulLower.add("argument1", lowerGradient);
+        mulLower.add("argument2", subLower);
+
+        initialDensity.add("argument2", mulLower);
+
+        return initialDensity;
+    }
+
+    /**
+     * Create vanilla-style final_density with planet-specific noise and universal caves
+     * Simplified from vanilla to avoid external cave function dependencies while maintaining quality
+     */
+    private static com.google.gson.JsonElement createVanillaStyleFinalDensity(String planetId, TerrainTweaks tweaks) {
+        // Use vanilla cave functions (universal) with custom terrain base
+        JsonObject finalDensity = new JsonObject();
+        finalDensity.addProperty("type", "minecraft:min");
+
+        // Terrain base (squeeze → interpolated → blend_density for smoothness)
+        JsonObject squeeze = new JsonObject();
+        squeeze.addProperty("type", "minecraft:squeeze");
+
+        JsonObject interpolated = new JsonObject();
+        interpolated.addProperty("type", "minecraft:interpolated");
+
+        JsonObject blendDensity = new JsonObject();
+        blendDensity.addProperty("type", "minecraft:blend_density");
+        blendDensity.add("argument", createVanillaStyleInitialDensity(planetId, tweaks));
+
+        interpolated.add("argument", blendDensity);
+
+        // Scale for terrain amplitude
+        JsonObject scaled = new JsonObject();
+        scaled.addProperty("type", "minecraft:mul");
+        scaled.addProperty("argument1", 0.64);
+        scaled.add("argument2", interpolated);
+
+        squeeze.add("argument", scaled);
+
+        finalDensity.add("argument1", squeeze);
+
+        // Universal vanilla noodle caves
+        finalDensity.addProperty("argument2", "minecraft:overworld/caves/noodle");
+
+        return finalDensity;
+    }
+
+    /**
+     * Create a modulated noise density function with optional offset and multiplier
+     */
+    private static com.google.gson.JsonElement createModulatedNoise(String baseNoise, double multiplier, double offset) {
+        com.google.gson.JsonElement result;
+
+        // Start with base noise reference
+        if (multiplier != 1.0) {
+            // Wrap in multiplication
+            JsonObject mulFunc = new JsonObject();
+            mulFunc.addProperty("type", "minecraft:mul");
+
+            // Create constant for multiplier
+            JsonObject constMul = new JsonObject();
+            constMul.addProperty("type", "minecraft:constant");
+            constMul.addProperty("argument", multiplier);
+
+            mulFunc.add("argument1", constMul);
+            mulFunc.addProperty("argument2", baseNoise);
+            result = mulFunc;
+        } else {
+            // No multiplication, use base noise as string
+            result = new JsonObject();
+            ((JsonObject)result).addProperty("ref", baseNoise);
+            result = new com.google.gson.JsonPrimitive(baseNoise);
+        }
+
+        // Apply offset if set
+        if (offset != 0.0) {
+            JsonObject addFunc = new JsonObject();
+            addFunc.addProperty("type", "minecraft:add");
+
+            // Create constant for offset
+            JsonObject constOffset = new JsonObject();
+            constOffset.addProperty("type", "minecraft:constant");
+            constOffset.addProperty("argument", offset);
+
+            addFunc.add("argument1", result);
+            addFunc.add("argument2", constOffset);
+            result = addFunc;
+        }
+
+        return result;
+    }
+
+    /**
+     * Generate custom noise file for a planet. Creates a unique noise source with
+     * planet-specific salt to ensure different terrain generation.
+     *
+     * @param planetId The planet identifier
+     * @param noiseType The noise type (continents, erosion, depth, ridges)
+     * @param salt Unique salt value for this noise
+     * @throws IOException If file writing fails
+     */
+    private static void generateCustomNoiseFile(String planetId, String noiseType, int salt) throws IOException {
+        JsonObject noise = new JsonObject();
+
+        // Standard vanilla noise parameters
+        noise.addProperty("firstOctave", -9);
+
+        // Amplitudes array - vanilla-like settings
+        JsonArray amplitudes = new JsonArray();
+        amplitudes.add(1.0);
+        amplitudes.add(1.0);
+        amplitudes.add(1.0);
+        amplitudes.add(1.0);
+        amplitudes.add(1.0);
+        amplitudes.add(0.0);
+        amplitudes.add(0.0);
+        noise.add("amplitudes", amplitudes);
+
+        // Custom salt for unique noise per planet
+        noise.addProperty("salt", salt);
+
+        // Write to worldgen/noise/ directory
+        String filename = planetId + "_" + noiseType;
+        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + filename + ".json", noise);
+
+        AdAstraMekanized.LOGGER.info("Generated custom noise: worldgen/noise/{}.json (salt: {})", filename, salt);
+    }
+
+    /**
+     * Generate all custom noise files for a planet (continents, erosion, depth, ridges).
+     * Each noise file gets a unique salt derived from the planet ID and noise type.
+     *
+     * @param planet The planet builder
+     * @throws IOException If file writing fails
+     */
+    private static void generateCustomNoiseFiles(PlanetBuilder planet) throws IOException {
+        int baseSalt = getPlanetSalt(planet);
+
+        // Generate 4 key noise files with unique salts
+        String[] noiseTypes = {"continents", "erosion", "depth", "ridges"};
+        for (int i = 0; i < noiseTypes.length; i++) {
+            String noiseType = noiseTypes[i];
+            // Offset salt by index to ensure each type is unique
+            int noiseSalt = baseSalt + (i * 1000);
+            generateCustomNoiseFile(planet.name, noiseType, noiseSalt);
+        }
+    }
+
+    /**
+     * Generate a shifted_noise density function that applies coordinate transformation
+     * to a VANILLA noise source. This creates unique terrain by sampling different
+     * regions of the noise space while maintaining vanilla terrain quality.
+     *
+     * @param planetId The planet identifier
+     * @param noiseType The noise type (continents, erosion, depth, ridges)
+     * @param shiftX X-axis coordinate shift
+     * @param shiftZ Z-axis coordinate shift
+     * @param scaleXZ Horizontal noise scale
+     * @param scaleY Vertical noise scale
+     * @throws IOException If file writing fails
+     */
+    private static void generateShiftedNoiseDensityFunction(String planetId, String noiseType,
+                                                             int shiftX, int shiftZ,
+                                                             double scaleXZ, double scaleY) throws IOException {
+        JsonObject densityFunc = new JsonObject();
+
+        densityFunc.addProperty("type", "minecraft:shifted_noise");
+
+        // Map noise type to vanilla noise source for vanilla-quality terrain
+        // These are the same noise sources used by vanilla Overworld
+        String vanillaNoise = switch (noiseType) {
+            case "continents" -> "minecraft:continentalness";
+            case "erosion" -> "minecraft:erosion";
+            case "depth" -> "minecraft:ridge";  // Depth uses ridge noise in vanilla
+            case "ridges" -> "minecraft:ridge";
+            default -> "minecraft:continentalness";
+        };
+        densityFunc.addProperty("noise", vanillaNoise);
+
+        // Noise scaling - use vanilla-like values
+        densityFunc.addProperty("xz_scale", scaleXZ);
+        densityFunc.addProperty("y_scale", scaleY);
+
+        // Shift X - use vanilla shift_x reference plus our coordinate offset
+        // This applies our offset on top of vanilla's shift mechanism
+        JsonObject shiftXObj = new JsonObject();
+        shiftXObj.addProperty("type", "minecraft:add");
+        shiftXObj.addProperty("argument1", "minecraft:shift_x");
+        shiftXObj.addProperty("argument2", (double) shiftX);
+        densityFunc.add("shift_x", shiftXObj);
+
+        // Shift Y - always 0 (no vertical shift needed)
+        densityFunc.addProperty("shift_y", 0);
+
+        // Shift Z - use vanilla shift_z reference plus our coordinate offset
+        JsonObject shiftZObj = new JsonObject();
+        shiftZObj.addProperty("type", "minecraft:add");
+        shiftZObj.addProperty("argument1", "minecraft:shift_z");
+        shiftZObj.addProperty("argument2", (double) shiftZ);
+        densityFunc.add("shift_z", shiftZObj);
+
+        // Write to worldgen/density_function/<planetId>/ directory
+        String path = RESOURCES_PATH + "worldgen/density_function/" + planetId + "/";
+        writeJsonFile(path + noiseType + ".json", densityFunc);
+
+        AdAstraMekanized.LOGGER.info("Generated vanilla-quality density function: {}{}.json (shift: {}, {}) using {}",
+                path.replace(RESOURCES_PATH, ""), noiseType, shiftX, shiftZ, vanillaNoise);
+    }
+
+    /**
+     * Generate coordinate-shifted terrain density functions (initial_density_without_jaggedness and final_density).
+     * These are self-contained terrain generators that use ONLY our shifted noise, not vanilla references.
+     *
+     * @param planet The planet builder
+     * @param shiftX X coordinate shift
+     * @param shiftZ Z coordinate shift
+     * @throws IOException If file writing fails
+     */
+    private static void generateCoordinateShiftedTerrainDensityFunctions(PlanetBuilder planet, int shiftX, int shiftZ) throws IOException {
+        String path = RESOURCES_PATH + "worldgen/density_function/" + planet.name + "/";
+
+        // Generate initial_density_without_jaggedness
+        // This combines depth and continents to create the basic terrain shape
+        JsonObject initialDensity = new JsonObject();
+        initialDensity.addProperty("type", "minecraft:cache_2d");
+
+        // Combine depth with continents-based factor
+        JsonObject depthMul = new JsonObject();
+        depthMul.addProperty("type", "minecraft:mul");
+        depthMul.addProperty("argument1", "adastramekanized:" + planet.name + "/depth");
+
+        // Factor based on continents (higher continents = more terrain variation)
+        JsonObject factor = new JsonObject();
+        factor.addProperty("type", "minecraft:add");
+
+        JsonObject continentsMul = new JsonObject();
+        continentsMul.addProperty("type", "minecraft:mul");
+        continentsMul.addProperty("argument1", "adastramekanized:" + planet.name + "/continents");
+        continentsMul.addProperty("argument2", 10.0);  // Scale factor
+
+        factor.add("argument1", continentsMul);
+        factor.addProperty("argument2", 1.0);  // Base factor
+
+        depthMul.add("argument2", factor);
+        initialDensity.add("argument", depthMul);
+
+        writeJsonFile(path + "initial_density_without_jaggedness.json", initialDensity);
+
+        // Generate final_density
+        // This is a self-contained terrain generator using ONLY our shifted noise
+        // No references to vanilla overworld functions
+        JsonObject finalDensity = new JsonObject();
+        finalDensity.addProperty("type", "minecraft:interpolated");
+
+        // Combine multiple noise sources for terrain
+        JsonObject terrainCombined = new JsonObject();
+        terrainCombined.addProperty("type", "minecraft:add");
+
+        // Y-gradient for base terrain shape (solid below, air above)
+        JsonObject yGradient = new JsonObject();
+        yGradient.addProperty("type", "minecraft:y_clamped_gradient");
+        yGradient.addProperty("from_y", -64);
+        yGradient.addProperty("to_y", 320);
+        yGradient.addProperty("from_value", 1.5);   // Solid at bottom
+        yGradient.addProperty("to_value", -1.5);   // Air at top
+
+        terrainCombined.add("argument1", yGradient);
+
+        // Add our shifted noise for terrain variation
+        JsonObject noiseContribution = new JsonObject();
+        noiseContribution.addProperty("type", "minecraft:add");
+
+        // Continents noise - large-scale terrain features
+        // Use configurable multiplier (default 0.4, higher = more continental influence)
+        double continentsScale = 0.4 * planet.continentsMultiplier;
+        JsonObject continentsScaled = new JsonObject();
+        continentsScaled.addProperty("type", "minecraft:mul");
+        continentsScaled.addProperty("argument1", "adastramekanized:" + planet.name + "/continents");
+        continentsScaled.addProperty("argument2", continentsScale);
+
+        noiseContribution.add("argument1", continentsScaled);
+
+        // Erosion noise - medium-scale features (valleys, plateaus)
+        // Use configurable multiplier (default 0.2, higher = more erosion features)
+        double erosionScale = 0.2 * planet.erosionMultiplier;
+        JsonObject erosionScaled = new JsonObject();
+        erosionScaled.addProperty("type", "minecraft:mul");
+        erosionScaled.addProperty("argument1", "adastramekanized:" + planet.name + "/erosion");
+        erosionScaled.addProperty("argument2", erosionScale);
+
+        noiseContribution.add("argument2", erosionScaled);
+
+        terrainCombined.add("argument2", noiseContribution);
+
+        // Add ridges for mountain peaks
+        // Use configurable multiplier (default 0.15, higher = more dramatic peaks)
+        double ridgesScale = 0.15 * planet.ridgesMultiplier;
+        JsonObject withRidges = new JsonObject();
+        withRidges.addProperty("type", "minecraft:add");
+        withRidges.add("argument1", terrainCombined);
+
+        JsonObject ridgesScaled = new JsonObject();
+        ridgesScaled.addProperty("type", "minecraft:mul");
+        ridgesScaled.addProperty("argument1", "adastramekanized:" + planet.name + "/ridges");
+        ridgesScaled.addProperty("argument2", ridgesScale);
+
+        withRidges.add("argument2", ridgesScaled);
+
+        finalDensity.add("argument", withRidges);
+
+        writeJsonFile(path + "final_density.json", finalDensity);
+
+        AdAstraMekanized.LOGGER.info("Generated terrain for '{}': shift({},{}), continents={:.2f}, erosion={:.2f}, ridges={:.2f}",
+            planet.name, shiftX, shiftZ, continentsScale, erosionScale, ridgesScale);
+    }
+
+    /**
+     * Generate VANILLA-QUALITY density functions for a planet.
+     * This copies the full vanilla density function set (offset, factor, jaggedness splines)
+     * and replaces 'minecraft:overworld/' references with planet-specific references.
+     *
+     * This produces terrain with vanilla-quality spline-based terrain shaping,
+     * but unique per planet due to coordinate shifting.
+     *
+     * Files generated:
+     * - continents.json (coordinate-shifted)
+     * - erosion.json (coordinate-shifted)
+     * - ridges.json (coordinate-shifted)
+     * - ridges_folded.json (references ridges)
+     * - offset.json (copied from vanilla, references replaced)
+     * - factor.json (copied from vanilla, references replaced)
+     * - jaggedness.json (copied from vanilla, references replaced)
+     * - depth.json (references offset)
+     * - base_3d_noise.json (configurable parameters)
+     * - sloped_cheese.json (configurable parameters)
+     *
+     * @param planet The planet builder
+     * @param shiftX X coordinate shift
+     * @param shiftZ Z coordinate shift
+     * @throws IOException If file operations fail
+     */
+    private static void generateVanillaQualityDensityFunctions(PlanetBuilder planet, int shiftX, int shiftZ) throws IOException {
+        String path = RESOURCES_PATH + "worldgen/density_function/" + planet.name + "/";
+        String templatePath = RESOURCES_PATH + "worldgen/density_function_templates/";
+        String planetRef = "adastramekanized:" + planet.name;
+
+        // Create directory
+        new File(path).mkdirs();
+
+        // 1. Generate coordinate-shifted continents
+        JsonObject continents = new JsonObject();
+        continents.addProperty("type", "minecraft:flat_cache");
+        JsonObject continentsInner = new JsonObject();
+        continentsInner.addProperty("type", "minecraft:shifted_noise");
+        continentsInner.addProperty("noise", "minecraft:continentalness");
+        // Add coordinate shift by using offset in shift_x/shift_z
+        JsonObject shiftXObj = new JsonObject();
+        shiftXObj.addProperty("type", "minecraft:add");
+        shiftXObj.addProperty("argument1", "minecraft:shift_x");
+        shiftXObj.addProperty("argument2", (double) shiftX);
+        continentsInner.add("shift_x", shiftXObj);
+        continentsInner.addProperty("shift_y", 0.0);
+        JsonObject shiftZObj = new JsonObject();
+        shiftZObj.addProperty("type", "minecraft:add");
+        shiftZObj.addProperty("argument1", "minecraft:shift_z");
+        shiftZObj.addProperty("argument2", (double) shiftZ);
+        continentsInner.add("shift_z", shiftZObj);
+        continentsInner.addProperty("xz_scale", 0.25);
+        continentsInner.addProperty("y_scale", 0.0);
+        continents.add("argument", continentsInner);
+        writeJsonFile(path + "continents.json", continents);
+
+        // 2. Generate coordinate-shifted erosion
+        JsonObject erosion = new JsonObject();
+        erosion.addProperty("type", "minecraft:flat_cache");
+        JsonObject erosionInner = new JsonObject();
+        erosionInner.addProperty("type", "minecraft:shifted_noise");
+        erosionInner.addProperty("noise", "minecraft:erosion");
+        erosionInner.add("shift_x", shiftXObj.deepCopy());
+        erosionInner.addProperty("shift_y", 0.0);
+        erosionInner.add("shift_z", shiftZObj.deepCopy());
+        erosionInner.addProperty("xz_scale", 0.25);
+        erosionInner.addProperty("y_scale", 0.0);
+        erosion.add("argument", erosionInner);
+        writeJsonFile(path + "erosion.json", erosion);
+
+        // 3. Generate coordinate-shifted ridges
+        JsonObject ridges = new JsonObject();
+        ridges.addProperty("type", "minecraft:flat_cache");
+        JsonObject ridgesInner = new JsonObject();
+        ridgesInner.addProperty("type", "minecraft:shifted_noise");
+        ridgesInner.addProperty("noise", "minecraft:ridge");
+        ridgesInner.add("shift_x", shiftXObj.deepCopy());
+        ridgesInner.addProperty("shift_y", 0.0);
+        ridgesInner.add("shift_z", shiftZObj.deepCopy());
+        ridgesInner.addProperty("xz_scale", 0.25);
+        ridgesInner.addProperty("y_scale", 0.0);
+        ridges.add("argument", ridgesInner);
+        writeJsonFile(path + "ridges.json", ridges);
+
+        // 4. Generate ridges_folded (references planet's ridges)
+        JsonObject ridgesFolded = new JsonObject();
+        ridgesFolded.addProperty("type", "minecraft:mul");
+        ridgesFolded.addProperty("argument1", -3.0);
+        JsonObject rfAdd = new JsonObject();
+        rfAdd.addProperty("type", "minecraft:add");
+        rfAdd.addProperty("argument1", -0.3333333333333333);
+        JsonObject rfAbs = new JsonObject();
+        rfAbs.addProperty("type", "minecraft:abs");
+        JsonObject rfInnerAdd = new JsonObject();
+        rfInnerAdd.addProperty("type", "minecraft:add");
+        rfInnerAdd.addProperty("argument1", -0.6666666666666666);
+        JsonObject rfInnerAbs = new JsonObject();
+        rfInnerAbs.addProperty("type", "minecraft:abs");
+        rfInnerAbs.addProperty("argument", planetRef + "/ridges");
+        rfInnerAdd.add("argument2", rfInnerAbs);
+        rfAbs.add("argument", rfInnerAdd);
+        rfAdd.add("argument2", rfAbs);
+        ridgesFolded.add("argument2", rfAdd);
+        writeJsonFile(path + "ridges_folded.json", ridgesFolded);
+
+        // 5. Copy and transform offset.json (replace minecraft:overworld/ with planet ref)
+        String offsetContent = readFileToString(templatePath + "vanilla_offset.json");
+        offsetContent = offsetContent.replace("minecraft:overworld/", planetRef + "/");
+        writeStringToFile(path + "offset.json", offsetContent);
+
+        // 6. Copy and transform factor.json
+        String factorContent = readFileToString(templatePath + "vanilla_factor.json");
+        factorContent = factorContent.replace("minecraft:overworld/", planetRef + "/");
+        writeStringToFile(path + "factor.json", factorContent);
+
+        // 7. Copy and transform jaggedness.json
+        String jaggednessContent = readFileToString(templatePath + "vanilla_jaggedness.json");
+        jaggednessContent = jaggednessContent.replace("minecraft:overworld/", planetRef + "/");
+        writeStringToFile(path + "jaggedness.json", jaggednessContent);
+
+        // 8. Generate depth.json (references planet's offset)
+        JsonObject depth = new JsonObject();
+        depth.addProperty("type", "minecraft:add");
+        JsonObject yGradient = new JsonObject();
+        yGradient.addProperty("type", "minecraft:y_clamped_gradient");
+        yGradient.addProperty("from_value", 1.5);
+        yGradient.addProperty("from_y", -64);
+        yGradient.addProperty("to_value", -1.5);
+        yGradient.addProperty("to_y", 320);
+        depth.add("argument1", yGradient);
+        depth.addProperty("argument2", planetRef + "/offset");
+        writeJsonFile(path + "depth.json", depth);
+
+        // 9. Generate base_3d_noise.json (configurable)
+        JsonObject base3dNoise = new JsonObject();
+        base3dNoise.addProperty("type", "minecraft:old_blended_noise");
+        base3dNoise.addProperty("smear_scale_multiplier", planet.smearScaleMultiplier);
+        base3dNoise.addProperty("xz_factor", planet.base3DNoiseXZFactor);
+        base3dNoise.addProperty("xz_scale", planet.base3DNoiseXZScale);
+        base3dNoise.addProperty("y_factor", planet.base3DNoiseYFactor);
+        base3dNoise.addProperty("y_scale", planet.base3DNoiseYScale);
+        writeJsonFile(path + "base_3d_noise.json", base3dNoise);
+
+        // 10. Generate sloped_cheese.json (configurable multiplier)
+        JsonObject slopedCheese = new JsonObject();
+        slopedCheese.addProperty("type", "minecraft:add");
+        // First argument: 4.0 * quarter_negative(...)
+        JsonObject terrainMul = new JsonObject();
+        terrainMul.addProperty("type", "minecraft:mul");
+        terrainMul.addProperty("argument1", (double) planet.terrainFactor);  // Configurable (default 4.0)
+        JsonObject quarterNeg = new JsonObject();
+        quarterNeg.addProperty("type", "minecraft:quarter_negative");
+        JsonObject innerMul = new JsonObject();
+        innerMul.addProperty("type", "minecraft:mul");
+        // (depth + jaggedness * half_negative(jagged_noise))
+        JsonObject depthPlusJagged = new JsonObject();
+        depthPlusJagged.addProperty("type", "minecraft:add");
+        depthPlusJagged.addProperty("argument1", planetRef + "/depth");
+        JsonObject jaggedMul = new JsonObject();
+        jaggedMul.addProperty("type", "minecraft:mul");
+        jaggedMul.addProperty("argument1", planetRef + "/jaggedness");
+        JsonObject halfNeg = new JsonObject();
+        halfNeg.addProperty("type", "minecraft:half_negative");
+        JsonObject jaggedNoise = new JsonObject();
+        jaggedNoise.addProperty("type", "minecraft:noise");
+        jaggedNoise.addProperty("noise", "minecraft:jagged");
+        jaggedNoise.addProperty("xz_scale", (double) planet.jaggednessNoiseScale);  // Configurable (default 1500.0)
+        jaggedNoise.addProperty("y_scale", 0.0);
+        halfNeg.add("argument", jaggedNoise);
+        jaggedMul.add("argument2", halfNeg);
+        depthPlusJagged.add("argument2", jaggedMul);
+        innerMul.add("argument1", depthPlusJagged);
+        innerMul.addProperty("argument2", planetRef + "/factor");
+        quarterNeg.add("argument", innerMul);
+        terrainMul.add("argument2", quarterNeg);
+        slopedCheese.add("argument1", terrainMul);
+        // Second argument: base_3d_noise
+        slopedCheese.addProperty("argument2", planetRef + "/base_3d_noise");
+        writeJsonFile(path + "sloped_cheese.json", slopedCheese);
+
+        // 11. Generate final_density.json with vanilla-accurate cave support
+        // Uses VANILLA_FINAL_DENSITY_TEMPLATE with proper depth masking and cave integration
+        // The template includes:
+        //   - y_clamped_gradient for depth masking (Y=-64 to -40) - CRITICAL for preventing surface carving
+        //   - y_clamped_gradient for top fade (Y=240 to 256) - prevents terrain at build limit
+        //   - range_choice for proper terrain/cave branching based on sloped_cheese threshold
+        //   - Full vanilla cave system: cheese caves, entrances, spaghetti_2d, pillars, noodle
+        // Only replaces sloped_cheese references with planet-specific version; cave functions use vanilla
+        String finalDensityJson = VANILLA_FINAL_DENSITY_TEMPLATE
+            .replace("minecraft:overworld/sloped_cheese", planetRef + "/sloped_cheese");
+        writeStringToFile(path + "final_density.json", finalDensityJson);
+
+        AdAstraMekanized.LOGGER.info("Generated VANILLA-QUALITY density functions for planet '{}' with shift ({}, {})",
+            planet.name, shiftX, shiftZ);
+        AdAstraMekanized.LOGGER.info("  - terrainFactor: {}, jaggedNoiseScale: {}", planet.terrainFactor, planet.jaggednessNoiseScale);
+        AdAstraMekanized.LOGGER.info("  - base3D: xzScale={}, yScale={}, xzFactor={}, yFactor={}, smear={}",
+            planet.base3DNoiseXZScale, planet.base3DNoiseYScale, planet.base3DNoiseXZFactor, planet.base3DNoiseYFactor, planet.smearScaleMultiplier);
+    }
+
+    /**
+     * Read a file to a string.
+     */
+    private static String readFileToString(String filePath) throws IOException {
+        return new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(filePath)));
+    }
+
+    /**
+     * Write a string to a file.
+     */
+    private static void writeStringToFile(String filePath, String content) throws IOException {
+        java.nio.file.Files.write(java.nio.file.Paths.get(filePath), content.getBytes());
+    }
+
+    /**
+     * Generate all custom density functions for a planet. Creates shifted_noise wrappers
+     * for the 4 key terrain functions: continents, erosion, depth, ridges.
+     * Also generates initial_density_without_jaggedness and final_density for actual terrain generation.
+     *
+     * @param planet The planet builder
+     * @throws IOException If file writing fails
+     */
+    private static void generateCustomDensityFunctions(PlanetBuilder planet) throws IOException {
+        // Use explicit shifts if set, otherwise auto-generate from planet ID
+        int shiftX = planet.coordinateShiftX != 0 ? planet.coordinateShiftX :
+                     generateCoordinateShift(planet.name, 0);
+        int shiftZ = planet.coordinateShiftZ != 0 ? planet.coordinateShiftZ :
+                     generateCoordinateShift(planet.name, 1);
+
+        // VANILLA-QUALITY MODE: Generate full vanilla density function set with coordinate shifting
+        // This produces terrain with vanilla-quality spline-based terrain shaping
+        if (planet.useVanillaQualityTerrain) {
+            generateVanillaQualityDensityFunctions(planet, shiftX, shiftZ);
+            return;
+        }
+
+        // LEGACY MODE: Simplified terrain generation (less vanilla-accurate)
+        // Generate 4 key density function files (for biome selection)
+        String[] noiseTypes = {"continents", "erosion", "depth", "ridges"};
+        for (String noiseType : noiseTypes) {
+            generateShiftedNoiseDensityFunction(
+                planet.name,
+                noiseType,
+                shiftX,
+                shiftZ,
+                planet.noiseScaleXZ,
+                planet.noiseScaleY
+            );
+        }
+
+        // Generate initial_density_without_jaggedness and final_density for actual 3D terrain
+        // These use coordinate-shifted noise to produce unique terrain per planet
+        generateCoordinateShiftedTerrainDensityFunctions(planet, shiftX, shiftZ);
+
+        AdAstraMekanized.LOGGER.info("Generated {} custom density functions for planet '{}' with coordinate shift ({}, {})",
+                noiseTypes.length, planet.name, shiftX, shiftZ);
+    }
+
+    /**
      * Generate noise settings using exact Moon pattern with configurable parameters
      */
     private static void generateNoiseSettings(PlanetBuilder planet) throws IOException {
@@ -2898,9 +4980,167 @@ public class PlanetMaker {
         noise.addProperty("size_vertical", planet.verticalNoiseSize);
         noiseSettings.add("noise", noise);
 
-        // Noise router using Moon's exact working pattern with configurable parameters
-        JsonObject noiseRouter = createNoiseRouter(planet);
-        noiseSettings.add("noise_router", noiseRouter);
+        // Check if using vanilla noise reference (RECOMMENDED)
+        if (planet.useVanillaNoise) {
+            // Reference vanilla noise density functions - proven and tested!
+            // This creates a noise_router object that references vanilla density functions
+            JsonObject noiseRouter = new JsonObject();
+            noiseRouter.addProperty("barrier", planet.vanillaNoiseReference + "/noise_router/barrier");
+            noiseRouter.addProperty("fluid_level_floodedness", planet.vanillaNoiseReference + "/noise_router/fluid_level_floodedness");
+            noiseRouter.addProperty("fluid_level_spread", planet.vanillaNoiseReference + "/noise_router/fluid_level_spread");
+            noiseRouter.addProperty("lava", planet.vanillaNoiseReference + "/noise_router/lava");
+            noiseRouter.addProperty("temperature", planet.vanillaNoiseReference + "/noise_router/temperature");
+            noiseRouter.addProperty("vegetation", planet.vanillaNoiseReference + "/noise_router/vegetation");
+
+            // Check if coordinate shifting is enabled (for unique terrain per planet)
+            boolean hasCoordinateShift = planet.coordinateShiftX != 0 || planet.coordinateShiftZ != 0;
+
+            // IDENTICAL VANILLA TERRAIN MODE - Use direct vanilla references for everything
+            // This produces terrain that is byte-for-byte identical to vanilla Overworld
+            // UNLESS coordinate shifting is enabled, in which case we generate unique terrain
+            if (planet.useIdenticalVanillaTerrain && !hasCoordinateShift) {
+                // All 4 terrain shape functions - direct vanilla references
+                noiseRouter.addProperty("continents", planet.vanillaNoiseReference + "/noise_router/continents");
+                noiseRouter.addProperty("erosion", planet.vanillaNoiseReference + "/noise_router/erosion");
+                noiseRouter.addProperty("depth", planet.vanillaNoiseReference + "/noise_router/depth");
+                noiseRouter.addProperty("ridges", planet.vanillaNoiseReference + "/noise_router/ridges");
+                // 3D terrain and caves - direct vanilla references (includes full cave system)
+                noiseRouter.addProperty("initial_density_without_jaggedness", planet.vanillaNoiseReference + "/noise_router/initial_density_without_jaggedness");
+                noiseRouter.addProperty("final_density", planet.vanillaNoiseReference + "/noise_router/final_density");
+
+                AdAstraMekanized.LOGGER.info("Planet '{}' using IDENTICAL vanilla terrain from '{}'", planet.name, planet.vanillaNoiseReference);
+            } else if (planet.useIdenticalVanillaTerrain && hasCoordinateShift) {
+                // COORDINATE-SHIFTED VANILLA TERRAIN MODE (LEGACY - simplified terrain)
+                // Uses custom density functions that wrap vanilla noise with coordinate offsets
+                // This gives vanilla-quality terrain but at different "locations" in noise space
+                noiseRouter.addProperty("continents", "adastramekanized:" + planet.name + "/continents");
+                noiseRouter.addProperty("erosion", "adastramekanized:" + planet.name + "/erosion");
+                noiseRouter.addProperty("depth", "adastramekanized:" + planet.name + "/depth");
+                noiseRouter.addProperty("ridges", "adastramekanized:" + planet.name + "/ridges");
+                // CRITICAL: Use custom initial_density and final_density that reference our shifted noise
+                // The vanilla functions have hardcoded noise references that don't use our custom entries!
+                noiseRouter.addProperty("initial_density_without_jaggedness", "adastramekanized:" + planet.name + "/initial_density_without_jaggedness");
+                noiseRouter.addProperty("final_density", "adastramekanized:" + planet.name + "/final_density");
+
+                AdAstraMekanized.LOGGER.info("Planet '{}' using vanilla terrain with coordinate shift ({}, {})",
+                    planet.name, planet.coordinateShiftX, planet.coordinateShiftZ);
+            } else if (planet.useVanillaQualityTerrain) {
+                // VANILLA-QUALITY TERRAIN MODE - Full vanilla density function set with coordinate shifting
+                // This uses the complete vanilla spline system (offset, factor, jaggedness) for authentic terrain
+                // with unique results per planet due to coordinate shifting
+                String planetRef = "adastramekanized:" + planet.name;
+                noiseRouter.addProperty("continents", planetRef + "/continents");
+                noiseRouter.addProperty("erosion", planetRef + "/erosion");
+                noiseRouter.addProperty("depth", planetRef + "/depth");
+                noiseRouter.addProperty("ridges", planetRef + "/ridges");
+                // Use the full final_density which includes:
+                // - sloped_cheese terrain formula
+                // - y_clamped_gradient depth masking (Y=-64 to -40) to protect bedrock layer
+                // - range_choice terrain/cave branching
+                // - Full vanilla cave system (cheese, spaghetti, entrances, pillars, noodle)
+                noiseRouter.addProperty("initial_density_without_jaggedness", planetRef + "/depth");
+                noiseRouter.addProperty("final_density", planetRef + "/final_density");
+
+                AdAstraMekanized.LOGGER.info("Planet '{}' using VANILLA-QUALITY terrain (full spline system) with shift ({}, {})",
+                    planet.name, planet.coordinateShiftX, planet.coordinateShiftZ);
+            } else {
+                // Determine if we should use custom density functions (coordinate-shifted terrain)
+                // Use custom if: coordinate shifts set, custom salt set, or non-default noise scaling
+                boolean useCustomDensityFunctions = planet.coordinateShiftX != 0 ||
+                                                    planet.coordinateShiftZ != 0 ||
+                                                    planet.customSalt != null ||
+                                                    planet.noiseScaleXZ != 1.0 ||
+                                                    planet.noiseScaleY != 1.0;
+
+                // For the 4 key terrain functions, use custom or vanilla references
+                if (useCustomDensityFunctions) {
+                    // Use our custom coordinate-shifted density functions
+                    noiseRouter.addProperty("continents", "adastramekanized:" + planet.name + "/continents");
+                    noiseRouter.addProperty("erosion", "adastramekanized:" + planet.name + "/erosion");
+                    noiseRouter.addProperty("depth", "adastramekanized:" + planet.name + "/depth");
+                    noiseRouter.addProperty("ridges", "adastramekanized:" + planet.name + "/ridges");
+
+                    // Use vanilla-quality terrain for proof-of-concept planets (Moon, Mars)
+                    // Other planets use simplified approach
+                    boolean useVanillaQuality = planet.name.equals("moon") || planet.name.equals("mars");
+
+                    if (useVanillaQuality) {
+                        // Vanilla-style composition for quality terrain with per-planet tweaks
+                        noiseRouter.add("initial_density_without_jaggedness", createVanillaStyleInitialDensity(planet.name, planet.terrainTweaks));
+                        noiseRouter.add("final_density", createVanillaStyleFinalDensity(planet.name, planet.terrainTweaks));
+                    } else {
+                        // Simplified approach for other planets
+                        noiseRouter.add("initial_density_without_jaggedness", createSimplifiedInitialDensity(planet.name));
+                        noiseRouter.add("final_density", createSimplifiedFinalDensity(planet.name));
+                    }
+                } else {
+                    // Use vanilla references (backwards compatible with old system)
+                    // Apply legacy frequency modulation if set
+                    if (planet.continentsMultiplier != 1.0 || planet.continentsNoiseOffset != 0.0) {
+                        noiseRouter.add("continents", createModulatedNoise(
+                            planet.vanillaNoiseReference + "/noise_router/continents",
+                            planet.continentsMultiplier,
+                            planet.continentsNoiseOffset
+                        ));
+                    } else {
+                        noiseRouter.addProperty("continents", planet.vanillaNoiseReference + "/noise_router/continents");
+                    }
+
+                    if (planet.erosionMultiplier != 1.0 || planet.erosionNoiseOffset != 0.0) {
+                        noiseRouter.add("erosion", createModulatedNoise(
+                            planet.vanillaNoiseReference + "/noise_router/erosion",
+                            planet.erosionMultiplier,
+                            planet.erosionNoiseOffset
+                        ));
+                    } else {
+                        noiseRouter.addProperty("erosion", planet.vanillaNoiseReference + "/noise_router/erosion");
+                    }
+
+                    if (planet.depthMultiplier != 1.0 || planet.depthNoiseOffset != 0.0) {
+                        noiseRouter.add("depth", createModulatedNoise(
+                            planet.vanillaNoiseReference + "/noise_router/depth",
+                            planet.depthMultiplier,
+                            planet.depthNoiseOffset
+                        ));
+                    } else {
+                        noiseRouter.addProperty("depth", planet.vanillaNoiseReference + "/noise_router/depth");
+                    }
+
+                    if (planet.ridgesMultiplier != 1.0 || planet.ridgesNoiseOffset != 0.0) {
+                        noiseRouter.add("ridges", createModulatedNoise(
+                            planet.vanillaNoiseReference + "/noise_router/ridges",
+                            planet.ridgesMultiplier,
+                            planet.ridgesNoiseOffset
+                        ));
+                    } else {
+                        noiseRouter.addProperty("ridges", planet.vanillaNoiseReference + "/noise_router/ridges");
+                    }
+
+                    // For vanilla terrain path, use vanilla references for density functions
+                    noiseRouter.addProperty("initial_density_without_jaggedness", planet.vanillaNoiseReference + "/noise_router/initial_density_without_jaggedness");
+                    noiseRouter.addProperty("final_density", planet.vanillaNoiseReference + "/noise_router/final_density");
+                }
+            }
+
+            // Common noise router properties for both custom and vanilla terrain
+            noiseRouter.addProperty("vein_toggle", planet.vanillaNoiseReference + "/noise_router/vein_toggle");
+            noiseRouter.addProperty("vein_ridged", planet.vanillaNoiseReference + "/noise_router/vein_ridged");
+            noiseRouter.addProperty("vein_gap", planet.vanillaNoiseReference + "/noise_router/vein_gap");
+            noiseSettings.add("noise_router", noiseRouter);
+        } else {
+            // Legacy custom noise generation (complex and error-prone)
+            JsonObject noiseRouter;
+            if (planet.useTectonicGeneration) {
+                // Use advanced Tectonic noise router
+                noiseRouter = createTectonicNoiseRouter(planet);
+                // Generate additional Tectonic files
+                generateTectonicFiles(planet);
+            } else {
+                // Use simple noise router
+                noiseRouter = createNoiseRouter(planet);
+            }
+            noiseSettings.add("noise_router", noiseRouter);
+        }
 
         // Surface rule using Moon's pattern with configurable blocks
         JsonObject surfaceRule = createSurfaceRule(planet);
@@ -3046,7 +5286,16 @@ public class PlanetMaker {
         continentalnessNoise.addProperty("shift_x", "minecraft:shift_x");
         continentalnessNoise.addProperty("shift_y", 0);
         continentalnessNoise.addProperty("shift_z", "minecraft:shift_z");
-        mulContinentalness.add("argument1", continentalnessNoise);
+        // Apply ocean offset (Tectonic-inspired) to continentalness
+        if (planet.oceanOffset != -0.8f) {
+            JsonObject offsetContinentalness = new JsonObject();
+            offsetContinentalness.addProperty("type", "minecraft:add");
+            offsetContinentalness.add("argument1", continentalnessNoise);
+            offsetContinentalness.addProperty("argument2", planet.oceanOffset);
+            mulContinentalness.add("argument1", offsetContinentalness);
+        } else {
+            mulContinentalness.add("argument1", continentalnessNoise);
+        }
 
         mulContinentalness.addProperty("argument2", getSeedVariation(planet, "height_var1", planet.heightVariation1 * planet.depthFactor * planet.terrainFactor, planet.heightVariation1 * 0.25f));
         addArgument1.add("argument2", mulContinentalness);
@@ -3256,43 +5505,15 @@ public class PlanetMaker {
     }
 
     /**
-     * Create final density using Moon's pattern with configurable parameters and cave carving
+     * Create base terrain (Tectonic's "sloped_cheese" equivalent)
+     * Combines continentalness and erosion noise for core terrain shape
      */
-    private static JsonObject createFinalDensity(PlanetBuilder planet) {
-        JsonObject finalDensity = new JsonObject();
-        finalDensity.addProperty("type", "minecraft:interpolated");
+    private static JsonObject createBaseTerrain(PlanetBuilder planet) {
+        // Base: add(continentalness + oceanOffset, erosion)
+        JsonObject baseTerrain = new JsonObject();
+        baseTerrain.addProperty("type", "minecraft:add");
 
-        JsonObject argument = new JsonObject();
-        argument.addProperty("type", "minecraft:blend_density");
-
-        // Create base terrain density (without caves)
-        JsonObject blendArgument = new JsonObject();
-        blendArgument.addProperty("type", "minecraft:add");
-
-        JsonObject argument1 = new JsonObject();
-        argument1.addProperty("type", "minecraft:mul");
-
-        JsonObject yGradient = new JsonObject();
-        yGradient.addProperty("type", "minecraft:y_clamped_gradient");
-        yGradient.addProperty("from_y", planet.gradientFromY);
-        yGradient.addProperty("to_y", planet.gradientToY);
-        yGradient.addProperty("from_value", planet.gradientFromValue);
-        yGradient.addProperty("to_value", planet.gradientToValue);
-        argument1.add("argument1", yGradient);
-
-        argument1.addProperty("argument2", planet.gradientMultiplier);
-        blendArgument.add("argument1", argument1);
-
-        JsonObject argument2 = new JsonObject();
-        argument2.addProperty("type", "minecraft:add");
-        argument2.addProperty("argument1", planet.initialDensityOffset + planet.depthOffset);
-
-        JsonObject mulArgument2 = new JsonObject();
-        mulArgument2.addProperty("type", "minecraft:mul");
-
-        JsonObject addArgument1 = new JsonObject();
-        addArgument1.addProperty("type", "minecraft:add");
-
+        // Continentalness with ocean offset
         JsonObject mulContinentalness = new JsonObject();
         mulContinentalness.addProperty("type", "minecraft:mul");
 
@@ -3304,11 +5525,22 @@ public class PlanetMaker {
         continentalnessNoise.addProperty("shift_x", "minecraft:shift_x");
         continentalnessNoise.addProperty("shift_y", 0);
         continentalnessNoise.addProperty("shift_z", "minecraft:shift_z");
-        mulContinentalness.add("argument1", continentalnessNoise);
 
-        mulContinentalness.addProperty("argument2", getSeedVariation(planet, "height_var3", planet.heightVariation3, planet.heightVariation3 * 0.25f));
-        addArgument1.add("argument2", mulContinentalness);
+        if (planet.oceanOffset != -0.8f) {
+            JsonObject offsetContinentalness = new JsonObject();
+            offsetContinentalness.addProperty("type", "minecraft:add");
+            offsetContinentalness.add("argument1", continentalnessNoise);
+            offsetContinentalness.addProperty("argument2", planet.oceanOffset);
+            mulContinentalness.add("argument1", offsetContinentalness);
+        } else {
+            mulContinentalness.add("argument1", continentalnessNoise);
+        }
 
+        mulContinentalness.addProperty("argument2", getSeedVariation(planet, "height_var3",
+            planet.heightVariation3, planet.heightVariation3 * 0.25f));
+        baseTerrain.add("argument2", mulContinentalness);
+
+        // Erosion
         JsonObject mulErosion = new JsonObject();
         mulErosion.addProperty("type", "minecraft:mul");
 
@@ -3321,35 +5553,410 @@ public class PlanetMaker {
         erosionNoise.addProperty("shift_y", 0);
         erosionNoise.addProperty("shift_z", "minecraft:shift_z");
         mulErosion.add("argument1", erosionNoise);
+        mulErosion.addProperty("argument2", getSeedVariation(planet, "height_var4",
+            planet.heightVariation4, planet.heightVariation4 * 0.25f));
 
-        mulErosion.addProperty("argument2", getSeedVariation(planet, "height_var4", planet.heightVariation4, planet.heightVariation4 * 0.25f));
-        addArgument1.add("argument1", mulErosion);
+        baseTerrain.add("argument1", mulErosion);
 
-        mulArgument2.add("argument1", addArgument1);
-        mulArgument2.addProperty("argument2", planet.terrainShapingFactor);
+        return baseTerrain;
+    }
 
-        argument2.add("argument2", mulArgument2);
-        blendArgument.add("argument2", argument2);
+    /**
+     * Create upper slope factor for terrain shaping
+     * Applies vertical terrain scaling and shaping factors
+     */
+    private static float getUpperSlopeFactor(PlanetBuilder planet) {
+        float effectiveShaping = planet.terrainShapingFactor * (1.0f - (planet.flatTerrainSkew * 0.5f));
+        return effectiveShaping * planet.verticalTerrainScale;
+    }
 
-        // Carve caves using vanilla min() pattern
-        if (planet.caveFrequency > 0 &&
-            (planet.enableCheeseCaves || planet.enableSpaghettiCaves || planet.enableNoodleCaves)) {
-
-            // Use min operation to carve caves (vanilla pattern)
-            // Cave density is already negative where caves form
-            JsonObject withCaves = new JsonObject();
-            withCaves.addProperty("type", "minecraft:min");
-            withCaves.add("argument1", blendArgument);  // Terrain density
-            withCaves.add("argument2", createCaveDensity(planet));  // Cave density (negative = air)
-
-            argument.add("argument", withCaves);
-        } else {
-            argument.add("argument", blendArgument);
+    /**
+     * Create underground rivers carving (Tectonic methodology)
+     * Returns density function that carves rivers (negative values)
+     */
+    private static JsonObject createUndergroundRivers(PlanetBuilder planet) {
+        if (!planet.undergroundRivers) {
+            JsonObject noop = new JsonObject();
+            noop.addProperty("type", "minecraft:constant");
+            noop.addProperty("argument", 0.0);
+            return noop;
         }
 
-        finalDensity.add("argument", argument);
+        JsonObject riverDensity = new JsonObject();
+        riverDensity.addProperty("type", "minecraft:mul");
 
-        return finalDensity;
+        JsonObject riverNoise = new JsonObject();
+        riverNoise.addProperty("type", "minecraft:shifted_noise");
+        riverNoise.addProperty("noise", "minecraft:ridge");
+        riverNoise.addProperty("xz_scale", 1.0);
+        riverNoise.addProperty("y_scale", 0.3);
+        riverNoise.addProperty("shift_x", "minecraft:shift_x");
+        riverNoise.addProperty("shift_y", 0);
+        riverNoise.addProperty("shift_z", "minecraft:shift_z");
+        riverDensity.add("argument1", riverNoise);
+        riverDensity.addProperty("argument2", -0.05);
+
+        return riverDensity;
+    }
+
+    /**
+     * Create lava tunnels carving (Tectonic methodology)
+     * Returns density function that carves tunnels (negative values)
+     */
+    private static JsonObject createLavaTunnels(PlanetBuilder planet) {
+        if (!planet.lavaTunnels) {
+            JsonObject noop = new JsonObject();
+            noop.addProperty("type", "minecraft:constant");
+            noop.addProperty("argument", 0.0);
+            return noop;
+        }
+
+        JsonObject tunnelDensity = new JsonObject();
+        tunnelDensity.addProperty("type", "minecraft:mul");
+
+        JsonObject tunnelNoise = new JsonObject();
+        tunnelNoise.addProperty("type", "minecraft:shifted_noise");
+        tunnelNoise.addProperty("noise", "minecraft:ridge");
+        tunnelNoise.addProperty("xz_scale", 0.8);
+        tunnelNoise.addProperty("y_scale", 0.1);
+        tunnelNoise.addProperty("shift_x", "minecraft:shift_x");
+        tunnelNoise.addProperty("shift_y", 0);
+        tunnelNoise.addProperty("shift_z", "minecraft:shift_z");
+        tunnelDensity.add("argument1", tunnelNoise);
+        tunnelDensity.addProperty("argument2", -0.08);
+
+        return tunnelDensity;
+    }
+
+    /**
+     * Create rolling hills variation (additive, not carving)
+     */
+    private static JsonObject createRollingHills(PlanetBuilder planet) {
+        if (!planet.rollingHills) {
+            JsonObject noop = new JsonObject();
+            noop.addProperty("type", "minecraft:constant");
+            noop.addProperty("argument", 0.0);
+            return noop;
+        }
+
+        JsonObject hillsDensity = new JsonObject();
+        hillsDensity.addProperty("type", "minecraft:mul");
+
+        JsonObject hillsNoise = new JsonObject();
+        hillsNoise.addProperty("type", "minecraft:shifted_noise");
+        hillsNoise.addProperty("noise", "minecraft:continentalness");
+        hillsNoise.addProperty("xz_scale", 8.0);
+        hillsNoise.addProperty("y_scale", 0);
+        hillsNoise.addProperty("shift_x", "minecraft:shift_x");
+        hillsNoise.addProperty("shift_y", 0);
+        hillsNoise.addProperty("shift_z", "minecraft:shift_z");
+        hillsDensity.add("argument1", hillsNoise);
+        hillsDensity.addProperty("argument2", 0.05);
+
+        return hillsDensity;
+    }
+
+    /**
+     * Create final density using Tectonic's modular composition methodology
+     *
+     * Structure: add(
+     *   min(
+     *     squeeze(mul(0.64, interpolated(blend_density(
+     *       y_gradient + (-1 + upper_slope * (1 + min(base_terrain, caves)))
+     *     )))),
+     *     noodle
+     *   ),
+     *   add(underground_rivers, lava_tunnels, rolling_hills)
+     * )
+     */
+    private static JsonObject createFinalDensity(PlanetBuilder planet) {
+        // Outermost: add(terrain_with_caves, carving_features)
+        JsonObject outerAdd = new JsonObject();
+        outerAdd.addProperty("type", "minecraft:add");
+
+        // Left side: min(squeezed_terrain, noodle_caves)
+        JsonObject minWithNoodle = new JsonObject();
+        minWithNoodle.addProperty("type", "minecraft:min");
+
+        // Squeezed terrain: squeeze(mul(0.64, interpolated(blend_density(...))))
+        JsonObject squeezed = new JsonObject();
+        squeezed.addProperty("type", "minecraft:squeeze");
+
+        JsonObject mulBy064 = new JsonObject();
+        mulBy064.addProperty("type", "minecraft:mul");
+        mulBy064.addProperty("argument1", planet.gradientMultiplier);
+
+        JsonObject interpolated = new JsonObject();
+        interpolated.addProperty("type", "minecraft:interpolated");
+
+        JsonObject blendDensity = new JsonObject();
+        blendDensity.addProperty("type", "minecraft:blend_density");
+
+        // Core composition: y_gradient + (-1 + upper_slope * (1 + min(base_terrain, caves)))
+        JsonObject coreAdd = new JsonObject();
+        coreAdd.addProperty("type", "minecraft:add");
+
+        // Y gradient for bottom cutoff
+        JsonObject yGradientBottom = new JsonObject();
+        yGradientBottom.addProperty("type", "minecraft:mul");
+
+        JsonObject yGradient = new JsonObject();
+        yGradient.addProperty("type", "minecraft:y_clamped_gradient");
+        yGradient.addProperty("from_y", planet.gradientFromY);
+        yGradient.addProperty("to_y", planet.minY + 24);  // Tectonic uses -40 for bottom cutoff
+        yGradient.addProperty("from_value", 0.0);
+        yGradient.addProperty("to_value", 1.0);
+        yGradientBottom.add("argument1", yGradient);
+        yGradientBottom.addProperty("argument2", planet.gradientMultiplier);
+        coreAdd.add("argument1", yGradientBottom);
+
+        // Terrain composition: -1 + upper_slope * (1 + min(base_terrain, caves))
+        JsonObject terrainComp = new JsonObject();
+        terrainComp.addProperty("type", "minecraft:add");
+        terrainComp.addProperty("argument1", -1.0 + planet.initialDensityOffset + planet.depthOffset);
+
+        JsonObject upperSlopeMul = new JsonObject();
+        upperSlopeMul.addProperty("type", "minecraft:mul");
+        upperSlopeMul.addProperty("argument1", getUpperSlopeFactor(planet));
+
+        JsonObject onePlusTerrain = new JsonObject();
+        onePlusTerrain.addProperty("type", "minecraft:add");
+        onePlusTerrain.addProperty("argument1", 1.0);
+
+        // min(base_terrain, caves) - caves carve into base terrain
+        if (planet.caveFrequency > 0 &&
+            (planet.enableCheeseCaves || planet.enableSpaghettiCaves || planet.enableNoodleCaves)) {
+            JsonObject minTerrainCaves = new JsonObject();
+            minTerrainCaves.addProperty("type", "minecraft:min");
+            minTerrainCaves.add("argument1", createBaseTerrain(planet));
+            minTerrainCaves.add("argument2", createCaveDensity(planet));
+            onePlusTerrain.add("argument2", minTerrainCaves);
+        } else {
+            onePlusTerrain.add("argument2", createBaseTerrain(planet));
+        }
+
+        upperSlopeMul.add("argument2", onePlusTerrain);
+        terrainComp.add("argument2", upperSlopeMul);
+        coreAdd.add("argument2", terrainComp);
+
+        blendDensity.add("argument", coreAdd);
+        interpolated.add("argument", blendDensity);
+        mulBy064.add("argument2", interpolated);
+        squeezed.add("argument", mulBy064);
+        minWithNoodle.add("argument1", squeezed);
+
+        // Noodle caves (applied separately, Tectonic style)
+        if (planet.enableNoodleCaves) {
+            minWithNoodle.add("argument2", createCaveDensity(planet));
+        } else {
+            JsonObject noNoodle = new JsonObject();
+            noNoodle.addProperty("type", "minecraft:constant");
+            noNoodle.addProperty("argument", 64.0);  // Large positive = no carving
+            minWithNoodle.add("argument2", noNoodle);
+        }
+
+        outerAdd.add("argument1", minWithNoodle);
+
+        // Right side: add(underground_rivers, lava_tunnels, rolling_hills)
+        JsonObject carvingFeatures = new JsonObject();
+        carvingFeatures.addProperty("type", "minecraft:add");
+
+        JsonObject riversAndTunnels = new JsonObject();
+        riversAndTunnels.addProperty("type", "minecraft:add");
+        riversAndTunnels.add("argument1", createUndergroundRivers(planet));
+        riversAndTunnels.add("argument2", createLavaTunnels(planet));
+
+        carvingFeatures.add("argument1", riversAndTunnels);
+        carvingFeatures.add("argument2", createRollingHills(planet));
+
+        outerAdd.add("argument2", carvingFeatures);
+
+        return outerAdd;
+    }
+
+    /**
+     * Create Tectonic noise router using NoiseRouterBuilder for advanced terrain.
+     */
+    private static JsonObject createTectonicNoiseRouter(PlanetBuilder planet) {
+        AdAstraMekanized.LOGGER.info("Generating Tectonic noise router for planet: {}", planet.name);
+
+        // Create Tectonic configuration
+        com.hecookin.adastramekanized.worldgen.builder.NoiseRouterBuilder.TectonicConfig config =
+            new com.hecookin.adastramekanized.worldgen.builder.NoiseRouterBuilder.TectonicConfig();
+
+        // Apply planet settings to config
+        config.continentScale = planet.continentalScale;
+        config.erosionScale = planet.erosionScale;
+        config.ridgeScale = planet.ridgeScale;
+        config.mountainSharpness = planet.mountainSharpness;
+        config.enableIslands = planet.enableIslands;
+        config.cheeseCaves = planet.enableCheeseCaves;
+        config.noodleCaves = planet.enableNoodleCaves;
+        config.undergroundRivers = planet.undergroundRivers;
+        config.lavaTunnels = planet.lavaTunnels;
+        config.desertDunes = planet.enableDesertDunes;
+        config.duneHeight = planet.duneHeight;
+        config.duneWavelength = planet.duneWavelength;
+        config.junglePillars = planet.junglePillars;
+        config.pillarHeight = planet.pillarHeight;
+
+        // Build the complete Tectonic noise router
+        com.hecookin.adastramekanized.worldgen.builder.NoiseRouterBuilder builder =
+            com.hecookin.adastramekanized.worldgen.builder.NoiseRouterBuilder.createTectonicTerrain(
+                planet.name,
+                planet.minY,
+                planet.minY + planet.worldHeight,
+                planet.seaLevel,
+                config
+            );
+
+        return builder.build();
+    }
+
+    /**
+     * Generate additional Tectonic files (noise definitions and density functions).
+     */
+    private static void generateTectonicFiles(PlanetBuilder planet) {
+        try {
+            AdAstraMekanized.LOGGER.info("Generating Tectonic worldgen files for planet: {}", planet.name);
+
+            // Create directories for Tectonic files
+            new File(RESOURCES_PATH + "worldgen/noise").mkdirs();
+            new File(RESOURCES_PATH + "worldgen/density_function/" + planet.name).mkdirs();
+
+            // Generate noise definitions
+            generateTectonicNoiseDefinitions(planet);
+
+            // Generate density functions
+            generateTectonicDensityFunctions(planet);
+
+            AdAstraMekanized.LOGGER.info("Successfully generated Tectonic files for: {}", planet.name);
+        } catch (Exception e) {
+            AdAstraMekanized.LOGGER.error("Failed to generate Tectonic files for planet: {}", planet.name, e);
+        }
+    }
+
+    /**
+     * Helper method to create a JsonArray from double values.
+     */
+    private static com.google.gson.JsonArray createAmplitudesArray(double... values) {
+        com.google.gson.JsonArray array = new com.google.gson.JsonArray();
+        for (double value : values) {
+            array.add(value);
+        }
+        return array;
+    }
+
+    /**
+     * Generate Tectonic noise definitions for a planet.
+     */
+    private static void generateTectonicNoiseDefinitions(PlanetBuilder planet) throws IOException {
+        // Generate continents noise (matching Tectonic's exact settings)
+        JsonObject continentsNoise = new JsonObject();
+        continentsNoise.addProperty("firstOctave", -10);  // Was -9, now -10 for larger scale
+        continentsNoise.add("amplitudes", createAmplitudesArray(1.75, 1.0, 2.0, 3.0, 2.0, 2.0, 1.0, 1.0, 1.0));
+        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_continents.json", continentsNoise);
+
+        // Generate islands noise (always create for noise router compatibility)
+        JsonObject islandsNoise = new JsonObject();
+        islandsNoise.addProperty("firstOctave", -9);
+        islandsNoise.add("amplitudes", createAmplitudesArray(1.0, 1.0, 0.0, 0.0, 0.0, 0.0));
+        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_islands.json", islandsNoise);
+
+        // Generate erosion noise (matching Tectonic's exact settings)
+        JsonObject erosionNoise = new JsonObject();
+        erosionNoise.addProperty("firstOctave", -10);  // Was -9, now -10 for larger scale
+        erosionNoise.add("amplitudes", createAmplitudesArray(2.0, 1.75, 1.5, 1.5, 1.3, 1.0, 1.0, 1.0, 1.0));
+        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_erosion.json", erosionNoise);
+
+        // Generate ridges noise (matching Tectonic's exact settings)
+        JsonObject ridgesNoise = new JsonObject();
+        ridgesNoise.addProperty("firstOctave", -8);  // Was -7, now -8 for larger scale
+        ridgesNoise.add("amplitudes", createAmplitudesArray(1.0, 2.0, 1.0));
+        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_ridges.json", ridgesNoise);
+
+        // Generate temperature noise
+        JsonObject temperatureNoise = new JsonObject();
+        temperatureNoise.addProperty("firstOctave", -10);
+        temperatureNoise.add("amplitudes", createAmplitudesArray(1.5, 0.0, 1.0, 0.0, 0.0, 0.0));
+        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_temperature.json", temperatureNoise);
+
+        // Generate vegetation noise
+        JsonObject vegetationNoise = new JsonObject();
+        vegetationNoise.addProperty("firstOctave", -8);
+        vegetationNoise.add("amplitudes", createAmplitudesArray(1.0, 1.0, 0.0, 0.0, 0.0, 0.0));
+        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_vegetation.json", vegetationNoise);
+
+        // Generate jaggedness noise (always create for noise router compatibility)
+        JsonObject jaggednessNoise = new JsonObject();
+        jaggednessNoise.addProperty("firstOctave", -15);
+        jaggednessNoise.add("amplitudes", createAmplitudesArray(1.0, 1.0, 1.0, 0.0));
+        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_jagged.json", jaggednessNoise);
+
+        // Generate cave noises
+        if (planet.enableCheeseCaves) {
+            JsonObject cheeseNoise = new JsonObject();
+            cheeseNoise.addProperty("firstOctave", -8);
+            cheeseNoise.add("amplitudes", createAmplitudesArray(1.0, 0.5, 0.5, 0.5));
+            writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_cave_cheese.json", cheeseNoise);
+        }
+
+        // Generate underground river noise
+        if (planet.undergroundRivers) {
+            JsonObject riverNoise = new JsonObject();
+            riverNoise.addProperty("firstOctave", -6);
+            riverNoise.add("amplitudes", createAmplitudesArray(1.0, 1.0, 1.0));
+            writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_underground_river.json", riverNoise);
+        }
+
+        // Generate lava tunnel noise
+        if (planet.lavaTunnels) {
+            JsonObject tunnelNoise = new JsonObject();
+            tunnelNoise.addProperty("firstOctave", -7);
+            tunnelNoise.add("amplitudes", createAmplitudesArray(1.0, 1.0));
+            writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_lava_tunnel.json", tunnelNoise);
+        }
+
+        AdAstraMekanized.LOGGER.info("Generated Tectonic noise definitions for: {}", planet.name);
+    }
+
+    /**
+     * Generate Tectonic density function files for a planet.
+     */
+    private static void generateTectonicDensityFunctions(PlanetBuilder planet) throws IOException {
+        // Generate raw continents density function
+        JsonObject rawContinents = new JsonObject();
+        rawContinents.addProperty("type", "minecraft:noise");
+        rawContinents.addProperty("noise", "adastramekanized:" + planet.name + "_continents");
+        rawContinents.addProperty("xz_scale", planet.continentalScale);
+        rawContinents.addProperty("y_scale", 0.0);
+        writeJsonFile(RESOURCES_PATH + "worldgen/density_function/" + planet.name + "/noise/raw_continents.json", rawContinents);
+
+        // Generate raw erosion density function
+        JsonObject rawErosion = new JsonObject();
+        rawErosion.addProperty("type", "minecraft:noise");
+        rawErosion.addProperty("noise", "adastramekanized:" + planet.name + "_erosion");
+        rawErosion.addProperty("xz_scale", planet.erosionScale);
+        rawErosion.addProperty("y_scale", 0.0);
+        writeJsonFile(RESOURCES_PATH + "worldgen/density_function/" + planet.name + "/noise/raw_erosion.json", rawErosion);
+
+        // Generate raw ridges density function
+        JsonObject rawRidges = new JsonObject();
+        rawRidges.addProperty("type", "minecraft:noise");
+        rawRidges.addProperty("noise", "adastramekanized:" + planet.name + "_ridges");
+        rawRidges.addProperty("xz_scale", planet.ridgeScale);
+        rawRidges.addProperty("y_scale", 0.0);
+        writeJsonFile(RESOURCES_PATH + "worldgen/density_function/" + planet.name + "/noise/raw_ridges.json", rawRidges);
+
+        // Generate vegetation density function (for spline coordinates)
+        JsonObject vegetationDF = new JsonObject();
+        vegetationDF.addProperty("type", "minecraft:noise");
+        vegetationDF.addProperty("noise", "adastramekanized:" + planet.name + "_vegetation");
+        vegetationDF.addProperty("xz_scale", 0.25);
+        vegetationDF.addProperty("y_scale", 0.0);
+        writeJsonFile(RESOURCES_PATH + "worldgen/density_function/" + planet.name + "_vegetation.json", vegetationDF);
+
+        AdAstraMekanized.LOGGER.info("Generated Tectonic density functions for: {}", planet.name);
     }
 
     /**
@@ -3424,7 +6031,7 @@ public class PlanetMaker {
 
         sequence.add(surfaceLayer);
 
-        // Underwater/subsurface layer
+        // Underwater/subsurface layer - use planet's underwater block (not hardcoded stone)
         JsonObject subsurfaceLayer = new JsonObject();
         subsurfaceLayer.addProperty("type", "minecraft:condition");
 
@@ -3438,11 +6045,46 @@ public class PlanetMaker {
         JsonObject subsurfaceResult = new JsonObject();
         subsurfaceResult.addProperty("type", "minecraft:block");
         JsonObject subsurfaceState = new JsonObject();
-        subsurfaceState.addProperty("Name", planet.underwaterBlock);
+        // Use planet's subsurface block for underwater areas (fixed: was using planet.underwaterBlock which defaulted to minecraft:stone)
+        subsurfaceState.addProperty("Name", planet.subsurfaceBlock);
         subsurfaceResult.add("result_state", subsurfaceState);
         subsurfaceLayer.add("then_run", subsurfaceResult);
 
         sequence.add(subsurfaceLayer);
+
+        // Deepslate layer replacement - mimics vanilla's stone->deepslate transition below Y=0
+        // This replaces vanilla deepslate with the planet's deepslateBlock
+        if (!planet.deepslateBlock.equals("minecraft:deepslate")) {
+            // Create deepslate replacement rule using vertical gradient (like vanilla)
+            // Vanilla deepslate transitions from Y=-8 (100% deepslate) to Y=0 (100% stone)
+            JsonObject deepslateLayer = new JsonObject();
+            deepslateLayer.addProperty("type", "minecraft:condition");
+
+            JsonObject deepslateCondition = new JsonObject();
+            deepslateCondition.addProperty("type", "minecraft:vertical_gradient");
+            deepslateCondition.addProperty("random_name", "adastramekanized:deepslate_" + planet.name);
+
+            // Below Y=-8 is 100% deepslate equivalent
+            JsonObject deepslateBelow = new JsonObject();
+            deepslateBelow.addProperty("absolute", -8);
+            deepslateCondition.add("true_at_and_below", deepslateBelow);
+
+            // Above Y=0 is 100% stone equivalent
+            JsonObject deepslateAbove = new JsonObject();
+            deepslateAbove.addProperty("absolute", 0);
+            deepslateCondition.add("false_at_and_above", deepslateAbove);
+
+            deepslateLayer.add("if_true", deepslateCondition);
+
+            JsonObject deepslateResult = new JsonObject();
+            deepslateResult.addProperty("type", "minecraft:block");
+            JsonObject deepslateState = new JsonObject();
+            deepslateState.addProperty("Name", planet.deepslateBlock);
+            deepslateResult.add("result_state", deepslateState);
+            deepslateLayer.add("then_run", deepslateResult);
+
+            sequence.add(deepslateLayer);
+        }
 
         // Only add deep layer as a surface rule if it's different from defaultBlock
         // This allows the defaultBlock to be used for the main stone layer
@@ -3617,6 +6259,10 @@ public class PlanetMaker {
     }
 
     private static void writeJsonFile(String path, JsonObject json) throws IOException {
+        // Create parent directories if they don't exist
+        java.nio.file.Path filePath = java.nio.file.Paths.get(path);
+        java.nio.file.Files.createDirectories(filePath.getParent());
+
         try (FileWriter writer = new FileWriter(path)) {
             GSON.toJson(json, writer);
         }
@@ -3768,7 +6414,7 @@ public class PlanetMaker {
 
         config.add("targets", targets);
         config.addProperty("size", oreType.equals("diamond") ? 8 : 12);
-        config.addProperty("discard_chance_on_air_exposure", 0.99f);  // 99% chance to skip when exposed to air
+        config.addProperty("discard_chance_on_air_exposure", 0.0f);  // Don't discard ores near caves - makes them findable
 
         feature.add("config", config);
         return feature;
@@ -4124,6 +6770,80 @@ public class PlanetMaker {
     }
 
     /**
+     * Generate biome tag file that groups all biomes for this planet.
+     * This tag is used by biome_modifiers to target all planet biomes at once.
+     * File: tags/worldgen/biome/[planet]_biomes.json
+     */
+    private static void generateBiomeTag(PlanetBuilder planet) throws IOException {
+        JsonObject tagFile = new JsonObject();
+        JsonArray values = new JsonArray();
+
+        // Add all custom biomes for this planet
+        for (PlanetBuilder.BiomeEntry biomeEntry : planet.customBiomes) {
+            String fullBiomeName;
+            if (biomeEntry.biomeName.contains(":")) {
+                fullBiomeName = biomeEntry.biomeName;
+            } else {
+                fullBiomeName = "adastramekanized:" + biomeEntry.biomeName;
+            }
+            values.add(fullBiomeName);
+        }
+
+        tagFile.add("values", values);
+        writeJsonFile(RESOURCES_PATH + "tags/worldgen/biome/" + planet.name + "_biomes.json", tagFile);
+
+        AdAstraMekanized.LOGGER.debug("Generated biome tag for planet '{}' with {} biomes", planet.name, values.size());
+    }
+
+    /**
+     * Generate NeoForge biome modifier file for mob spawning control.
+     * This creates add_spawns.json that adds configured mobs to all planet biomes.
+     * File: neoforge/biome_modifier/[planet]/add_spawns.json
+     *
+     * IMPORTANT: Only vanilla (minecraft:) entities are included in biome_modifier files.
+     * NeoForge parses JSON before checking conditions, so modded entity references would
+     * cause crashes when the mod isn't loaded. Modded mobs must be handled via runtime
+     * biome modifiers or the mod's own spawn system.
+     */
+    private static void generateBiomeModifier(PlanetBuilder planet) throws IOException {
+        // Create planet-specific directory
+        new File(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name).mkdirs();
+
+        // Collect ONLY vanilla mob spawns - modded entities are NOT included
+        // because NeoForge parses JSON before checking conditions, causing crashes
+        JsonArray spawners = new JsonArray();
+
+        for (java.util.Map.Entry<String, java.util.List<PlanetBuilder.MobSpawnEntry>> entry : planet.mobSpawns.entrySet()) {
+            for (PlanetBuilder.MobSpawnEntry mob : entry.getValue()) {
+                // Only add vanilla minecraft entities to biome_modifier
+                // Modded entities would cause parsing errors when mod isn't loaded
+                String modid = mob.mobId.contains(":") ? mob.mobId.split(":")[0] : "minecraft";
+                if (modid.equals("minecraft")) {
+                    JsonObject spawner = new JsonObject();
+                    spawner.addProperty("type", mob.mobId);
+                    spawner.addProperty("weight", mob.weight);
+                    spawner.addProperty("minCount", mob.minCount);
+                    spawner.addProperty("maxCount", mob.maxCount);
+                    spawners.add(spawner);
+                }
+            }
+        }
+
+        // Only generate if there are vanilla spawns configured
+        if (spawners.size() > 0) {
+            JsonObject biomeModifier = new JsonObject();
+            biomeModifier.addProperty("type", "neoforge:add_spawns");
+            biomeModifier.addProperty("biomes", "#adastramekanized:" + planet.name + "_biomes");
+            biomeModifier.add("spawners", spawners);
+
+            writeJsonFile(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name + "/add_spawns.json", biomeModifier);
+
+            AdAstraMekanized.LOGGER.debug("Generated biome modifier for planet '{}' with {} vanilla spawn entries",
+                planet.name, spawners.size());
+        }
+    }
+
+    /**
      * Create a custom biome with features
      */
     private static JsonObject createCustomBiome(PlanetBuilder.BiomeEntry biomeEntry, PlanetBuilder planet) {
@@ -4142,20 +6862,27 @@ public class PlanetMaker {
         effects.addProperty("water_fog_color", 329011);
         biome.add("effects", effects);
 
-        // Mob spawners - populate with configured mob spawns
+        // Mob spawners - only add VANILLA mobs directly to biome JSON
+        // Modded mobs are handled by biome_modifier with NeoForge conditions (see generateBiomeModifier)
         JsonObject spawners = new JsonObject();
         for (String category : new String[]{"monster", "creature", "ambient", "water_creature", "water_ambient", "misc"}) {
             JsonArray categorySpawns = new JsonArray();
 
-            // Add configured spawns for this category
+            // Add configured spawns for this category, but ONLY vanilla (minecraft) entities
+            // Modded entities will be added via biome_modifier which supports neoforge:conditions
             if (planet.mobSpawns.containsKey(category)) {
                 for (PlanetBuilder.MobSpawnEntry mob : planet.mobSpawns.get(category)) {
-                    JsonObject spawn = new JsonObject();
-                    spawn.addProperty("type", mob.mobId);
-                    spawn.addProperty("minCount", mob.minCount);
-                    spawn.addProperty("maxCount", mob.maxCount);
-                    spawn.addProperty("weight", mob.weight);
-                    categorySpawns.add(spawn);
+                    // Only add vanilla minecraft entities to biome JSON
+                    // Modded entities are handled by generateBiomeModifier() with NeoForge conditions
+                    String modid = mob.mobId.contains(":") ? mob.mobId.split(":")[0] : "minecraft";
+                    if (modid.equals("minecraft")) {
+                        JsonObject spawn = new JsonObject();
+                        spawn.addProperty("type", mob.mobId);
+                        spawn.addProperty("minCount", mob.minCount);
+                        spawn.addProperty("maxCount", mob.maxCount);
+                        spawn.addProperty("weight", mob.weight);
+                        categorySpawns.add(spawn);
+                    }
                 }
             }
 
@@ -4176,18 +6903,76 @@ public class PlanetMaker {
         // Features by generation step
         JsonArray features = new JsonArray();
 
-        // Generation steps in order
+        // Generation steps in order (11 steps total, indices 0-10)
+        // 0=raw_generation, 1=lakes, 2=local_modifications, 3=underground_structures,
+        // 4=surface_structures, 5=strongholds, 6=underground_ores, 7=underground_decoration,
+        // 8=fluid_springs, 9=vegetal_decoration, 10=top_layer_modification
         String[] steps = {
             "raw_generation", "lakes", "local_modifications", "underground_structures",
             "surface_structures", "strongholds", "underground_ores", "underground_decoration",
             "fluid_springs", "vegetal_decoration", "top_layer_modification"
         };
 
-        for (String step : steps) {
+        for (int i = 0; i < steps.length; i++) {
+            String step = steps[i];
             JsonArray stepFeatures = new JsonArray();
 
-            if (step.equals("underground_ores") && planet.oreVeinsEnabled) {
-                // Add ore features for all configured ore types
+            if (planet.useVanillaUndergroundFeatures) {
+                // Add vanilla underground features based on generation step
+                switch (i) {
+                    case 1: // lakes
+                        stepFeatures.add("minecraft:lake_lava_underground");
+                        stepFeatures.add("minecraft:lake_lava_surface");
+                        break;
+                    case 2: // local_modifications
+                        stepFeatures.add("minecraft:amethyst_geode");
+                        break;
+                    case 3: // underground_structures
+                        stepFeatures.add("minecraft:monster_room");
+                        stepFeatures.add("minecraft:monster_room_deep");
+                        break;
+                    case 6: // underground_ores - full vanilla ore set
+                        stepFeatures.add("minecraft:ore_dirt");
+                        stepFeatures.add("minecraft:ore_gravel");
+                        stepFeatures.add("minecraft:ore_granite_upper");
+                        stepFeatures.add("minecraft:ore_granite_lower");
+                        stepFeatures.add("minecraft:ore_diorite_upper");
+                        stepFeatures.add("minecraft:ore_diorite_lower");
+                        stepFeatures.add("minecraft:ore_andesite_upper");
+                        stepFeatures.add("minecraft:ore_andesite_lower");
+                        stepFeatures.add("minecraft:ore_tuff");
+                        stepFeatures.add("minecraft:ore_coal_upper");
+                        stepFeatures.add("minecraft:ore_coal_lower");
+                        stepFeatures.add("minecraft:ore_iron_upper");
+                        stepFeatures.add("minecraft:ore_iron_middle");
+                        stepFeatures.add("minecraft:ore_iron_small");
+                        stepFeatures.add("minecraft:ore_gold");
+                        stepFeatures.add("minecraft:ore_gold_lower");
+                        stepFeatures.add("minecraft:ore_redstone");
+                        stepFeatures.add("minecraft:ore_redstone_lower");
+                        stepFeatures.add("minecraft:ore_diamond");
+                        stepFeatures.add("minecraft:ore_diamond_medium");
+                        stepFeatures.add("minecraft:ore_diamond_large");
+                        stepFeatures.add("minecraft:ore_diamond_buried");
+                        stepFeatures.add("minecraft:ore_lapis");
+                        stepFeatures.add("minecraft:ore_lapis_buried");
+                        stepFeatures.add("minecraft:ore_copper");
+                        stepFeatures.add("minecraft:ore_copper_large");
+                        stepFeatures.add("minecraft:ore_emerald");
+                        break;
+                    case 7: // underground_decoration
+                        stepFeatures.add("minecraft:ore_infested");
+                        break;
+                    case 8: // fluid_springs
+                        stepFeatures.add("minecraft:spring_water");
+                        stepFeatures.add("minecraft:spring_lava");
+                        break;
+                    case 9: // vegetal_decoration
+                        stepFeatures.add("minecraft:glow_lichen");
+                        break;
+                }
+            } else if (step.equals("underground_ores") && planet.oreVeinsEnabled) {
+                // Add custom ore features for all configured ore types (legacy behavior)
                 if (!planet.oreVeinCounts.isEmpty()) {
                     // Add only configured ore types
                     for (String oreType : planet.oreVeinCounts.keySet()) {
@@ -4211,9 +6996,16 @@ public class PlanetMaker {
 
         biome.add("features", features);
 
-        // Carvers
+        // Carvers - add vanilla carvers for full cave generation when enabled
         JsonObject carvers = new JsonObject();
-        carvers.add("air", new JsonArray());
+        JsonArray airCarvers = new JsonArray();
+        if (planet.useVanillaCaves) {
+            // Vanilla carvers for full cave system
+            airCarvers.add("minecraft:cave");
+            airCarvers.add("minecraft:cave_extra_underground");
+            airCarvers.add("minecraft:canyon");
+        }
+        carvers.add("air", airCarvers);
         biome.add("carvers", carvers);
 
         return biome;

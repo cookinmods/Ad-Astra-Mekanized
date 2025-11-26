@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:noise",
+  "noise": "adastramekanized:mars_continents",
+  "xz_scale": 0.004,
+  "y_scale": 0.0
+}
