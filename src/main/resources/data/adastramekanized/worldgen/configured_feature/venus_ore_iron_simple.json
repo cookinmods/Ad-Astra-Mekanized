@@ -356,7 +356,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
+          "block": "minecraft:brown_terracotta"
         },
         "state": {
           "Name": "minecraft:iron_ore"
@@ -365,7 +365,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
+          "block": "minecraft:orange_terracotta"
         },
         "state": {
           "Name": "minecraft:iron_ore"

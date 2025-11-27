@@ -1,0 +1,48 @@
+{
+  "type": "adastramekanized:bellator",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "adastramekanized:bellator",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "adastramekanized:bellator_savanna",
+          "parameters": {
+            "temperature": 0.95,
+            "humidity": 0.0,
+            "continentalness": 0.0,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "adastramekanized:bellator_savanna_plateau",
+          "parameters": {
+            "temperature": 0.9,
+            "humidity": -0.2,
+            "continentalness": 0.3,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "adastramekanized:bellator_windswept_savanna",
+          "parameters": {
+            "temperature": 0.85,
+            "humidity": -0.3,
+            "continentalness": 0.4,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        }
+      ]
+    }
+  }
+}

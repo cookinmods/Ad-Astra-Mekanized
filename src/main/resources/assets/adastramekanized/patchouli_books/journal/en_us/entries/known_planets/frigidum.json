@@ -1,0 +1,28 @@
+{
+  "name": "Frigidum",
+  "icon": "minecraft:snow_block",
+  "category": "adastramekanized:known_planets",
+  "advancement": "adastramekanized:planets/visited_frigidum",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Planetary Data",
+      "text": "$(bold)Gravity:$() 110.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #DDEEFF$(br)$(bold)Ambient Light:$() 80.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() No"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Resources",
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Coal (Common)$(br)• Copper (Common)$(br)• Diamond (Uncommon)$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Biomes",
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Snowy Plains$(br)• Ice Spikes$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Surface Composition",
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Snow Block$(br)• $(bold)Subsurface:$() Packed Ice$(br)• $(bold)Deep:$() Blue Ice$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+    }
+  ]
+}

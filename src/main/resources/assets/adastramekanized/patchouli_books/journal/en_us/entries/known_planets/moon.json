@@ -12,17 +12,17 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Abundant)$(br)• Copper (Uncommon)$(br)• Redstone (Rare)$(br)• Gold (Rare)$(br)• Diamond (Rare)$(br)• Coal (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Aluminum (Common)$(br)• Gold (Common)$(br)• Platinum (Uncommon)$(br)"
     },
     {
       "type": "patchouli:text",
       "title": "Biomes",
-      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Moon Highlands$(br)• Moon Maria$(br)• Moon Craters$(br)"
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Moon Highlands$(br)• Moon Maria$(br)• Moon Crater Rim$(br)• Moon Crater Floor$(br)• Moon Polar$(br)"
     },
     {
       "type": "patchouli:text",
       "title": "Surface Composition",
-      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Moon Sand$(br)• $(bold)Subsurface:$() Moon Stone$(br)• $(bold)Deep:$() Deepslate$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d63"
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Moon Sand$(br)• $(bold)Subsurface:$() Moon Stone$(br)• $(bold)Deep:$() Moon Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
     }
   ]
 }

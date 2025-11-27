@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_terra_nova": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:terra_nova"
+      }
+    }
+  }
+}

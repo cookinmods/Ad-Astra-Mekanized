@@ -1,0 +1,85 @@
+{
+  "temperature": 1.0,
+  "downfall": -0.8,
+  "has_precipitation": false,
+  "effects": {
+    "fog_color": 5574912,
+    "sky_color": 3342336,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:magma_cube",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 15
+      },
+      {
+        "type": "minecraft:blaze",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:wither_skeleton",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 6
+      },
+      {
+        "type": "minecraft:ghast",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 3
+      }
+    ],
+    "creature": [],
+    "ambient": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [],
+    [
+      "adastramekanized:pyrios_ore_gold_simple",
+      "adastramekanized:pyrios_ore_diamond_simple",
+      "adastramekanized:pyrios_ore_iron_simple",
+      "adastramekanized:pyrios_ore_redstone_simple"
+    ],
+    [
+      "minecraft:ore_infested"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen"
+    ],
+    []
+  ],
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  }
+}

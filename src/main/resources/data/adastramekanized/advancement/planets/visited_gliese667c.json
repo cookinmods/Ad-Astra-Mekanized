@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_gliese667c": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:gliese667c"
+      }
+    }
+  }
+}

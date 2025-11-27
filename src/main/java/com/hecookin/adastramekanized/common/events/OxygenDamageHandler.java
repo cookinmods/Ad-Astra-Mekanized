@@ -24,10 +24,31 @@ public class OxygenDamageHandler {
         if (living.getType().is(ModEntityTypeTags.LIVES_WITHOUT_OXYGEN)) return;
         if (living.getType().is(ModEntityTypeTags.CAN_SURVIVE_IN_SPACE)) return;
 
-        // Additional check for Mowzie's Mobs entities by namespace
+        // Additional check for modded entities by namespace
+        // These mobs are configured on planets and should be immune to oxygen damage
         String entityId = living.getType().getDescriptionId();
-        if (entityId != null && entityId.contains("mowziesmobs")) {
-            return; // All Mowzie's Mobs are exempt from oxygen damage
+        if (entityId != null) {
+            if (entityId.contains("mowziesmobs")) {
+                return; // All Mowzie's Mobs are exempt from oxygen damage
+            }
+            if (entityId.contains("undead_revamp2")) {
+                return; // All Undead Revamp 2 mobs are exempt from oxygen damage
+            }
+            if (entityId.contains("doom")) {
+                return; // MCDoom demons are exempt - they're from hell
+            }
+            if (entityId.contains("ribbits")) {
+                return; // Ribbits frog people are exempt - magical beings
+            }
+            if (entityId.contains("kobolds")) {
+                return; // Kobolds are exempt - cave dwellers adapted to any atmosphere
+            }
+            if (entityId.contains("reptilian")) {
+                return; // Reptilian creatures are exempt - adapted to harsh environments
+            }
+            if (entityId.contains("lumination")) {
+                return; // Lumination mobs are exempt - magical creatures
+            }
         }
 
         // Skip spectators and creative players

@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_vulcan": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:vulcan"
+      }
+    }
+  }
+}

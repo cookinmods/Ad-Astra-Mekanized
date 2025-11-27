@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_io": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:io"
+      }
+    }
+  }
+}

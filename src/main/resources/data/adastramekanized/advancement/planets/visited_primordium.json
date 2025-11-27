@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_primordium": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:primordium"
+      }
+    }
+  }
+}

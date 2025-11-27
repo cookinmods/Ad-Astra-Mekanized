@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)Standard ore distribution enabled."
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Copper (Common)$(br)• Redstone (Common)$(br)• Diamond (Uncommon)$(br)"
     },
     {
       "type": "patchouli:text",
@@ -22,7 +22,7 @@
     {
       "type": "patchouli:text",
       "title": "Surface Composition",
-      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Mars Sand$(br)• $(bold)Subsurface:$() Mars Stone$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d48"
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Mars Sand$(br)• $(bold)Subsurface:$() Mars Stone$(br)• $(bold)Deep:$() Mars Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
     }
   ]
 }

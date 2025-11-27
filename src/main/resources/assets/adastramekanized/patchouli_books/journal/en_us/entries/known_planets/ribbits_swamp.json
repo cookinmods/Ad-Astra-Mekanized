@@ -1,26 +1,23 @@
 {
   "name": "Ribbits Swamp",
-  "icon": "minecraft:lily_pad",
+  "icon": "minecraft:grass_block",
   "category": "adastramekanized:known_planets",
+  "advancement": "adastramekanized:planets/visited_ribbits_swamp",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(bold)Ribbits Swamp$() is a peaceful swamp world inhabited by the $(o)Ribbits$(), a species of intelligent frog-like villagers who live in charming swamp villages.$(br2)This world features flat, waterlogged terrain perfect for the Ribbits' amphibious lifestyle."
+      "title": "Planetary Data",
+      "text": "$(bold)Gravity:$() 100.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #87CEEB$(br)$(bold)Ambient Light:$() 70.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() Yes"
     },
     {
       "type": "patchouli:text",
-      "title": "Environment",
-      "text": "$(li)$(bold)Gravity:$() 1.0g (Earth-like)$(li)$(bold)Atmosphere:$() Breathable$(li)$(bold)Temperature:$() Moderate, humid$(li)$(bold)Terrain:$() Flat swamplands with water pools$(li)$(bold)Biomes:$() Swamp, Mangrove Swamp"
+      "title": "Biomes",
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Swamp$(br)• Mangrove Swamp$(br)"
     },
     {
       "type": "patchouli:text",
-      "title": "Native Life",
-      "text": "$(bold)Ribbits$()$(br)Small frog villagers who:$(li)Build swamp villages$(li)Trade with players$(li)Fish in swamp waters$(li)Cast beneficial magic$(li)Water crops$(li)Play music together$(br2)Also home to vanilla frogs, slimes, and witches."
-    },
-    {
-      "type": "patchouli:text",
-      "title": "Resources",
-      "text": "$(li)$(bold)Structures:$() Ribbit swamp villages with unique architecture$(li)$(bold)Trading:$() Ribbits offer plant blocks, maracas, and other swamp goods$(li)$(bold)Caves:$() Flooded cave systems filled with water"
+      "title": "Surface Composition",
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Grass Block$(br)• $(bold)Subsurface:$() Mud$(br)• $(bold)Deep:$() Deepslate$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d62"
     }
   ]
 }

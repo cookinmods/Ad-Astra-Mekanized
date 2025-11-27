@@ -1,0 +1,36 @@
+{
+  "type": "adastramekanized:frigidum",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "adastramekanized:frigidum",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "adastramekanized:frigidum_snowy_plains",
+          "parameters": {
+            "temperature": -1.0,
+            "humidity": 0.5,
+            "continentalness": 0.0,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "adastramekanized:frigidum_ice_spikes",
+          "parameters": {
+            "temperature": -1.0,
+            "humidity": 0.3,
+            "continentalness": 0.3,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        }
+      ]
+    }
+  }
+}

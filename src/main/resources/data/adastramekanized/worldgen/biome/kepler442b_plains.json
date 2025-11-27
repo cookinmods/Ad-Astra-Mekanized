@@ -1,0 +1,128 @@
+{
+  "temperature": 0.5,
+  "downfall": 0.4,
+  "has_precipitation": true,
+  "effects": {
+    "fog_color": 12640448,
+    "sky_color": 8900331,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:zombie",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:skeleton",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:spider",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 5
+      },
+      {
+        "type": "minecraft:creeper",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 4
+      }
+    ],
+    "creature": [
+      {
+        "type": "minecraft:cow",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:pig",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:sheep",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:chicken",
+        "minCount": 2,
+        "maxCount": 4,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:rabbit",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 6
+      },
+      {
+        "type": "minecraft:fox",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 4
+      },
+      {
+        "type": "minecraft:wolf",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 3
+      }
+    ],
+    "ambient": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [],
+    [
+      "adastramekanized:kepler442b_ore_coal_simple",
+      "adastramekanized:kepler442b_ore_iron_simple",
+      "adastramekanized:kepler442b_ore_copper_simple",
+      "adastramekanized:kepler442b_ore_emerald_simple"
+    ],
+    [
+      "minecraft:ore_infested"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen"
+    ],
+    []
+  ],
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  }
+}

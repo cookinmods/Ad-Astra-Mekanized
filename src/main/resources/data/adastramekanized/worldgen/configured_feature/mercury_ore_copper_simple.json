@@ -365,7 +365,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
+          "block": "minecraft:gray_concrete"
         },
         "state": {
           "Name": "minecraft:copper_ore"

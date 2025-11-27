@@ -7,10 +7,10 @@
       "type": "minecraft:multi_noise",
       "biomes": [
         {
-          "biome": "minecraft:plains",
+          "biome": "adastramekanized:venus_desert",
           "parameters": {
-            "temperature": 0.0,
-            "humidity": 0.0,
+            "temperature": 0.9,
+            "humidity": -0.9,
             "continentalness": 0.0,
             "erosion": 0.0,
             "depth": 0.0,

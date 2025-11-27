@@ -1,0 +1,80 @@
+{
+  "temperature": 0.9,
+  "downfall": -0.2,
+  "has_precipitation": false,
+  "effects": {
+    "fog_color": 13417352,
+    "sky_color": 14527078,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:husk",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 15
+      }
+    ],
+    "creature": [
+      {
+        "type": "minecraft:horse",
+        "minCount": 2,
+        "maxCount": 4,
+        "weight": 20
+      },
+      {
+        "type": "minecraft:llama",
+        "minCount": 2,
+        "maxCount": 4,
+        "weight": 15
+      }
+    ],
+    "ambient": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [],
+    [
+      "adastramekanized:bellator_ore_gold_simple",
+      "adastramekanized:bellator_ore_diamond_simple",
+      "adastramekanized:bellator_ore_iron_simple",
+      "adastramekanized:bellator_ore_copper_simple"
+    ],
+    [
+      "minecraft:ore_infested"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen"
+    ],
+    []
+  ],
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  }
+}

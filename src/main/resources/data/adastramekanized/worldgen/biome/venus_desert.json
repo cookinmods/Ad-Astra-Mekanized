@@ -1,0 +1,73 @@
+{
+  "temperature": 0.9,
+  "downfall": -0.9,
+  "has_precipitation": false,
+  "effects": {
+    "fog_color": 16755251,
+    "sky_color": 16764006,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:magma_cube",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 20
+      },
+      {
+        "type": "minecraft:blaze",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 10
+      }
+    ],
+    "creature": [],
+    "ambient": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [],
+    [
+      "adastramekanized:venus_ore_gold_simple",
+      "adastramekanized:venus_ore_copper_simple",
+      "adastramekanized:venus_ore_coal_simple",
+      "adastramekanized:venus_ore_iron_simple"
+    ],
+    [
+      "minecraft:ore_infested"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen"
+    ],
+    []
+  ],
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  }
+}

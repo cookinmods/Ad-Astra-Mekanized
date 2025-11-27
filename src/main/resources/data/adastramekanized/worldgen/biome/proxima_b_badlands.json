@@ -1,0 +1,80 @@
+{
+  "temperature": 0.8,
+  "downfall": -0.7,
+  "has_precipitation": false,
+  "effects": {
+    "fog_color": 13391189,
+    "sky_color": 16739179,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:husk",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 25
+      },
+      {
+        "type": "minecraft:cave_spider",
+        "minCount": 1,
+        "maxCount": 3,
+        "weight": 20
+      }
+    ],
+    "creature": [
+      {
+        "type": "minecraft:rabbit",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 15
+      }
+    ],
+    "ambient": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [],
+    [
+      "adastramekanized:proxima_b_ore_gold_simple",
+      "adastramekanized:proxima_b_ore_diamond_simple",
+      "adastramekanized:proxima_b_ore_copper_simple",
+      "adastramekanized:proxima_b_ore_redstone_simple"
+    ],
+    [
+      "minecraft:ore_infested"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen"
+    ],
+    []
+  ],
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  }
+}

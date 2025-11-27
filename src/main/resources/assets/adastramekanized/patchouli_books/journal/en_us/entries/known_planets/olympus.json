@@ -1,0 +1,28 @@
+{
+  "name": "Olympus",
+  "icon": "minecraft:white_terracotta",
+  "category": "adastramekanized:known_planets",
+  "advancement": "adastramekanized:planets/visited_olympus",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Planetary Data",
+      "text": "$(bold)Gravity:$() 100.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #87CEEB$(br)$(bold)Ambient Light:$() 100.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() No"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Resources",
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)Standard ore distribution enabled."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Biomes",
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Plains$(br)• Mountains$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Surface Composition",
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() White Terracotta$(br)• $(bold)Subsurface:$() Smooth Stone$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d63"
+    }
+  ]
+}

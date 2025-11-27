@@ -1,0 +1,42 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:kepler22b_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:dolphin",
+      "weight": 8,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "minecraft:turtle",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "minecraft:cod",
+      "weight": 10,
+      "minCount": 2,
+      "maxCount": 3
+    },
+    {
+      "type": "minecraft:salmon",
+      "weight": 8,
+      "minCount": 2,
+      "maxCount": 3
+    },
+    {
+      "type": "minecraft:tropical_fish",
+      "weight": 12,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "minecraft:drowned",
+      "weight": 5,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

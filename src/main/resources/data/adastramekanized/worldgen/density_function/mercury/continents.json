@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:flat_cache",
+  "argument": {
+    "type": "minecraft:shifted_noise",
+    "noise": "minecraft:continentalness",
+    "shift_x": {
+      "type": "minecraft:add",
+      "argument1": "minecraft:shift_x",
+      "argument2": 45000.0
+    },
+    "shift_y": 0.0,
+    "shift_z": {
+      "type": "minecraft:add",
+      "argument1": "minecraft:shift_z",
+      "argument2": 30000.0
+    },
+    "xz_scale": 0.25,
+    "y_scale": 0.0
+  }
+}

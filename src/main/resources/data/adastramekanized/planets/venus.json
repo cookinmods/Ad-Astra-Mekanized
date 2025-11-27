@@ -11,9 +11,9 @@
   },
   "atmosphere": {
     "has_atmosphere": true,
-    "breathable": true,
+    "breathable": false,
     "pressure": 1.0,
-    "oxygen_level": 0.21,
+    "oxygen_level": 0.0,
     "type": "NORMAL"
   },
   "dimension": {
@@ -57,7 +57,7 @@
       "has_rain": true,
       "has_snow": true,
       "has_storms": false,
-      "rain_acidity": 0.0
+      "rain_acidity": 2.0
     },
     "particles": {
       "has_dust": false,

@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_luxoria": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:luxoria"
+      }
+    }
+  }
+}

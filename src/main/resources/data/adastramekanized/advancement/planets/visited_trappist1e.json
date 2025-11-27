@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_trappist1e": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:trappist1e"
+      }
+    }
+  }
+}

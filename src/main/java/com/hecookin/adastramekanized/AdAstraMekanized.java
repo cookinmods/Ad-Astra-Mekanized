@@ -17,7 +17,12 @@ import com.hecookin.adastramekanized.common.registry.ModRecipeSerializers;
 import com.hecookin.adastramekanized.config.AdAstraMekanizedConfig;
 import com.hecookin.adastramekanized.integration.ModIntegrationManager;
 import com.hecookin.adastramekanized.integration.mowziesmobs.MowziesMobsIntegration;
+import com.hecookin.adastramekanized.worldgen.biome.MoonBiomeProvider;
+import com.hecookin.adastramekanized.worldgen.biome.MoonBiomes;
+import com.hecookin.adastramekanized.worldgen.biome.PlanetBiomeRegistry;
+import com.hecookin.adastramekanized.worldgen.integration.TectonicNeoForgeIntegration;
 import net.neoforged.bus.api.IEventBus;
+import terrablender.api.Regions;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -70,6 +75,12 @@ public class AdAstraMekanized {
         // Register chunk generators
         ModChunkGenerators.register(modEventBus);
 
+        // Register planet biome system
+        PlanetBiomeRegistry.register(modEventBus);
+
+        // Initialize Tectonic worldgen integration
+        TectonicNeoForgeIntegration.initialize(modEventBus);
+
         // Register mod setup
         modEventBus.addListener(this::commonSetup);
 
@@ -109,6 +120,25 @@ public class AdAstraMekanized {
             // Initialize Mowzie's Mobs integration
             MowziesMobsIntegration.init();
 
+            // Configure modded mob spawn control
+            // Controlled mods: mowziesmobs, kobolds, doom, mobs_of_mythology, luminousworld,
+            //                  undead_revamp2, rottencreatures, shineals_prehistoric_expansion, reptilian
+            // By default, controlled mobs ONLY spawn in whitelisted planets
+            // To allow vanilla dimension spawning, uncomment one of these:
+            // ModdedMobSpawnController.allowInOverworld("mowziesmobs");
+            // ModdedMobSpawnController.allowInVanillaDimensions("kobolds");
+            // ModdedMobSpawnController.allowInNether("doom");
+            // ModdedMobSpawnController.allowInOverworld("mobs_of_mythology");
+            // ModdedMobSpawnController.allowInOverworld("luminousworld");
+            // ModdedMobSpawnController.allowInOverworld("undead_revamp2");
+            // ModdedMobSpawnController.allowInOverworld("rottencreatures");
+            // ModdedMobSpawnController.allowInOverworld("shineals_prehistoric_expansion");
+            // ModdedMobSpawnController.allowInOverworld("reptilian");
+
+            // To add more mob mods to spawn control:
+            // ModdedMobSpawnController.addControlledMod("alexsmobs");
+            // ModdedMobSpawnController.allowInOverworld("alexsmobs");
+
             // Initialize rocket tier properties
             ModEntityTypes.initRocketTiers();
             LOGGER.info("Rocket tiers initialized");
@@ -118,6 +148,15 @@ public class AdAstraMekanized {
 
             // Initialize planet system components
             LOGGER.info("Planet system initialization complete");
+
+            // Register planet biomes
+            MoonBiomes.register();
+            LOGGER.info("Planet-specific biomes registered");
+
+            // TerraBlender regions DISABLED - TerraBlender only works for Overworld/Nether/End
+            // Custom dimensions use dimension JSON for biome distribution instead
+            // Regions.register(new MoonBiomeProvider());  // DISABLED: Was registering Moon biomes in Overworld!
+            LOGGER.info("Planet biome providers registration skipped (custom dimensions use dimension JSON)");
 
             LOGGER.info("Ad Astra Mekanized common setup complete");
         });

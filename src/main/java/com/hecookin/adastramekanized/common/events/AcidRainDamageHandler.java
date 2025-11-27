@@ -110,11 +110,11 @@ public class AcidRainDamageHandler {
             if (stream != null) {
                 JsonObject planetData = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
 
-                if (planetData.has("atmospheric_rendering")) {
-                    JsonObject atmosphericRendering = planetData.getAsJsonObject("atmospheric_rendering");
+                if (planetData.has("rendering")) {
+                    JsonObject rendering = planetData.getAsJsonObject("rendering");
 
-                    if (atmosphericRendering.has("weather")) {
-                        JsonObject weather = atmosphericRendering.getAsJsonObject("weather");
+                    if (rendering.has("weather")) {
+                        JsonObject weather = rendering.getAsJsonObject("weather");
 
                         if (weather.has("rain_acidity")) {
                             return weather.get("rain_acidity").getAsFloat();

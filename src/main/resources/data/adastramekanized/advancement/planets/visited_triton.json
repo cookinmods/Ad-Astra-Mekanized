@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_triton": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:triton"
+      }
+    }
+  }
+}

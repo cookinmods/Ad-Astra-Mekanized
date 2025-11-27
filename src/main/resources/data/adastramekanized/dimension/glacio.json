@@ -7,11 +7,23 @@
       "type": "minecraft:multi_noise",
       "biomes": [
         {
-          "biome": "minecraft:plains",
+          "biome": "adastramekanized:glacio_snowy_taiga",
           "parameters": {
-            "temperature": 0.0,
-            "humidity": 0.0,
+            "temperature": -0.8,
+            "humidity": 0.4,
             "continentalness": 0.0,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "adastramekanized:glacio_frozen_river",
+          "parameters": {
+            "temperature": -0.9,
+            "humidity": 0.5,
+            "continentalness": -0.2,
             "erosion": 0.0,
             "depth": 0.0,
             "weirdness": 0.0,

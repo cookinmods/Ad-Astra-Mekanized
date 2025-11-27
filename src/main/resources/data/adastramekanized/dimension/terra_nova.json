@@ -1,0 +1,48 @@
+{
+  "type": "adastramekanized:terra_nova",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "adastramekanized:terra_nova",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "adastramekanized:terra_nova_plains",
+          "parameters": {
+            "temperature": 0.5,
+            "humidity": 0.5,
+            "continentalness": 0.0,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "adastramekanized:terra_nova_forest",
+          "parameters": {
+            "temperature": 0.5,
+            "humidity": 0.6,
+            "continentalness": 0.1,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "adastramekanized:terra_nova_taiga",
+          "parameters": {
+            "temperature": 0.3,
+            "humidity": 0.6,
+            "continentalness": 0.0,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Scaleland",
+  "icon": "minecraft:grass_block",
+  "category": "adastramekanized:known_planets",
+  "advancement": "adastramekanized:planets/visited_scaleland",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Planetary Data",
+      "text": "$(bold)Gravity:$() 90.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #FFD700$(br)$(bold)Ambient Light:$() 85.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() Yes"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Resources",
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)Standard ore distribution enabled."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Biomes",
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Scaleland Desert$(br)• Scaleland Savanna$(br)• Scaleland Badlands$(br)• Scaleland Plains$(br)• Scaleland Thicket$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Surface Composition",
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Grass Block$(br)• $(bold)Subsurface:$() Coarse Dirt$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d63"
+    }
+  ]
+}

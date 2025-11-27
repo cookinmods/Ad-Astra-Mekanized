@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_enceladus": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:enceladus"
+      }
+    }
+  }
+}

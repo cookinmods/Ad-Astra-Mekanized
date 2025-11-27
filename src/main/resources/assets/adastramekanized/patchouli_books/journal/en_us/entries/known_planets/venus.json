@@ -12,12 +12,17 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)Standard ore distribution enabled."
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Copper (Common)$(br)• Coal (Common)$(br)• Iron (Common)$(br)• Gold (Uncommon)$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Biomes",
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Desert$(br)"
     },
     {
       "type": "patchouli:text",
       "title": "Surface Composition",
-      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Yellow Terracotta$(br)• $(bold)Subsurface:$() Orange Terracotta$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d63"
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Yellow Terracotta$(br)• $(bold)Subsurface:$() Orange Terracotta$(br)• $(bold)Deep:$() Brown Terracotta$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
     }
   ]
 }

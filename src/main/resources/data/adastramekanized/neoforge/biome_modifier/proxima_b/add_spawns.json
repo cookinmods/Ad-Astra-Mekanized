@@ -1,0 +1,24 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:proxima_b_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:rabbit",
+      "weight": 15,
+      "minCount": 2,
+      "maxCount": 3
+    },
+    {
+      "type": "minecraft:husk",
+      "weight": 25,
+      "minCount": 2,
+      "maxCount": 3
+    },
+    {
+      "type": "minecraft:cave_spider",
+      "weight": 20,
+      "minCount": 1,
+      "maxCount": 3
+    }
+  ]
+}

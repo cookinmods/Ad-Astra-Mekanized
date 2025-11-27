@@ -281,8 +281,10 @@ public class PlanetMaker {
                     // Already has our namespace, just use it directly
                     customBiomeName = biomeEntry.biomeName;
                 } else if (biomeEntry.biomeName.startsWith("minecraft:")) {
-                    // Use vanilla biomes directly without modification
-                    customBiomeName = biomeEntry.biomeName;
+                    // Convert vanilla biomes to planet-specific custom biomes
+                    // This prevents Mekanism's ore injection since our biomes aren't in #minecraft:is_overworld
+                    String vanillaBiomeName = biomeEntry.biomeName.substring("minecraft:".length());
+                    customBiomeName = "adastramekanized:" + planet.name + "_" + vanillaBiomeName;
                 } else {
                     // Add our namespace and planet prefix for custom biomes
                     customBiomeName = "adastramekanized:" + planet.name + "_" + biomeEntry.biomeName;
@@ -673,6 +675,8 @@ public class PlanetMaker {
         private boolean stormsEnabled = false;
         private boolean acidRainDamage = false;
         private float acidRainDamageAmount = 1.0f;
+        private boolean fireDamage = false;
+        private float fireDamageAmount = 1.0f;
 
         // Tectonic worldgen configuration system
         private CraterConfig craterConfig = null;
@@ -2115,6 +2119,22 @@ public class PlanetMaker {
             return this;
         }
 
+        /**
+         * Enable fire damage on this planet (constant heat damage)
+         */
+        public PlanetBuilder fireDamage(boolean damage) {
+            this.fireDamage = damage;
+            return this;
+        }
+
+        /**
+         * Set fire damage amount per tick
+         */
+        public PlanetBuilder fireDamageAmount(float damage) {
+            this.fireDamageAmount = Math.max(0.0f, damage);
+            return this;
+        }
+
         // World structure configuration methods
         public PlanetBuilder worldDimensions(int minY, int height) {
             this.minY = minY;
@@ -3293,11 +3313,10 @@ public class PlanetMaker {
                             String oreName = capitalizeWords(ore.getKey());
                             oresText.append("• ").append(oreName);
                             int veins = ore.getValue();
+                            // Only three rarity levels: Common, Uncommon, Rare
                             if (veins >= 20) {
-                                oresText.append(" (Abundant)");
-                            } else if (veins >= 10) {
                                 oresText.append(" (Common)");
-                            } else if (veins >= 5) {
+                            } else if (veins >= 10) {
                                 oresText.append(" (Uncommon)");
                             } else {
                                 oresText.append(" (Rare)");
@@ -6515,7 +6534,8 @@ public class PlanetMaker {
         height.add("min_inclusive", minHeight);
 
         JsonObject maxHeight = new JsonObject();
-        maxHeight.addProperty("absolute", oreType.equals("diamond") ? 16 : 256);
+        // Max Y=48 to prevent surface ore exposure, diamond stays at 16
+        maxHeight.addProperty("absolute", oreType.equals("diamond") ? 16 : 48);
         height.add("max_inclusive", maxHeight);
 
         heightRange.add("height", height);
@@ -6754,13 +6774,19 @@ public class PlanetMaker {
         // For each biome in the planet, create a custom version with features
         for (PlanetBuilder.BiomeEntry biomeEntry : planet.customBiomes) {
             JsonObject biome = createCustomBiome(biomeEntry, planet);
-            // Extract just the biome name for the filename
+            // Generate filename matching the biome ID used in dimension json
+            // Uses same logic as createBiomePreset and generateBiomeTag
             String biomeName;
-            if (biomeEntry.biomeName.contains(":")) {
-                // Remove namespace for filename
-                biomeName = biomeEntry.biomeName.substring(biomeEntry.biomeName.lastIndexOf(":") + 1);
+            if (biomeEntry.biomeName.startsWith("adastramekanized:")) {
+                // Already has our namespace, extract just the name part
+                biomeName = biomeEntry.biomeName.substring("adastramekanized:".length());
+            } else if (biomeEntry.biomeName.startsWith("minecraft:")) {
+                // Convert vanilla biomes to planet-specific name
+                String vanillaBiomeName = biomeEntry.biomeName.substring("minecraft:".length());
+                biomeName = planet.name + "_" + vanillaBiomeName;
             } else {
-                biomeName = biomeEntry.biomeName;
+                // Add planet prefix
+                biomeName = planet.name + "_" + biomeEntry.biomeName;
             }
 
             // Create filename without colons (filesystem safe)
@@ -6779,12 +6805,19 @@ public class PlanetMaker {
         JsonArray values = new JsonArray();
 
         // Add all custom biomes for this planet
+        // Uses same conversion logic as createBiomePreset to ensure consistency
         for (PlanetBuilder.BiomeEntry biomeEntry : planet.customBiomes) {
             String fullBiomeName;
-            if (biomeEntry.biomeName.contains(":")) {
+            if (biomeEntry.biomeName.startsWith("adastramekanized:")) {
+                // Already has our namespace, use directly
                 fullBiomeName = biomeEntry.biomeName;
+            } else if (biomeEntry.biomeName.startsWith("minecraft:")) {
+                // Convert vanilla biomes to planet-specific to avoid Mekanism ore injection
+                String vanillaBiomeName = biomeEntry.biomeName.substring("minecraft:".length());
+                fullBiomeName = "adastramekanized:" + planet.name + "_" + vanillaBiomeName;
             } else {
-                fullBiomeName = "adastramekanized:" + biomeEntry.biomeName;
+                // Add our namespace and planet prefix
+                fullBiomeName = "adastramekanized:" + planet.name + "_" + biomeEntry.biomeName;
             }
             values.add(fullBiomeName);
         }
@@ -6917,6 +6950,9 @@ public class PlanetMaker {
             String step = steps[i];
             JsonArray stepFeatures = new JsonArray();
 
+            // Check if custom ores are configured - if so, use custom ore features instead of vanilla
+            boolean useCustomOres = planet.oreVeinsEnabled && !planet.oreVeinCounts.isEmpty();
+
             if (planet.useVanillaUndergroundFeatures) {
                 // Add vanilla underground features based on generation step
                 switch (i) {
@@ -6931,34 +6967,42 @@ public class PlanetMaker {
                         stepFeatures.add("minecraft:monster_room");
                         stepFeatures.add("minecraft:monster_room_deep");
                         break;
-                    case 6: // underground_ores - full vanilla ore set
-                        stepFeatures.add("minecraft:ore_dirt");
-                        stepFeatures.add("minecraft:ore_gravel");
-                        stepFeatures.add("minecraft:ore_granite_upper");
-                        stepFeatures.add("minecraft:ore_granite_lower");
-                        stepFeatures.add("minecraft:ore_diorite_upper");
-                        stepFeatures.add("minecraft:ore_diorite_lower");
-                        stepFeatures.add("minecraft:ore_andesite_upper");
-                        stepFeatures.add("minecraft:ore_andesite_lower");
-                        stepFeatures.add("minecraft:ore_tuff");
-                        stepFeatures.add("minecraft:ore_coal_upper");
-                        stepFeatures.add("minecraft:ore_coal_lower");
-                        stepFeatures.add("minecraft:ore_iron_upper");
-                        stepFeatures.add("minecraft:ore_iron_middle");
-                        stepFeatures.add("minecraft:ore_iron_small");
-                        stepFeatures.add("minecraft:ore_gold");
-                        stepFeatures.add("minecraft:ore_gold_lower");
-                        stepFeatures.add("minecraft:ore_redstone");
-                        stepFeatures.add("minecraft:ore_redstone_lower");
-                        stepFeatures.add("minecraft:ore_diamond");
-                        stepFeatures.add("minecraft:ore_diamond_medium");
-                        stepFeatures.add("minecraft:ore_diamond_large");
-                        stepFeatures.add("minecraft:ore_diamond_buried");
-                        stepFeatures.add("minecraft:ore_lapis");
-                        stepFeatures.add("minecraft:ore_lapis_buried");
-                        stepFeatures.add("minecraft:ore_copper");
-                        stepFeatures.add("minecraft:ore_copper_large");
-                        stepFeatures.add("minecraft:ore_emerald");
+                    case 6: // underground_ores
+                        if (useCustomOres) {
+                            // Use custom planet-specific ore features when configured
+                            for (String oreType : planet.oreVeinCounts.keySet()) {
+                                stepFeatures.add("adastramekanized:" + planet.name + "_ore_" + oreType + "_simple");
+                            }
+                        } else {
+                            // Fall back to vanilla ore set
+                            stepFeatures.add("minecraft:ore_dirt");
+                            stepFeatures.add("minecraft:ore_gravel");
+                            stepFeatures.add("minecraft:ore_granite_upper");
+                            stepFeatures.add("minecraft:ore_granite_lower");
+                            stepFeatures.add("minecraft:ore_diorite_upper");
+                            stepFeatures.add("minecraft:ore_diorite_lower");
+                            stepFeatures.add("minecraft:ore_andesite_upper");
+                            stepFeatures.add("minecraft:ore_andesite_lower");
+                            stepFeatures.add("minecraft:ore_tuff");
+                            stepFeatures.add("minecraft:ore_coal_upper");
+                            stepFeatures.add("minecraft:ore_coal_lower");
+                            stepFeatures.add("minecraft:ore_iron_upper");
+                            stepFeatures.add("minecraft:ore_iron_middle");
+                            stepFeatures.add("minecraft:ore_iron_small");
+                            stepFeatures.add("minecraft:ore_gold");
+                            stepFeatures.add("minecraft:ore_gold_lower");
+                            stepFeatures.add("minecraft:ore_redstone");
+                            stepFeatures.add("minecraft:ore_redstone_lower");
+                            stepFeatures.add("minecraft:ore_diamond");
+                            stepFeatures.add("minecraft:ore_diamond_medium");
+                            stepFeatures.add("minecraft:ore_diamond_large");
+                            stepFeatures.add("minecraft:ore_diamond_buried");
+                            stepFeatures.add("minecraft:ore_lapis");
+                            stepFeatures.add("minecraft:ore_lapis_buried");
+                            stepFeatures.add("minecraft:ore_copper");
+                            stepFeatures.add("minecraft:ore_copper_large");
+                            stepFeatures.add("minecraft:ore_emerald");
+                        }
                         break;
                     case 7: // underground_decoration
                         stepFeatures.add("minecraft:ore_infested");

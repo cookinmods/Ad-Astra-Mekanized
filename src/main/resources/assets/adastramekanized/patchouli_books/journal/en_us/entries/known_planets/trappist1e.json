@@ -1,0 +1,28 @@
+{
+  "name": "Trappist1e",
+  "icon": "minecraft:grass_block",
+  "category": "adastramekanized:known_planets",
+  "advancement": "adastramekanized:planets/visited_trappist1e",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Planetary Data",
+      "text": "$(bold)Gravity:$() 90.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #FFAAAA$(br)$(bold)Ambient Light:$() 75.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() Yes"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Resources",
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Coal (Common)$(br)• Lapis (Common)$(br)• Diamond (Uncommon)$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Biomes",
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Flower Forest$(br)• Meadow$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Surface Composition",
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Grass Block$(br)• $(bold)Subsurface:$() Dirt$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d63"
+    }
+  ]
+}

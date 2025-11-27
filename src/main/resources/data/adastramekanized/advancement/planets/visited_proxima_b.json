@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_proxima_b": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:proxima_b"
+      }
+    }
+  }
+}

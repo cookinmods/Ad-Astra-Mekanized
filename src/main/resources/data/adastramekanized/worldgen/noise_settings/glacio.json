@@ -1,11 +1,11 @@
 {
-  "sea_level": 63,
+  "sea_level": 50,
   "disable_mob_generation": false,
   "aquifers_enabled": true,
   "ore_veins_enabled": true,
   "legacy_random_source": false,
   "default_block": {
-    "Name": "minecraft:stone"
+    "Name": "minecraft:packed_ice"
   },
   "default_fluid": {
     "Name": "minecraft:water"
@@ -23,12 +23,12 @@
     "lava": "minecraft:overworld/noise_router/lava",
     "temperature": "minecraft:overworld/noise_router/temperature",
     "vegetation": "minecraft:overworld/noise_router/vegetation",
-    "continents": "minecraft:overworld/noise_router/continents",
-    "erosion": "minecraft:overworld/noise_router/erosion",
-    "depth": "minecraft:overworld/noise_router/depth",
-    "ridges": "minecraft:overworld/noise_router/ridges",
-    "initial_density_without_jaggedness": "minecraft:overworld/noise_router/initial_density_without_jaggedness",
-    "final_density": "minecraft:overworld/noise_router/final_density",
+    "continents": "adastramekanized:glacio/continents",
+    "erosion": "adastramekanized:glacio/erosion",
+    "depth": "adastramekanized:glacio/depth",
+    "ridges": "adastramekanized:glacio/ridges",
+    "initial_density_without_jaggedness": "adastramekanized:glacio/depth",
+    "final_density": "adastramekanized:glacio/final_density",
     "vein_toggle": "minecraft:overworld/noise_router/vein_toggle",
     "vein_ridged": "minecraft:overworld/noise_router/vein_ridged",
     "vein_gap": "minecraft:overworld/noise_router/vein_gap"

@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_callisto": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:callisto"
+      }
+    }
+  }
+}

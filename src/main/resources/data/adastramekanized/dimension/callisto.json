@@ -1,0 +1,24 @@
+{
+  "type": "adastramekanized:callisto",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "adastramekanized:callisto",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "adastramekanized:callisto_desert",
+          "parameters": {
+            "temperature": -0.7,
+            "humidity": -0.5,
+            "continentalness": 0.3,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        }
+      ]
+    }
+  }
+}

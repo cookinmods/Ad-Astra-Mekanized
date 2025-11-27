@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_titan": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:titan"
+      }
+    }
+  }
+}

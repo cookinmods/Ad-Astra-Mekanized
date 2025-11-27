@@ -1,0 +1,71 @@
+{
+  "id": "adastramekanized:pluto",
+  "display_name": "Pluto",
+  "properties": {
+    "gravity": 0.06,
+    "temperature": 20.0,
+    "day_length": 24.0,
+    "orbit_distance": 1000,
+    "has_rings": false,
+    "moon_count": 0
+  },
+  "atmosphere": {
+    "has_atmosphere": false,
+    "breathable": false,
+    "pressure": 0.0,
+    "oxygen_level": 0.0,
+    "type": "NONE"
+  },
+  "dimension": {
+    "dimension_type": "adastramekanized:pluto",
+    "biome_source": "pluto_biome_source",
+    "chunk_generator": "pluto_generator",
+    "is_orbital": false,
+    "sky_color": 2,
+    "fog_color": 3,
+    "ambient_light": 0.005
+  },
+  "rendering": {
+    "sky": {
+      "sky_color": 2,
+      "sunrise_color": 0,
+      "custom_sky": true,
+      "has_stars": true,
+      "star_count": 70000,
+      "star_brightness": 3.0,
+      "star_visibility": "constant"
+    },
+    "fog": {
+      "fog_color": 3,
+      "has_fog": false,
+      "fog_density": 0.0,
+      "near_plane": 192.0,
+      "far_plane": 512.0
+    },
+    "celestial_bodies": {
+      "sun": {
+        "texture": "minecraft:textures/environment/sun.png",
+        "scale": 1.0,
+        "color": 16777215,
+        "visible": true
+      },
+      "moons": [],
+      "visible_planets": []
+    },
+    "weather": {
+      "has_clouds": false,
+      "has_rain": false,
+      "has_snow": true,
+      "has_storms": false,
+      "rain_acidity": 0.0
+    },
+    "particles": {
+      "has_dust": false,
+      "has_ash": false,
+      "has_spores": false,
+      "has_snowfall": false,
+      "particle_density": 0.0,
+      "particle_color": 16777215
+    }
+  }
+}

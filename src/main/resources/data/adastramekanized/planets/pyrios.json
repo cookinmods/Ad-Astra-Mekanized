@@ -1,0 +1,71 @@
+{
+  "id": "adastramekanized:pyrios",
+  "display_name": "Pyrios",
+  "properties": {
+    "gravity": 1.0,
+    "temperature": 20.0,
+    "day_length": 24.0,
+    "orbit_distance": 1000,
+    "has_rings": false,
+    "moon_count": 0
+  },
+  "atmosphere": {
+    "has_atmosphere": true,
+    "breathable": false,
+    "pressure": 1.0,
+    "oxygen_level": 0.0,
+    "type": "NORMAL"
+  },
+  "dimension": {
+    "dimension_type": "adastramekanized:pyrios",
+    "biome_source": "pyrios_biome_source",
+    "chunk_generator": "pyrios_generator",
+    "is_orbital": false,
+    "sky_color": 3342336,
+    "fog_color": 5574912,
+    "ambient_light": 0.5
+  },
+  "rendering": {
+    "sky": {
+      "sky_color": 3342336,
+      "sunrise_color": 16777087,
+      "custom_sky": true,
+      "has_stars": true,
+      "star_count": 15000,
+      "star_brightness": 1.0,
+      "star_visibility": "night_only"
+    },
+    "fog": {
+      "fog_color": 5574912,
+      "has_fog": true,
+      "fog_density": 0.5,
+      "near_plane": 192.0,
+      "far_plane": 512.0
+    },
+    "celestial_bodies": {
+      "sun": {
+        "texture": "minecraft:textures/environment/sun.png",
+        "scale": 1.0,
+        "color": 16777215,
+        "visible": true
+      },
+      "moons": [],
+      "visible_planets": []
+    },
+    "weather": {
+      "has_clouds": false,
+      "has_rain": false,
+      "has_snow": true,
+      "has_storms": false,
+      "rain_acidity": 0.0
+    },
+    "particles": {
+      "has_dust": false,
+      "has_ash": false,
+      "has_spores": false,
+      "has_snowfall": false,
+      "particle_density": 0.0,
+      "particle_color": 16777215
+    }
+  }
+}

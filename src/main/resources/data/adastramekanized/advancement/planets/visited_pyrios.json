@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_pyrios": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:pyrios"
+      }
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "temperature": 0.5,
+  "downfall": 0.6,
+  "has_precipitation": true,
+  "effects": {
+    "fog_color": 16764108,
+    "sky_color": 16755370,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:zombie",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 6
+      },
+      {
+        "type": "minecraft:skeleton",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 6
+      }
+    ],
+    "creature": [
+      {
+        "type": "minecraft:cow",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:pig",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:sheep",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:chicken",
+        "minCount": 2,
+        "maxCount": 4,
+        "weight": 12
+      },
+      {
+        "type": "minecraft:bee",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:frog",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 6
+      }
+    ],
+    "ambient": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [],
+    [
+      "adastramekanized:trappist1e_ore_diamond_simple",
+      "adastramekanized:trappist1e_ore_iron_simple",
+      "adastramekanized:trappist1e_ore_coal_simple",
+      "adastramekanized:trappist1e_ore_lapis_simple"
+    ],
+    [
+      "minecraft:ore_infested"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen"
+    ],
+    []
+  ],
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  }
+}

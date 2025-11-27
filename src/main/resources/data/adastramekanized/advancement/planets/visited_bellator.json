@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_bellator": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:bellator"
+      }
+    }
+  }
+}

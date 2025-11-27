@@ -53,7 +53,7 @@
       "visible_planets": [
         {
           "texture": "adastramekanized:textures/celestial/earth.png",
-          "scale": 0.2,
+          "scale": 2.0,
           "color": 4286945,
           "horizontal_position": 0.5,
           "vertical_position": 0.8,

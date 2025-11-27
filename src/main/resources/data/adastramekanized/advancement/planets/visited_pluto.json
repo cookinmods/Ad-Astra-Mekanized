@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_pluto": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:pluto"
+      }
+    }
+  }
+}

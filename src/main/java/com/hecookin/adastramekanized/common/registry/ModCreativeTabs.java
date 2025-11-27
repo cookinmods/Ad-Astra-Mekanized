@@ -239,7 +239,6 @@ public class ModCreativeTabs {
                         output.accept(ModBlocks.NASA_WORKBENCH.get());
                         // Oxygen Network Monitor removed - incomplete feature
                         output.accept(ModItems.OXYGEN_NETWORK_CONTROLLER.get());
-                        output.accept(ModItems.ASTRONOMER_JOURNAL.get());
 
                         // Rocket Components
                         output.accept(ModItems.ROCKET_NOSE_CONE.get());
@@ -321,6 +320,9 @@ public class ModCreativeTabs {
                         output.accept(ModItems.JET_SUIT.get());
                         output.accept(ModItems.JET_SUIT_PANTS.get());
                         output.accept(ModItems.JET_SUIT_BOOTS.get());
+
+                        // Equipment Items
+                        output.accept(ModItems.ASTRONOMER_JOURNAL.get());
                     })
                     .build());
 

@@ -1,0 +1,36 @@
+{
+  "type": "adastramekanized:gliese667c",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "adastramekanized:gliese667c",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "adastramekanized:gliese667c_windswept_hills",
+          "parameters": {
+            "temperature": 0.3,
+            "humidity": 0.3,
+            "continentalness": 0.5,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "adastramekanized:gliese667c_stony_peaks",
+          "parameters": {
+            "temperature": 0.2,
+            "humidity": 0.1,
+            "continentalness": 0.7,
+            "erosion": 0.0,
+            "depth": 0.0,
+            "weirdness": 0.0,
+            "offset": 0.0
+          }
+        }
+      ]
+    }
+  }
+}

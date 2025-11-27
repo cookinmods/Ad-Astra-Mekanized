@@ -1,0 +1,104 @@
+{
+  "temperature": 0.8,
+  "downfall": 0.9,
+  "has_precipitation": true,
+  "effects": {
+    "fog_color": 4478276,
+    "sky_color": 5596757,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:slime",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 12
+      },
+      {
+        "type": "minecraft:witch",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 6
+      },
+      {
+        "type": "minecraft:drowned",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:spider",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 6
+      },
+      {
+        "type": "minecraft:cave_spider",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 5
+      }
+    ],
+    "creature": [
+      {
+        "type": "minecraft:frog",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:axolotl",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 6
+      }
+    ],
+    "ambient": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [],
+    [
+      "adastramekanized:paludis_ore_gold_simple",
+      "adastramekanized:paludis_ore_coal_simple",
+      "adastramekanized:paludis_ore_iron_simple",
+      "adastramekanized:paludis_ore_copper_simple"
+    ],
+    [
+      "minecraft:ore_infested"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen"
+    ],
+    []
+  ],
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  }
+}

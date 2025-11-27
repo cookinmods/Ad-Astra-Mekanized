@@ -1,0 +1,28 @@
+{
+  "name": "Proxima B",
+  "icon": "minecraft:red_sand",
+  "category": "adastramekanized:known_planets",
+  "advancement": "adastramekanized:planets/visited_proxima_b",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Planetary Data",
+      "text": "$(bold)Gravity:$() 110.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #FF6B6B$(br)$(bold)Ambient Light:$() 60.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() No"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Resources",
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Redstone (Common)$(br)• Copper (Common)$(br)• Gold (Common)$(br)• Diamond (Uncommon)$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Biomes",
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Badlands$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Surface Composition",
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Red Sand$(br)• $(bold)Subsurface:$() Red Sandstone$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d40"
+    }
+  ]
+}

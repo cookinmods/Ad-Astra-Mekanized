@@ -1,0 +1,28 @@
+{
+  "name": "Paludis",
+  "icon": "minecraft:mud",
+  "category": "adastramekanized:known_planets",
+  "advancement": "adastramekanized:planets/visited_paludis",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Planetary Data",
+      "text": "$(bold)Gravity:$() 90.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #556655$(br)$(bold)Ambient Light:$() 40.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() Yes"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Resources",
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Coal (Common)$(br)• Iron (Common)$(br)• Copper (Common)$(br)• Gold (Uncommon)$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Biomes",
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Swamp$(br)• Mangrove Swamp$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Surface Composition",
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Mud$(br)• $(bold)Subsurface:$() Muddy Mangrove Roots$(br)• $(bold)Deep:$() Clay$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d58"
+    }
+  ]
+}

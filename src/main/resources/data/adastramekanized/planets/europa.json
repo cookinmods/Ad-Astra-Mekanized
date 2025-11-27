@@ -1,0 +1,81 @@
+{
+  "id": "adastramekanized:europa",
+  "display_name": "Europa",
+  "properties": {
+    "gravity": 0.13,
+    "temperature": 20.0,
+    "day_length": 24.0,
+    "orbit_distance": 1000,
+    "has_rings": false,
+    "moon_count": 0
+  },
+  "atmosphere": {
+    "has_atmosphere": false,
+    "breathable": false,
+    "pressure": 0.0,
+    "oxygen_level": 0.0,
+    "type": "NONE"
+  },
+  "dimension": {
+    "dimension_type": "adastramekanized:europa",
+    "biome_source": "europa_biome_source",
+    "chunk_generator": "europa_generator",
+    "is_orbital": false,
+    "sky_color": 1710638,
+    "fog_color": 1450302,
+    "ambient_light": 0.05
+  },
+  "rendering": {
+    "sky": {
+      "sky_color": 1710638,
+      "sunrise_color": 0,
+      "custom_sky": true,
+      "has_stars": true,
+      "star_count": 40000,
+      "star_brightness": 2.2,
+      "star_visibility": "constant"
+    },
+    "fog": {
+      "fog_color": 1450302,
+      "has_fog": false,
+      "fog_density": 0.0,
+      "near_plane": 192.0,
+      "far_plane": 512.0
+    },
+    "celestial_bodies": {
+      "sun": {
+        "texture": "minecraft:textures/environment/sun.png",
+        "scale": 1.0,
+        "color": 16777215,
+        "visible": true
+      },
+      "moons": [],
+      "visible_planets": [
+        {
+          "texture": "adastramekanized:textures/celestial/jupiter.png",
+          "scale": 3.0,
+          "color": 15258808,
+          "horizontal_position": 0.3,
+          "vertical_position": 0.6,
+          "moves_with_time": true,
+          "visible": true
+        }
+      ]
+    },
+    "weather": {
+      "has_clouds": false,
+      "has_rain": false,
+      "has_snow": true,
+      "has_storms": false,
+      "rain_acidity": 0.0
+    },
+    "particles": {
+      "has_dust": false,
+      "has_ash": false,
+      "has_spores": false,
+      "has_snowfall": false,
+      "particle_density": 0.0,
+      "particle_color": 16777215
+    }
+  }
+}

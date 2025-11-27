@@ -25,6 +25,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
@@ -83,16 +84,19 @@ public class PlanetDebugCommands {
     private static final SuggestionProvider<CommandSourceStack> PLANET_SUGGESTIONS =
         (context, builder) -> {
             PlanetRegistry registry = PlanetRegistry.getInstance();
-            if (!registry.isDataLoaded()) {
-                return Suggestions.empty();
-            }
 
-            // Use command-safe versions of display names (lowercase, no spaces)
-            var suggestions = registry.getAllPlanets().stream()
-                .map(planet -> toCommandSafeName(planet.displayName()))
-                .distinct()
-                .sorted()  // Sort alphabetically for better UX
-                .toArray(String[]::new);
+            // Always include "earth" as an option to return to overworld
+            java.util.List<String> suggestions = new java.util.ArrayList<>();
+            suggestions.add("earth");
+
+            if (registry.isDataLoaded()) {
+                // Use command-safe versions of display names (lowercase, no spaces)
+                registry.getAllPlanets().stream()
+                    .map(planet -> toCommandSafeName(planet.displayName()))
+                    .distinct()
+                    .sorted()  // Sort alphabetically for better UX
+                    .forEach(suggestions::add);
+            }
 
             return SharedSuggestionProvider.suggest(suggestions, builder);
         };
@@ -204,6 +208,11 @@ public class PlanetDebugCommands {
             return 0;
         }
 
+        // Special case: "earth" or "overworld" teleports back to the overworld
+        if (planetInput.equalsIgnoreCase("earth") || planetInput.equalsIgnoreCase("overworld")) {
+            return teleportToOverworld(player, source);
+        }
+
         PlanetManager manager = PlanetManager.getInstance();
         if (!manager.isReady()) {
             source.sendFailure(Component.literal("§cPlanet system not ready. Try again in a moment."));
@@ -263,6 +272,36 @@ public class PlanetDebugCommands {
             }
         });
 
+        return 1;
+    }
+
+    /**
+     * Teleport player back to the Overworld (Earth)
+     */
+    private static int teleportToOverworld(ServerPlayer player, CommandSourceStack source) {
+        ServerLevel overworld = player.server.getLevel(Level.OVERWORLD);
+        if (overworld == null) {
+            source.sendFailure(Component.literal("§cCould not find the Overworld dimension"));
+            return 0;
+        }
+
+        // If player is already in overworld, just notify them
+        if (player.level().dimension() == Level.OVERWORLD) {
+            source.sendSuccess(() -> Component.literal("§7You are already on Earth (Overworld)"), false);
+            return 1;
+        }
+
+        source.sendSuccess(() -> Component.literal("§6Returning to Earth..."), false);
+
+        // Use player's current X/Z coordinates, find safe Y
+        double x = player.getX();
+        double z = player.getZ();
+        int surfaceY = overworld.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, (int) x, (int) z);
+
+        // Teleport to overworld at surface level
+        player.teleportTo(overworld, x, surfaceY + 1, z, player.getYRot(), player.getXRot());
+
+        source.sendSuccess(() -> Component.literal("§aWelcome back to Earth!"), false);
         return 1;
     }
 

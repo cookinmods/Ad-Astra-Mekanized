@@ -1,0 +1,28 @@
+{
+  "name": "Ganymede",
+  "icon": "minecraft:gray_concrete",
+  "category": "adastramekanized:known_planets",
+  "advancement": "adastramekanized:planets/visited_ganymede",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Planetary Data",
+      "text": "$(bold)Gravity:$() 15.0% of Earth$(br)$(bold)Atmosphere:$() None (requires oxygen)$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #0A0A15$(br)$(bold)Ambient Light:$() 3.0%$(br)$(bold)Clouds:$() No$(br)$(bold)Rain:$() No"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Resources",
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Copper (Common)$(br)• Gold (Common)$(br)• Diamond (Uncommon)$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Biomes",
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Plains$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Surface Composition",
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Gray Concrete$(br)• $(bold)Subsurface:$() Light Gray Concrete$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+    }
+  ]
+}

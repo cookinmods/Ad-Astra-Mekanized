@@ -1,0 +1,79 @@
+{
+  "temperature": -0.5,
+  "downfall": 0.0,
+  "has_precipitation": false,
+  "effects": {
+    "fog_color": 2763306,
+    "sky_color": 1710618,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:spider",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 15
+      },
+      {
+        "type": "minecraft:cave_spider",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 20
+      },
+      {
+        "type": "minecraft:silverfish",
+        "minCount": 2,
+        "maxCount": 4,
+        "weight": 10
+      }
+    ],
+    "creature": [],
+    "ambient": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [],
+    [
+      "adastramekanized:profundus_ore_gold_simple",
+      "adastramekanized:profundus_ore_iron_simple",
+      "adastramekanized:profundus_ore_copper_simple",
+      "adastramekanized:profundus_ore_emerald_simple"
+    ],
+    [
+      "minecraft:ore_infested"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen"
+    ],
+    []
+  ],
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  }
+}

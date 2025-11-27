@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_kepler442b": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:kepler442b"
+      }
+    }
+  }
+}

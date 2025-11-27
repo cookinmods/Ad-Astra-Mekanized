@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:triton_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:phantom",
+      "weight": 5,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

@@ -7,17 +7,22 @@
     {
       "type": "patchouli:text",
       "title": "Planetary Data",
-      "text": "$(bold)Gravity:$() 80.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #E6F3FF$(br)$(bold)Ambient Light:$() 60.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() No"
+      "text": "$(bold)Gravity:$() 80.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #E6F3FF$(br)$(bold)Ambient Light:$() 70.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() No"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)Standard ore distribution enabled."
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Coal (Common)$(br)• Copper (Common)$(br)• Diamond (Uncommon)$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Biomes",
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Snowy Taiga$(br)• Frozen River$(br)"
     },
     {
       "type": "patchouli:text",
       "title": "Surface Composition",
-      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Snow Block$(br)• $(bold)Subsurface:$() Ice$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d63"
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Snow Block$(br)• $(bold)Subsurface:$() Ice$(br)• $(bold)Deep:$() Packed Ice$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d50"
     }
   ]
 }

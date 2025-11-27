@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_frigidum": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:frigidum"
+      }
+    }
+  }
+}

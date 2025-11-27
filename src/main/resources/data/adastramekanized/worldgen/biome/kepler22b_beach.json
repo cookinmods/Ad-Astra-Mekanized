@@ -1,0 +1,98 @@
+{
+  "temperature": 0.5,
+  "downfall": 0.7,
+  "has_precipitation": true,
+  "effects": {
+    "fog_color": 10408703,
+    "sky_color": 7255551,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:drowned",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 5
+      }
+    ],
+    "creature": [
+      {
+        "type": "minecraft:dolphin",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:turtle",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 6
+      },
+      {
+        "type": "minecraft:cod",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:salmon",
+        "minCount": 2,
+        "maxCount": 3,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:tropical_fish",
+        "minCount": 2,
+        "maxCount": 4,
+        "weight": 12
+      }
+    ],
+    "ambient": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [
+      "minecraft:monster_room",
+      "minecraft:monster_room_deep"
+    ],
+    [],
+    [],
+    [
+      "adastramekanized:kepler22b_ore_diamond_simple",
+      "adastramekanized:kepler22b_ore_iron_simple",
+      "adastramekanized:kepler22b_ore_copper_simple",
+      "adastramekanized:kepler22b_ore_lapis_simple"
+    ],
+    [
+      "minecraft:ore_infested"
+    ],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glow_lichen"
+    ],
+    []
+  ],
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  }
+}

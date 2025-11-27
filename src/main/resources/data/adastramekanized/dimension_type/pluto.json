@@ -1,0 +1,19 @@
+{
+  "ambient_light": 0.005,
+  "effects": "adastramekanized:pluto",
+  "has_ceiling": false,
+  "has_skylight": true,
+  "height": 384,
+  "min_y": -64,
+  "natural": true,
+  "coordinate_scale": 1.0,
+  "bed_works": true,
+  "respawn_anchor_works": false,
+  "has_raids": false,
+  "logical_height": 384,
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "ultrawarm": false,
+  "piglin_safe": false,
+  "monster_spawn_light_level": 7,
+  "monster_spawn_block_light_limit": 15
+}

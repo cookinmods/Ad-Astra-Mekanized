@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Lapis (Abundant)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Lapis (Common)$(br)"
     },
     {
       "type": "patchouli:text",

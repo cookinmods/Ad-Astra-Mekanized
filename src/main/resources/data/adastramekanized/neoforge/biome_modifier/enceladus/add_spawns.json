@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:enceladus_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:stray",
+      "weight": 5,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}
