@@ -52,6 +52,12 @@ public class MoonDimensionEffects extends DimensionSpecialEffects {
         return (x * z) % 1000 == 0; // Extremely rare "fog" from dust
     }
 
+    @Override
+    public float[] getSunriseColor(float timeOfDay, float partialTicks) {
+        // No sunrise/sunset colors on the Moon - space has no atmosphere to scatter light
+        return null;
+    }
+
     /**
      * Get Moon sky color (black space)
      */
