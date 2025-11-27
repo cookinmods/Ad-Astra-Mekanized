@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Biomes",
-      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• Earth Orbit$(br)"
+      "text": "$(bold)Terrain Biomes:$()$(br)$(br)• The Void$(br)"
     },
     {
       "type": "patchouli:text",

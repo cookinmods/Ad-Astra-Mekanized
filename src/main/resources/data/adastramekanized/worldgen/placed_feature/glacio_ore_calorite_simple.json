@@ -1,5 +1,5 @@
 {
-  "feature": "adastramekanized:mars_ore_diamond_simple",
+  "feature": "adastramekanized:glacio_ore_calorite_simple",
   "placement": [
     {
       "type": "minecraft:count",
@@ -16,7 +16,7 @@
           "absolute": -64
         },
         "max_inclusive": {
-          "absolute": 16
+          "absolute": 48
         }
       }
     },

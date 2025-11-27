@@ -47,6 +47,7 @@
     [],
     [
       "adastramekanized:venus_ore_gold_simple",
+      "adastramekanized:venus_ore_calorite_simple",
       "adastramekanized:venus_ore_copper_simple",
       "adastramekanized:venus_ore_coal_simple",
       "adastramekanized:venus_ore_iron_simple"
@@ -59,7 +60,8 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:patch_cactus",
+      "minecraft:patch_dead_bush"
     ],
     []
   ],

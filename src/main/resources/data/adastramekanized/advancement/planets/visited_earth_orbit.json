@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "visited_earth_orbit": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "adastramekanized:earth_orbit"
+      }
+    }
+  }
+}

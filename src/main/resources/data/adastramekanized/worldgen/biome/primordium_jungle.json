@@ -66,7 +66,12 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:trees_jungle",
+      "minecraft:bamboo_vegetation",
+      "minecraft:vines",
+      "minecraft:patch_grass_jungle",
+      "minecraft:patch_melon",
+      "minecraft:jungle_flowers"
     ],
     []
   ],

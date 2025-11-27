@@ -6255,6 +6255,13 @@ public class PlanetMaker {
             case "iron", "gold", "copper", "coal", "diamond", "emerald", "lapis", "redstone" ->
                 "minecraft:" + oreType + "_ore";
 
+            // Ad Astra Mekanized space ores - ROCKET PROGRESSION MATERIALS
+            // These are the key ores for building higher-tier rockets
+            case "desh" -> "adastramekanized:desh_ore";           // Tier 2 rocket material (Moon)
+            case "ostrum" -> "adastramekanized:ostrum_ore";       // Tier 3 rocket material (Mars)
+            case "calorite" -> "adastramekanized:calorite_ore";   // Tier 4 rocket material (Venus)
+            case "etrium" -> "adastramekanized:etrium_ore";       // Bonus space ore
+
             // Mekanism ores - these ARE available since Mekanism is installed
             case "osmium" -> "mekanism:osmium_ore";
             case "tin" -> "mekanism:tin_ore";
@@ -6509,6 +6516,20 @@ public class PlanetMaker {
                     break;
                 case "nickel":
                     veinCount = 5;  // Medium
+                    break;
+                // Ad Astra Mekanized space ores - ROCKET PROGRESSION
+                // Intentionally rare to require exploration before tier upgrade
+                case "desh":
+                    veinCount = 3;  // Rare - Tier 2 material (Moon)
+                    break;
+                case "ostrum":
+                    veinCount = 3;  // Rare - Tier 3 material (Mars)
+                    break;
+                case "calorite":
+                    veinCount = 2;  // Very rare - Tier 4 material (Venus)
+                    break;
+                case "etrium":
+                    veinCount = 2;  // Very rare - bonus space ore
                     break;
                 default:
                     veinCount = 5;  // Default for unknown ores
@@ -6829,50 +6850,80 @@ public class PlanetMaker {
     }
 
     /**
-     * Generate NeoForge biome modifier file for mob spawning control.
-     * This creates add_spawns.json that adds configured mobs to all planet biomes.
-     * File: neoforge/biome_modifier/[planet]/add_spawns.json
+     * Generate NeoForge biome modifier files for mob spawning control.
+     * Creates separate files for vanilla and modded mobs:
+     * - add_spawns.json: Vanilla (minecraft:) mobs, always active
+     * - add_spawns_[modid].json: Modded mobs with neoforge:mod_loaded condition
      *
-     * IMPORTANT: Only vanilla (minecraft:) entities are included in biome_modifier files.
-     * NeoForge parses JSON before checking conditions, so modded entity references would
-     * cause crashes when the mod isn't loaded. Modded mobs must be handled via runtime
-     * biome modifiers or the mod's own spawn system.
+     * File location: neoforge/biome_modifier/[planet]/
      */
     private static void generateBiomeModifier(PlanetBuilder planet) throws IOException {
         // Create planet-specific directory
         new File(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name).mkdirs();
 
-        // Collect ONLY vanilla mob spawns - modded entities are NOT included
-        // because NeoForge parses JSON before checking conditions, causing crashes
-        JsonArray spawners = new JsonArray();
+        // Collect vanilla mob spawns
+        JsonArray vanillaSpawners = new JsonArray();
+
+        // Group modded mobs by their mod ID
+        java.util.Map<String, JsonArray> moddedSpawnersByMod = new java.util.HashMap<>();
 
         for (java.util.Map.Entry<String, java.util.List<PlanetBuilder.MobSpawnEntry>> entry : planet.mobSpawns.entrySet()) {
             for (PlanetBuilder.MobSpawnEntry mob : entry.getValue()) {
-                // Only add vanilla minecraft entities to biome_modifier
-                // Modded entities would cause parsing errors when mod isn't loaded
                 String modid = mob.mobId.contains(":") ? mob.mobId.split(":")[0] : "minecraft";
+
+                JsonObject spawner = new JsonObject();
+                spawner.addProperty("type", mob.mobId);
+                spawner.addProperty("weight", mob.weight);
+                spawner.addProperty("minCount", mob.minCount);
+                spawner.addProperty("maxCount", mob.maxCount);
+
                 if (modid.equals("minecraft")) {
-                    JsonObject spawner = new JsonObject();
-                    spawner.addProperty("type", mob.mobId);
-                    spawner.addProperty("weight", mob.weight);
-                    spawner.addProperty("minCount", mob.minCount);
-                    spawner.addProperty("maxCount", mob.maxCount);
-                    spawners.add(spawner);
+                    vanillaSpawners.add(spawner);
+                } else {
+                    // Group by mod ID for conditional loading
+                    moddedSpawnersByMod.computeIfAbsent(modid, k -> new JsonArray()).add(spawner);
                 }
             }
         }
 
-        // Only generate if there are vanilla spawns configured
-        if (spawners.size() > 0) {
+        // Generate vanilla spawns file (no conditions needed)
+        if (vanillaSpawners.size() > 0) {
             JsonObject biomeModifier = new JsonObject();
             biomeModifier.addProperty("type", "neoforge:add_spawns");
             biomeModifier.addProperty("biomes", "#adastramekanized:" + planet.name + "_biomes");
-            biomeModifier.add("spawners", spawners);
+            biomeModifier.add("spawners", vanillaSpawners);
 
             writeJsonFile(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name + "/add_spawns.json", biomeModifier);
 
             AdAstraMekanized.LOGGER.debug("Generated biome modifier for planet '{}' with {} vanilla spawn entries",
-                planet.name, spawners.size());
+                planet.name, vanillaSpawners.size());
+        }
+
+        // Generate conditional modded spawns files (one per mod)
+        for (java.util.Map.Entry<String, JsonArray> moddedEntry : moddedSpawnersByMod.entrySet()) {
+            String modid = moddedEntry.getKey();
+            JsonArray moddedSpawners = moddedEntry.getValue();
+
+            if (moddedSpawners.size() > 0) {
+                JsonObject biomeModifier = new JsonObject();
+
+                // Add NeoForge condition for mod to be loaded
+                JsonArray conditions = new JsonArray();
+                JsonObject modLoadedCondition = new JsonObject();
+                modLoadedCondition.addProperty("type", "neoforge:mod_loaded");
+                modLoadedCondition.addProperty("modid", modid);
+                conditions.add(modLoadedCondition);
+                biomeModifier.add("neoforge:conditions", conditions);
+
+                biomeModifier.addProperty("type", "neoforge:add_spawns");
+                biomeModifier.addProperty("biomes", "#adastramekanized:" + planet.name + "_biomes");
+                biomeModifier.add("spawners", moddedSpawners);
+
+                writeJsonFile(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name + "/add_spawns_" + modid + ".json", biomeModifier);
+
+                AdAstraMekanized.LOGGER.debug("Generated conditional biome modifier for planet '{}' with {} {} spawn entries",
+                    planet.name, moddedSpawners.size(), modid);
+            }
         }
     }
 
@@ -7012,7 +7063,98 @@ public class PlanetMaker {
                         stepFeatures.add("minecraft:spring_lava");
                         break;
                     case 9: // vegetal_decoration
-                        stepFeatures.add("minecraft:glow_lichen");
+                        // Add vegetation based on biome type
+                        String biomeLower = biomeEntry.biomeName.toLowerCase();
+
+                        // Swamp biomes - lily pads, seagrass, vines, swamp trees
+                        if (biomeLower.contains("swamp") || biomeLower.contains("mangrove")) {
+                            stepFeatures.add("minecraft:trees_swamp");
+                            stepFeatures.add("minecraft:flower_swamp");
+                            stepFeatures.add("minecraft:patch_grass_normal");
+                            stepFeatures.add("minecraft:patch_waterlily");
+                            stepFeatures.add("minecraft:seagrass_swamp");
+                            stepFeatures.add("minecraft:vines");
+                            stepFeatures.add("minecraft:brown_mushroom_swamp");
+                            stepFeatures.add("minecraft:red_mushroom_swamp");
+                            if (biomeLower.contains("mangrove")) {
+                                stepFeatures.add("minecraft:mangrove_vegetation");
+                            }
+                        }
+                        // Jungle biomes - jungle trees, bamboo, vines, melons
+                        else if (biomeLower.contains("jungle")) {
+                            stepFeatures.add("minecraft:trees_jungle");
+                            stepFeatures.add("minecraft:bamboo_vegetation");
+                            stepFeatures.add("minecraft:vines");
+                            stepFeatures.add("minecraft:patch_grass_jungle");
+                            stepFeatures.add("minecraft:patch_melon");
+                            stepFeatures.add("minecraft:jungle_flowers");
+                            if (biomeLower.contains("bamboo")) {
+                                stepFeatures.add("minecraft:bamboo");
+                            }
+                        }
+                        // Forest biomes - various trees, flowers, grass
+                        else if (biomeLower.contains("forest")) {
+                            stepFeatures.add("minecraft:trees_oak");
+                            stepFeatures.add("minecraft:trees_birch");
+                            stepFeatures.add("minecraft:flower_forest_flowers");
+                            stepFeatures.add("minecraft:patch_grass_forest");
+                            if (biomeLower.contains("dark")) {
+                                stepFeatures.add("minecraft:dark_forest_vegetation");
+                                stepFeatures.add("minecraft:brown_mushroom_normal");
+                                stepFeatures.add("minecraft:red_mushroom_normal");
+                            }
+                        }
+                        // Plains biomes - grass, flowers, occasional trees
+                        else if (biomeLower.contains("plain") || biomeLower.contains("meadow")) {
+                            stepFeatures.add("minecraft:trees_plains");
+                            stepFeatures.add("minecraft:flower_plains");
+                            stepFeatures.add("minecraft:patch_grass_plain");
+                            if (biomeLower.contains("sunflower")) {
+                                stepFeatures.add("minecraft:patch_sunflower");
+                            }
+                        }
+                        // Savanna biomes - acacia trees, grass
+                        else if (biomeLower.contains("savanna")) {
+                            stepFeatures.add("minecraft:trees_savanna");
+                            stepFeatures.add("minecraft:patch_grass_savanna");
+                            stepFeatures.add("minecraft:patch_tall_grass");
+                        }
+                        // Desert biomes - cacti, dead bushes
+                        else if (biomeLower.contains("desert")) {
+                            stepFeatures.add("minecraft:patch_cactus");
+                            stepFeatures.add("minecraft:patch_dead_bush");
+                        }
+                        // Taiga biomes - spruce trees, ferns
+                        else if (biomeLower.contains("taiga")) {
+                            stepFeatures.add("minecraft:trees_taiga");
+                            stepFeatures.add("minecraft:patch_large_fern");
+                            stepFeatures.add("minecraft:patch_grass_taiga");
+                            stepFeatures.add("minecraft:brown_mushroom_taiga");
+                            stepFeatures.add("minecraft:red_mushroom_taiga");
+                        }
+                        // Ocean biomes - seagrass, kelp
+                        else if (biomeLower.contains("ocean") || biomeLower.contains("beach")) {
+                            stepFeatures.add("minecraft:seagrass_simple");
+                            stepFeatures.add("minecraft:kelp");
+                        }
+                        // Lush caves biome
+                        else if (biomeLower.contains("lush")) {
+                            stepFeatures.add("minecraft:lush_caves_vegetation");
+                            stepFeatures.add("minecraft:moss_patch");
+                            stepFeatures.add("minecraft:spore_blossom");
+                            stepFeatures.add("minecraft:glow_lichen");
+                        }
+                        // Default - minimal vegetation
+                        else {
+                            stepFeatures.add("minecraft:glow_lichen");
+                        }
+
+                        // Add any custom features from the planet's customFeatures list
+                        for (PlanetBuilder.FeatureEntry feature : planet.customFeatures) {
+                            if (feature.placementStep.equals("vegetal_decoration")) {
+                                stepFeatures.add(feature.featureName);
+                            }
+                        }
                         break;
                 }
             } else if (step.equals("underground_ores") && planet.oreVeinsEnabled) {

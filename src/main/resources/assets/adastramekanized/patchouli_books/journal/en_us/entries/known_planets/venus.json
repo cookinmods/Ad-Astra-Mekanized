@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Copper (Common)$(br)• Coal (Common)$(br)• Iron (Common)$(br)• Gold (Uncommon)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Copper (Common)$(br)• Coal (Common)$(br)• Iron (Common)$(br)• Calorite (Rare)$(br)• Gold (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

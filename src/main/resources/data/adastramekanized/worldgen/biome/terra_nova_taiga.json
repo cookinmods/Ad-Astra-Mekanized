@@ -102,7 +102,11 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:trees_taiga",
+      "minecraft:patch_large_fern",
+      "minecraft:patch_grass_taiga",
+      "minecraft:brown_mushroom_taiga",
+      "minecraft:red_mushroom_taiga"
     ],
     []
   ],

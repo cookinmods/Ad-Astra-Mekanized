@@ -53,7 +53,8 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:patch_cactus",
+      "minecraft:patch_dead_bush"
     ],
     []
   ],

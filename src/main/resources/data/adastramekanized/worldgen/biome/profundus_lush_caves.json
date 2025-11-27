@@ -65,6 +65,9 @@
       "minecraft:spring_lava"
     ],
     [
+      "minecraft:lush_caves_vegetation",
+      "minecraft:moss_patch",
+      "minecraft:spore_blossom",
       "minecraft:glow_lichen"
     ],
     []

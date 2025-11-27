@@ -54,6 +54,7 @@
     [],
     [
       "adastramekanized:glacio_ore_diamond_simple",
+      "adastramekanized:glacio_ore_calorite_simple",
       "adastramekanized:glacio_ore_iron_simple",
       "adastramekanized:glacio_ore_coal_simple",
       "adastramekanized:glacio_ore_copper_simple"
@@ -66,7 +67,11 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:trees_taiga",
+      "minecraft:patch_large_fern",
+      "minecraft:patch_grass_taiga",
+      "minecraft:brown_mushroom_taiga",
+      "minecraft:red_mushroom_taiga"
     ],
     []
   ],

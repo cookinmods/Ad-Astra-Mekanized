@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Aluminum (Common)$(br)• Gold (Common)$(br)• Platinum (Uncommon)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Aluminum (Common)$(br)• Gold (Uncommon)$(br)• Desh (Rare)$(br)• Platinum (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

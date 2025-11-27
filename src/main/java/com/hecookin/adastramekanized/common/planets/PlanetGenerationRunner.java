@@ -392,15 +392,77 @@ public class PlanetGenerationRunner {
             .cloudsEnabled(false)
             .rainEnabled(false)
             .snowEnabled(false)
-            // Moon ores - 4 ores: 2 common, 1 uncommon, 1 rare
-            .configureOre("iron", 70)       // common - lunar regolith deposits
-            .configureOre("aluminum", 60)   // common - abundant in lunar highlands
-            .configureOre("gold", 30)       // uncommon - impact deposits
-            .configureOre("platinum", 12);  // rare - deep crater deposits
+            // Moon ores - includes DESH for Tier 2 rocket progression
+            .configureOre("iron", 50)       // common - lunar regolith deposits
+            .configureOre("aluminum", 40)   // common - abundant in lunar highlands
+            .configureOre("desh", 8)        // PROGRESSION ORE - rare, needed for Tier 2 rocket
+            .configureOre("gold", 15)       // uncommon - impact deposits
+            .configureOre("platinum", 5);   // rare - deep crater deposits
 
         // Apply Moon mob preset
         applyMoonMobPreset(moon);
         moon.generate();
+
+        // EARTH'S ORBIT - Space station dimension with Earth view below
+        // This is a VOID DIMENSION - no terrain generation, just a spawn platform
+        // Tier 1 destination - accessible with basic rocket
+        registerPlanet("earth_orbit")
+            .gravity(0.166f)  // Moon-like micro-gravity
+            // VOID DIMENSION - flat with no terrain features
+            .continentalScale(0.0f)
+            .erosionScale(0.0f)
+            .ridgeScale(0.0f)
+            .heightVariation(0.0f, 0.0f, 0.0f, 0.0f)
+            // All blocks are air - void space
+            .surfaceBlock("minecraft:air")
+            .subsurfaceBlock("minecraft:air")
+            .deepBlock("minecraft:air")
+            .defaultBlock("minecraft:air")
+            .bedrockBlock("minecraft:bedrock")
+            // World structure
+            .worldDimensions(0, 256)
+            .seaLevel(100)
+            .disableMobGeneration(true)  // No spawning in orbit
+            .aquifersEnabled(false)
+            .oreVeinsEnabled(false)
+            .addCavePreset("none")  // No caves in void space
+            // No liquids in space
+            .oceanConfig("minecraft:air", 0, 0.0f)
+            .lakeConfig("minecraft:air", 0.0f)
+            .lavaLakes(0, 0.0f)
+            .undergroundLiquids("minecraft:air", false)
+            .waterRule(false)
+            // Space visuals - black void with stars
+            .skyColor(0x000000)
+            .fogColor(0x000000)
+            .hasAtmosphere(false)
+            .ambientLight(0.0f)
+            .hasSkylight(false)
+            // Celestial view - Earth below
+            .addSun(
+                net.minecraft.resources.ResourceLocation.parse("minecraft:textures/environment/sun.png"),
+                1.0f,
+                0xFFFFFF,
+                false  // Sun not visible (in Earth's shadow)
+            )
+            .addVisiblePlanet(
+                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("adastramekanized", "textures/celestial/earth.png"),
+                1.0f,      // Massive Earth below
+                0x4169E1,  // Royal blue
+                0.0f,      // Centered
+                -0.5f,     // Low (below horizon)
+                false      // Static (not moving - we're orbiting it)
+            )
+            .starsVisibleDuringDay(true)  // Stars always visible in space
+            .starCount(100000)            // Ultra dense starfield
+            .starBrightness(3.0f)         // Maximum brightness
+            .cloudsEnabled(false)
+            .rainEnabled(false)
+            .snowEnabled(false)
+            // Single void biome
+            .clearBiomes()
+            .addBiome("minecraft:the_void", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, "Earth Orbit")
+            .generate();
 
         // Mars planet - VANILLA-QUALITY TERRAIN with Mars blocks
         // Uses FULL vanilla density function set (offset, factor, jaggedness splines) with coordinate shift
@@ -457,11 +519,12 @@ public class PlanetGenerationRunner {
             .cloudsEnabled(false)
             .rainEnabled(false)
             .snowEnabled(false)
-            // Mars ores - 4 ores: 2 common, 1 uncommon, 1 rare
-            .configureOre("iron", 75)       // common - iron oxide rich soil
-            .configureOre("copper", 60)     // common - volcanic deposits
-            .configureOre("redstone", 35)   // uncommon - thermal energy
-            .configureOre("diamond", 12)    // rare - ancient impact sites
+            // Mars ores - includes OSTRUM for Tier 3 rocket progression
+            .configureOre("iron", 55)       // common - iron oxide rich soil
+            .configureOre("copper", 45)     // common - volcanic deposits
+            .configureOre("ostrum", 8)      // PROGRESSION ORE - rare, needed for Tier 3 rocket
+            .configureOre("redstone", 20)   // uncommon - thermal energy
+            .configureOre("diamond", 5)     // rare - ancient impact sites
             .generate();
 
         // ==================== SOLAR SYSTEM INNER PLANETS ====================
@@ -481,11 +544,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 3-4 ores: 2 common, 1 uncommon, 1 rare
-            .configureOre("copper", 70)    // common - sulfur-rich environment
-            .configureOre("coal", 65)      // common
-            .configureOre("iron", 35)      // uncommon
-            .configureOre("gold", 12)      // rare
+            // Venus ores - includes CALORITE for Tier 4 rocket progression
+            .configureOre("copper", 50)    // common - sulfur-rich environment
+            .configureOre("coal", 45)      // common
+            .configureOre("calorite", 6)   // PROGRESSION ORE - rare, needed for Tier 4 rocket
+            .configureOre("iron", 25)      // uncommon
+            .configureOre("gold", 5)       // rare
             // Sparse hostile mobs - too hostile for most life + MCDoom demons
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:magma_cube", 20, 1, 2)
@@ -527,9 +591,10 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 3-4 ores: 2 common, 1 uncommon, 1 rare - metal-rich planet
+            // Mercury ores - includes OSTRUM for Tier 3 rocket progression (2nd Tier 2 planet)
             .configureOre("iron", 80)      // common - very metal-rich
             .configureOre("copper", 70)    // common
+            .configureOre("ostrum", 6)     // PROGRESSION ORE - rare, needed for Tier 3 rocket
             .configureOre("nickel", 35)    // uncommon
             .configureOre("platinum", 12)  // rare
             // Sparse parasitic mobs + cave-dwelling kobolds
@@ -1454,11 +1519,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 4 ores: frozen world
+            // Glacio ores - includes CALORITE for Tier 4 rocket progression (2nd Tier 3 planet)
             .configureOre("iron", 70)      // common
             .configureOre("coal", 65)      // common - ancient organics
+            .configureOre("calorite", 5)   // PROGRESSION ORE - rare, needed for Tier 4 rocket
             .configureOre("copper", 35)    // uncommon
-            .configureOre("diamond", 15)    // rare - ice preserves gems
+            .configureOre("diamond", 15)   // rare - ice preserves gems
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:stray", 30, 2, 3)
             .addMobSpawn("creature", "minecraft:polar_bear", 20, 1, 2)

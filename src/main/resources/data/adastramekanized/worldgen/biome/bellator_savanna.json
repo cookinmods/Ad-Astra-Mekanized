@@ -66,7 +66,9 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:trees_savanna",
+      "minecraft:patch_grass_savanna",
+      "minecraft:patch_tall_grass"
     ],
     []
   ],

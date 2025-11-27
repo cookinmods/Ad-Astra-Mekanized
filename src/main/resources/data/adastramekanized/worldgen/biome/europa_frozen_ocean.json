@@ -60,7 +60,8 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:seagrass_simple",
+      "minecraft:kelp"
     ],
     []
   ],

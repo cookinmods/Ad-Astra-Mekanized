@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Copper (Common)$(br)• Nickel (Common)$(br)• Platinum (Uncommon)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Copper (Common)$(br)• Nickel (Common)$(br)• Platinum (Uncommon)$(br)• Ostrum (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

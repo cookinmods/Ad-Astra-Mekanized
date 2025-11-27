@@ -49,7 +49,8 @@
       "adastramekanized:mercury_ore_nickel_simple",
       "adastramekanized:mercury_ore_platinum_simple",
       "adastramekanized:mercury_ore_iron_simple",
-      "adastramekanized:mercury_ore_copper_simple"
+      "adastramekanized:mercury_ore_copper_simple",
+      "adastramekanized:mercury_ore_ostrum_simple"
     ],
     [
       "minecraft:ore_infested"
@@ -59,7 +60,8 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:patch_cactus",
+      "minecraft:patch_dead_bush"
     ],
     []
   ],
