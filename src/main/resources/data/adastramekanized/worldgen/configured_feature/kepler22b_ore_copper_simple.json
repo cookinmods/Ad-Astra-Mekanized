@@ -347,7 +347,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:sand"
+          "block": "minecraft:dirt"
         },
         "state": {
           "Name": "minecraft:copper_ore"

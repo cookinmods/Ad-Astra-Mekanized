@@ -347,7 +347,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:orange_concrete"
+          "block": "minecraft:orange_terracotta"
         },
         "state": {
           "Name": "minecraft:diamond_ore"
@@ -365,7 +365,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:orange_concrete"
+          "block": "minecraft:orange_terracotta"
         },
         "state": {
           "Name": "minecraft:diamond_ore"

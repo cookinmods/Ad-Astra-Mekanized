@@ -356,7 +356,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "adastramekanized:mars_stone"
+          "block": "adastramekanized:basalt"
         },
         "state": {
           "Name": "minecraft:redstone_ore"

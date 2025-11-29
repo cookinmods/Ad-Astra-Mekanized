@@ -356,7 +356,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
+          "block": "minecraft:deepslate"
         },
         "state": {
           "Name": "minecraft:coal_ore"
@@ -365,7 +365,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
+          "block": "minecraft:deepslate"
         },
         "state": {
           "Name": "minecraft:coal_ore"

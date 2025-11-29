@@ -1,9 +1,9 @@
 {
-  "feature": "adastramekanized:moon_ore_gold_simple",
+  "feature": "adastramekanized:moon_ore_cheese_simple",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 15
+      "count": 8
     },
     {
       "type": "minecraft:in_square"

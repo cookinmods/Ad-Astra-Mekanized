@@ -91,7 +91,7 @@
     ],
     [
       "minecraft:lush_caves_vegetation",
-      "minecraft:moss_patch",
+      "minecraft:lush_caves_ceiling_vegetation",
       "minecraft:spore_blossom",
       "minecraft:glow_lichen"
     ],

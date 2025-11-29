@@ -347,7 +347,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:gray_concrete"
+          "block": "minecraft:gray_terracotta"
         },
         "state": {
           "Name": "minecraft:copper_ore"
@@ -365,7 +365,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:gray_concrete"
+          "block": "minecraft:gray_terracotta"
         },
         "state": {
           "Name": "minecraft:copper_ore"

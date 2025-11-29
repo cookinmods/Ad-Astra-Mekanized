@@ -514,9 +514,14 @@ public class PlanetMaker {
         // Advanced surface controls
         private boolean enableCustomSurfaceRules = true;
         private boolean disableDefaultSurfaceGeneration = true;
-        private boolean preventGrassGeneration = true;
-        private boolean preventGravelGeneration = true;
+        // NOTE: Prevention flags disabled - they were causing surface rules to fire
+        // BEFORE the above_preliminary_surface wrapper, resulting in single-layer surfaces
+        private boolean preventGrassGeneration = false;
+        private boolean preventGravelGeneration = false;
         private boolean preventSandGeneration = false;
+        // Surface layer depth control: true = 1 block (like grass), false = 3-8 blocks (like mars sand)
+        // Default: null (auto-detect based on surface block type)
+        private Boolean singleLayerSurface = null;
 
         // Basic planet properties
         private int seaLevel = 63;
@@ -583,6 +588,13 @@ public class PlanetMaker {
         private boolean enableStrongholds = false;
         private boolean enableMineshafts = false;
         private boolean enableDungeons = false;
+
+        // Modded structure support - these generate biome tags for structure spawning
+        private boolean enableRibbitsStructures = false;  // Swamp frog villages
+        private boolean enableKoboldsStructures = false;  // Underground kobold dens
+        private boolean enableDungeonsAriseStructures = false;  // WhenDungeonsArise structures
+        private boolean enableSevenSeasStructures = false;  // WhenDungeonsArise Seven Seas ships
+        private java.util.Set<String> dungeonsAriseStructureTypes = new java.util.HashSet<>();  // Specific structure types to enable
 
         // Feature placement system (vegetation, rocks, etc.)
         private java.util.List<FeatureEntry> customFeatures = new java.util.ArrayList<>();
@@ -677,6 +689,7 @@ public class PlanetMaker {
         private float acidRainDamageAmount = 1.0f;
         private boolean fireDamage = false;
         private float fireDamageAmount = 1.0f;
+        private int surfaceTemperature = 15;  // Surface temperature in Celsius (Earth default)
 
         // Tectonic worldgen configuration system
         private CraterConfig craterConfig = null;
@@ -1372,6 +1385,17 @@ public class PlanetMaker {
             return this;
         }
 
+        /**
+         * Control surface layer depth behavior.
+         * - true: Single layer surface (1 block on top, like grass/moss - subsurface shows immediately below)
+         * - false: Multi-layer surface (3-8 blocks of surface material, like mars sand)
+         * - null (default): Auto-detect based on surface block type (grass_block/moss_block = single, others = multi)
+         */
+        public PlanetBuilder singleLayerSurface(boolean single) {
+            this.singleLayerSurface = single;
+            return this;
+        }
+
         public PlanetBuilder disableDefaultSurfaceGeneration(boolean disable) {
             this.disableDefaultSurfaceGeneration = disable;
             return this;
@@ -1666,10 +1690,10 @@ public class PlanetMaker {
         /**
          * Enable Kobolds structure generation (kobold dens) for this planet.
          * This will allow kobold_den and kobold_den_pirate structures to generate.
-         * Note: Kobolds naturally spawn in forests/taigas at Y=12-32, so ensure your
-         * planet has appropriate biomes if you want structures to actually generate.
+         * Automatically generates biome tags to add this planet's biomes to kobold den requirements.
          */
         public PlanetBuilder enableKoboldsStructures() {
+            this.enableKoboldsStructures = true;
             com.hecookin.adastramekanized.common.events.ModdedStructureController
                 .whitelistModStructures(
                     net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
@@ -1705,9 +1729,10 @@ public class PlanetMaker {
         /**
          * Enable Ribbits structure generation (swamp villages) for this planet.
          * This will allow ribbit swamp villages to generate in swamp biomes.
-         * Note: Ribbits villages spawn in swamp and mangrove swamp biomes.
+         * Automatically generates biome tags to add this planet's biomes to ribbit village requirements.
          */
         public PlanetBuilder enableRibbitsStructures() {
+            this.enableRibbitsStructures = true;
             com.hecookin.adastramekanized.common.events.ModdedStructureController
                 .whitelistModStructures(
                     net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
@@ -1724,6 +1749,28 @@ public class PlanetMaker {
         public PlanetBuilder addRibbitsMobs(int weight) {
             // Ribbits spawn as passive creatures (they're villagers, not monsters)
             addMobSpawn("creature", "ribbits:ribbit", weight, 2, 5);
+            return this;
+        }
+
+        /**
+         * Enable WhenDungeonsArise structures for this planet.
+         * Adds biome tags to allow various dungeon structures to spawn.
+         * @param structureTypes Types to enable: "plains", "forest", "desert", "jungle", "ocean", "swamp", "mountain", "snowy"
+         */
+        public PlanetBuilder enableDungeonsAriseStructures(String... structureTypes) {
+            this.enableDungeonsAriseStructures = true;
+            for (String type : structureTypes) {
+                this.dungeonsAriseStructureTypes.add(type.toLowerCase());
+            }
+            return this;
+        }
+
+        /**
+         * Enable WhenDungeonsArise Seven Seas structures (ships) for ocean planets.
+         * Adds biome tags to allow pirate ships and other naval structures to spawn.
+         */
+        public PlanetBuilder enableSevenSeasStructures() {
+            this.enableSevenSeasStructures = true;
             return this;
         }
 
@@ -2132,6 +2179,15 @@ public class PlanetMaker {
          */
         public PlanetBuilder fireDamageAmount(float damage) {
             this.fireDamageAmount = Math.max(0.0f, damage);
+            return this;
+        }
+
+        /**
+         * Set surface temperature in Celsius
+         * Reference values: Earth=15, Moon=-173, Mars=-65, Venus=464, Mercury=167
+         */
+        public PlanetBuilder temperature(int celsius) {
+            this.surfaceTemperature = celsius;
             return this;
         }
 
@@ -3286,9 +3342,17 @@ public class PlanetMaker {
 
                 StringBuilder statsText = new StringBuilder();
                 statsText.append("$(bold)Gravity:$() ").append(String.format("%.1f", gravity * 100)).append("% of Earth$(br)");
-                statsText.append("$(bold)Atmosphere:$() ").append(hasAtmosphere ? "Yes" : "None (requires oxygen)").append("$(br)");
-                statsText.append("$(bold)Temperature:$() [Not Yet Implemented]$(br)");
-                statsText.append("$(bold)Sky Color:$() #").append(String.format("%06X", skyColor)).append("$(br)");
+                // Atmosphere display: simple breathable/toxic/none
+                String atmosphereText;
+                if (!hasAtmosphere) {
+                    atmosphereText = "None";
+                } else if (atmosphereBreathable) {
+                    atmosphereText = "Breathable";
+                } else {
+                    atmosphereText = "Toxic";
+                }
+                statsText.append("$(bold)Atmosphere:$() ").append(atmosphereText).append("$(br)");
+                statsText.append("$(bold)Temperature:$() ").append(surfaceTemperature).append(" C$(br)");
                 statsText.append("$(bold)Ambient Light:$() ").append(String.format("%.1f%%", ambientLight * 100)).append("$(br)");
                 statsText.append("$(bold)Clouds:$() ").append(cloudsEnabled ? "Yes" : "No").append("$(br)");
                 statsText.append("$(bold)Rain:$() ").append(rainEnabled ? "Yes" : "No");
@@ -3903,6 +3967,9 @@ public class PlanetMaker {
 
         // Generate biome modifier for mob spawning (NeoForge system)
         generateBiomeModifier(planet);
+
+        // Generate biome tags for modded structure support
+        generateStructureBiomeTags(planet);
     }
 
     /**
@@ -5979,13 +6046,39 @@ public class PlanetMaker {
     }
 
     /**
-     * Create surface rule using Moon's proven pattern with configurable blocks
+     * Create surface rule using Moon's proven pattern with configurable blocks.
+     *
+     * GRASS-SPECIFIC HANDLING: When the surface block is grass_block or moss_block,
+     * we use stone_depth conditions to ensure:
+     * - Surface block (grass) appears ONLY on the top block
+     * - Subsurface block (dirt) appears in layers below
+     * This prevents grass from stacking vertically in the subsurface.
+     *
+     * For non-grass blocks (sand, concrete, terracotta, etc.), we use the simpler
+     * above_preliminary_surface approach which works fine for uniform surface blocks.
      */
     private static JsonObject createSurfaceRule(PlanetBuilder planet) {
         JsonObject surfaceRule = new JsonObject();
         surfaceRule.addProperty("type", "minecraft:sequence");
 
         JsonArray sequence = new JsonArray();
+
+        // DEBUG: Log surface rule generation
+        AdAstraMekanized.LOGGER.info("Creating surface rule for {} - surface: {}, subsurface: {}",
+            planet.name, planet.surfaceBlock, planet.subsurfaceBlock);
+
+        // Determine surface layer behavior: single layer (like grass) vs multi-layer (like sand)
+        // Manual override takes precedence, otherwise auto-detect based on surface block type
+        boolean useSingleLayerSurface;
+        if (planet.singleLayerSurface != null) {
+            useSingleLayerSurface = planet.singleLayerSurface;  // Manual override
+            AdAstraMekanized.LOGGER.info("Planet {} using {} surface (manual override)",
+                planet.name, useSingleLayerSurface ? "single-layer" : "multi-layer");
+        } else {
+            // Auto-detect: grass-like blocks get single layer, others get multi-layer
+            useSingleLayerSurface = planet.surfaceBlock.equals("minecraft:grass_block")
+                || planet.surfaceBlock.equals("minecraft:moss_block");
+        }
 
         // Bedrock floor generation - place bedrock at the bottom of the world
         JsonObject bedrockFloor = new JsonObject();
@@ -6033,43 +6126,190 @@ public class PlanetMaker {
         // Note: Ore generation should happen through configured features, not surface rules
         // Surface rules are only for surface/subsurface blocks
 
-        // Surface layer (top block) - above preliminary surface
-        JsonObject surfaceLayer = new JsonObject();
-        surfaceLayer.addProperty("type", "minecraft:condition");
+        // Create the main surface rules wrapped in above_preliminary_surface condition
+        // This is how vanilla does it - all surface block placement happens inside this wrapper
+        JsonObject abovePreliminaryWrapper = new JsonObject();
+        abovePreliminaryWrapper.addProperty("type", "minecraft:condition");
 
-        JsonObject surfaceCondition = new JsonObject();
-        surfaceCondition.addProperty("type", "minecraft:above_preliminary_surface");
-        surfaceLayer.add("if_true", surfaceCondition);
+        JsonObject abovePreliminaryCondition = new JsonObject();
+        abovePreliminaryCondition.addProperty("type", "minecraft:above_preliminary_surface");
+        abovePreliminaryWrapper.add("if_true", abovePreliminaryCondition);
 
-        JsonObject surfaceResult = new JsonObject();
-        surfaceResult.addProperty("type", "minecraft:block");
-        JsonObject surfaceState = new JsonObject();
-        surfaceState.addProperty("Name", planet.surfaceBlock);
-        surfaceResult.add("result_state", surfaceState);
-        surfaceLayer.add("then_run", surfaceResult);
+        // Create inner sequence for surface rules
+        JsonObject innerSequence = new JsonObject();
+        innerSequence.addProperty("type", "minecraft:sequence");
+        JsonArray innerSeq = new JsonArray();
 
-        sequence.add(surfaceLayer);
+        if (useSingleLayerSurface) {
+            // SINGLE-LAYER SURFACE: 1 block of surface on top, subsurface immediately below
+            // Used for grass-like blocks or when manually specified via .singleLayerSurface(true)
+            // Pattern: ON_FLOOR → surface block, UNDER_FLOOR → subsurface block
 
-        // Underwater/subsurface layer - use planet's underwater block (not hardcoded stone)
-        JsonObject subsurfaceLayer = new JsonObject();
-        subsurfaceLayer.addProperty("type", "minecraft:condition");
+            // ON_FLOOR wrapper with grass/dirt sequence inside
+            JsonObject onFloorWrapper = new JsonObject();
+            onFloorWrapper.addProperty("type", "minecraft:condition");
 
-        JsonObject subsurfaceCondition = new JsonObject();
-        subsurfaceCondition.addProperty("type", "minecraft:water");
-        subsurfaceCondition.addProperty("offset", -1);
-        subsurfaceCondition.addProperty("surface_depth_multiplier", 0);
-        subsurfaceCondition.addProperty("add_stone_depth", false);
-        subsurfaceLayer.add("if_true", subsurfaceCondition);
+            JsonObject onFloorCondition = new JsonObject();
+            onFloorCondition.addProperty("type", "minecraft:stone_depth");
+            onFloorCondition.addProperty("offset", 0);
+            onFloorCondition.addProperty("surface_type", "floor");
+            onFloorCondition.addProperty("add_surface_depth", false);  // ON_FLOOR
+            onFloorCondition.addProperty("secondary_depth_range", 0);
+            onFloorWrapper.add("if_true", onFloorCondition);
 
-        JsonObject subsurfaceResult = new JsonObject();
-        subsurfaceResult.addProperty("type", "minecraft:block");
-        JsonObject subsurfaceState = new JsonObject();
-        // Use planet's subsurface block for underwater areas (fixed: was using planet.underwaterBlock which defaulted to minecraft:stone)
-        subsurfaceState.addProperty("Name", planet.subsurfaceBlock);
-        subsurfaceResult.add("result_state", subsurfaceState);
-        subsurfaceLayer.add("then_run", subsurfaceResult);
+            // Inner sequence: if water check → grass, else → dirt (fallback)
+            JsonObject innerGrassDirtSeq = new JsonObject();
+            innerGrassDirtSeq.addProperty("type", "minecraft:sequence");
+            JsonArray grassDirtArray = new JsonArray();
 
-        sequence.add(subsurfaceLayer);
+            // Grass rule with water condition
+            JsonObject grassRule = new JsonObject();
+            grassRule.addProperty("type", "minecraft:condition");
+            JsonObject waterCondition = new JsonObject();
+            waterCondition.addProperty("type", "minecraft:water");
+            waterCondition.addProperty("offset", 0);
+            waterCondition.addProperty("surface_depth_multiplier", 0);
+            waterCondition.addProperty("add_stone_depth", false);
+            grassRule.add("if_true", waterCondition);
+            JsonObject grassResult = new JsonObject();
+            grassResult.addProperty("type", "minecraft:block");
+            JsonObject grassState = new JsonObject();
+            grassState.addProperty("Name", planet.surfaceBlock);
+            grassResult.add("result_state", grassState);
+            grassRule.add("then_run", grassResult);
+            grassDirtArray.add(grassRule);
+
+            // Dirt fallback (unconditional - fires if water check fails)
+            JsonObject dirtFallback = new JsonObject();
+            dirtFallback.addProperty("type", "minecraft:block");
+            JsonObject dirtState = new JsonObject();
+            dirtState.addProperty("Name", planet.subsurfaceBlock);
+            dirtFallback.add("result_state", dirtState);
+            grassDirtArray.add(dirtFallback);
+
+            innerGrassDirtSeq.add("sequence", grassDirtArray);
+            onFloorWrapper.add("then_run", innerGrassDirtSeq);
+            innerSeq.add(onFloorWrapper);
+
+            // UNDER_FLOOR wrapper for dirt layers below (3-4 blocks deep)
+            if (!planet.subsurfaceBlock.equals(planet.surfaceBlock)) {
+                JsonObject underFloorWrapper = new JsonObject();
+                underFloorWrapper.addProperty("type", "minecraft:condition");
+
+                JsonObject underFloorCondition = new JsonObject();
+                underFloorCondition.addProperty("type", "minecraft:stone_depth");
+                underFloorCondition.addProperty("offset", 0);
+                underFloorCondition.addProperty("surface_type", "floor");
+                underFloorCondition.addProperty("add_surface_depth", true);  // UNDER_FLOOR
+                underFloorCondition.addProperty("secondary_depth_range", 3);  // Add 3 extra blocks of depth
+                underFloorWrapper.add("if_true", underFloorCondition);
+
+                JsonObject dirtResult = new JsonObject();
+                dirtResult.addProperty("type", "minecraft:block");
+                JsonObject subsurfaceState = new JsonObject();
+                subsurfaceState.addProperty("Name", planet.subsurfaceBlock);
+                dirtResult.add("result_state", subsurfaceState);
+                underFloorWrapper.add("then_run", dirtResult);
+
+                innerSeq.add(underFloorWrapper);
+            }
+        } else {
+            // MULTI-LAYER SURFACE: 3-8 blocks of surface material before subsurface
+            // Used for sand, concrete, terracotta, etc. or when manually specified via .singleLayerSurface(false)
+            // Pattern: ON_FLOOR → surface, UNDER_FLOOR(6 depth) → surface, UNDER_FLOOR(12 depth) → subsurface
+
+            // Rule 1: ON_FLOOR - guarantees surface block on TOP block only
+            // add_surface_depth=false makes this deterministic (not noise-dependent)
+            JsonObject onFloorWrapper = new JsonObject();
+            onFloorWrapper.addProperty("type", "minecraft:condition");
+
+            JsonObject onFloorCondition = new JsonObject();
+            onFloorCondition.addProperty("type", "minecraft:stone_depth");
+            onFloorCondition.addProperty("offset", 0);
+            onFloorCondition.addProperty("surface_type", "floor");
+            onFloorCondition.addProperty("add_surface_depth", false);  // ON_FLOOR - top block only
+            onFloorCondition.addProperty("secondary_depth_range", 0);
+            onFloorWrapper.add("if_true", onFloorCondition);
+
+            JsonObject onFloorResult = new JsonObject();
+            onFloorResult.addProperty("type", "minecraft:block");
+            JsonObject onFloorState = new JsonObject();
+            onFloorState.addProperty("Name", planet.surfaceBlock);
+            onFloorResult.add("result_state", onFloorState);
+            onFloorWrapper.add("then_run", onFloorResult);
+
+            innerSeq.add(onFloorWrapper);
+
+            // Rule 2: UNDER_FLOOR - places surface block in 6-8 layers below top
+            // add_surface_depth=true with secondary_depth_range=6 gives variable 3-8 block depth
+            JsonObject underFloorWrapper = new JsonObject();
+            underFloorWrapper.addProperty("type", "minecraft:condition");
+
+            JsonObject underFloorCondition = new JsonObject();
+            underFloorCondition.addProperty("type", "minecraft:stone_depth");
+            underFloorCondition.addProperty("offset", 0);
+            underFloorCondition.addProperty("surface_type", "floor");
+            underFloorCondition.addProperty("add_surface_depth", true);  // UNDER_FLOOR - layers below
+            underFloorCondition.addProperty("secondary_depth_range", 6);  // 6 extra blocks of depth
+            underFloorWrapper.add("if_true", underFloorCondition);
+
+            JsonObject underFloorResult = new JsonObject();
+            underFloorResult.addProperty("type", "minecraft:block");
+            JsonObject underFloorState = new JsonObject();
+            underFloorState.addProperty("Name", planet.surfaceBlock);
+            underFloorResult.add("result_state", underFloorState);
+            underFloorWrapper.add("then_run", underFloorResult);
+
+            innerSeq.add(underFloorWrapper);
+
+            // Rule 3: Subsurface layer - even deeper (12+ blocks total)
+            if (!planet.subsurfaceBlock.equals(planet.surfaceBlock)) {
+                JsonObject subsurfaceLayer = new JsonObject();
+                subsurfaceLayer.addProperty("type", "minecraft:condition");
+
+                JsonObject subsurfaceCondition = new JsonObject();
+                subsurfaceCondition.addProperty("type", "minecraft:stone_depth");
+                subsurfaceCondition.addProperty("offset", 0);
+                subsurfaceCondition.addProperty("surface_type", "floor");
+                subsurfaceCondition.addProperty("add_surface_depth", true);
+                subsurfaceCondition.addProperty("secondary_depth_range", 12);  // Deeper than surface layer
+                subsurfaceLayer.add("if_true", subsurfaceCondition);
+
+                JsonObject subsurfaceResult = new JsonObject();
+                subsurfaceResult.addProperty("type", "minecraft:block");
+                JsonObject subsurfaceState = new JsonObject();
+                subsurfaceState.addProperty("Name", planet.subsurfaceBlock);
+                subsurfaceResult.add("result_state", subsurfaceState);
+                subsurfaceLayer.add("then_run", subsurfaceResult);
+
+                innerSeq.add(subsurfaceLayer);
+            }
+        }
+
+        // Underwater floor - use water condition for blocks under water (applies to all planets)
+        JsonObject underwaterLayer = new JsonObject();
+        underwaterLayer.addProperty("type", "minecraft:condition");
+
+        JsonObject underwaterCondition = new JsonObject();
+        underwaterCondition.addProperty("type", "minecraft:water");
+        underwaterCondition.addProperty("offset", -1);
+        underwaterCondition.addProperty("surface_depth_multiplier", 0);
+        underwaterCondition.addProperty("add_stone_depth", false);
+        underwaterLayer.add("if_true", underwaterCondition);
+
+        JsonObject underwaterResult = new JsonObject();
+        underwaterResult.addProperty("type", "minecraft:block");
+        JsonObject underwaterState = new JsonObject();
+        // Use subsurface block for underwater areas (like dirt under water in vanilla)
+        underwaterState.addProperty("Name", planet.subsurfaceBlock);
+        underwaterResult.add("result_state", underwaterState);
+        underwaterLayer.add("then_run", underwaterResult);
+
+        innerSeq.add(underwaterLayer);
+
+        innerSequence.add("sequence", innerSeq);
+        abovePreliminaryWrapper.add("then_run", innerSequence);
+        sequence.add(abovePreliminaryWrapper);
 
         // Deepslate layer replacement - mimics vanilla's stone->deepslate transition below Y=0
         // This replaces vanilla deepslate with the planet's deepslateBlock
@@ -6261,6 +6501,7 @@ public class PlanetMaker {
             case "ostrum" -> "adastramekanized:ostrum_ore";       // Tier 3 rocket material (Mars)
             case "calorite" -> "adastramekanized:calorite_ore";   // Tier 4 rocket material (Venus)
             case "etrium" -> "adastramekanized:etrium_ore";       // Bonus space ore
+            case "cheese" -> "adastramekanized:moon_cheese_ore";  // Moon cheese ore
 
             // Mekanism ores - these ARE available since Mekanism is installed
             case "osmium" -> "mekanism:osmium_ore";
@@ -6850,6 +7091,191 @@ public class PlanetMaker {
     }
 
     /**
+     * Generate biome tags for modded structure spawning.
+     * Creates tag files in other mods' namespaces to add planet biomes to structure requirements.
+     *
+     * Structure mods check biome tags to determine where structures can spawn:
+     * - Ribbits: #ribbits:has_structure/ribbit_village (needs swamp biomes)
+     * - Kobolds: #kobolds:kobold_den_biomes (needs forest/taiga biomes)
+     * - WhenDungeonsArise: #dungeons_arise:has_structure/*_biomes (various biome types)
+     * - Seven Seas: #dungeons_arise_seven_seas:has_structure/*_biomes (ocean biomes)
+     */
+    private static void generateStructureBiomeTags(PlanetBuilder planet) throws IOException {
+        // Collect all biome names for this planet
+        java.util.List<String> planetBiomes = new java.util.ArrayList<>();
+        for (PlanetBuilder.BiomeEntry biomeEntry : planet.customBiomes) {
+            String fullBiomeName;
+            if (biomeEntry.biomeName.startsWith("adastramekanized:")) {
+                fullBiomeName = biomeEntry.biomeName;
+            } else if (biomeEntry.biomeName.startsWith("minecraft:")) {
+                String vanillaBiomeName = biomeEntry.biomeName.substring("minecraft:".length());
+                fullBiomeName = "adastramekanized:" + planet.name + "_" + vanillaBiomeName;
+            } else {
+                fullBiomeName = "adastramekanized:" + planet.name + "_" + biomeEntry.biomeName;
+            }
+            planetBiomes.add(fullBiomeName);
+        }
+
+        if (planetBiomes.isEmpty()) return;
+
+        // Generate Ribbits structure biome tag
+        if (planet.enableRibbitsStructures) {
+            generateModdedStructureBiomeTag("ribbits", "tags/worldgen/biome/has_structure", "ribbit_village", planetBiomes);
+            AdAstraMekanized.LOGGER.info("Generated Ribbits village biome tag for planet '{}'", planet.name);
+        }
+
+        // Generate Kobolds structure biome tag
+        if (planet.enableKoboldsStructures) {
+            generateModdedStructureBiomeTag("kobolds", "tags/worldgen/biome", "kobold_den_biomes", planetBiomes);
+            AdAstraMekanized.LOGGER.info("Generated Kobolds den biome tag for planet '{}'", planet.name);
+        }
+
+        // Generate WhenDungeonsArise structure biome tags
+        if (planet.enableDungeonsAriseStructures) {
+            generateDungeonsAriseBiomeTags(planet, planetBiomes);
+        }
+
+        // Generate Seven Seas structure biome tags
+        if (planet.enableSevenSeasStructures) {
+            generateSevenSeasBiomeTags(planet, planetBiomes);
+        }
+    }
+
+    /**
+     * Generate a biome tag file in a mod's namespace to add biomes to structure requirements.
+     * Merges with existing file if present (accumulates biomes from multiple planets).
+     */
+    private static void generateModdedStructureBiomeTag(String modNamespace, String tagPath, String tagName,
+            java.util.List<String> biomes) throws IOException {
+        // Create directory structure: data/[modNamespace]/[tagPath]/
+        String dirPath = RESOURCES_PATH.replace("adastramekanized", modNamespace) + tagPath;
+        new File(dirPath).mkdirs();
+
+        String filePath = dirPath + "/" + tagName + ".json";
+        java.util.Set<String> allBiomes = new java.util.LinkedHashSet<>();
+
+        // Read existing file if present and extract biomes
+        File existingFile = new File(filePath);
+        if (existingFile.exists()) {
+            try (java.io.FileReader reader = new java.io.FileReader(existingFile)) {
+                JsonObject existing = new com.google.gson.Gson().fromJson(reader, JsonObject.class);
+                if (existing != null && existing.has("values")) {
+                    JsonArray existingValues = existing.getAsJsonArray("values");
+                    for (int i = 0; i < existingValues.size(); i++) {
+                        allBiomes.add(existingValues.get(i).getAsString());
+                    }
+                }
+            } catch (Exception e) {
+                // If reading fails, start fresh
+            }
+        }
+
+        // Add new biomes
+        allBiomes.addAll(biomes);
+
+        // Write merged result
+        JsonObject tagFile = new JsonObject();
+        tagFile.addProperty("replace", false);  // Append to existing tag, don't replace
+        JsonArray values = new JsonArray();
+        for (String biome : allBiomes) {
+            values.add(biome);
+        }
+        tagFile.add("values", values);
+
+        writeJsonFile(filePath, tagFile);
+    }
+
+    /**
+     * Write a biome tag file, merging with existing content if present.
+     * Used to accumulate biomes from multiple planets in the same tag file.
+     */
+    private static void writeMergedBiomeTagFile(String filePath, java.util.List<String> newBiomes) throws IOException {
+        java.util.Set<String> allBiomes = new java.util.LinkedHashSet<>();
+
+        // Read existing file if present and extract biomes
+        File existingFile = new File(filePath);
+        if (existingFile.exists()) {
+            try (java.io.FileReader reader = new java.io.FileReader(existingFile)) {
+                JsonObject existing = new com.google.gson.Gson().fromJson(reader, JsonObject.class);
+                if (existing != null && existing.has("values")) {
+                    JsonArray existingValues = existing.getAsJsonArray("values");
+                    for (int i = 0; i < existingValues.size(); i++) {
+                        allBiomes.add(existingValues.get(i).getAsString());
+                    }
+                }
+            } catch (Exception e) {
+                // If reading fails, start fresh
+            }
+        }
+
+        // Add new biomes
+        allBiomes.addAll(newBiomes);
+
+        // Write merged result
+        JsonObject tagFile = new JsonObject();
+        tagFile.addProperty("replace", false);
+        JsonArray values = new JsonArray();
+        for (String biome : allBiomes) {
+            values.add(biome);
+        }
+        tagFile.add("values", values);
+
+        writeJsonFile(filePath, tagFile);
+    }
+
+    /**
+     * Generate WhenDungeonsArise structure biome tags based on enabled structure types.
+     * Merges with existing files to accumulate biomes from multiple planets.
+     */
+    private static void generateDungeonsAriseBiomeTags(PlanetBuilder planet, java.util.List<String> planetBiomes) throws IOException {
+        String basePath = RESOURCES_PATH.replace("adastramekanized", "dungeons_arise") + "tags/worldgen/biome/has_structure";
+        new File(basePath).mkdirs();
+
+        // Map structure types to their biome tag files
+        java.util.Map<String, String[]> structuresByType = new java.util.HashMap<>();
+        structuresByType.put("plains", new String[]{"illager_campsite_biomes", "merchant_campsite_biomes", "illager_windmill_biomes", "small_blimp_biomes"});
+        structuresByType.put("forest", new String[]{"bandit_village_biomes", "greenwood_pub_biomes", "aviary_biomes", "bandit_towers_biomes"});
+        structuresByType.put("desert", new String[]{"scorched_mines_biomes", "monastery_biomes", "shiraz_palace_biomes"});
+        structuresByType.put("jungle", new String[]{"jungle_tree_house_biomes", "infested_temple_biomes"});
+        structuresByType.put("ocean", new String[]{"illager_galley_biomes", "illager_corsair_biomes", "lighthouse_biomes", "fishing_hut_biomes"});
+        structuresByType.put("swamp", new String[]{"mushroom_village_biomes", "mushroom_house_biomes", "mushroom_mines_biomes"});
+        structuresByType.put("mountain", new String[]{"keep_kayra_biomes", "foundry_biomes", "mechanical_nest_biomes", "heavenly_rider_biomes", "heavenly_challenger_biomes", "heavenly_conqueror_biomes"});
+        structuresByType.put("snowy", new String[]{"plague_asylum_biomes"});
+        structuresByType.put("badlands", new String[]{"coliseum_biomes", "ceryneian_hind_biomes"});
+        structuresByType.put("underground", new String[]{"mining_system_biomes"});
+
+        // Create tag file for enabled structure types
+        for (String structureType : planet.dungeonsAriseStructureTypes) {
+            String[] structureTags = structuresByType.get(structureType);
+            if (structureTags != null) {
+                for (String tagName : structureTags) {
+                    String filePath = basePath + "/" + tagName + ".json";
+                    writeMergedBiomeTagFile(filePath, planetBiomes);
+                }
+                AdAstraMekanized.LOGGER.info("Generated WhenDungeonsArise '{}' structure tags for planet '{}'", structureType, planet.name);
+            }
+        }
+    }
+
+    /**
+     * Generate WhenDungeonsArise Seven Seas structure biome tags for ocean structures.
+     * Merges with existing files to accumulate biomes from multiple planets.
+     */
+    private static void generateSevenSeasBiomeTags(PlanetBuilder planet, java.util.List<String> planetBiomes) throws IOException {
+        String basePath = RESOURCES_PATH.replace("adastramekanized", "dungeons_arise_seven_seas") + "tags/worldgen/biome/has_structure";
+        new File(basePath).mkdirs();
+
+        // All Seven Seas structures need ocean biomes
+        String[] sevenSeasTags = {"corsair_corvette_biomes", "pirate_junk_biomes", "small_yacht_biomes", "unicorn_galleon_biomes", "victory_frigate_biomes"};
+
+        for (String tagName : sevenSeasTags) {
+            String filePath = basePath + "/" + tagName + ".json";
+            writeMergedBiomeTagFile(filePath, planetBiomes);
+        }
+        AdAstraMekanized.LOGGER.info("Generated Seven Seas structure biome tags for planet '{}'", planet.name);
+    }
+
+    /**
      * Generate NeoForge biome modifier files for mob spawning control.
      * Creates separate files for vanilla and modded mobs:
      * - add_spawns.json: Vanilla (minecraft:) mobs, always active
@@ -7077,7 +7503,7 @@ public class PlanetMaker {
                             stepFeatures.add("minecraft:brown_mushroom_swamp");
                             stepFeatures.add("minecraft:red_mushroom_swamp");
                             if (biomeLower.contains("mangrove")) {
-                                stepFeatures.add("minecraft:mangrove_vegetation");
+                                stepFeatures.add("minecraft:trees_mangrove");
                             }
                         }
                         // Jungle biomes - jungle trees, bamboo, vines, melons
@@ -7087,14 +7513,14 @@ public class PlanetMaker {
                             stepFeatures.add("minecraft:vines");
                             stepFeatures.add("minecraft:patch_grass_jungle");
                             stepFeatures.add("minecraft:patch_melon");
-                            stepFeatures.add("minecraft:jungle_flowers");
+                            stepFeatures.add("minecraft:flower_warm");
                             if (biomeLower.contains("bamboo")) {
                                 stepFeatures.add("minecraft:bamboo");
                             }
                         }
                         // Forest biomes - various trees, flowers, grass
                         else if (biomeLower.contains("forest")) {
-                            stepFeatures.add("minecraft:trees_oak");
+                            stepFeatures.add("minecraft:trees_birch_and_oak");
                             stepFeatures.add("minecraft:trees_birch");
                             stepFeatures.add("minecraft:flower_forest_flowers");
                             stepFeatures.add("minecraft:patch_grass_forest");
@@ -7135,12 +7561,12 @@ public class PlanetMaker {
                         // Ocean biomes - seagrass, kelp
                         else if (biomeLower.contains("ocean") || biomeLower.contains("beach")) {
                             stepFeatures.add("minecraft:seagrass_simple");
-                            stepFeatures.add("minecraft:kelp");
+                            stepFeatures.add("minecraft:kelp_warm");
                         }
                         // Lush caves biome
                         else if (biomeLower.contains("lush")) {
                             stepFeatures.add("minecraft:lush_caves_vegetation");
-                            stepFeatures.add("minecraft:moss_patch");
+                            stepFeatures.add("minecraft:lush_caves_ceiling_vegetation");
                             stepFeatures.add("minecraft:spore_blossom");
                             stepFeatures.add("minecraft:glow_lichen");
                         }
