@@ -344,11 +344,14 @@ public class PlanetGenerationRunner {
      * - .lavaTunnels(true) - Underground lava channels
      */
     private static void configurePlanets() {
-        // Moon planet - FLAT PLAINS-LIKE TERRAIN with Moon blocks
-        // Uses vanillaQualityFlat preset for gentle rolling hills, no mountains
-        // Caves remain enabled for underground exploration
+        // Moon planet - ULTRA-FLAT PLAINS-LIKE TERRAIN with Moon blocks
+        // Uses vanillaQualityFlat preset + additional flattening for true plains feel
+        // No hills, no mountains - just flat lunar surface like plains biome
         PlanetMaker.PlanetBuilder moon = registerPlanet("moon")
-            .vanillaQualityFlat()          // Flat terrain with gentle rolling hills
+            .vanillaQualityFlat()          // Start with flat preset
+            .slopedCheeseMultiplier(0.5f)  // OVERRIDE: Minimal terrain elevation (lower = flatter)
+            .base3DNoiseFactor(10.0f, 80.0f) // OVERRIDE: Very small horizontal features, normal vertical
+            .jaggedNoiseScale(10000.0f)    // OVERRIDE: Mountains so far apart they don't appear
             .coordinateShift(5000, 5000)   // Shift coordinates for unique Moon terrain
             // Physical properties
             .gravity(0.166f)  // Moon has 1/6 Earth gravity
@@ -395,7 +398,7 @@ public class PlanetGenerationRunner {
             // Moon ores - Plan B: silver-rich ice world
             .configureOre("silver", 8)     // primary - IE ore, lunar silver deposits
             .configureOre("iron", 10)       // tertiary - lunar regolith deposits
-            .configureOre("desh", 4)        // PROGRESSION ORE - needed for Tier 2 rocket
+            .configureOre("desh", 5)        // PROGRESSION ORE - needed for Tier 2 rocket
             .configureOre("cheese", 4)      // Moon cheese ore - classic Ad Astra feature
             .configureOre("moon_etrium", 2); // ENDGAME ORE - unchanged
 
@@ -521,7 +524,6 @@ public class PlanetGenerationRunner {
             .snowEnabled(false)
             // Mars ores - Plan B: energy-rich desert world with Mekanism osmium
             .configureOre("redstone", 25)   // primary - thermal energy from volcanic activity
-            .configureOre("copper", 20)     // secondary - volcanic deposits
             .configureOre("osmium", 15)     // tertiary - Mekanism ore available early
             .configureOre("ostrum", 5)      // PROGRESSION ORE - needed for Tier 3 rocket
             .configureOre("desh", 3)        // rare - secondary desh source
@@ -551,7 +553,6 @@ public class PlanetGenerationRunner {
             .configureOre("coal", 25)      // primary - sulfurous organic deposits
             .configureOre("lead", 20)      // secondary - IE ore, heavy metal deposits
             .configureOre("redstone", 15)  // tertiary - volcanic thermal energy
-            .configureOre("gold", 12)      // uncommon - volcanic precious metals
             .configureOre("calorite", 4)   // PROGRESSION ORE - needed for Tier 4 rocket
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             // Sparse hostile mobs - too hostile for most life (no nether creatures in space)
@@ -598,7 +599,6 @@ public class PlanetGenerationRunner {
             .configureOre("nickel", 25)    // primary - IE ore, metal-dense core
             .configureOre("iron", 20)      // secondary - iron-rich regolith
             .configureOre("redstone", 15)  // tertiary - thermal energy from sun proximity
-            .configureOre("silver", 12)    // uncommon - IE ore, precious metal deposits
             .configureOre("ostrum", 4)     // PROGRESSION ORE - needed for Tier 3 rocket
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             // Sparse parasitic mobs + cave-dwelling kobolds
@@ -650,9 +650,7 @@ public class PlanetGenerationRunner {
             .configureOre("lapis", 25)     // primary - blue gems in blue ice
             .configureOre("silver", 20)    // secondary - IE ore, frozen deposits
             .configureOre("iron", 15)      // tertiary - rocky core deposits
-            .configureOre("copper", 12)    // uncommon - subsurface metal
-            .configureOre("diamond", 6)    // rare - preserved in ice
-            .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
+            .configureOre("etrium", 6)     // ENDGAME ORE - unchanged
             // Very sparse aquatic-themed mobs
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:drowned", 15, 1, 2)
@@ -970,8 +968,8 @@ public class PlanetGenerationRunner {
             .configureOre("osmium", 25)    // primary - Mekanism ore, major source
             .configureOre("nickel", 20)    // secondary - IE ore, asteroid metals
             .configureOre("iron", 15)      // tertiary - basic asteroid metal
-            .configureOre("silver", 8)     // rare - IE ore, precious deposits
-            .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
+            .configureOre("silver", 4)     // rare - IE ore, precious deposits
+            .configureOre("etrium", 4)     // ENDGAME ORE - unchanged
             // Minimal life + asteroid cave kobolds
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:silverfish", 20, 2, 4)
@@ -1014,8 +1012,7 @@ public class PlanetGenerationRunner {
             .configureOre("gold", 25)      // primary - ancient precious deposits
             .configureOre("silver", 20)    // secondary - IE ore, frozen silver veins
             .configureOre("iron", 12)      // tertiary - rocky core deposits
-            .configureOre("diamond", 6)    // rare - preserved in eternal ice
-            .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
+            .configureOre("etrium", 5)     // ENDGAME ORE - unchanged
             // Very sparse
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:phantom", 3, 1, 1)
@@ -1602,8 +1599,7 @@ public class PlanetGenerationRunner {
             .configureOre("coal", 25)      // primary - ancient frozen organics
             .configureOre("silver", 20)    // secondary - IE ore, frozen metal deposits
             .configureOre("calorite", 3)   // PROGRESSION ORE - needed for Tier 4 rocket
-            .configureOre("diamond", 6)    // rare - ice preserves gem veins
-            .configureOre("glacio_etrium", 2) // ENDGAME ORE - unchanged
+            .configureOre("glacio_etrium", 3) // ENDGAME ORE - unchanged
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:stray", 30, 2, 3)
             .addMobSpawn("creature", "minecraft:polar_bear", 20, 1, 2)
@@ -1808,10 +1804,7 @@ public class PlanetGenerationRunner {
             .clearAllMobSpawns()
             .addMowziesMobsPreset("savanna")
             .addMobSpawn("monster", "minecraft:husk", 15, 1, 2)
-            .addMobSpawn("creature", "minecraft:horse", 20, 2, 4)
             .addMobSpawn("creature", "minecraft:llama", 15, 2, 4)
-            // Boss-tier Umvuthi (very rare)
-            .addMowziesMob("umvuthi", 2, 1, 1)
             // Born in Chaos Halloween mobs - tribal warrior world
             .addBornInChaosPumpkin(18)
             .allowPeacefulMobs(true)

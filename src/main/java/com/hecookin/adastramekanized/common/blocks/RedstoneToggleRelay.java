@@ -1,6 +1,7 @@
 package com.hecookin.adastramekanized.common.blocks;
 
 import com.hecookin.adastramekanized.AdAstraMekanized;
+import com.hecookin.adastramekanized.common.blockentities.machines.GravityNormalizerBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.machines.ImprovedOxygenDistributor;
 import com.hecookin.adastramekanized.common.data.ButtonControllerManager;
 import com.hecookin.adastramekanized.common.data.DistributorLinkData;
@@ -34,7 +35,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import java.util.List;
 
 /**
- * A relay block that toggles linked oxygen distributors when it receives a redstone signal.
+ * A relay block that controls linked oxygen and gravity distributors based on redstone signal.
+ * Redstone ON = machines ON, Redstone OFF = machines OFF (direct sync, not toggle).
  * Can be paired with an Oxygen Network Controller via right-click.
  */
 public class RedstoneToggleRelay extends DirectionalBlock {
@@ -118,15 +120,18 @@ public class RedstoneToggleRelay extends DirectionalBlock {
                 // Update block state
                 level.setBlock(pos, state.setValue(POWERED, hasSignal), 2);
 
-                // Toggle distributors when signal changes
-                if (hasSignal) {
-                    toggleDistributors(level, pos, null);
-                }
+                // Set distributor state to match redstone signal:
+                // Redstone ON -> machines ON, Redstone OFF -> machines OFF
+                setDistributorState(level, pos, hasSignal, null);
             }
         }
     }
 
-    private void toggleDistributors(Level level, BlockPos relayPos, Player player) {
+    /**
+     * Sets all linked distributors to the specified state.
+     * @param enableMachines true = turn machines ON, false = turn machines OFF
+     */
+    private void setDistributorState(Level level, BlockPos relayPos, boolean enableMachines, Player player) {
         // Check if we have a controller bound
         ButtonControllerManager.ControllerBinding binding = ButtonControllerManager.getBinding(level, relayPos);
         if (binding == null) {
@@ -146,32 +151,26 @@ public class RedstoneToggleRelay extends DirectionalBlock {
             linkData.fromNbt(binding.controllerData.getCompound("LinkData"));
         }
 
-        // Count current state
-        int enabledCount = 0;
         int totalCount = linkData.getLinkCount();
-
-        for (DistributorLinkData.LinkedDistributor link : linkData.getLinkedDistributors()) {
-            if (link.isEnabled()) {
-                enabledCount++;
-            }
-        }
-
-        // Determine new state (if any are on, turn all off; if all are off, turn all on)
-        boolean newState = enabledCount == 0;
         int successCount = 0;
 
-        // Apply new state to all distributors
+        // Apply the specified state to all distributors (no toggle logic - direct set)
         for (DistributorLinkData.LinkedDistributor link : linkData.getLinkedDistributors()) {
-            link.setEnabled(newState);
+            link.setEnabled(enableMachines);
 
             BlockPos distributorPos = link.getPos();
             if (level.isLoaded(distributorPos)) {
                 BlockEntity be = level.getBlockEntity(distributorPos);
                 if (be instanceof ImprovedOxygenDistributor distributor) {
-                    distributor.setManuallyDisabled(!newState);
+                    distributor.setManuallyDisabled(!enableMachines);
                     successCount++;
-                    AdAstraMekanized.LOGGER.info("Relay at {} toggled distributor at {} to {}",
-                        relayPos, distributorPos, newState ? "ON" : "OFF");
+                    AdAstraMekanized.LOGGER.info("Relay at {} set oxygen distributor at {} to {}",
+                        relayPos, distributorPos, enableMachines ? "ON" : "OFF");
+                } else if (be instanceof GravityNormalizerBlockEntity gravityNormalizer) {
+                    gravityNormalizer.setManuallyDisabled(!enableMachines);
+                    successCount++;
+                    AdAstraMekanized.LOGGER.info("Relay at {} set gravity normalizer at {} to {}",
+                        relayPos, distributorPos, enableMachines ? "ON" : "OFF");
                 }
             }
         }
@@ -182,17 +181,17 @@ public class RedstoneToggleRelay extends DirectionalBlock {
 
         // Play sound effect
         level.playSound(null, relayPos,
-            newState ? SoundEvents.PISTON_EXTEND : SoundEvents.PISTON_CONTRACT,
+            enableMachines ? SoundEvents.PISTON_EXTEND : SoundEvents.PISTON_CONTRACT,
             SoundSource.BLOCKS, 0.5F, 1.0F);
 
         // Send feedback to nearby players if triggered by redstone
         if (player == null) {
-            String action = newState ? "Activated" : "Deactivated";
+            String action = enableMachines ? "Activated" : "Deactivated";
             for (Player nearbyPlayer : level.players()) {
                 if (nearbyPlayer.position().distanceToSqr(relayPos.getX() + 0.5, relayPos.getY() + 0.5, relayPos.getZ() + 0.5) < 64) {
                     nearbyPlayer.displayClientMessage(
                         Component.literal("Relay " + action.toLowerCase() + " ")
-                            .withStyle(newState ? ChatFormatting.GREEN : ChatFormatting.RED)
+                            .withStyle(enableMachines ? ChatFormatting.GREEN : ChatFormatting.RED)
                             .append(Component.literal(successCount + "/" + totalCount + " distributors")
                                 .withStyle(ChatFormatting.WHITE)),
                         true
@@ -201,10 +200,10 @@ public class RedstoneToggleRelay extends DirectionalBlock {
             }
         } else {
             // Direct player interaction feedback
-            String action = newState ? "Enabled" : "Disabled";
+            String action = enableMachines ? "Enabled" : "Disabled";
             player.displayClientMessage(
                 Component.literal(action + " ")
-                    .withStyle(newState ? ChatFormatting.GREEN : ChatFormatting.RED)
+                    .withStyle(enableMachines ? ChatFormatting.GREEN : ChatFormatting.RED)
                     .append(Component.literal(successCount + "/" + totalCount + " distributors")
                         .withStyle(ChatFormatting.WHITE)),
                 true
@@ -241,11 +240,11 @@ public class RedstoneToggleRelay extends DirectionalBlock {
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal("Toggles linked distributors via redstone")
+        tooltip.add(Component.literal("Controls linked oxygen & gravity distributors")
+            .withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.literal("Redstone ON = machines ON, OFF = machines OFF")
             .withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.literal("Sneak+right-click with controller to pair")
-            .withStyle(ChatFormatting.DARK_GRAY));
-        tooltip.add(Component.literal("Apply redstone signal to toggle")
             .withStyle(ChatFormatting.DARK_GRAY));
     }
 }
