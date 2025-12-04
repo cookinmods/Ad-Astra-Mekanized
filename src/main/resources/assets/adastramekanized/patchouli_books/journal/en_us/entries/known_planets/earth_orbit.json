@@ -7,7 +7,7 @@
     {
       "type": "patchouli:text",
       "title": "Planetary Data",
-      "text": "$(bold)Gravity:$() 16.6% of Earth$(br)$(bold)Atmosphere:$() None (requires oxygen)$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #000000$(br)$(bold)Ambient Light:$() 0.0%$(br)$(bold)Clouds:$() No$(br)$(bold)Rain:$() No"
+      "text": "$(bold)Gravity:$() 16.6% of Earth$(br)$(bold)Atmosphere:$() None$(br)$(bold)Temperature:$() -270 C$(br)$(bold)Ambient Light:$() 0.0%$(br)$(bold)Clouds:$() No$(br)$(bold)Rain:$() No"
     },
     {
       "type": "patchouli:text",

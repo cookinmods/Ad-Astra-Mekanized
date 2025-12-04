@@ -365,7 +365,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
+          "block": "minecraft:end_stone"
         },
         "state": {
           "Name": "minecraft:coal_ore"

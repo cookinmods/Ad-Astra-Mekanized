@@ -1,0 +1,78 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "born_in_chaos_v1"
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:frigidum_biomes",
+  "spawners": [
+    {
+      "type": "born_in_chaos_v1:baby_spider",
+      "weight": 18,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "born_in_chaos_v1:mother_spider",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:dread_hound",
+      "weight": 13,
+      "minCount": 1,
+      "maxCount": 3
+    },
+    {
+      "type": "born_in_chaos_v1:dire_hound_leader",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:phantom_creeper",
+      "weight": 13,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "born_in_chaos_v1:swarmer",
+      "weight": 13,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "born_in_chaos_v1:thornshell_crab",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "born_in_chaos_v1:maggot",
+      "weight": 18,
+      "minCount": 3,
+      "maxCount": 6
+    },
+    {
+      "type": "born_in_chaos_v1:corpse_fly",
+      "weight": 13,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "born_in_chaos_v1:bloody_gadfly",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 3
+    },
+    {
+      "type": "born_in_chaos_v1:nightmare_stalker",
+      "weight": 4,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

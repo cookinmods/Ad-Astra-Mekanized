@@ -42,7 +42,9 @@
     [
       "adastramekanized:triton_ore_diamond_simple",
       "adastramekanized:triton_ore_iron_simple",
-      "adastramekanized:triton_ore_copper_simple"
+      "adastramekanized:triton_ore_copper_simple",
+      "adastramekanized:triton_ore_silver_simple",
+      "adastramekanized:triton_ore_ostrum_simple"
     ],
     [
       "minecraft:ore_infested"

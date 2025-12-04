@@ -33,6 +33,7 @@ public class ModdedStructureController {
         // Initialize with controlled structure mods
         controlledStructureMods.add("kobolds");  // Kobold dens and structures
         controlledStructureMods.add("ribbits");  // Ribbit swamp villages
+        controlledStructureMods.add("born_in_chaos_v1");  // Born in Chaos structures (Dark Tower, Clown Caravan, etc.)
     }
 
     /**

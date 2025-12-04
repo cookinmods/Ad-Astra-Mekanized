@@ -443,6 +443,108 @@ registerPlanet("oretest")
     .generate();                       // Adds to generation queue AND registry
 ```
 
+### Vanilla-Quality Terrain System
+
+The mod supports three terrain generation modes:
+
+1. **`useIdenticalVanillaTerrain()`** - Byte-for-byte identical to Overworld (no uniqueness)
+2. **`useIdenticalVanillaTerrain()` + `coordinateShift()`** - Legacy simplified terrain (not vanilla quality)
+3. **`useVanillaQualityTerrain()`** - **RECOMMENDED** Full vanilla density function set with coordinate shifting
+
+#### How Vanilla-Quality Terrain Works
+
+The vanilla-quality system copies Minecraft's complete terrain algorithm:
+- **offset.json** (60KB) - Massive spline lookup table for terrain height offset
+- **factor.json** (34KB) - Spline lookup for terrain distribution
+- **jaggedness.json** (11KB) - Spline lookup for mountain peak sharpness
+- **sloped_cheese.json** - Core terrain formula: `4 * quarter_negative((depth + jaggedness * half_negative(jagged)) * factor) + base_3d_noise`
+
+All spline references are replaced from `minecraft:overworld/` to `adastramekanized:{planet}/`, and coordinate shifting produces unique terrain per planet.
+
+#### Terrain Generation Modes Comparison
+
+| Mode | Quality | Uniqueness | Use Case |
+|------|---------|------------|----------|
+| `useIdenticalVanillaTerrain()` | Vanilla | None (identical to Overworld) | Testing |
+| Legacy + `coordinateShift()` | Simplified | Unique but simplified | Not recommended |
+| `useVanillaQualityTerrain()` | Vanilla | Unique per planet | **Production planets** |
+
+#### Vanilla-Quality Presets
+
+```java
+// Standard Overworld terrain (default)
+.vanillaQualityStandard()
+
+// Flat terrain with gentle rolling hills
+.vanillaQualityFlat()
+
+// Dramatic peaks and valleys
+.vanillaQualityMountainous()
+
+// Otherworldly terrain feel
+.vanillaQualityAlien()
+
+// Moon-style crater terrain
+.vanillaQualityCratered()
+
+// Island chains and water bodies
+.vanillaQualityArchipelago()
+```
+
+#### Configurable Terrain Parameters
+
+| Parameter | Default | Method | Effect |
+|-----------|---------|--------|--------|
+| `terrainFactor` | 4.0 | `.slopedCheeseMultiplier(float)` | Overall terrain scale (higher = more dramatic) |
+| `jaggednessNoiseScale` | 1500.0 | `.jaggedNoiseScale(float)` | Mountain peak spacing (lower = closer peaks) |
+| `base3DNoiseXZScale` | 0.25 | `.base3dNoiseScale(xz, y)` | Horizontal terrain frequency |
+| `base3DNoiseYScale` | 0.125 | `.base3dNoiseScale(xz, y)` | Vertical terrain frequency |
+| `base3DNoiseXZFactor` | 80.0 | `.base3dNoiseFactor(xz, y)` | Horizontal terrain amplitude |
+| `base3DNoiseYFactor` | 160.0 | `.base3dNoiseFactor(xz, y)` | Vertical terrain amplitude |
+| `smearScaleMultiplier` | 8.0 | `.base3dNoiseSmear(float)` | Terrain smoothing (lower = sharper) |
+| `coordinateShiftX/Z` | auto | `.coordinateShift(x, z)` | Noise space offset for uniqueness |
+
+#### Preset Parameter Values
+
+| Preset | terrainFactor | jaggedScale | xzFactor | smear |
+|--------|---------------|-------------|----------|-------|
+| Standard | 4.0 | 1500.0 | 80.0 | 8.0 |
+| Flat | 2.0 | 2000.0 | 40.0 | 8.0 |
+| Mountainous | 6.0 | 1000.0 | 120.0 | 8.0 |
+| Alien | 5.0 | 1200.0 | 60.0 | 6.0 |
+| Cratered | 3.0 | 800.0 | 100.0 | 4.0 |
+| Archipelago | 4.0 | 1500.0 | 50.0 | 8.0 |
+
+#### Example: Moon with Vanilla-Quality Terrain
+
+```java
+registerPlanet("moon")
+    .vanillaQualityCratered()          // Use cratered terrain preset
+    .coordinateShift(5000, 5000)       // Unique terrain location
+    .surfaceBlock("adastramekanized:moon_sand")
+    .defaultBlock("adastramekanized:moon_stone")
+    .gravity(0.166f)
+    .hasAtmosphere(false)
+    .generate();
+```
+
+#### Generated Density Function Files
+
+When using `useVanillaQualityTerrain()`, these files are generated per planet:
+```
+worldgen/density_function/{planet}/
+├── continents.json        # Coordinate-shifted continentalness
+├── erosion.json           # Coordinate-shifted erosion
+├── ridges.json            # Coordinate-shifted ridges
+├── ridges_folded.json     # Folded ridges reference
+├── offset.json            # Full vanilla spline (60KB)
+├── factor.json            # Full vanilla spline (34KB)
+├── jaggedness.json        # Full vanilla spline (11KB)
+├── depth.json             # Y-gradient + offset
+├── base_3d_noise.json     # Configurable 3D noise
+└── sloped_cheese.json     # Core terrain formula
+```
+
 ### Available Planets (13 Total)
 
 The mod includes 13 pre-configured planets in `PlanetGenerationRunner.configurePlanets()`:
@@ -584,3 +686,5 @@ registerPlanet("habitable_world")
   - `/home/keroppi/Development/Minecraft/Ad-Astra/` (original Ad Astra reference)
   - `/home/keroppi/Development/Minecraft/Mekanism/` (Mekanism reference)
 - always update planetGenerationRunner when adding/editing planet generation
+- always ensure gradle makePlanets is updated to generate proper changes when we alter planets and biom generation
+- do not directly modify the generated files of planets, modify planetGenerationRunner so when gradle makePlanets is run it update properly

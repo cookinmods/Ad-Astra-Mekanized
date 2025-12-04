@@ -2,6 +2,7 @@ package com.hecookin.adastramekanized.common.registry;
 
 import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.common.blocks.BlockProperties;
+import com.hecookin.adastramekanized.common.blocks.machines.GravityNormalizerBlock;
 import com.hecookin.adastramekanized.common.blocks.machines.OxygenDistributorBlock;
 import com.hecookin.adastramekanized.common.blocks.machines.WirelessPowerRelayBlock;
 import com.hecookin.adastramekanized.common.blocks.RedstoneToggleRelay;
@@ -481,6 +482,9 @@ public class ModBlocks {
 
     public static final Supplier<Block> OXYGEN_DISTRIBUTOR = registerBlock("oxygen_distributor",
             () -> new OxygenDistributorBlock(BlockProperties.INDUSTRIAL_BLOCK));
+
+    public static final Supplier<Block> GRAVITY_NORMALIZER = registerBlock("gravity_normalizer",
+            () -> new GravityNormalizerBlock(BlockProperties.INDUSTRIAL_BLOCK));
 
     public static final Supplier<Block> WIRELESS_POWER_RELAY = registerBlock("wireless_power_relay",
             () -> new WirelessPowerRelayBlock(BlockProperties.INDUSTRIAL_BLOCK));

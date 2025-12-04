@@ -144,7 +144,7 @@
         "then_run": {
           "type": "minecraft:block",
           "result_state": {
-            "Name": "adastramekanized:basalt"
+            "Name": "minecraft:basalt"
           }
         }
       },
@@ -163,7 +163,7 @@
         "then_run": {
           "type": "minecraft:block",
           "result_state": {
-            "Name": "adastramekanized:basalt"
+            "Name": "minecraft:basalt"
           }
         }
       }

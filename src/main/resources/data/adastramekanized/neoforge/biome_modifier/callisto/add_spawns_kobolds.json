@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "kobolds"
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:callisto_biomes",
+  "spawners": [
+    {
+      "type": "kobolds:kobold",
+      "weight": 8,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "kobolds:kobold_warrior",
+      "weight": 4,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "kobolds:kobold_enchanter",
+      "weight": 2,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "kobolds:kobold_engineer",
+      "weight": 4,
+      "minCount": 1,
+      "maxCount": 2
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "reptilian"
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:arenos_biomes",
+  "spawners": [
+    {
+      "type": "reptilian:gecko",
+      "weight": 12,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "reptilian:komodo_dragon",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 2
+    }
+  ]
+}

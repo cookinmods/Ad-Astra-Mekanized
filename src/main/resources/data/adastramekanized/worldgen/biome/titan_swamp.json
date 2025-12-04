@@ -53,10 +53,12 @@
     [],
     [],
     [
-      "adastramekanized:titan_ore_gold_simple",
+      "adastramekanized:titan_ore_calorite_simple",
       "adastramekanized:titan_ore_coal_simple",
-      "adastramekanized:titan_ore_iron_simple",
-      "adastramekanized:titan_ore_copper_simple"
+      "adastramekanized:titan_ore_osmium_simple",
+      "adastramekanized:titan_ore_lead_simple",
+      "adastramekanized:titan_ore_redstone_simple",
+      "adastramekanized:titan_ore_etrium_simple"
     ],
     [
       "minecraft:ore_infested"

@@ -3,12 +3,14 @@ package com.hecookin.adastramekanized.client;
 import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.client.models.armor.SpaceSuitModel;
 import com.hecookin.adastramekanized.client.models.entities.vehicles.RocketModel;
+import com.hecookin.adastramekanized.client.renderers.blocks.GravityNormalizerBlockEntityRenderer;
 import com.hecookin.adastramekanized.client.renderers.blocks.MekanismBasedOxygenDistributorRenderer;
 import com.hecookin.adastramekanized.client.renderers.blocks.OxygenDistributorBlockEntityRenderer;
 import com.hecookin.adastramekanized.client.renderers.blocks.SlidingDoorBlockEntityRenderer;
 import com.hecookin.adastramekanized.client.renderers.entities.vehicles.LanderRenderer;
 import com.hecookin.adastramekanized.client.renderers.entities.vehicles.RocketRenderer;
 import com.hecookin.adastramekanized.client.gui.GuiOxygenDistributor;
+import com.hecookin.adastramekanized.client.screens.GravityNormalizerScreen;
 import com.hecookin.adastramekanized.client.screens.NasaWorkbenchScreen;
 import com.hecookin.adastramekanized.client.screens.OxygenControllerScreen;
 import com.hecookin.adastramekanized.client.screens.OxygenMonitorScreen;
@@ -42,6 +44,7 @@ public class ClientModEvents {
             BlockEntityRenderers.register(ModBlockEntityTypes.OXYGEN_DISTRIBUTOR.get(), (context) -> new OxygenDistributorBlockEntityRenderer());
             BlockEntityRenderers.register(ModBlockEntityTypes.MEKANISM_OXYGEN_DISTRIBUTOR.get(), MekanismBasedOxygenDistributorRenderer::new);
             BlockEntityRenderers.register(ModBlockEntityTypes.SLIDING_DOOR.get(), SlidingDoorBlockEntityRenderer::new);
+            BlockEntityRenderers.register(ModBlockEntityTypes.GRAVITY_NORMALIZER.get(), (context) -> new GravityNormalizerBlockEntityRenderer());
 
             // Register armor model renderers
             registerArmorRenderers();
@@ -175,6 +178,7 @@ public class ClientModEvents {
         event.register(ModMenuTypes.OXYGEN_CONTROLLER.get(), OxygenControllerScreen::new);
         event.register(ModMenuTypes.WIRELESS_POWER_RELAY.get(), WirelessPowerRelayScreen::new);
         event.register(ModMenuTypes.OXYGEN_MONITOR.get(), OxygenMonitorScreen::new);
+        event.register(ModMenuTypes.GRAVITY_NORMALIZER.get(), GravityNormalizerScreen::new);
         event.register(ModMenuTypes.NASA_WORKBENCH.get(), NasaWorkbenchScreen::new);
         event.register(ModMenuTypes.ROCKET.get(), RocketScreen::new);
         // TODO: Create LanderScreen - using RocketScreen as placeholder
@@ -187,6 +191,10 @@ public class ClientModEvents {
         // Register the oxygen distributor top model for the animated part
         event.register(ModelResourceLocation.standalone(
             ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "block/oxygen_distributor_top")));
+
+        // Register the gravity normalizer top model for the animated part
+        event.register(ModelResourceLocation.standalone(
+            ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "block/gravity_normalizer_top")));
 
         // Register sliding door models
         event.register(ModelResourceLocation.standalone(

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_etrionic_capacitor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "adastramekanized:etrionic_capacitor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "adastramekanized:gravity_normalizer"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_etrionic_capacitor"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "adastramekanized:gravity_normalizer"
+    ]
+  }
+}

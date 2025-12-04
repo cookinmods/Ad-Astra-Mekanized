@@ -55,8 +55,9 @@
     [
       "adastramekanized:bellator_ore_gold_simple",
       "adastramekanized:bellator_ore_diamond_simple",
+      "adastramekanized:bellator_ore_copper_simple",
       "adastramekanized:bellator_ore_iron_simple",
-      "adastramekanized:bellator_ore_copper_simple"
+      "adastramekanized:bellator_ore_lead_simple"
     ],
     [
       "minecraft:ore_infested"

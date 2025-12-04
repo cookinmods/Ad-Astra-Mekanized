@@ -14,13 +14,7 @@
         "type": "minecraft:husk",
         "minCount": 2,
         "maxCount": 3,
-        "weight": 25
-      },
-      {
-        "type": "minecraft:cave_spider",
-        "minCount": 1,
-        "maxCount": 3,
-        "weight": 20
+        "weight": 30
       }
     ],
     "creature": [
@@ -28,7 +22,7 @@
         "type": "minecraft:rabbit",
         "minCount": 2,
         "maxCount": 3,
-        "weight": 15
+        "weight": 18
       }
     ],
     "ambient": [],
@@ -54,9 +48,9 @@
     [],
     [
       "adastramekanized:proxima_b_ore_gold_simple",
-      "adastramekanized:proxima_b_ore_diamond_simple",
       "adastramekanized:proxima_b_ore_copper_simple",
-      "adastramekanized:proxima_b_ore_redstone_simple"
+      "adastramekanized:proxima_b_ore_redstone_simple",
+      "adastramekanized:proxima_b_ore_lead_simple"
     ],
     [
       "minecraft:ore_infested"

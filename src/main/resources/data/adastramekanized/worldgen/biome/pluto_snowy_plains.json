@@ -42,7 +42,9 @@
     [
       "adastramekanized:pluto_ore_gold_simple",
       "adastramekanized:pluto_ore_diamond_simple",
-      "adastramekanized:pluto_ore_iron_simple"
+      "adastramekanized:pluto_ore_iron_simple",
+      "adastramekanized:pluto_ore_silver_simple",
+      "adastramekanized:pluto_ore_etrium_simple"
     ],
     [
       "minecraft:ore_infested"

@@ -3,6 +3,7 @@ package com.hecookin.adastramekanized.common.registry;
 import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.common.blockentities.LaunchPadBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.NasaWorkbenchBlockEntity;
+import com.hecookin.adastramekanized.common.blockentities.machines.GravityNormalizerBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.machines.OxygenDistributorBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.machines.ImprovedOxygenDistributor;
 import com.hecookin.adastramekanized.common.blockentities.machines.WirelessPowerRelayBlockEntity;
@@ -40,6 +41,13 @@ public class ModBlockEntityTypes {
             () -> createBlockEntityType(
                 WirelessPowerRelayBlockEntity::new,
                 ModBlocks.WIRELESS_POWER_RELAY.get()));
+
+    // Gravity Normalizer block entity
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GravityNormalizerBlockEntity>> GRAVITY_NORMALIZER =
+        BLOCK_ENTITY_TYPES.register("gravity_normalizer",
+            () -> createBlockEntityType(
+                GravityNormalizerBlockEntity::new,
+                ModBlocks.GRAVITY_NORMALIZER.get()));
 
     // Oxygen Network Monitor block entity
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<OxygenNetworkMonitorBlockEntity>> OXYGEN_NETWORK_MONITOR =

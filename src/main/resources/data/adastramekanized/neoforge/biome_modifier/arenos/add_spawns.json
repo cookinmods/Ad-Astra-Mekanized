@@ -10,15 +10,9 @@
     },
     {
       "type": "minecraft:husk",
-      "weight": 35,
+      "weight": 40,
       "minCount": 2,
       "maxCount": 4
-    },
-    {
-      "type": "minecraft:spider",
-      "weight": 20,
-      "minCount": 1,
-      "maxCount": 2
     }
   ]
 }

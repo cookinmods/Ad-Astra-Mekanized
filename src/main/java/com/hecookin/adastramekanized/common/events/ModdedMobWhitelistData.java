@@ -30,6 +30,7 @@ public class ModdedMobWhitelistData {
         controlledMods.add("shineals_prehistoric_expansion");
         controlledMods.add("reptilian");
         controlledMods.add("ribbits");  // Frog villagers and swamp villages
+        controlledMods.add("born_in_chaos_v1");  // Born in Chaos spirits, undead, and Halloween mobs
     }
 
     /**

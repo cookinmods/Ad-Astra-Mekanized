@@ -7,12 +7,12 @@
     {
       "type": "patchouli:text",
       "title": "Planetary Data",
-      "text": "$(bold)Gravity:$() 14.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #CC8844$(br)$(bold)Ambient Light:$() 15.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() Yes"
+      "text": "$(bold)Gravity:$() 14.0% of Earth$(br)$(bold)Atmosphere:$() Toxic$(br)$(bold)Temperature:$() -179 C$(br)$(bold)Ambient Light:$() 15.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() Yes"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Coal (Common)$(br)• Iron (Common)$(br)• Copper (Common)$(br)• Gold (Uncommon)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Coal (Common)$(br)• Lead (Uncommon)$(br)• Osmium (Uncommon)$(br)• Redstone (Uncommon)$(br)• Calorite (Rare)$(br)• Etrium (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

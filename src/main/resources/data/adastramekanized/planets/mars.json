@@ -55,7 +55,7 @@
           "scale": 0.3,
           "color": 11176038,
           "horizontal_position": 0.4,
-          "vertical_position": 0.15,
+          "vertical_position": 1.15,
           "moves_with_time": true,
           "visible": true
         },

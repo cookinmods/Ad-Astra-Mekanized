@@ -1,6 +1,7 @@
 package com.hecookin.adastramekanized.common.items;
 
 import com.hecookin.adastramekanized.AdAstraMekanized;
+import com.hecookin.adastramekanized.common.blockentities.machines.GravityNormalizerBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.machines.ImprovedOxygenDistributor;
 import com.hecookin.adastramekanized.common.blockentities.machines.WirelessPowerRelayBlockEntity;
 import com.hecookin.adastramekanized.common.blocks.machines.WirelessPowerRelayBlock;
@@ -120,10 +121,14 @@ public class OxygenNetworkController extends Item {
             return InteractionResult.PASS;
         }
 
-        // Check if this is a distributor - simple right-click to toggle link
+        // Check if this is a distributor (oxygen or gravity) - simple right-click to toggle link
         BlockEntity be = level.getBlockEntity(pos);
-        if (be instanceof ImprovedOxygenDistributor distributor) {
+        boolean isOxygenDistributor = be instanceof ImprovedOxygenDistributor;
+        boolean isGravityDistributor = be instanceof GravityNormalizerBlockEntity;
+
+        if (isOxygenDistributor || isGravityDistributor) {
             if (!level.isClientSide) {
+                String distributorType = isOxygenDistributor ? "oxygen distributor" : "gravity distributor";
                 // Toggle link on simple right-click
                 {
                     DistributorLinkData linkData = getOrCreateLinkData(stack);
@@ -133,19 +138,19 @@ public class OxygenNetworkController extends Item {
                         linkData.removeLink(pos);
                         saveLinkData(stack, linkData);
                         player.displayClientMessage(
-                            Component.literal("Unlinked distributor at ")
+                            Component.literal("Unlinked " + distributorType + " at ")
                                 .withStyle(ChatFormatting.YELLOW)
                                 .append(Component.literal(String.format("%d, %d, %d", pos.getX(), pos.getY(), pos.getZ()))
                                     .withStyle(ChatFormatting.WHITE)),
                             true
                         );
-                        AdAstraMekanized.LOGGER.info("Unlinked distributor at {} from controller", pos);
+                        AdAstraMekanized.LOGGER.info("Unlinked {} at {} from controller", distributorType, pos);
                     } else {
                         // Link
                         if (linkData.addLink(pos)) {
                             saveLinkData(stack, linkData);
                             player.displayClientMessage(
-                                Component.literal("Linked distributor at ")
+                                Component.literal("Linked " + distributorType + " at ")
                                     .withStyle(ChatFormatting.GREEN)
                                     .append(Component.literal(String.format("%d, %d, %d", pos.getX(), pos.getY(), pos.getZ()))
                                         .withStyle(ChatFormatting.WHITE))
@@ -153,7 +158,7 @@ public class OxygenNetworkController extends Item {
                                         .withStyle(ChatFormatting.GRAY)),
                                 true
                             );
-                            AdAstraMekanized.LOGGER.info("Linked distributor at {} to controller", pos);
+                            AdAstraMekanized.LOGGER.info("Linked {} at {} to controller", distributorType, pos);
                         } else {
                             player.displayClientMessage(
                                 Component.literal("Cannot link more distributors! Maximum 64 reached.")
@@ -318,6 +323,13 @@ public class OxygenNetworkController extends Item {
                 boolean online = distributor.isActive();
 
                 link.updateStatus(energy, oxygen, efficiency, online);
+            } else if (be instanceof GravityNormalizerBlockEntity gravityDistributor) {
+                int energy = gravityDistributor.getEnergyStorage().getEnergyStored();
+                long argon = gravityDistributor.getArgonTank().getStored();
+                float efficiency = gravityDistributor.getEfficiency();
+                boolean online = gravityDistributor.isActive();
+
+                link.updateStatus(energy, argon, efficiency, online);
             } else {
                 // Distributor no longer exists or not loaded
                 link.updateStatus(0, 0, 0, false);

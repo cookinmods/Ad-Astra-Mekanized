@@ -44,37 +44,27 @@ public class PlanetDimensionEffects extends DimensionSpecialEffects {
     }
 
     @Override
-    public @NotNull Vec3 getBrightnessDependentFogColor(@NotNull Vec3 skyColor, float celestialAngle) {
+    public @NotNull Vec3 getBrightnessDependentFogColor(@NotNull Vec3 fogColor, float brightness) {
         // Handle null planet case or no atmosphere
         if (planet == null || !planet.atmosphere().hasAtmosphere()) {
-            // No atmosphere = constant black space, no sunrise/sunset color transitions
-            return new Vec3(0.0, 0.0, 0.0);
+            // No atmosphere = black space (like End but darker)
+            return fogColor.scale(0.05);
         }
 
-        // Use neutral grey fog that varies with day/night cycle
-        // Colored sunrise/sunset effects are handled by getSunriseColor() instead
-        float brightness;
-        if (!planet.atmosphere().breathable()) {
-            // Thin/toxic atmospheres: very minimal variation (90-100% brightness)
-            brightness = 0.9f + 0.1f * (float) Math.cos(celestialAngle * 2.0 * Math.PI);
-        } else {
-            // Breathable atmospheres: normal day/night variation like Earth
-            brightness = 0.5f + 0.5f * (float) Math.cos(celestialAngle * 2.0 * Math.PI);
-        }
-
-        // Return neutral grey fog scaled by brightness
-        return new Vec3(brightness, brightness, brightness);
+        // Follow vanilla Overworld pattern: multiply input fog color by brightness factors
+        // This preserves the biome's fog color while adjusting for day/night cycle
+        return fogColor.multiply(
+            brightness * 0.94F + 0.06F,
+            brightness * 0.94F + 0.06F,
+            brightness * 0.91F + 0.09F
+        );
     }
 
     @Override
     public boolean isFoggyAt(int x, int z) {
-        // Handle null planet case
-        if (planet == null) {
-            return false; // Default to no fog for unknown planets
-        }
-
-        // Fog based on planet atmosphere density
-        return planet.rendering().fog().hasFog();
+        // Follow vanilla Overworld: NOT foggy (return false)
+        // Dense fog is controlled by biome effects, not dimension effects
+        return false;
     }
 
     @Override

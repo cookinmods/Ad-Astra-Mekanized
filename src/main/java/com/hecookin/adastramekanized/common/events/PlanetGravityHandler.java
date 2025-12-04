@@ -3,6 +3,8 @@ package com.hecookin.adastramekanized.common.events;
 import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.api.planets.Planet;
 import com.hecookin.adastramekanized.api.planets.PlanetRegistry;
+import com.hecookin.adastramekanized.common.gravity.GravityManager;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -93,6 +95,13 @@ public class PlanetGravityHandler {
         Level level = event.getLevel();
 
         if (level.isClientSide()) return;
+
+        // Check if entity is in a gravity-normalized zone
+        // If so, let GravityNormalizerHandler handle it instead
+        BlockPos pos = BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ());
+        if (GravityManager.getInstance().isInGravityZone(level, pos)) {
+            return; // Skip planet gravity - normalizer will handle it
+        }
 
         float gravity = getGravity(level);
 
@@ -191,6 +200,13 @@ public class PlanetGravityHandler {
 
         // Skip if in water, lava, or has no gravity
         if (item.isInWater() || item.isInLava() || item.isNoGravity()) return;
+
+        // Check if item is in a gravity-normalized zone
+        // If so, let GravityNormalizerHandler handle it instead
+        BlockPos pos = BlockPos.containing(item.getX(), item.getY(), item.getZ());
+        if (GravityManager.getInstance().isInGravityZone(item.level(), pos)) {
+            return; // Skip planet gravity - normalizer will handle it
+        }
 
         // Get gravity directly from the level - same source as living entities
         float gravity = getGravity(item.level());

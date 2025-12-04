@@ -127,3 +127,11 @@ type = "required"
 versionRange = "[1.0.0,)"
 ordering = "BEFORE"  # CRITICAL: Load ChemLib BEFORE your mod
 side = "BOTH"
+
+# Born in Chaos - Horror mobs (spirits, undead, Halloween mobs)
+[[dependencies.adastramekanized]]
+modId = "born_in_chaos_v1"
+type = "optional"
+versionRange = "[1.7.0,)"
+ordering = "AFTER"
+side = "BOTH"

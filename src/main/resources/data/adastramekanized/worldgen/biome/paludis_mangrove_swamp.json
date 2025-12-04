@@ -14,31 +14,19 @@
         "type": "minecraft:slime",
         "minCount": 1,
         "maxCount": 2,
-        "weight": 12
+        "weight": 15
       },
       {
         "type": "minecraft:witch",
         "minCount": 1,
         "maxCount": 1,
-        "weight": 6
+        "weight": 8
       },
       {
         "type": "minecraft:drowned",
         "minCount": 1,
         "maxCount": 2,
-        "weight": 8
-      },
-      {
-        "type": "minecraft:spider",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 6
-      },
-      {
-        "type": "minecraft:cave_spider",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 5
+        "weight": 10
       }
     ],
     "creature": [
@@ -79,8 +67,8 @@
     [
       "adastramekanized:paludis_ore_gold_simple",
       "adastramekanized:paludis_ore_coal_simple",
-      "adastramekanized:paludis_ore_iron_simple",
-      "adastramekanized:paludis_ore_copper_simple"
+      "adastramekanized:paludis_ore_copper_simple",
+      "adastramekanized:paludis_ore_lead_simple"
     ],
     [
       "minecraft:ore_infested"

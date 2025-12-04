@@ -55,9 +55,9 @@
     [
       "adastramekanized:glacio_ore_diamond_simple",
       "adastramekanized:glacio_ore_calorite_simple",
-      "adastramekanized:glacio_ore_iron_simple",
       "adastramekanized:glacio_ore_coal_simple",
-      "adastramekanized:glacio_ore_copper_simple"
+      "adastramekanized:glacio_ore_silver_simple",
+      "adastramekanized:glacio_ore_glacio_etrium_simple"
     ],
     [
       "minecraft:ore_infested"

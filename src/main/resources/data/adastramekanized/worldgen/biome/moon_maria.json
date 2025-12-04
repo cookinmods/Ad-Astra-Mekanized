@@ -1,6 +1,6 @@
 {
-  "temperature": -0.6,
-  "downfall": -0.8,
+  "temperature": -0.5,
+  "downfall": 0.0,
   "has_precipitation": false,
   "effects": {
     "fog_color": 657930,
@@ -9,7 +9,14 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [],
+    "monster": [
+      {
+        "type": "minecraft:silverfish",
+        "minCount": 32,
+        "maxCount": 64,
+        "weight": 1000
+      }
+    ],
     "creature": [],
     "ambient": [],
     "water_creature": [],
@@ -33,9 +40,10 @@
     [],
     [],
     [
-      "adastramekanized:moon_ore_platinum_simple",
       "adastramekanized:moon_ore_desh_simple",
       "adastramekanized:moon_ore_iron_simple",
+      "adastramekanized:moon_ore_silver_simple",
+      "adastramekanized:moon_ore_moon_etrium_simple",
       "adastramekanized:moon_ore_cheese_simple"
     ],
     [

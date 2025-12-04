@@ -305,6 +305,18 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy("has_oxygen_gear", has(ModItems.OXYGEN_GEAR.get()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "oxygen_distributor"));
 
+        // Gravity Normalizer - 10 items (uses argon/etrium for gravity manipulation theme)
+        NasaWorkbenchRecipeBuilder.builder(RecipeCategory.MISC, ModBlocks.GRAVITY_NORMALIZER.get(), 1)
+            .addIngredient(ModItems.ETRIONIC_CORE.get())
+            .addIngredient(ModItems.LARGE_GAS_TANK.get()).addIngredient(ModItems.OSTRUM_SHEET.get())
+            .addIngredient(ModItems.OSTRUM_SHEET.get())
+            .addIngredient(ModItems.LARGE_GAS_TANK.get()).addIngredient(ModItems.ETRIONIC_CAPACITOR.get())
+            .addIngredient(ModItems.OSTRUM_SHEET.get()).addIngredient(ModItems.FAN.get())
+            .addIngredient(ModItems.FAN.get())
+            .addIngredient(ModItems.FAN.get())
+            .unlockedBy("has_etrionic_capacitor", has(ModItems.ETRIONIC_CAPACITOR.get()))
+            .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "gravity_normalizer"));
+
         // ========== ROCKETS ==========
 
         // Tier 1 Rocket - Steel-based, basic lunar rocket (14 ingredient slots)

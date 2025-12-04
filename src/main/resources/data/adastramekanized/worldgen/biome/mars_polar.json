@@ -12,27 +12,15 @@
     "monster": [
       {
         "type": "minecraft:husk",
-        "minCount": 2,
-        "maxCount": 4,
-        "weight": 50
-      },
-      {
-        "type": "minecraft:spider",
         "minCount": 1,
-        "maxCount": 2,
-        "weight": 30
-      },
-      {
-        "type": "minecraft:phantom",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 10
+        "maxCount": 3,
+        "weight": 25
       },
       {
         "type": "minecraft:enderman",
         "minCount": 1,
         "maxCount": 1,
-        "weight": 15
+        "weight": 8
       }
     ],
     "creature": [],
@@ -58,11 +46,12 @@
     [],
     [],
     [
-      "adastramekanized:mars_ore_diamond_simple",
-      "adastramekanized:mars_ore_iron_simple",
+      "adastramekanized:mars_ore_desh_simple",
       "adastramekanized:mars_ore_copper_simple",
+      "adastramekanized:mars_ore_osmium_simple",
+      "adastramekanized:mars_ore_redstone_simple",
       "adastramekanized:mars_ore_ostrum_simple",
-      "adastramekanized:mars_ore_redstone_simple"
+      "adastramekanized:mars_ore_mars_etrium_simple"
     ],
     [
       "minecraft:ore_infested"

@@ -265,7 +265,7 @@ public class PlanetGenerationRunner {
     private static void applyMoonMobPreset(PlanetMaker.PlanetBuilder planet) {
         // Moon-specific mob spawning - matches the biome_modifier configuration
         planet.clearAllMobSpawns()  // Clear any default spawns
-              //.addMobSpawn("monster", "minecraft:silverfish", 1000, 32, 64)  // Silverfish swarms (from biome_modifier)
+              .addMobSpawn("monster", "minecraft:silverfish", 1000, 32, 64)  // Silverfish swarms (from biome_modifier)
 
                 //.addMowziesMob("naga", 5, 1, 2)     // Nagas near water
 
@@ -290,9 +290,8 @@ public class PlanetGenerationRunner {
      * Apply Mars mob preset
      */
     private static void applyMarsMobPreset(PlanetMaker.PlanetBuilder planet) {
-        // Hostile mobs for Mars - harsh environment
+        // Hostile mobs for Mars - harsh environment (no spiders in space)
         planet.addMobSpawn("monster", "minecraft:husk", 30, 2, 4)
-              .addMobSpawn("monster", "minecraft:spider", 20, 1, 2)
               .addMobSpawn("monster", "minecraft:phantom", 10, 1, 2)
               .addMobSpawn("monster", "minecraft:enderman", 5, 1, 1);
     }
@@ -345,16 +344,16 @@ public class PlanetGenerationRunner {
      * - .lavaTunnels(true) - Underground lava channels
      */
     private static void configurePlanets() {
-        // Moon planet - VANILLA-QUALITY TERRAIN with Moon blocks
-        // Uses FULL vanilla density function set (offset, factor, jaggedness splines) with coordinate shift
-        // This produces terrain with vanilla-quality spline-based terrain shaping, unique to Moon
+        // Moon planet - FLAT PLAINS-LIKE TERRAIN with Moon blocks
+        // Uses vanillaQualityFlat preset for gentle rolling hills, no mountains
+        // Caves remain enabled for underground exploration
         PlanetMaker.PlanetBuilder moon = registerPlanet("moon")
-            .vanillaQualityCratered()      // Use vanilla-quality cratered terrain preset
+            .vanillaQualityFlat()          // Flat terrain with gentle rolling hills
             .coordinateShift(5000, 5000)   // Shift coordinates for unique Moon terrain
             // Physical properties
             .gravity(0.166f)  // Moon has 1/6 Earth gravity
             .temperature(-173) // Lunar surface average temperature
-            // Surface blocks - this is all we need to customize!
+            // Surface blocks
             .surfaceBlock("adastramekanized:moon_sand")
             .subsurfaceBlock("adastramekanized:moon_stone")
             .singleLayerSurface(false)  // multi-layer surface
@@ -367,13 +366,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)  // Airless moon - no water
             .oreVeinsEnabled(true)
-            // Custom Moon biomes (vanilla climate parameters work with vanilla noise!)
+            // 3 Moon biomes - plains-like with low erosion/weirdness for flat terrain
+            // Removed crater biomes (moon_crater_rim, moon_crater_floor)
             .clearBiomes()
-            .addBiome("adastramekanized:moon_highlands", -0.8f, -0.9f, 0.4f, 0.2f, 0.0f, 0.1f, "Lunar Highlands")
-            .addBiome("adastramekanized:moon_maria", -0.6f, -0.8f, -0.2f, 0.3f, -0.5f, -0.1f, "Lunar Maria")
-            .addBiome("adastramekanized:moon_crater_rim", 0.2f, 0.4f, 0.6f, 0.8f, 0.5f, 0.7f, "Crater Rim")
-            .addBiome("adastramekanized:moon_crater_floor", -0.8f, -0.6f, -0.5f, -0.2f, -0.3f, 0.0f, "Crater Floor")
-            .addBiome("adastramekanized:moon_polar", -1.0f, -0.75f, 0.0f, 0.2f, 0.0f, 0.3f, "Polar Region")
+            .addBiome("adastramekanized:moon_highlands", -0.5f, 0.0f, -0.3f, 0.3f, -0.2f, 0.2f, "Lunar Highlands")
+            .addBiome("adastramekanized:moon_maria", -0.5f, 0.0f, -0.3f, 0.3f, -0.2f, 0.2f, "Lunar Maria")
+            .addBiome("adastramekanized:moon_polar", -1.0f, -0.5f, -0.3f, 0.3f, -0.2f, 0.2f, "Polar Region")
             // Visual properties
             .skyColor(0x0A0A0A)
             .fogColor(0x0A0A0A)
@@ -386,7 +384,7 @@ public class PlanetGenerationRunner {
             .addSun()
             .addVisiblePlanet(
                 net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("adastramekanized", "textures/celestial/earth.png"),
-                2.0f, 0x4169E1, 0.5f, 0.8f, true
+                0.25f, 0x4169E1, 0.5f, 0.8f, true
             )
             .starsVisibleDuringDay(true)
             .starCount(50000)
@@ -394,11 +392,12 @@ public class PlanetGenerationRunner {
             .cloudsEnabled(false)
             .rainEnabled(false)
             .snowEnabled(false)
-            // Moon ores - includes DESH for Tier 2 rocket progression (rates at 2/3)
-            .configureOre("iron", 20)       // common - lunar regolith deposits
-            .configureOre("desh", 4)        // PROGRESSION ORE - rare, needed for Tier 2 rocket
-            .configureOre("platinum", 2)    // rare - deep crater deposits
-            .configureOre("cheese", 8);     // Moon cheese ore - classic Ad Astra feature
+            // Moon ores - Plan B: silver-rich ice world
+            .configureOre("silver", 8)     // primary - IE ore, lunar silver deposits
+            .configureOre("iron", 10)       // tertiary - lunar regolith deposits
+            .configureOre("desh", 4)        // PROGRESSION ORE - needed for Tier 2 rocket
+            .configureOre("cheese", 4)      // Moon cheese ore - classic Ad Astra feature
+            .configureOre("moon_etrium", 2); // ENDGAME ORE - unchanged
 
         // Apply Moon mob preset
         applyMoonMobPreset(moon);
@@ -479,23 +478,20 @@ public class PlanetGenerationRunner {
             .surfaceBlock("adastramekanized:mars_sand")
             .subsurfaceBlock("adastramekanized:mars_stone")
             .singleLayerSurface(false)  // multi-layer surface
-            .deepBlock("adastramekanized:basalt")
+            .deepBlock("minecraft:basalt")
             .defaultBlock("adastramekanized:mars_stone")      // Replaces vanilla stone (above Y=0)
-            .deepslateBlock("adastramekanized:basalt")    // Replaces vanilla deepslate (below Y=0)
+            .deepslateBlock("minecraft:basalt")    // Replaces vanilla deepslate (below Y=0)
             .bedrockBlock("minecraft:bedrock")
             // World configuration
             .seaLevel(0)
             .disableMobGeneration(false)
             .aquifersEnabled(false)  // Dry desert planet - no water
             .oreVeinsEnabled(true)
-            // Mob spawning - Mars hostile environment
-            .addMobSpawn("monster", "minecraft:husk", 50, 2, 4)
-            .addMobSpawn("monster", "minecraft:spider", 30, 1, 2)
-            .addMobSpawn("monster", "minecraft:phantom", 10, 1, 2)
-            .addMobSpawn("monster", "minecraft:enderman", 15, 1, 1)
-            // MCDoom demons - Mars red planet
-            .addMCDoomDemon("cacodemon", 8, 1, 1)
-            .addMCDoomDemon("imp", 12, 1, 2)
+            // Mob spawning - Mars sparse hostile environment (reduced rates)
+            .addMobSpawn("monster", "minecraft:husk", 25, 1, 3)
+            .addMobSpawn("monster", "minecraft:enderman", 8, 1, 1)
+            // Born in Chaos undead - Mars harsh wasteland (reduced)
+            .addBornInChaosUndead(12)
             // Add custom biomes for Mars (vanilla climate parameters work with vanilla noise!)
             .clearBiomes()
             .addBiome("adastramekanized:mars_highlands", -0.2f, -0.7f, 0.6f, -0.1f, 0.5f, 0.0f, "Martian Highlands")
@@ -511,7 +507,7 @@ public class PlanetGenerationRunner {
             .addSun()
             .addMoon(
                 net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("adastramekanized", "textures/celestial/phobos.png"),
-                0.3f, 0xAA8866, 0.4f, 0.15f, true
+                0.3f, 0xAA8866, 0.4f, 1.15f, true
             )
             .addMoon(
                 net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("adastramekanized", "textures/celestial/deimos.png"),
@@ -523,12 +519,13 @@ public class PlanetGenerationRunner {
             .cloudsEnabled(false)
             .rainEnabled(false)
             .snowEnabled(false)
-            // Mars ores - includes OSTRUM for Tier 3 rocket progression (rates at 2/3)
-            .configureOre("iron", 23)       // common - iron oxide rich soil
-            .configureOre("copper", 19)     // common - volcanic deposits
-            .configureOre("ostrum", 3)      // PROGRESSION ORE - rare, needed for Tier 3 rocket
-            .configureOre("redstone", 8)    // uncommon - thermal energy
-            .configureOre("diamond", 2)     // rare - ancient impact sites
+            // Mars ores - Plan B: energy-rich desert world with Mekanism osmium
+            .configureOre("redstone", 25)   // primary - thermal energy from volcanic activity
+            .configureOre("copper", 20)     // secondary - volcanic deposits
+            .configureOre("osmium", 15)     // tertiary - Mekanism ore available early
+            .configureOre("ostrum", 5)      // PROGRESSION ORE - needed for Tier 3 rocket
+            .configureOre("desh", 3)        // rare - secondary desh source
+            .configureOre("mars_etrium", 2) // ENDGAME ORE - unchanged
             .generate();
 
         // ==================== SOLAR SYSTEM INNER PLANETS ====================
@@ -550,19 +547,17 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Venus ores - includes CALORITE for Tier 4 rocket progression (rates at 2/3)
-            .configureOre("copper", 20)    // common - sulfur-rich environment
-            .configureOre("coal", 19)      // common
-            .configureOre("calorite", 3)   // PROGRESSION ORE - rare, needed for Tier 4 rocket
-            .configureOre("iron", 10)      // uncommon
-            .configureOre("gold", 2)       // rare
-            // Sparse hostile mobs - too hostile for most life + MCDoom demons
+            // Venus ores - Plan B: toxic hellscape with lead, coal, and redstone
+            .configureOre("coal", 25)      // primary - sulfurous organic deposits
+            .configureOre("lead", 20)      // secondary - IE ore, heavy metal deposits
+            .configureOre("redstone", 15)  // tertiary - volcanic thermal energy
+            .configureOre("gold", 12)      // uncommon - volcanic precious metals
+            .configureOre("calorite", 4)   // PROGRESSION ORE - needed for Tier 4 rocket
+            .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
+            // Sparse hostile mobs - too hostile for most life (no nether creatures in space)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:magma_cube", 20, 1, 2)
-            .addMobSpawn("monster", "minecraft:blaze", 10, 1, 1)
-            // MCDoom demons - hot toxic hellscape
-            .addMCDoomDemon("imp", 15, 1, 3)
-            .addMCDoomDemon("lost_soul", 10, 1, 2)
+            // Born in Chaos undead - toxic hellscape survivors
+            .addBornInChaosUndead(25)
             // Reptilian survivors - sparse heat-adapted lizards
             .addReptilianCreature("gecko", 8, 1, 1)
             .allowPeacefulMobs(false)
@@ -599,12 +594,13 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Mercury ores - includes OSTRUM for Tier 3 rocket progression (rates at 2/3)
-            .configureOre("iron", 33)      // common - very metal-rich
-            .configureOre("copper", 28)    // common
-            .configureOre("ostrum", 3)     // PROGRESSION ORE - rare, needed for Tier 3 rocket
-            .configureOre("nickel", 15)    // uncommon
-            .configureOre("platinum", 5)   // rare
+            // Mercury ores - Plan B: IE metal-rich scorched world + redstone
+            .configureOre("nickel", 25)    // primary - IE ore, metal-dense core
+            .configureOre("iron", 20)      // secondary - iron-rich regolith
+            .configureOre("redstone", 15)  // tertiary - thermal energy from sun proximity
+            .configureOre("silver", 12)    // uncommon - IE ore, precious metal deposits
+            .configureOre("ostrum", 4)     // PROGRESSION ORE - needed for Tier 3 rocket
+            .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             // Sparse parasitic mobs + cave-dwelling kobolds
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:silverfish", 30, 2, 4)
@@ -650,11 +646,13 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 3-4 ores: sparse but includes precious gems beneath ice (rates at 2/3)
-            .configureOre("iron", 27)      // common - basic metal
-            .configureOre("copper", 23)    // common
-            .configureOre("lapis", 12)     // uncommon - blue gem in blue ice
-            .configureOre("diamond", 5)    // rare
+            // Europa ores - Plan B: ice moon with silver and gems + iron
+            .configureOre("lapis", 25)     // primary - blue gems in blue ice
+            .configureOre("silver", 20)    // secondary - IE ore, frozen deposits
+            .configureOre("iron", 15)      // tertiary - rocky core deposits
+            .configureOre("copper", 12)    // uncommon - subsurface metal
+            .configureOre("diamond", 6)    // rare - preserved in ice
+            .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             // Very sparse aquatic-themed mobs
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:drowned", 15, 1, 2)
@@ -699,20 +697,17 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 3-4 ores: volcanic - rich in redstone and gold (rates at 2/3)
-            .configureOre("redstone", 33)  // common - sulfur-rich volcanic
-            .configureOre("gold", 27)      // common - volcanic deposits
-            .configureOre("iron", 15)      // uncommon
-            .configureOre("diamond", 6)    // rare
-            // Nether-type mobs thrive here + MCDoom demons
+            // Io ores - Plan B: volcanic moon with gold and nickel
+            .configureOre("gold", 25)      // primary - volcanic gold deposits
+            .configureOre("redstone", 20)  // secondary - thermal energy
+            .configureOre("nickel", 15)    // tertiary - IE ore, volcanic metal
+            .configureOre("diamond", 5)    // rare - forged in heat
+            // MCDoom demons ONLY - volcanic hellscape (no other mobs to avoid infighting)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:magma_cube", 50, 2, 4)
-            .addMobSpawn("monster", "minecraft:blaze", 30, 1, 2)
-            .addMobSpawn("monster", "minecraft:zombified_piglin", 20, 2, 4)
-            .addMobSpawn("creature", "minecraft:strider", 40, 1, 2)
-            // MCDoom demons - volcanic hellscape
-            .addMCDoomDemon("imp", 15, 1, 3)
-            .addMCDoomDemon("lost_soul", 10, 1, 2)
+            .addMCDoomDemon("imp", 40, 2, 4)
+            .addMCDoomDemon("lost_soul", 30, 1, 3)
+            .addMCDoomDemon("cacodemon", 15, 1, 1)
+            .addMCDoomDemon("pinky", 10, 1, 2)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:basalt_deltas", 1.0f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, "Io Volcanic Fields")
@@ -751,15 +746,14 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)  // Airless moon - no water
             .oreVeinsEnabled(true)
-            // 3-4 ores: balanced rocky moon (rates at 2/3)
-            .configureOre("iron", 28)      // common
-            .configureOre("copper", 24)    // common
-            .configureOre("gold", 12)      // uncommon
-            .configureOre("diamond", 4)    // rare
-            // Moderate mob spawning
+            // Ganymede ores - Plan B: Mekanism osmium hub
+            .configureOre("osmium", 25)    // primary - Mekanism ore, major source
+            .configureOre("iron", 20)      // secondary - rocky moon deposits
+            .configureOre("copper", 15)    // tertiary - basic metal
+            .configureOre("diamond", 5)    // rare - deep deposits
+            // Moderate mob spawning (no spiders in space)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:skeleton", 20, 1, 2)
-            .addMobSpawn("monster", "minecraft:spider", 15, 1, 2)
+            .addMobSpawn("monster", "minecraft:skeleton", 25, 1, 2)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:plains", -0.5f, 0.0f, 0.2f, 0.0f, 0.0f, 0.0f, "Ganymedean Plains")
@@ -793,11 +787,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 3-4 ores: ancient cratered moon with heavy metals (rates at 2/3)
-            .configureOre("iron", 28)      // common
-            .configureOre("lead", 24)      // common - heavy ancient deposits
-            .configureOre("gold", 22)      // uncommon
-            .configureOre("diamond", 5)    // rare
+            // Callisto ores - Plan B: IE lead-rich ancient moon + iron
+            .configureOre("lead", 25)      // primary - IE ore, ancient heavy deposits
+            .configureOre("nickel", 20)    // secondary - IE ore, metallic core
+            .configureOre("iron", 15)      // tertiary - rocky moon core
+            .configureOre("gold", 12)      // uncommon - precious metal seams
+            .configureOre("diamond", 5)    // rare - impact diamonds
             // Very sparse mobs + underground kobolds
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:endermite", 10, 1, 1)
@@ -839,11 +834,13 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 3-4 ores: hydrocarbon-rich moon (rates at 2/3)
-            .configureOre("coal", 33)      // common - hydrocarbon rich
-            .configureOre("iron", 27)      // common
-            .configureOre("copper", 22)    // uncommon
-            .configureOre("gold", 5)       // rare
+            // Titan ores - Plan B: hydrocarbon moon with osmium, lead, and redstone
+            .configureOre("coal", 25)      // primary - hydrocarbon deposits
+            .configureOre("lead", 18)      // secondary - IE ore, organic sediment metals
+            .configureOre("osmium", 15)    // tertiary - Mekanism ore source
+            .configureOre("redstone", 12)  // uncommon - chemical energy from hydrocarbons
+            .configureOre("calorite", 3)   // rare - Tier 4 progression ore
+            .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             // Alien-themed mobs
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:slime", 30, 2, 4)
@@ -883,9 +880,9 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)  // Airless icy moon - no liquid water
             .oreVeinsEnabled(true)
-            // 3 ores: sparse icy moon (rates at 2/3)
-            .configureOre("iron", 27)      // common
-            .configureOre("copper", 22)    // common
+            // Enceladus ores - Plan B: silver-rich geyser moon
+            .configureOre("silver", 25)    // primary - IE ore, geyser deposits
+            .configureOre("copper", 20)    // secondary - frozen metal seams
             .configureOre("diamond", 6)    // rare - pristine ice preserves gems
             // Almost no mobs
             .clearAllMobSpawns()
@@ -925,10 +922,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 3 ores: frozen outer moon (rates at 2/3)
-            .configureOre("iron", 27)      // common
-            .configureOre("copper", 22)    // common
-            .configureOre("diamond", 6)    // rare
+            // Triton ores - Plan B: frozen nitrogen world with silver, iron, and ostrum
+            .configureOre("silver", 25)    // primary - IE ore, frozen nitrogen deposits
+            .configureOre("iron", 15)      // secondary - rocky core deposits
+            .configureOre("copper", 12)    // tertiary - frozen metal seams
+            .configureOre("diamond", 6)    // rare - pristine ancient deposits
+            .configureOre("ostrum", 3)     // rare - Tier 3 progression ore
             // Almost lifeless
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:phantom", 5, 1, 1)
@@ -967,11 +966,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 4 ores: metal-rich asteroid - the mining destination (rates at 2/3)
-            .configureOre("iron", 33)      // common - very metal rich
-            .configureOre("osmium", 28)    // common - rare elsewhere
-            .configureOre("nickel", 17)    // uncommon
-            .configureOre("platinum", 6)   // rare
+            // Ceres ores - Plan B: THE mining hub for Mekanism osmium
+            .configureOre("osmium", 25)    // primary - Mekanism ore, major source
+            .configureOre("nickel", 20)    // secondary - IE ore, asteroid metals
+            .configureOre("iron", 15)      // tertiary - basic asteroid metal
+            .configureOre("silver", 8)     // rare - IE ore, precious deposits
+            .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             // Minimal life + asteroid cave kobolds
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:silverfish", 20, 2, 4)
@@ -1010,10 +1010,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 3 ores: frozen dwarf planet (rates at 2/3)
-            .configureOre("iron", 27)      // common
-            .configureOre("gold", 22)      // common - ancient deposits
-            .configureOre("diamond", 6)    // rare
+            // Pluto ores - Plan B: frozen dwarf planet with gold, silver, and iron
+            .configureOre("gold", 25)      // primary - ancient precious deposits
+            .configureOre("silver", 20)    // secondary - IE ore, frozen silver veins
+            .configureOre("iron", 12)      // tertiary - rocky core deposits
+            .configureOre("diamond", 6)    // rare - preserved in eternal ice
+            .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             // Very sparse
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:phantom", 3, 1, 1)
@@ -1050,9 +1052,10 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 3 ores: distant dark dwarf planet (rates at 2/3)
-            .configureOre("iron", 27)      // common
-            .configureOre("copper", 22)    // common
+            // Eris ores - Plan B: distant dark dwarf planet with lead and iron
+            .configureOre("lead", 25)      // primary - IE ore, heavy ancient deposits
+            .configureOre("copper", 20)    // secondary - frozen metal seams
+            .configureOre("iron", 15)      // tertiary - rocky core deposits
             .configureOre("diamond", 6)    // rare - pristine ancient deposits
             // Almost no life
             .clearAllMobSpawns()
@@ -1092,11 +1095,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 4 ores: ocean world with aquatic resources (rates at 2/3)
-            .configureOre("iron", 28)      // common
-            .configureOre("copper", 27)    // common
-            .configureOre("lapis", 15)     // uncommon - ocean gems
-            .configureOre("diamond", 5)    // rare
+            // Kepler22b ores - Plan B: ocean world with osmium for colony tech
+            .configureOre("lapis", 25)     // primary - ocean blue gems
+            .configureOre("osmium", 20)    // secondary - Mekanism ore, colony technology
+            .configureOre("copper", 15)    // tertiary - underwater deposits
+            .configureOre("diamond", 5)    // rare - deep ocean floor
+            .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             // Reduced mob spawns for performance
             .clearAllMobSpawns()
             .addMobSpawn("creature", "minecraft:dolphin", 8, 1, 2)
@@ -1105,6 +1109,8 @@ public class PlanetGenerationRunner {
             .addMobSpawn("creature", "minecraft:salmon", 8, 2, 3)
             .addMobSpawn("creature", "minecraft:tropical_fish", 12, 2, 4)
             .addMobSpawn("monster", "minecraft:drowned", 5, 1, 1)
+            // Born in Chaos aquatic undead - deep ocean horrors
+            .addBornInChaosAquatic(15)
             .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:beach", 0.5f, 0.7f, 0.0f, 0.0f, 0.0f, 0.0f, "Kepler Island Shores")
@@ -1113,12 +1119,13 @@ public class PlanetGenerationRunner {
             .fogColor(0x9ED2FF)
             .hasAtmosphere(true)
             .breathableAtmosphere(true)
-            .ambientLight(0.9f)
+            .ambientLight(0.0f)  // Must be low for night-time mob spawning (vanilla Overworld = 0.0)
             .cloudsEnabled(true)
             .rainEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("balanced_vanilla")
+            .enableBornInChaosStructures()   // Enable Born in Chaos structures
             // Enable ocean WhenDungeonsArise structures (lighthouses, fishing huts, illager ships)
             .enableDungeonsAriseStructures("ocean")
             // Enable Seven Seas underwater structures (shipwrecks, pirate ships, sea forts)
@@ -1142,11 +1149,11 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 4 ores: lush forest world (rates at 2/3)
-            .configureOre("coal", 33)      // common - organic rich
-            .configureOre("iron", 28)      // common
-            .configureOre("copper", 15)    // uncommon
-            .configureOre("emerald", 5)    // rare - forest gems
+            // Kepler442b ores - Plan B: forest world with emerald and osmium
+            .configureOre("emerald", 25)   // primary - forest gem deposits
+            .configureOre("coal", 20)      // secondary - organic-rich soils
+            .configureOre("osmium", 15)    // tertiary - Mekanism ore, colony tech
+            .configureOre("copper", 12)    // rare - forest floor deposits
             // Forest life (reduced for performance)
             .clearAllMobSpawns()
             .addMobSpawn("creature", "minecraft:cow", 8, 2, 3)
@@ -1158,8 +1165,7 @@ public class PlanetGenerationRunner {
             .addMobSpawn("creature", "minecraft:wolf", 3, 1, 2)
             .addMobSpawn("monster", "minecraft:zombie", 8, 1, 2)
             .addMobSpawn("monster", "minecraft:skeleton", 8, 1, 2)
-            .addMobSpawn("monster", "minecraft:spider", 5, 1, 1)
-            .addMobSpawn("monster", "minecraft:creeper", 4, 1, 1)
+            .addMobSpawn("monster", "minecraft:creeper", 6, 1, 1)
             .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:forest", 0.5f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f, "Kepler Woodlands")
@@ -1169,7 +1175,7 @@ public class PlanetGenerationRunner {
             .fogColor(0xC0E0C0)
             .hasAtmosphere(true)
             .breathableAtmosphere(true)
-            .ambientLight(0.85f)
+            .ambientLight(0.0f)  // Must be low for night-time mob spawning (vanilla Overworld = 0.0)
             .cloudsEnabled(true)
             .rainEnabled(true)
             .starsVisibleDuringDay(false)
@@ -1196,16 +1202,15 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 4 ores: tidally locked world with thermal activity (rates at 2/3)
-            .configureOre("redstone", 33)  // common - thermal energy
-            .configureOre("copper", 28)    // common
-            .configureOre("gold", 15)      // uncommon
-            .configureOre("diamond", 5)    // rare
-            // Sparse but adapted life
+            // Proxima B ores - Plan B: tidally locked with lead and redstone
+            .configureOre("redstone", 25)  // primary - thermal energy from tidal forces
+            .configureOre("lead", 20)      // secondary - IE ore, heavy metal deposits
+            .configureOre("copper", 15)    // tertiary - twilight zone deposits
+            .configureOre("gold", 10)      // rare - precious metal seams
+            // Sparse but adapted life (no spiders in space)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:husk", 25, 2, 3)
-            .addMobSpawn("monster", "minecraft:cave_spider", 20, 1, 3)
-            .addMobSpawn("creature", "minecraft:rabbit", 15, 2, 3)
+            .addMobSpawn("monster", "minecraft:husk", 30, 2, 3)
+            .addMobSpawn("creature", "minecraft:rabbit", 18, 2, 3)
             .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:badlands", 0.8f, -0.7f, 0.3f, 0.0f, 0.0f, 0.0f, "Proxima Twilight Zone")
@@ -1240,11 +1245,11 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 4 ores: red dwarf system, unique resources (rates at 2/3)
-            .configureOre("iron", 28)      // common
-            .configureOre("coal", 27)      // common - dense organic life
-            .configureOre("lapis", 15)     // uncommon
-            .configureOre("diamond", 5)    // rare
+            // Trappist1E ores - Plan B: red dwarf world with lapis and osmium
+            .configureOre("lapis", 25)     // primary - unique crystalline formations
+            .configureOre("coal", 20)      // secondary - dense organic life
+            .configureOre("osmium", 15)    // tertiary - Mekanism ore, colony tech
+            .configureOre("diamond", 5)    // rare - deep geological deposits
             // Lush life (reduced for performance)
             .clearAllMobSpawns()
             .addMobSpawn("creature", "minecraft:cow", 10, 2, 3)
@@ -1290,18 +1295,20 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 4 ores: super-Earth with rich mountain deposits (rates at 2/3)
-            .configureOre("iron", 33)      // common - super-Earth core
-            .configureOre("gold", 27)      // common - rich in precious metals
-            .configureOre("emerald", 17)   // uncommon - mountain gems
-            .configureOre("diamond", 6)    // rare
+            // Gliese667C ores - Plan B: super-Earth with emerald, osmium, and redstone
+            .configureOre("emerald", 25)   // primary - mountain gem deposits
+            .configureOre("osmium", 20)    // secondary - Mekanism ore, super-Earth core
+            .configureOre("redstone", 15)  // tertiary - active tectonic energy
+            .configureOre("gold", 12)      // uncommon - precious mountain veins
+            .configureOre("diamond", 6)    // rare - deep mountain deposits
             // Mountain-adapted life (reduced for performance)
             .clearAllMobSpawns()
             .addMobSpawn("creature", "minecraft:goat", 12, 2, 3)
             .addMobSpawn("creature", "minecraft:llama", 8, 1, 2)
             .addMobSpawn("creature", "minecraft:sheep", 8, 1, 2)
-            .addMobSpawn("monster", "minecraft:skeleton", 8, 1, 2)
-            .addMobSpawn("monster", "minecraft:spider", 5, 1, 1)
+            .addMobSpawn("monster", "minecraft:skeleton", 10, 1, 2)
+            // Born in Chaos bosses - advanced difficulty world
+            .addBornInChaosBosses(10)
             .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:windswept_hills", 0.3f, 0.3f, 0.5f, 0.0f, 0.0f, 0.0f, "Gliese Highlands")
@@ -1317,6 +1324,7 @@ public class PlanetGenerationRunner {
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("balanced_vanilla")
+            .enableBornInChaosStructures()   // Enable Born in Chaos structures (Dark Tower, etc.)
             // Enable mountain WhenDungeonsArise structures (keep kayra, foundry, mechanical nest)
             .enableDungeonsAriseStructures("mountain")
             .generate();
@@ -1341,21 +1349,15 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 4 ores: volcanic with precious metals (rates at 2/3)
-            .configureOre("gold", 33)      // common - volcanic gold
-            .configureOre("redstone", 28)  // common - thermal energy
-            .configureOre("iron", 15)      // uncommon
-            .configureOre("diamond", 6)    // rare - forged in extreme heat
-            // Nether-type mobs + MCDoom demons
+            // Pyrios ores - Plan B: volcanic hellscape with gold and nickel
+            .configureOre("gold", 25)      // primary - volcanic gold deposits
+            .configureOre("nickel", 20)    // secondary - IE ore, molten metal seams
+            .configureOre("redstone", 15)  // tertiary - thermal energy
+            .configureOre("calorite", 3)   // rare - Tier 4 progression ore
+            // Keep only ghasts and striders (no blazes/magma cubes/wither skeletons in space)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:magma_cube", 15, 1, 2)
-            .addMobSpawn("monster", "minecraft:blaze", 10, 1, 2)
-            .addMobSpawn("monster", "minecraft:wither_skeleton", 6, 1, 1)
-            .addMobSpawn("monster", "minecraft:ghast", 3, 1, 1)
-            .addMobSpawn("creature", "minecraft:strider", 12, 1, 2)
-            // MCDoom demons - volcanic nether-like world
-            .addMCDoomDemon("imp", 15, 1, 3)
-            .addMCDoomDemon("lost_soul", 10, 1, 2)
+            .addMobSpawn("monster", "minecraft:ghast", 8, 1, 1)
+            .addMobSpawn("creature", "minecraft:strider", 15, 1, 2)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:basalt_deltas", 1.0f, -0.8f, 0.4f, 0.0f, 0.0f, 0.0f, "Pyrios Lava Fields")
@@ -1390,16 +1392,18 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 4 ores: frozen world with hidden deposits (rates at 2/3)
-            .configureOre("iron", 28)      // common
-            .configureOre("coal", 27)      // common - ancient organic matter
-            .configureOre("copper", 12)    // uncommon
-            .configureOre("diamond", 5)    // rare
+            // Frigidum ores - Plan B: frozen wasteland with silver
+            .configureOre("silver", 25)    // primary - IE ore, frozen precious deposits
+            .configureOre("coal", 20)      // secondary - ancient organic matter
+            .configureOre("copper", 15)    // tertiary - frozen metal seams
+            .configureOre("diamond", 5)    // rare - preserved in ice
             // Sparse but dangerous ice creatures
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:stray", 30, 2, 3)
             .addMobSpawn("creature", "minecraft:polar_bear", 15, 1, 2)
             .addMobSpawn("monster", "minecraft:skeleton", 20, 1, 2)
+            // Born in Chaos creatures - frozen wasteland predators
+            .addBornInChaosCreatures(18)
             .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, "Frigidum Ice Fields")
@@ -1415,6 +1419,7 @@ public class PlanetGenerationRunner {
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("frozen")
+            .enableBornInChaosStructures()   // Enable Born in Chaos structures
             // Enable snowy WhenDungeonsArise structures
             .enableDungeonsAriseStructures("snowy")
             .generate();
@@ -1436,15 +1441,16 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 4 ores: desert world with buried minerals (rates at 2/3)
-            .configureOre("copper", 33)    // common - desert deposits
-            .configureOre("iron", 27)      // common
-            .configureOre("gold", 12)      // uncommon - buried treasure
-            .configureOre("diamond", 4)    // rare
-            // Desert creatures + Reptilian mobs
+            // Arenos ores - Plan B: twin-sun desert with copper, iron, and redstone
+            .configureOre("copper", 25)    // primary - desert metal deposits
+            .configureOre("lead", 18)      // secondary - IE ore, buried heavy metals
+            .configureOre("iron", 15)      // tertiary - rocky deposits
+            .configureOre("redstone", 12)  // uncommon - thermal energy from twin suns
+            .configureOre("gold", 10)      // rare - ancient buried treasure
+            .configureOre("diamond", 4)    // rare - deep desert veins
+            // Desert creatures + Reptilian mobs (no spiders in space)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:husk", 35, 2, 4)
-            .addMobSpawn("monster", "minecraft:spider", 20, 1, 2)
+            .addMobSpawn("monster", "minecraft:husk", 40, 2, 4)
             .addMobSpawn("creature", "minecraft:rabbit", 15, 2, 3)
             // Reptilian mod - desert lizards thrive here
             .addReptilianCreature("gecko", 12, 1, 2)
@@ -1485,23 +1491,23 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 4 ores: swamp world with organic deposits (rates at 2/3)
-            .configureOre("coal", 33)      // common - organic matter
-            .configureOre("iron", 27)      // common
-            .configureOre("copper", 15)    // uncommon
-            .configureOre("gold", 5)       // rare - silt deposits
-            // Swamp creatures + Ribbits frog civilization
+            // Paludis ores - Plan B: swamp world with organic deposits and buried heavy metals
+            .configureOre("coal", 25)      // primary - organic matter from swamp
+            .configureOre("gold", 20)      // secondary - ancient silt deposits
+            .configureOre("lead", 15)      // tertiary - IE ore, heavy metals in mud
+            .configureOre("copper", 10)    // rare - oxidized deposits
+            // Swamp creatures + Ribbits frog civilization (no spiders in space)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:slime", 12, 1, 2)
-            .addMobSpawn("monster", "minecraft:witch", 6, 1, 1)
-            .addMobSpawn("monster", "minecraft:drowned", 8, 1, 2)
-            .addMobSpawn("monster", "minecraft:spider", 6, 1, 1)
-            .addMobSpawn("monster", "minecraft:cave_spider", 5, 1, 1)
+            .addMobSpawn("monster", "minecraft:slime", 15, 1, 2)
+            .addMobSpawn("monster", "minecraft:witch", 8, 1, 1)
+            .addMobSpawn("monster", "minecraft:drowned", 10, 1, 2)
             .addMobSpawn("creature", "minecraft:frog", 10, 2, 3)
             .addMobSpawn("creature", "minecraft:axolotl", 6, 1, 2)
             // Ribbits frog civilization - main inhabitants of the swamp world
             // Note: Ribbits mod only has one entity type "ribbits:ribbit" with professions assigned randomly
             .addMobSpawn("creature", "ribbits:ribbit", 50, 2, 5)
+            // Born in Chaos aquatic undead - murky swamp horrors
+            .addBornInChaosAquatic(18)
             .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:swamp", 0.8f, 0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Paludis Swamps")
@@ -1516,6 +1522,7 @@ public class PlanetGenerationRunner {
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("dramatic_alien")
+            .enableBornInChaosStructures()   // Enable Born in Chaos structures
             // Enable Ribbits structures (villages, temples, etc.) for this swamp world
             .enableRibbitsStructures()
             // Enable swamp WhenDungeonsArise structures
@@ -1540,20 +1547,19 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 4 ores: bioluminescent world with unique gems (rates at 2/3)
-            .configureOre("lapis", 33)     // common - bioluminescent crystals
-            .configureOre("emerald", 28)   // common - alien gems
-            .configureOre("gold", 15)      // uncommon
-            .configureOre("diamond", 6)    // rare
-            // Alien life (reduced for performance)
+            // Luxoria ores - Plan B: bioluminescent jungle with unique gems
+            .configureOre("emerald", 25)   // primary - alien gem formations
+            .configureOre("lapis", 20)     // secondary - bioluminescent crystals
+            .configureOre("gold", 15)      // tertiary - jungle treasure
+            .configureOre("diamond", 6)    // rare - deep gem veins
+            // Alien life (no spiders in space)
             .clearAllMobSpawns()
-            .addMobSpawn("creature", "minecraft:glow_squid", 10, 1, 2)
-            .addMobSpawn("creature", "minecraft:axolotl", 10, 1, 2)
-            .addMobSpawn("creature", "minecraft:parrot", 8, 1, 2)
-            .addMobSpawn("creature", "minecraft:ocelot", 5, 1, 1)
-            .addMobSpawn("monster", "minecraft:spider", 8, 1, 2)
-            .addMobSpawn("monster", "minecraft:cave_spider", 6, 1, 1)
-            .addMobSpawn("monster", "minecraft:phantom", 4, 1, 1)
+            .addMobSpawn("creature", "minecraft:glow_squid", 12, 1, 2)
+            .addMobSpawn("creature", "minecraft:axolotl", 12, 1, 2)
+            .addMobSpawn("creature", "minecraft:parrot", 10, 1, 2)
+            .addMobSpawn("creature", "minecraft:ocelot", 6, 1, 1)
+            .addMobSpawn("monster", "minecraft:phantom", 6, 1, 1)
+            .addBornInChaosSpirits(18)     // Born in Chaos spirits - mystical bioluminescent jungle
             .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:jungle", 0.9f, 0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Luxoria Rainforest")
@@ -1568,6 +1574,7 @@ public class PlanetGenerationRunner {
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("dramatic_alien")
+            .enableBornInChaosStructures()   // Enable Born in Chaos structures
             // Enable jungle WhenDungeonsArise structures (jungle tree houses, infested temples)
             .enableDungeonsAriseStructures("jungle")
             .generate();
@@ -1591,12 +1598,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // Glacio ores - includes CALORITE for Tier 4 rocket progression (rates at 2/3)
-            .configureOre("iron", 28)      // common
-            .configureOre("coal", 27)      // common - ancient organics
-            .configureOre("calorite", 2)   // PROGRESSION ORE - rare, needed for Tier 4 rocket
-            .configureOre("copper", 15)    // uncommon
-            .configureOre("diamond", 6)    // rare - ice preserves gems
+            // Glacio ores - Plan B: icy world with silver and calorite
+            .configureOre("coal", 25)      // primary - ancient frozen organics
+            .configureOre("silver", 20)    // secondary - IE ore, frozen metal deposits
+            .configureOre("calorite", 3)   // PROGRESSION ORE - needed for Tier 4 rocket
+            .configureOre("diamond", 6)    // rare - ice preserves gem veins
+            .configureOre("glacio_etrium", 2) // ENDGAME ORE - unchanged
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:stray", 30, 2, 3)
             .addMobSpawn("creature", "minecraft:polar_bear", 20, 1, 2)
@@ -1639,18 +1646,17 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // 4 ores: volcanic with rich mineral deposits (rates at 2/3)
-            .configureOre("iron", 33)      // common
-            .configureOre("redstone", 28)  // common - thermal energy
-            .configureOre("gold", 15)      // uncommon
-            .configureOre("diamond", 6)    // rare
+            // Vulcan ores - Plan B: volcanic world with thermal energy ores
+            .configureOre("redstone", 25)  // primary - thermal energy from volcanic activity
+            .configureOre("nickel", 20)    // secondary - IE ore, volcanic metal deposits
+            .configureOre("gold", 15)      // tertiary - volcanic treasure
+            .configureOre("diamond", 6)    // rare - pressure-formed gems
+            // MCDoom demons ONLY - volcanic rocky world (no other mobs to avoid infighting)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:magma_cube", 40, 2, 4)
-            .addMobSpawn("monster", "minecraft:zombified_piglin", 25, 2, 3)
-            .addMobSpawn("creature", "minecraft:strider", 30, 1, 2)
-            // MCDoom demons - volcanic rocky world
-            .addMCDoomDemon("imp", 15, 1, 3)
-            .addMCDoomDemon("lost_soul", 10, 1, 2)
+            .addMCDoomDemon("imp", 35, 2, 4)
+            .addMCDoomDemon("lost_soul", 25, 1, 3)
+            .addMCDoomDemon("cacodemon", 12, 1, 1)
+            .addMCDoomDemon("pinky", 8, 1, 2)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:basalt_deltas", 0.8f, -0.6f, 0.3f, 0.0f, 0.0f, 0.0f, "Vulcan Lava Fields")
@@ -1672,32 +1678,34 @@ public class PlanetGenerationRunner {
             .coordinateShift(90000, 90000)
             .gravity(0.95f)
             .temperature(18) // Earth-like colony world
-            .surfaceBlock("minecraft:grass_block")
+            .surfaceBlock("minecraft:mycelium")
             .subsurfaceBlock("minecraft:dirt")
             .singleLayerSurface(true)  // grass_block = single layer
             .deepBlock("minecraft:basalt")
-            .defaultBlock("minecraft:stone")
+            .defaultBlock("minecraft:end_stone")
             .bedrockBlock("minecraft:bedrock")
             .seaLevel(63)
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 4 ores: balanced Earth-like colony world (rates at 2/3)
-            .configureOre("iron", 33)      // common
-            .configureOre("coal", 28)      // common
-            .configureOre("copper", 15)    // uncommon
-            .configureOre("emerald", 5)    // rare
-            // Earth-like life
+            // Terra Nova ores - Plan B: colony world with Mekanism osmium
+            .configureOre("coal", 25)      // primary - organic deposits
+            .configureOre("osmium", 20)    // secondary - Mekanism ore, alien geology
+            .configureOre("emerald", 15)   // tertiary - terraformed gem deposits
+            .configureOre("copper", 10)    // rare - oxidized veins
+            // Earth-like life (no spiders in space)
             .clearAllMobSpawns()
             .addMobSpawn("creature", "minecraft:cow", 25, 2, 4)
             .addMobSpawn("creature", "minecraft:pig", 25, 2, 4)
             .addMobSpawn("creature", "minecraft:sheep", 25, 2, 4)
             .addMobSpawn("creature", "minecraft:chicken", 30, 3, 5)
             .addMobSpawn("creature", "minecraft:horse", 10, 2, 4)
-            .addMobSpawn("monster", "minecraft:zombie", 18, 2, 3)
-            .addMobSpawn("monster", "minecraft:skeleton", 18, 2, 3)
-            .addMobSpawn("monster", "minecraft:spider", 15, 1, 2)
-            .addMobSpawn("monster", "minecraft:creeper", 10, 1, 1)
+            .addMobSpawn("monster", "minecraft:zombie", 20, 2, 3)
+            .addMobSpawn("monster", "minecraft:skeleton", 20, 2, 3)
+            .addMobSpawn("monster", "minecraft:creeper", 12, 1, 1)
+            // Born in Chaos creatures - strange colony world with twisted wildlife
+            .addBornInChaosCreatures(18)  // Hounds, crabs - year-round spawns
+            .addBornInChaosClowns(12)     // Zombie clowns spawn year-round
             .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:plains", 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, "Terra Nova Plains")
@@ -1707,12 +1715,13 @@ public class PlanetGenerationRunner {
             .fogColor(0xB0C4DE)
             .hasAtmosphere(true)
             .breathableAtmosphere(true)
-            .ambientLight(0.85f)
+            .ambientLight(0.0f)  // Must be low for night-time mob spawning (vanilla Overworld = 0.0)
             .cloudsEnabled(true)
             .rainEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("balanced_vanilla")
+            .enableBornInChaosStructures()   // Enable Born in Chaos structures (Clown Caravan, etc.)
             // Enable plains and forest WhenDungeonsArise structures (bandit villages, campsites, etc.)
             .enableDungeonsAriseStructures("plains", "forest")
             .generate();
@@ -1737,20 +1746,21 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // 4 ores: lush jungle world (rates at 2/3)
-            .configureOre("iron", 28)      // common
-            .configureOre("coal", 27)      // common - organic matter
-            .configureOre("copper", 15)    // uncommon
-            .configureOre("emerald", 6)    // rare - jungle temple treasure
-            // Mowzie's Mobs jungle creatures
+            // Primordium ores - Plan B: ancient jungle with buried heavy metals
+            .configureOre("coal", 25)      // primary - organic jungle matter
+            .configureOre("lead", 20)      // secondary - IE ore, ancient buried metals
+            .configureOre("emerald", 15)   // tertiary - jungle temple treasure
+            .configureOre("copper", 12)    // rare - oxidized jungle deposits
+            // Mowzie's Mobs jungle creatures (no spiders in space)
             .clearAllMobSpawns()
             .addMowziesMobsPreset("jungle")
-            .addMobSpawn("monster", "minecraft:spider", 20, 1, 2)
-            .addMobSpawn("creature", "minecraft:parrot", 15, 2, 3)
-            .addMobSpawn("creature", "minecraft:ocelot", 10, 1, 2)
+            .addMobSpawn("creature", "minecraft:parrot", 18, 2, 3)
+            .addMobSpawn("creature", "minecraft:ocelot", 12, 1, 2)
             // Boss-tier mobs (very rare)
             .addMowziesMob("ferrous_wroughtnaut", 2, 1, 1)
             .addMowziesMob("naga", 5, 1, 1)
+            // Born in Chaos creatures - dense jungle infested
+            .addBornInChaosCreatures(22)
             .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:jungle", 0.95f, 0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Primordium Jungle")
@@ -1766,6 +1776,7 @@ public class PlanetGenerationRunner {
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("lush")
+            .enableBornInChaosStructures()   // Enable Born in Chaos structures
             // Enable jungle WhenDungeonsArise structures (jungle tree houses, infested temples)
             .enableDungeonsAriseStructures("jungle")
             .generate();
@@ -1787,11 +1798,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)  // Dry savanna
             .oreVeinsEnabled(true)
-            // 4 ores: savanna world (rates at 2/3)
-            .configureOre("iron", 28)      // common
-            .configureOre("copper", 27)    // common
-            .configureOre("gold", 12)      // uncommon - tribal treasure
-            .configureOre("diamond", 5)    // rare
+            // Bellator ores - Plan B: warrior savanna with copper, iron, and tribal gold
+            .configureOre("copper", 25)    // primary - savanna metal deposits
+            .configureOre("gold", 20)      // secondary - tribal treasure hoards
+            .configureOre("iron", 15)      // tertiary - tribal metalworking
+            .configureOre("lead", 12)      // uncommon - IE ore, heavy metal veins
+            .configureOre("diamond", 5)    // rare - deep savanna gems
             // Mowzie's Mobs Umvuthana civilization
             .clearAllMobSpawns()
             .addMowziesMobsPreset("savanna")
@@ -1800,6 +1812,8 @@ public class PlanetGenerationRunner {
             .addMobSpawn("creature", "minecraft:llama", 15, 2, 4)
             // Boss-tier Umvuthi (very rare)
             .addMowziesMob("umvuthi", 2, 1, 1)
+            // Born in Chaos Halloween mobs - tribal warrior world
+            .addBornInChaosPumpkin(18)
             .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:savanna", 0.95f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, "Bellator Savanna")
@@ -1815,6 +1829,7 @@ public class PlanetGenerationRunner {
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("balanced_vanilla")
+            .enableBornInChaosStructures()   // Enable Born in Chaos structures
             // Enable plains WhenDungeonsArise structures (campsites, windmills fit savanna)
             .enableDungeonsAriseStructures("plains")
             .generate();
@@ -1839,18 +1854,18 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)  // No surface water
             .oreVeinsEnabled(true)
-            // 4 ores: rich mining world for kobolds (rates at 2/3)
-            .configureOre("iron", 33)      // common - kobold smithing
-            .configureOre("gold", 28)      // common - kobold hoarding
-            .configureOre("copper", 22)    // uncommon
-            .configureOre("emerald", 8)    // uncommon - kobold treasure
-            // Kobold civilization - high spawn rates
+            // Profundus ores - Plan B: underground cave kingdom with osmium and iron
+            .configureOre("osmium", 25)    // primary - Mekanism ore, deep cave deposits
+            .configureOre("iron", 20)      // secondary - kobold smithing essential
+            .configureOre("lead", 15)      // tertiary - IE ore, heavy underground metals
+            .configureOre("nickel", 12)    // uncommon - IE ore, kobold mining
+            .configureOre("emerald", 8)    // rare - kobold treasure hoards
+            // Kobold civilization - high spawn rates (no spiders in space)
             .clearAllMobSpawns()
             .addKoboldsMobs(50)            // Main kobold variants with high weight
             .addHostileKobolds(15)         // Hostile variants (zombies, skeletons, witherbolds)
-            .addMobSpawn("monster", "minecraft:spider", 15, 1, 2)
-            .addMobSpawn("monster", "minecraft:cave_spider", 20, 1, 2)
-            .addMobSpawn("monster", "minecraft:silverfish", 10, 2, 4)
+            .addBornInChaosSpirits(20)     // Born in Chaos spirits - fits dark underground theme
+            .addMobSpawn("monster", "minecraft:silverfish", 15, 2, 4)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:dripstone_caves", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, "Profundus Caverns")
@@ -1869,6 +1884,7 @@ public class PlanetGenerationRunner {
             .addSun()
             .addCavePreset("extreme_caves")  // Maximize cave generation
             .enableKoboldsStructures()       // Enable kobold dens
+            .enableBornInChaosStructures()   // Enable Born in Chaos structures (Dark Tower, etc.)
             // Enable underground WhenDungeonsArise structures (mining systems, etc.)
             .enableDungeonsAriseStructures("underground")
             .generate();

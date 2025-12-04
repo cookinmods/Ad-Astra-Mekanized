@@ -1,0 +1,60 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "born_in_chaos_v1"
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:bellator_biomes",
+  "spawners": [
+    {
+      "type": "born_in_chaos_v1:pumpkinhead",
+      "weight": 18,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "born_in_chaos_v1:mr_pumpkin",
+      "weight": 13,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "born_in_chaos_v1:mrs_pumpkin",
+      "weight": 13,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "born_in_chaos_v1:pumpkin_dunce",
+      "weight": 15,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "born_in_chaos_v1:pumpkin_bruiser",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:senor_pumpkin",
+      "weight": 9,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:sir_pumpkinhead",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:lord_pumpkinhead",
+      "weight": 3,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

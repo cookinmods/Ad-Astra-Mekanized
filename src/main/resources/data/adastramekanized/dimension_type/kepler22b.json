@@ -1,5 +1,5 @@
 {
-  "ambient_light": 0.9,
+  "ambient_light": 0.0,
   "effects": "adastramekanized:kepler22b",
   "has_ceiling": false,
   "has_skylight": true,

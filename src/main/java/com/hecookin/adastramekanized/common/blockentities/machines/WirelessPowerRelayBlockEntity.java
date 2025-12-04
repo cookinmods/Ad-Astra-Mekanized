@@ -1,6 +1,7 @@
 package com.hecookin.adastramekanized.common.blockentities.machines;
 
 import com.hecookin.adastramekanized.AdAstraMekanized;
+import com.hecookin.adastramekanized.common.blockentities.machines.GravityNormalizerBlockEntity;
 import com.hecookin.adastramekanized.common.data.DistributorLinkData;
 import com.hecookin.adastramekanized.common.items.OxygenNetworkController;
 import com.hecookin.adastramekanized.common.menus.WirelessPowerRelayMenu;
@@ -99,8 +100,10 @@ public class WirelessPowerRelayBlockEntity extends BlockEntity implements MenuPr
         // Update statuses first
         OxygenNetworkController.updateDistributorStatuses(level, linkData);
 
-        // Collect all enabled distributors that need power
-        List<ImprovedOxygenDistributor> needsPower = new ArrayList<>();
+        // Collect all enabled distributors (oxygen and gravity) that need power
+        List<IEnergyStorage> needsPower = new ArrayList<>();
+        List<BlockPos> needsPowerPositions = new ArrayList<>();
+
         for (DistributorLinkData.LinkedDistributor link : linkData.getLinkedDistributors()) {
             if (!link.isEnabled()) continue;
 
@@ -108,10 +111,21 @@ public class WirelessPowerRelayBlockEntity extends BlockEntity implements MenuPr
             if (!level.isLoaded(pos)) continue;
 
             BlockEntity be = level.getBlockEntity(pos);
+
+            // Check for oxygen distributors
             if (be instanceof ImprovedOxygenDistributor distributor) {
                 IEnergyStorage storage = distributor.getEnergyStorage();
                 if (storage.getEnergyStored() < storage.getMaxEnergyStored()) {
-                    needsPower.add(distributor);
+                    needsPower.add(storage);
+                    needsPowerPositions.add(pos);
+                }
+            }
+            // Check for gravity distributors
+            else if (be instanceof GravityNormalizerBlockEntity gravityDistributor) {
+                IEnergyStorage storage = gravityDistributor.getEnergyStorage();
+                if (storage.getEnergyStored() < storage.getMaxEnergyStored()) {
+                    needsPower.add(storage);
+                    needsPowerPositions.add(pos);
                 }
             }
         }
@@ -134,15 +148,16 @@ public class WirelessPowerRelayBlockEntity extends BlockEntity implements MenuPr
         int totalDistributed = 0;
 
         // Distribute power equally
-        for (ImprovedOxygenDistributor distributor : needsPower) {
-            IEnergyStorage storage = distributor.getEnergyStorage();
+        for (int i = 0; i < needsPower.size(); i++) {
+            IEnergyStorage storage = needsPower.get(i);
+            BlockPos pos = needsPowerPositions.get(i);
             int toSend = Math.min(perDistributor, storage.getMaxEnergyStored() - storage.getEnergyStored());
 
             if (toSend > 0) {
                 int sent = storage.receiveEnergy(toSend, false);
                 totalDistributed += sent;
 
-                AdAstraMekanized.LOGGER.debug("Sent {} FE to distributor at {}", sent, distributor.getBlockPos());
+                AdAstraMekanized.LOGGER.debug("Sent {} FE to distributor at {}", sent, pos);
             }
         }
 

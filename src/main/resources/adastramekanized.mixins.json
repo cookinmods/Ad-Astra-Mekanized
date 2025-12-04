@@ -10,7 +10,14 @@
   "client": [
     "LevelRendererMixin",
     "CustomDyeableArmorItemMixin",
-    "HumanoidModelMixin"
+    "HumanoidModelMixin",
+    "client.LoadingOverlayMixin",
+    "client.LoadingOverlayAccessor",
+    "client.TitleScreenMixin",
+    "client.PauseScreenMixin",
+    "client.SelectWorldScreenMixin",
+    "client.CreateWorldScreenMixin",
+    "client.RotatingCubeMapRendererMixin"
   ],
   "server": [],
   "injectors": {

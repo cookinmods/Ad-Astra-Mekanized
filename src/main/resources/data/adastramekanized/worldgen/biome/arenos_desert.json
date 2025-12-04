@@ -14,13 +14,7 @@
         "type": "minecraft:husk",
         "minCount": 2,
         "maxCount": 4,
-        "weight": 35
-      },
-      {
-        "type": "minecraft:spider",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 20
+        "weight": 40
       }
     ],
     "creature": [
@@ -56,7 +50,9 @@
       "adastramekanized:arenos_ore_gold_simple",
       "adastramekanized:arenos_ore_diamond_simple",
       "adastramekanized:arenos_ore_copper_simple",
-      "adastramekanized:arenos_ore_iron_simple"
+      "adastramekanized:arenos_ore_iron_simple",
+      "adastramekanized:arenos_ore_lead_simple",
+      "adastramekanized:arenos_ore_redstone_simple"
     ],
     [
       "minecraft:ore_infested"

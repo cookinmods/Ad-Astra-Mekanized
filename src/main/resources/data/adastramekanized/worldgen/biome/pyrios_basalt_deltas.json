@@ -11,28 +11,10 @@
   "spawners": {
     "monster": [
       {
-        "type": "minecraft:magma_cube",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 15
-      },
-      {
-        "type": "minecraft:blaze",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 10
-      },
-      {
-        "type": "minecraft:wither_skeleton",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 6
-      },
-      {
         "type": "minecraft:ghast",
         "minCount": 1,
         "maxCount": 1,
-        "weight": 3
+        "weight": 8
       }
     ],
     "creature": [],
@@ -59,8 +41,8 @@
     [],
     [
       "adastramekanized:pyrios_ore_gold_simple",
-      "adastramekanized:pyrios_ore_diamond_simple",
-      "adastramekanized:pyrios_ore_iron_simple",
+      "adastramekanized:pyrios_ore_nickel_simple",
+      "adastramekanized:pyrios_ore_calorite_simple",
       "adastramekanized:pyrios_ore_redstone_simple"
     ],
     [

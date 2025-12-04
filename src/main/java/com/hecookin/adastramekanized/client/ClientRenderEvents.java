@@ -1,6 +1,7 @@
 package com.hecookin.adastramekanized.client;
 
 import com.hecookin.adastramekanized.AdAstraMekanized;
+import com.hecookin.adastramekanized.client.renderers.GravityZoneRenderer;
 import com.hecookin.adastramekanized.client.renderers.OxygenZoneRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
@@ -21,13 +22,19 @@ public class ClientRenderEvents {
 
     @SubscribeEvent
     public static void onRenderWorldLast(RenderLevelStageEvent event) {
-        // Render oxygen zones after translucent blocks
+        // Render oxygen and gravity zones after translucent blocks
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
             return;
         }
 
-        OxygenZoneRenderer renderer = OxygenZoneRenderer.getInstance();
-        if (!renderer.isRenderingEnabled()) {
+        OxygenZoneRenderer oxygenRenderer = OxygenZoneRenderer.getInstance();
+        GravityZoneRenderer gravityRenderer = GravityZoneRenderer.getInstance();
+
+        boolean oxygenEnabled = oxygenRenderer.isRenderingEnabled();
+        boolean gravityEnabled = gravityRenderer.isRenderingEnabled();
+
+        // Skip if neither renderer is active
+        if (!oxygenEnabled && !gravityEnabled) {
             return;
         }
 
@@ -40,9 +47,18 @@ public class ClientRenderEvents {
         RenderBuffers renderBuffers = mc.renderBuffers();
         MultiBufferSource.BufferSource bufferSource = renderBuffers.bufferSource();
 
-        // Render the oxygen zones
         poseStack.pushPose();
-        renderer.render(poseStack, bufferSource, cameraPos);
+
+        // Render oxygen zones
+        if (oxygenEnabled) {
+            oxygenRenderer.render(poseStack, bufferSource, cameraPos);
+        }
+
+        // Render gravity zones
+        if (gravityEnabled) {
+            gravityRenderer.render(poseStack, bufferSource, cameraPos);
+        }
+
         bufferSource.endBatch();
         poseStack.popPose();
     }

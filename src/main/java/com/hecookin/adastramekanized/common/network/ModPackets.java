@@ -69,6 +69,26 @@ public class ModPackets {
             )
         );
 
+        // Register gravity normalizer button packet (client -> server)
+        registrar.playToServer(
+            GravityNormalizerButtonPacket.TYPE,
+            GravityNormalizerButtonPacket.CODEC,
+            new DirectionalPayloadHandler<>(
+                null, // No client handler needed
+                GravityNormalizerButtonPacket::handle
+            )
+        );
+
+        // Register gravity visualization packet (server -> client)
+        registrar.playToClient(
+            GravityVisualizationPacket.TYPE,
+            GravityVisualizationPacket.CODEC,
+            new DirectionalPayloadHandler<>(
+                GravityVisualizationPacket::handle,
+                null // No server handler needed
+            )
+        );
+
         AdAstraMekanized.LOGGER.info("Registered network packets");
     }
 }

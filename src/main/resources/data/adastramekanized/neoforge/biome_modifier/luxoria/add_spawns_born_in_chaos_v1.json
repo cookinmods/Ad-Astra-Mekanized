@@ -1,0 +1,54 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "born_in_chaos_v1"
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:luxoria_biomes",
+  "spawners": [
+    {
+      "type": "born_in_chaos_v1:restless_spirit",
+      "weight": 18,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "born_in_chaos_v1:seared_spirit",
+      "weight": 13,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:firelight",
+      "weight": 13,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "born_in_chaos_v1:pumpkin_spirit",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:infernal_spirit",
+      "weight": 8,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:dark_vortex",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:spiritof_chaos",
+      "weight": 4,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

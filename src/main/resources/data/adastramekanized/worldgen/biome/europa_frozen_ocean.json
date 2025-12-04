@@ -50,7 +50,9 @@
       "adastramekanized:europa_ore_diamond_simple",
       "adastramekanized:europa_ore_iron_simple",
       "adastramekanized:europa_ore_copper_simple",
-      "adastramekanized:europa_ore_lapis_simple"
+      "adastramekanized:europa_ore_lapis_simple",
+      "adastramekanized:europa_ore_silver_simple",
+      "adastramekanized:europa_ore_etrium_simple"
     ],
     [
       "minecraft:ore_infested"

@@ -9,20 +9,7 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:magma_cube",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 20
-      },
-      {
-        "type": "minecraft:blaze",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 10
-      }
-    ],
+    "monster": [],
     "creature": [],
     "ambient": [],
     "water_creature": [],
@@ -48,9 +35,10 @@
     [
       "adastramekanized:venus_ore_gold_simple",
       "adastramekanized:venus_ore_calorite_simple",
-      "adastramekanized:venus_ore_copper_simple",
       "adastramekanized:venus_ore_coal_simple",
-      "adastramekanized:venus_ore_iron_simple"
+      "adastramekanized:venus_ore_lead_simple",
+      "adastramekanized:venus_ore_redstone_simple",
+      "adastramekanized:venus_ore_etrium_simple"
     ],
     [
       "minecraft:ore_infested"

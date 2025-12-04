@@ -1,0 +1,39 @@
+{
+  "type": "adastramekanized:nasa_workbench",
+  "ingredients": [
+    {
+      "item": "adastramekanized:etrionic_core"
+    },
+    {
+      "item": "adastramekanized:large_gas_tank"
+    },
+    {
+      "item": "adastramekanized:ostrum_sheet"
+    },
+    {
+      "item": "adastramekanized:ostrum_sheet"
+    },
+    {
+      "item": "adastramekanized:large_gas_tank"
+    },
+    {
+      "item": "adastramekanized:etrionic_capacitor"
+    },
+    {
+      "item": "adastramekanized:ostrum_sheet"
+    },
+    {
+      "item": "adastramekanized:fan"
+    },
+    {
+      "item": "adastramekanized:fan"
+    },
+    {
+      "item": "adastramekanized:fan"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "adastramekanized:gravity_normalizer"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mowziesmobs"
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:bellator_biomes",
+  "spawners": [
+    {
+      "type": "mowziesmobs:umvuthana_raptor",
+      "weight": 50,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "mowziesmobs:umvuthana_crane",
+      "weight": 30,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "mowziesmobs:umvuthana",
+      "weight": 40,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "mowziesmobs:umvuthi",
+      "weight": 2,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

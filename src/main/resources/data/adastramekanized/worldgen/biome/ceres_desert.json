@@ -41,9 +41,10 @@
     [],
     [
       "adastramekanized:ceres_ore_nickel_simple",
-      "adastramekanized:ceres_ore_platinum_simple",
+      "adastramekanized:ceres_ore_osmium_simple",
       "adastramekanized:ceres_ore_iron_simple",
-      "adastramekanized:ceres_ore_osmium_simple"
+      "adastramekanized:ceres_ore_silver_simple",
+      "adastramekanized:ceres_ore_etrium_simple"
     ],
     [
       "minecraft:ore_infested"

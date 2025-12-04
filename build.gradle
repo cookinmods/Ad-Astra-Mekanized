@@ -118,19 +118,22 @@ dependencies {
     compileOnly "mezz.jei:jei-${jei_minecraft}-neoforge-api:${jei_version}"
     localRuntime "mezz.jei:jei-${jei_minecraft}-neoforge:${jei_version}"
 
-    // BIOME GENERATION (Optional runtime dependencies)
+    // TECTONIC WORLDGEN SYSTEM (REQUIRED dependencies for planet generation)
+    // TerraBlender for NeoForge 1.21.1
+    implementation "curse.maven:terrablender-940057:6054947"
+
+    // Tectonic for NeoForge 1.21.1
+    implementation "curse.maven:tectonic-686836:7128220"
+
+    // Lithostitched (required by Tectonic) - using latest
+    implementation "curse.maven:lithostitched-936015:7063201"
+
+    // BIOME GENERATION (Optional runtime dependencies for variety)
     localRuntime "curse.maven:terralith-513688:6090387"
-    localRuntime "curse.maven:tectonic-686836:6596485"
-    // TerraBlender - Phase 3.1 requires compile-time access for API integration
-    compileOnly "curse.maven:terraBlender-940057:6054947"
-    localRuntime "curse.maven:terraBlender-940057:6054947"
     localRuntime "curse.maven:biomsOPlenty-220318:6501142"
     localRuntime "curse.maven:glitchCore-955399:5660740" //dependency: biomsOPlenty
     localRuntime "curse.maven:incendium-591388:5962249"
     localRuntime "curse.maven:nullscape-570354:6402757"
-
-    // Lithostitched - dependency for Tectonic
-    localRuntime "curse.maven:lithostitched-936015:6201869" //tectonics dependency
 
     //JADE (Optional UI enhancement)
     localRuntime "curse.maven:jade-324717:6011258"
@@ -171,6 +174,10 @@ dependencies {
     implementation "curse.maven:createCraftsAndAdditions-439890:6445614"
 
 
+    implementation "curse.maven:BornInChaos-686437:7150215"
+
+
+
     // DUNGEONS
     implementation "curse.maven:DungeonCrawl-324973:6047162"
     implementation "curse.maven:WhenDungeonsArise-442508:6078710"
@@ -186,9 +193,35 @@ dependencies {
     implementation "curse.maven:EpicFight-405076:6968128"
 
 
-    // MOWIES MOBS
-    implementation "curse.maven:MowiesMobs-250498:6700443"
     implementation "curse.maven:geckolib-388172:6659026"
+
+
+
+    // MOBS FOR PLANETS
+    implementation "curse.maven:MowiesMobs-250498:6700443"
+    implementation "curse.maven:kobolds-484967:7088059"
+    implementation "curse.maven:theundeadRevamped-479710:6778715"
+    //implementation "curse.maven:reptilian-1169666:6816483"  // Commented out - dependency download issues
+    implementation "blank:reptilian-1.1.0-neoforge-1.21.1"
+    //implementation "curse.maven:PrehistoricExpansion-909176:7011472"  // Commented out - dependency download issues
+    implementation "blank:shineals_prehistoric_expansion-1.4.3-neoforge-1.21.1"
+    implementation "curse.maven:luminousoverworld-909107:6588233"
+    implementation "curse.maven:mcdoom-368765:5729612"
+    // implementation "curse.maven:mobsOfMythology-699989:6403508"  // Commented out - Architectury API spawn placement bug (uses Operation.OR instead of REPLACE)
+    // implementation "curse.maven:rottenCreatures-371033:6677062"  // Commented out - spawn placement bug in NeoForge 1.21.1
+
+    implementation "curse.maven:ribbits-622967:6988284"
+    implementation "curse.maven:yungsAPI-1015100:6715463" //ribbits dependency
+
+    implementation "curse.maven:structureCompass-319598:5774341"
+
+
+
+    implementation "curse.maven:accessories-938917:7046407"
+    implementation "curse.maven:owo-lib-532610:6785734"
+    implementation "curse.maven:smartbrainlib-661293:7055149"
+    implementation "curse.maven:azurelib-817423:7084472"
+    implementation "curse.maven:platform-997634:6677047"
 
     // Patchouli for guide book
     implementation "vazkii.patchouli:Patchouli:1.21-87-NEOFORGE"
@@ -284,6 +317,18 @@ tasks.register('makePlanets', JavaExec) {
             include "worldgen/configured_feature/*.json"
             include "worldgen/placed_feature/*.json"
             include "worldgen/biome/*.json"
+            include "neoforge/biome_modifier/**/*.json"
+        }
+
+        // Clean up modded structure biome tags (regenerated fresh each time)
+        def moddedDirs = ["dungeons_arise", "dungeons_arise_seven_seas", "ribbits", "kobolds"]
+        moddedDirs.each { modDir ->
+            def modDataDir = file("src/main/resources/data/${modDir}")
+            if (modDataDir.exists()) {
+                delete fileTree(modDataDir) {
+                    include "tags/**/*.json"
+                }
+            }
         }
 
         println "Cleanup completed, generating new planets..."

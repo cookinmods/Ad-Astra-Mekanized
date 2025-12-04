@@ -6,13 +6,19 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
+
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Controls spawning of modded mobs to restrict them to specific dimensions and biomes.
@@ -28,6 +34,9 @@ import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 public class ModdedMobSpawnController {
     private static final ModdedMobWhitelistData whitelist = new ModdedMobWhitelistData();
 
+    // Track entities that were allowed by FinalizeSpawnEvent to avoid double-checking in EntityJoinLevelEvent
+    private static final Set<Integer> allowedEntityIds = ConcurrentHashMap.newKeySet();
+
     /**
      * Get the whitelist data instance for configuration during planet generation.
      */
@@ -41,7 +50,7 @@ public class ModdedMobSpawnController {
      * ALLOWS manual spawns (spawn eggs, spawners, commands) EVERYWHERE.
      * BLOCKS natural spawns (world generation, reinforcements) unless whitelisted.
      */
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onFinalizeSpawn(FinalizeSpawnEvent event) {
         Mob mob = event.getEntity();
 
@@ -62,6 +71,8 @@ public class ModdedMobSpawnController {
 
         // ALWAYS allow manual spawn types (spawn eggs, spawners, commands, dispensers)
         if (isManualSpawn(spawnType)) {
+            // Track this entity as allowed so EntityJoinLevelEvent doesn't block it
+            allowedEntityIds.add(mob.getId());
             AdAstraMekanized.LOGGER.debug("Allowed {} manual spawn ({}) in dimension {} (manual spawns allowed everywhere)",
                 entityId, spawnType, event.getLevel().getLevel().dimension().location());
             return;
@@ -82,11 +93,73 @@ public class ModdedMobSpawnController {
         if (!allowed) {
             // Cancel natural spawn - not whitelisted for this dimension+biome
             event.setSpawnCancelled(true);
-            AdAstraMekanized.LOGGER.debug("Blocked {} natural spawn ({}) in dimension {} biome {} (not whitelisted)",
+            AdAstraMekanized.LOGGER.info("[SpawnControl] BLOCKED {} spawn ({}) in {} biome {} - not whitelisted",
                 entityId, spawnType, dimension.location(), biomeId);
         } else {
+            // Track this entity as allowed so EntityJoinLevelEvent doesn't block it
+            allowedEntityIds.add(mob.getId());
             AdAstraMekanized.LOGGER.debug("Allowed {} natural spawn ({}) in dimension {} biome {} (whitelisted)",
                 entityId, spawnType, dimension.location(), biomeId);
+        }
+    }
+
+    /**
+     * Backup event handler that catches ANY entity joining the world.
+     * This handles cases where FinalizeSpawnEvent is bypassed (e.g., some MCreator mods).
+     *
+     * Only blocks controlled mods that weren't already processed by FinalizeSpawnEvent.
+     *
+     * PERFORMANCE: Checks namespace FIRST to skip 99%+ of entities immediately
+     * (vanilla entities, non-controlled mods like ad_astra, create, etc.)
+     */
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        Entity entity = event.getEntity();
+
+        // PERFORMANCE: Check namespace FIRST - skip vast majority of entities immediately
+        ResourceLocation entityId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+        if (entityId == null) {
+            return;
+        }
+        String modNamespace = entityId.getNamespace();
+
+        // Early exit for non-controlled mods (minecraft, ad_astra, mekanism, etc.)
+        // This skips ~99% of entities before any other checks
+        if (!whitelist.isControlledMod(modNamespace)) {
+            return;
+        }
+
+        // Now we know it's a controlled mod - do remaining checks
+        // Only handle Mob entities
+        if (!(entity instanceof Mob mob)) {
+            return;
+        }
+
+        // Skip if already processed and allowed by FinalizeSpawnEvent
+        if (allowedEntityIds.remove(mob.getId())) {
+            return;
+        }
+
+        // Skip client-side
+        if (event.getLevel().isClientSide()) {
+            return;
+        }
+
+        // Get dimension and biome
+        Level level = event.getLevel();
+        ResourceKey<Level> dimension = level.dimension();
+        BlockPos pos = mob.blockPosition();
+        Holder<Biome> biomeHolder = level.getBiome(pos);
+        ResourceLocation biomeId = getBiomeId(biomeHolder);
+
+        // Check if this mod is whitelisted for this dimension+biome
+        boolean allowed = whitelist.isModAllowed(dimension.location(), biomeId, modNamespace);
+
+        if (!allowed) {
+            // Cancel entity join - not whitelisted for this dimension+biome
+            event.setCanceled(true);
+            AdAstraMekanized.LOGGER.info("[SpawnControl] BLOCKED {} join in {} biome {} - not whitelisted (EntityJoinLevel fallback)",
+                entityId, dimension.location(), biomeId);
         }
     }
 

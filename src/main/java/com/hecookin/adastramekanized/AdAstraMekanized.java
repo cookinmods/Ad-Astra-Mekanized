@@ -15,6 +15,7 @@ import com.hecookin.adastramekanized.common.registry.ModMenuTypes;
 import com.hecookin.adastramekanized.common.registry.ModRecipeTypes;
 import com.hecookin.adastramekanized.common.registry.ModRecipeSerializers;
 import com.hecookin.adastramekanized.config.AdAstraMekanizedConfig;
+import com.hecookin.adastramekanized.common.events.ModdedMobSpawnController;
 import com.hecookin.adastramekanized.integration.ModIntegrationManager;
 import com.hecookin.adastramekanized.integration.mowziesmobs.MowziesMobsIntegration;
 import com.hecookin.adastramekanized.worldgen.biome.MoonBiomeProvider;
@@ -122,18 +123,16 @@ public class AdAstraMekanized {
 
             // Configure modded mob spawn control
             // Controlled mods: mowziesmobs, kobolds, doom, mobs_of_mythology, luminousworld,
-            //                  undead_revamp2, rottencreatures, shineals_prehistoric_expansion, reptilian
-            // By default, controlled mobs ONLY spawn in whitelisted planets
-            // To allow vanilla dimension spawning, uncomment one of these:
-            // ModdedMobSpawnController.allowInOverworld("mowziesmobs");
-            // ModdedMobSpawnController.allowInVanillaDimensions("kobolds");
-            // ModdedMobSpawnController.allowInNether("doom");
-            // ModdedMobSpawnController.allowInOverworld("mobs_of_mythology");
-            // ModdedMobSpawnController.allowInOverworld("luminousworld");
-            // ModdedMobSpawnController.allowInOverworld("undead_revamp2");
-            // ModdedMobSpawnController.allowInOverworld("rottencreatures");
-            // ModdedMobSpawnController.allowInOverworld("shineals_prehistoric_expansion");
-            // ModdedMobSpawnController.allowInOverworld("reptilian");
+            //                  undead_revamp2, rottencreatures, shineals_prehistoric_expansion, reptilian, born_in_chaos_v1
+            // By default, controlled mobs ONLY spawn in whitelisted dimensions/planets
+            // Enable vanilla dimension spawning for mods that should spawn on Earth:
+            ModdedMobSpawnController.allowInVanillaDimensions("undead_revamp2");  // Spawn on Earth, Nether, End - blocked elsewhere
+            ModdedMobSpawnController.allowInVanillaDimensions("born_in_chaos_v1"); // Spawn on Earth, Nether, End - blocked elsewhere
+            ModdedMobSpawnController.allowInVanillaDimensions("mowziesmobs");     // Spawn on Earth, Nether, End - blocked elsewhere
+            ModdedMobSpawnController.allowInVanillaDimensions("kobolds");         // Spawn on Earth, Nether, End - blocked elsewhere
+            ModdedMobSpawnController.allowInNether("doom");                        // Doom mobs only in Nether and whitelisted planets
+            ModdedMobSpawnController.allowInOverworld("rottencreatures");
+            ModdedMobSpawnController.allowInOverworld("reptilian");
 
             // To add more mob mods to spawn control:
             // ModdedMobSpawnController.addControlledMod("alexsmobs");
@@ -145,6 +144,11 @@ public class AdAstraMekanized {
 
             // Planets are now generated using PlanetMaker system
             LOGGER.info("Using PlanetMaker for planet generation - run './gradlew makePlanets' to regenerate");
+
+            // Initialize planet spawn whitelists by loading PlanetGenerationRunner
+            // This triggers the static block which registers all modded mob whitelists
+            int planetCount = com.hecookin.adastramekanized.common.planets.PlanetGenerationRunner.getAllPlanetBuilders().size();
+            LOGGER.info("Initialized spawn whitelists for {} planets", planetCount);
 
             // Initialize planet system components
             LOGGER.info("Planet system initialization complete");

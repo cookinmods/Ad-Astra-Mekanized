@@ -197,7 +197,7 @@ public class ImprovedOxygenDistributor extends BlockEntity implements MenuProvid
         lastEnergyUsage = 0;
         clearOxygenatedBlocks();
         sendVisualizationRemoval();
-        notifyNearbyDistributorsForUpdate();
+        // Note: notifyNearbyDistributorsForUpdate() already called by clearOxygenatedBlocks()
         AdAstraMekanized.LOGGER.debug("Deactivating oxygen distributor at {}", worldPosition);
         setChanged();
         if (level != null) {
@@ -330,31 +330,16 @@ public class ImprovedOxygenDistributor extends BlockEntity implements MenuProvid
         }
     }
 
+    /**
+     * Notify nearby distributors that blocks may be available.
+     * Note: Distributors naturally re-expand every DISTRIBUTION_INTERVAL ticks,
+     * so explicit notification is only needed for immediate response.
+     * Removed expensive 274K position scan - distributors will reclaim blocks naturally.
+     */
     protected void notifyNearbyDistributorsForUpdate() {
-        if (level == null || level.isClientSide) return;
-
-        BlockPos.betweenClosedStream(
-            worldPosition.offset(-32, -32, -32),
-            worldPosition.offset(32, 32, 32)
-        ).forEach(pos -> {
-            if (!pos.equals(worldPosition)) {
-                BlockEntity be = level.getBlockEntity(pos);
-                if (be instanceof ImprovedOxygenDistributor other ||
-                    be instanceof MekanismBasedOxygenDistributor other2) {
-                    // Trigger quick update for active distributors
-                    if (be instanceof ImprovedOxygenDistributor improved) {
-                        if (!improved.isManuallyDisabled() && improved.isActive()) {
-                            improved.tickCounter = DISTRIBUTION_INTERVAL - 1;
-                        }
-                    } else if (be instanceof MekanismBasedOxygenDistributor base) {
-                        if (!base.isManuallyDisabled() && base.isActive()) {
-                            // MekanismBasedOxygenDistributor uses 100 tick interval
-                            // We can't directly set its tickCounter from here
-                        }
-                    }
-                }
-            }
-        });
+        // Intentionally empty - removed O(n^3) position scan that caused freezes.
+        // Nearby distributors will reclaim released blocks during their next distribution cycle.
+        // This happens every ~20 ticks anyway, so the delay is negligible.
     }
 
     private BlockPos getStartPosition(BlockPos distributorPos) {

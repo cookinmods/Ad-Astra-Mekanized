@@ -1,6 +1,7 @@
 package com.hecookin.adastramekanized.common.registry;
 
 import com.hecookin.adastramekanized.AdAstraMekanized;
+import com.hecookin.adastramekanized.common.menus.GravityNormalizerMenu;
 import com.hecookin.adastramekanized.common.menus.LanderMenu;
 import com.hecookin.adastramekanized.common.menus.NasaWorkbenchMenu;
 import com.hecookin.adastramekanized.common.menus.OxygenDistributorMenu;
@@ -37,6 +38,10 @@ public class ModMenuTypes {
     public static final Supplier<MenuType<OxygenMonitorMenu>> OXYGEN_MONITOR =
             MENUS.register("oxygen_monitor",
                 () -> IMenuTypeExtension.create(OxygenMonitorMenu::new));
+
+    public static final Supplier<MenuType<GravityNormalizerMenu>> GRAVITY_NORMALIZER =
+            MENUS.register("gravity_normalizer",
+                () -> IMenuTypeExtension.create(GravityNormalizerMenu::new));
 
     public static final Supplier<MenuType<NasaWorkbenchMenu>> NASA_WORKBENCH =
             MENUS.register("nasa_workbench",

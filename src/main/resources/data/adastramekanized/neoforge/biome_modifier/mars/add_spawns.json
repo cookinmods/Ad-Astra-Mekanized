@@ -4,25 +4,13 @@
   "spawners": [
     {
       "type": "minecraft:husk",
-      "weight": 50,
-      "minCount": 2,
-      "maxCount": 4
-    },
-    {
-      "type": "minecraft:spider",
-      "weight": 30,
+      "weight": 25,
       "minCount": 1,
-      "maxCount": 2
-    },
-    {
-      "type": "minecraft:phantom",
-      "weight": 10,
-      "minCount": 1,
-      "maxCount": 2
+      "maxCount": 3
     },
     {
       "type": "minecraft:enderman",
-      "weight": 15,
+      "weight": 8,
       "minCount": 1,
       "maxCount": 1
     }

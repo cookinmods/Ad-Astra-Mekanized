@@ -49,6 +49,9 @@ public class OxygenDamageHandler {
             if (entityId.contains("lumination")) {
                 return; // Lumination mobs are exempt - magical creatures
             }
+            if (entityId.contains("born_in_chaos")) {
+                return; // Born in Chaos mobs are exempt - supernatural creatures
+            }
         }
 
         // Skip spectators and creative players

@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "born_in_chaos_v1"
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:gliese667c_biomes",
+  "spawners": [
+    {
+      "type": "born_in_chaos_v1:supreme_bonescaller",
+      "weight": 5,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:lifestealer",
+      "weight": 5,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:krampus",
+      "weight": 3,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:missioner",
+      "weight": 5,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

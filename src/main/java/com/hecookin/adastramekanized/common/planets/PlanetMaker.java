@@ -1752,6 +1752,182 @@ public class PlanetMaker {
             return this;
         }
 
+        // ========== BORN IN CHAOS MOB HELPERS ==========
+
+        /**
+         * Enable Born in Chaos structures for this planet.
+         * Includes: Dark Tower, Clown Caravan, Mound of Hounds, Firewell, Lookout Tower, Farm
+         */
+        public PlanetBuilder enableBornInChaosStructures() {
+            com.hecookin.adastramekanized.common.events.ModdedStructureController
+                .whitelistModStructures(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                        AdAstraMekanized.MOD_ID, this.name),
+                    "born_in_chaos_v1");
+            return this;
+        }
+
+        /**
+         * Add a single Born in Chaos mob to the planet.
+         * @param mobName The mob name (e.g., "zombie_clown", "restless_spirit")
+         * @param weight Spawn weight
+         * @param minGroup Minimum group size
+         * @param maxGroup Maximum group size
+         */
+        public PlanetBuilder addBornInChaosMob(String mobName, int weight, int minGroup, int maxGroup) {
+            return addModdedMob("born_in_chaos_v1", mobName, "monster", weight, minGroup, maxGroup);
+        }
+
+        /**
+         * Add Born in Chaos Spirit mobs (ghosts, spectral entities).
+         * Recommended for: profundus, luxoria (dark/mystical worlds)
+         * @param weight Base spawn weight (recommended: 15-30)
+         */
+        public PlanetBuilder addBornInChaosSpirits(int weight) {
+            addMobSpawn("monster", "born_in_chaos_v1:restless_spirit", weight, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:seared_spirit", weight - 5, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:firelight", weight - 5, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:pumpkin_spirit", weight - 8, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:infernal_spirit", weight - 10, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:dark_vortex", weight / 3, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:spiritof_chaos", weight / 4, 1, 1);
+            return this;
+        }
+
+        /**
+         * Add Born in Chaos Undead mobs (zombies, skeletons).
+         * Recommended for: mars, venus, io (harsh/barren worlds)
+         * @param weight Base spawn weight (recommended: 20-40)
+         */
+        public PlanetBuilder addBornInChaosUndead(int weight) {
+            addMobSpawn("monster", "born_in_chaos_v1:decrepit_skeleton", weight, 2, 4);
+            addMobSpawn("monster", "born_in_chaos_v1:skeleton_demoman", weight - 5, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:decaying_zombie", weight, 2, 4);
+            addMobSpawn("monster", "born_in_chaos_v1:barrel_zombie", weight - 5, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:door_knight", weight - 10, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:skeleton_thrasher", weight - 8, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:bonescaller", weight / 2, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:bone_imp", weight - 5, 1, 3);
+            addMobSpawn("monster", "born_in_chaos_v1:zombie_bruiser", weight - 10, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:siamese_skeletons", weight / 3, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:fallen_chaos_knight", weight / 4, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:scarlet_persecutor", weight / 4, 1, 1);
+            return this;
+        }
+
+        /**
+         * Add Born in Chaos Pumpkin/Halloween mobs.
+         * Recommended for: terra_nova, bellator (Halloween-themed areas)
+         * @param weight Base spawn weight (recommended: 20-35)
+         */
+        public PlanetBuilder addBornInChaosPumpkin(int weight) {
+            addMobSpawn("monster", "born_in_chaos_v1:pumpkinhead", weight, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:mr_pumpkin", weight - 5, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:mrs_pumpkin", weight - 5, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:pumpkin_dunce", weight - 3, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:pumpkin_bruiser", weight - 8, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:senor_pumpkin", weight / 2, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:sir_pumpkinhead", weight / 3, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:lord_pumpkinhead", weight / 5, 1, 1);
+            return this;
+        }
+
+        /**
+         * Add Born in Chaos Clown mob (with Clown Caravan structure).
+         * Recommended for: terra_nova (strange/circus themed)
+         * @param weight Base spawn weight (recommended: 10-20)
+         */
+        public PlanetBuilder addBornInChaosClowns(int weight) {
+            addMobSpawn("monster", "born_in_chaos_v1:zombie_clown", weight, 1, 2);
+            return this;
+        }
+
+        /**
+         * Add Born in Chaos creature mobs (spiders, hounds, crabs).
+         * Recommended for: primordium, frigidum (creature-heavy worlds)
+         * @param weight Base spawn weight (recommended: 15-30)
+         */
+        public PlanetBuilder addBornInChaosCreatures(int weight) {
+            addMobSpawn("monster", "born_in_chaos_v1:baby_spider", weight, 2, 4);
+            addMobSpawn("monster", "born_in_chaos_v1:mother_spider", weight / 3, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:dread_hound", weight - 5, 1, 3);
+            addMobSpawn("monster", "born_in_chaos_v1:dire_hound_leader", weight / 3, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:phantom_creeper", weight - 5, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:swarmer", weight - 5, 2, 4);
+            addMobSpawn("monster", "born_in_chaos_v1:thornshell_crab", weight - 8, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:maggot", weight, 3, 6);
+            addMobSpawn("monster", "born_in_chaos_v1:corpse_fly", weight - 5, 2, 4);
+            addMobSpawn("monster", "born_in_chaos_v1:bloody_gadfly", weight - 8, 1, 3);
+            addMobSpawn("monster", "born_in_chaos_v1:nightmare_stalker", weight / 4, 1, 1);
+            return this;
+        }
+
+        /**
+         * Add Born in Chaos aquatic undead (for water-containing worlds).
+         * Recommended for: paludis, kepler22b (swamp/ocean worlds)
+         * @param weight Base spawn weight (recommended: 15-25)
+         */
+        public PlanetBuilder addBornInChaosAquatic(int weight) {
+            addMobSpawn("water_creature", "born_in_chaos_v1:corpse_fish", weight, 2, 4);
+            addMobSpawn("water_creature", "born_in_chaos_v1:glutton_fish", weight - 5, 1, 2);
+            addMobSpawn("monster", "born_in_chaos_v1:zombie_fisherman", weight - 3, 1, 2);
+            return this;
+        }
+
+        /**
+         * Add Born in Chaos special/boss mobs.
+         * Recommended for: kepler22b, gliese667c (advanced difficulty worlds)
+         * @param weight Base spawn weight (recommended: 5-15)
+         */
+        public PlanetBuilder addBornInChaosBosses(int weight) {
+            addMobSpawn("monster", "born_in_chaos_v1:supreme_bonescaller", weight / 2, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:lifestealer", weight / 2, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:krampus", weight / 3, 1, 1);
+            addMobSpawn("monster", "born_in_chaos_v1:missioner", weight / 2, 1, 1);
+            return this;
+        }
+
+        /**
+         * Add Born in Chaos preset for different world types.
+         * @param preset Choose from: "spirits", "undead", "pumpkin"/"halloween", "creatures", "aquatic", "boss"/"hard", "full"
+         */
+        public PlanetBuilder addBornInChaosPreset(String preset) {
+            switch (preset.toLowerCase()) {
+                case "spirits":
+                    addBornInChaosSpirits(25);
+                    break;
+                case "undead":
+                    addBornInChaosUndead(30);
+                    break;
+                case "pumpkin":
+                case "halloween":
+                    addBornInChaosPumpkin(25);
+                    addBornInChaosClowns(15);
+                    break;
+                case "creatures":
+                    addBornInChaosCreatures(25);
+                    break;
+                case "aquatic":
+                    addBornInChaosAquatic(20);
+                    break;
+                case "boss":
+                case "hard":
+                    addBornInChaosBosses(10);
+                    break;
+                case "full":
+                    addBornInChaosSpirits(20);
+                    addBornInChaosUndead(25);
+                    addBornInChaosPumpkin(20);
+                    addBornInChaosCreatures(20);
+                    break;
+                default:
+                    AdAstraMekanized.LOGGER.warn("Unknown Born in Chaos preset: {}", preset);
+            }
+            return this;
+        }
+
+        // ========== END BORN IN CHAOS HELPERS ==========
+
         /**
          * Enable WhenDungeonsArise structures for this planet.
          * Adds biome tags to allow various dungeon structures to spawn.
@@ -3374,7 +3550,12 @@ public class PlanetMaker {
                         sortedOres.sort((a, b) -> b.getValue().compareTo(a.getValue()));
 
                         for (java.util.Map.Entry<String, Integer> ore : sortedOres) {
-                            String oreName = capitalizeWords(ore.getKey());
+                            String oreKey = ore.getKey();
+                            // Planet-specific etrium ores should just display as "Etrium"
+                            if (oreKey.endsWith("_etrium")) {
+                                oreKey = "etrium";
+                            }
+                            String oreName = capitalizeWords(oreKey.replace("_", " "));
                             oresText.append("• ").append(oreName);
                             int veins = ore.getValue();
                             // Only three rarity levels: Common, Uncommon, Rare
@@ -6500,25 +6681,31 @@ public class PlanetMaker {
             case "desh" -> "adastramekanized:desh_ore";           // Tier 2 rocket material (Moon)
             case "ostrum" -> "adastramekanized:ostrum_ore";       // Tier 3 rocket material (Mars)
             case "calorite" -> "adastramekanized:calorite_ore";   // Tier 4 rocket material (Venus)
-            case "etrium" -> "adastramekanized:etrium_ore";       // Bonus space ore
+            case "etrium" -> "adastramekanized:etrium_ore";       // Generic etrium ore (for planets without specific variant)
+            case "moon_etrium" -> "adastramekanized:moon_etrium_ore";     // Etrium ore (Moon variant)
+            case "mars_etrium" -> "adastramekanized:mars_etrium_ore";     // Etrium ore (Mars variant)
+            case "glacio_etrium" -> "adastramekanized:glacio_etrium_ore"; // Etrium ore (Glacio variant)
             case "cheese" -> "adastramekanized:moon_cheese_ore";  // Moon cheese ore
 
-            // Mekanism ores - these ARE available since Mekanism is installed
+            // Mekanism ores - required mod
             case "osmium" -> "mekanism:osmium_ore";
             case "tin" -> "mekanism:tin_ore";
             case "uranium" -> "mekanism:uranium_ore";
             case "fluorite" -> "mekanism:fluorite_ore";
             case "lead" -> "mekanism:lead_ore";
 
-            // Immersive Engineering ores - NOT installed, use vanilla substitutes
-            case "aluminum", "bauxite" -> "minecraft:iron_ore";  // Common like iron
-            case "silver" -> "minecraft:gold_ore";   // Precious like gold
-            case "nickel" -> "minecraft:copper_ore"; // Similar to copper
+            // Immersive Engineering ores - required mod (uses ore_<metal> naming)
+            case "aluminum", "bauxite" -> "immersiveengineering:ore_bauxite";
+            case "silver" -> "immersiveengineering:ore_silver";
+            case "nickel" -> "immersiveengineering:ore_nickel";
 
-            // Other modded ores - use vanilla substitutes
-            case "zinc" -> "minecraft:iron_ore";
-            case "platinum" -> "minecraft:diamond_ore";
-            case "tungsten" -> "minecraft:iron_ore";
+            // Create ores - required mod
+            case "zinc" -> "create:zinc_ore";
+
+            // Ores without blocks in required mods - use vanilla substitutes
+            // NOTE: platinum and tungsten don't exist in Mekanism/IE/Create
+            case "platinum" -> "minecraft:diamond_ore";  // FIXME: No platinum ore exists - replace in planet configs
+            case "tungsten" -> "minecraft:iron_ore";     // FIXME: No tungsten ore exists - replace in planet configs
 
             // Default fallback
             default -> "minecraft:" + oreType + "_ore";
@@ -6680,7 +6867,13 @@ public class PlanetMaker {
         }
 
         config.add("targets", targets);
-        config.addProperty("size", oreType.equals("diamond") ? 8 : 12);
+        // Vein size: etrium gets small veins (4) like ancient debris, diamond gets 8, others get 12
+        int veinSize = switch (oreType) {
+            case "etrium", "moon_etrium", "mars_etrium", "glacio_etrium" -> 4;  // Small veins - rare endgame ore
+            case "diamond" -> 8;
+            default -> 12;
+        };
+        config.addProperty("size", veinSize);
         config.addProperty("discard_chance_on_air_exposure", 0.0f);  // Don't discard ores near caves - makes them findable
 
         feature.add("config", config);
@@ -6770,7 +6963,10 @@ public class PlanetMaker {
                     veinCount = 2;  // Very rare - Tier 4 material (Venus)
                     break;
                 case "etrium":
-                    veinCount = 2;  // Very rare - bonus space ore
+                case "moon_etrium":
+                case "mars_etrium":
+                case "glacio_etrium":
+                    veinCount = 2;  // Very rare - endgame etrium ore
                     break;
                 default:
                     veinCount = 5;  // Default for unknown ores
@@ -6796,8 +6992,12 @@ public class PlanetMaker {
         height.add("min_inclusive", minHeight);
 
         JsonObject maxHeight = new JsonObject();
-        // Max Y=48 to prevent surface ore exposure, diamond stays at 16
-        maxHeight.addProperty("absolute", oreType.equals("diamond") ? 16 : 48);
+        // Max Y level: etrium and diamond spawn deep (Y=16), others up to Y=48
+        boolean isDeepOre = switch (oreType) {
+            case "diamond", "etrium", "moon_etrium", "mars_etrium", "glacio_etrium" -> true;
+            default -> false;
+        };
+        maxHeight.addProperty("absolute", isDeepOre ? 16 : 48);
         height.add("max_inclusive", maxHeight);
 
         heightRange.add("height", height);

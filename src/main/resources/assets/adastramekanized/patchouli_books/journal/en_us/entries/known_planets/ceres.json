@@ -1,18 +1,18 @@
 {
   "name": "Ceres",
-  "icon": "minecraft:gray_concrete",
+  "icon": "minecraft:gray_terracotta",
   "category": "adastramekanized:known_planets",
   "advancement": "adastramekanized:planets/visited_ceres",
   "pages": [
     {
       "type": "patchouli:text",
       "title": "Planetary Data",
-      "text": "$(bold)Gravity:$() 5.0% of Earth$(br)$(bold)Atmosphere:$() None (requires oxygen)$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #000000$(br)$(bold)Ambient Light:$() 0.0%$(br)$(bold)Clouds:$() No$(br)$(bold)Rain:$() No"
+      "text": "$(bold)Gravity:$() 5.0% of Earth$(br)$(bold)Atmosphere:$() None$(br)$(bold)Temperature:$() -106 C$(br)$(bold)Ambient Light:$() 0.0%$(br)$(bold)Clouds:$() No$(br)$(bold)Rain:$() No"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Osmium (Common)$(br)• Nickel (Common)$(br)• Platinum (Uncommon)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Nickel (Common)$(br)• Iron (Uncommon)$(br)• Silver (Rare)$(br)• Etrium (Rare)$(br)"
     },
     {
       "type": "patchouli:text",
@@ -22,7 +22,7 @@
     {
       "type": "patchouli:text",
       "title": "Surface Composition",
-      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Gray Concrete$(br)• $(bold)Subsurface:$() Stone$(br)• $(bold)Deep:$() Deepslate$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Gray Terracotta$(br)• $(bold)Subsurface:$() Stone$(br)• $(bold)Deep:$() Deepslate$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
     }
   ]
 }

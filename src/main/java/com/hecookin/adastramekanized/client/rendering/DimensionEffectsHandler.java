@@ -12,6 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -38,24 +40,30 @@ public class DimensionEffectsHandler {
      */
     @SubscribeEvent
     public static void registerDimensionEffects(RegisterDimensionSpecialEffectsEvent event) {
-        AdAstraMekanized.LOGGER.info("Registering custom dimension effects for planets...");
+        AdAstraMekanized.LOGGER.info("=== DIMENSION EFFECTS REGISTRATION START ===");
 
         try {
             // Get all loaded planets from the planet registry
             PlanetRegistry registry = PlanetRegistry.getInstance();
+            int planetCount = registry != null && registry.getAllPlanets() != null ? registry.getAllPlanets().size() : 0;
+            AdAstraMekanized.LOGGER.info("PlanetRegistry status: instance={}, planets={}",
+                registry != null ? "present" : "null", planetCount);
 
             if (registry != null && registry.getAllPlanets() != null && !registry.getAllPlanets().isEmpty()) {
                 // If registry is ready, use it
+                AdAstraMekanized.LOGGER.info("Using PRIMARY path: PlanetRegistry with {} planets", planetCount);
                 registerFromPlanetRegistry(event, registry);
             } else {
                 // Fallback: Register known planets using JSON data
-                AdAstraMekanized.LOGGER.info("PlanetRegistry not ready, using fallback registration");
+                AdAstraMekanized.LOGGER.info("Using FALLBACK path: PlanetRegistry not ready");
                 registerKnownPlanetEffects(event);
             }
         } catch (Exception e) {
             AdAstraMekanized.LOGGER.error("Failed to register dimension effects, using fallback", e);
             registerKnownPlanetEffects(event);
         }
+
+        AdAstraMekanized.LOGGER.info("=== DIMENSION EFFECTS REGISTRATION COMPLETE ===");
     }
 
     private static void registerFromPlanetRegistry(RegisterDimensionSpecialEffectsEvent event, PlanetRegistry registry) {
@@ -89,29 +97,35 @@ public class DimensionEffectsHandler {
      * Fallback method to register effects for specific known planets using JSON data
      */
     public static void registerKnownPlanetEffects(RegisterDimensionSpecialEffectsEvent event) {
-        AdAstraMekanized.LOGGER.info("Registering dimension effects from planet JSON data...");
+        AdAstraMekanized.LOGGER.info("FALLBACK Step 1: Attempting to load planet JSON data...");
 
         // Load planet data directly from JSON files during client startup
         try {
             net.minecraft.server.packs.resources.ResourceManager resourceManager =
                 net.minecraft.client.Minecraft.getInstance().getResourceManager();
 
+            AdAstraMekanized.LOGGER.info("FALLBACK Step 2: ResourceManager={}", resourceManager != null ? "present" : "null");
+
             if (resourceManager != null) {
                 loadPlanetsFromResourceManager(resourceManager);
 
                 // Now try to register from the loaded data
                 PlanetRegistry registry = PlanetRegistry.getInstance();
+                int loadedCount = registry != null ? registry.getAllPlanets().size() : 0;
+                AdAstraMekanized.LOGGER.info("FALLBACK Step 3: After JSON load, registry has {} planets", loadedCount);
+
                 if (registry != null && !registry.getAllPlanets().isEmpty()) {
+                    AdAstraMekanized.LOGGER.info("FALLBACK: Successfully loaded JSON, using registry path");
                     registerFromPlanetRegistry(event, registry);
                     return;
                 }
             }
         } catch (Exception e) {
-            AdAstraMekanized.LOGGER.error("Failed to load planets from JSON, using hardcoded fallback", e);
+            AdAstraMekanized.LOGGER.error("FALLBACK: Failed to load planets from JSON", e);
         }
 
         // Last resort: Auto-generate from planet registry (if JSON loading fails completely)
-        AdAstraMekanized.LOGGER.info("Using fallback: auto-generating dimension effects from planet registry...");
+        AdAstraMekanized.LOGGER.info("FALLBACK Step 4: Using PlanetBuilder auto-generation (last resort)...");
 
         // Get all planet builders from PlanetGenerationRunner
         var planetBuilders = com.hecookin.adastramekanized.common.planets.PlanetGenerationRunner.getAllPlanetBuilders();
@@ -148,30 +162,86 @@ public class DimensionEffectsHandler {
 
         // For moon, use special MoonDimensionEffects
         if ("moon".equals(builder.getName())) {
+            AdAstraMekanized.LOGGER.info("Creating MoonDimensionEffects for: {}", builder.getName());
             return new MoonDimensionEffects();
         }
 
-        // For other planets, create a custom PlanetDimensionEffects
-        // that reads properties from the builder
-        return new PlanetDimensionEffects(null) {
-            private final float cloudHeight = builder.hasClouds() ? 192.0f : Float.NaN;
-            private final boolean hasRain = builder.hasRain();
-            private final boolean hasFog = builder.hasAtmosphere();
+        // Extract properties from builder
+        boolean hasClouds = builder.hasClouds();
+        boolean hasRain = builder.hasRain();
+        boolean hasAtmosphere = builder.hasAtmosphere();
+        boolean breathable = builder.isAtmosphereBreathable();
 
-            // Override constructor parameters via reflection-like pattern
-            // We can't actually override the constructor, so we override methods instead
+        AdAstraMekanized.LOGGER.info("Creating BuilderDimensionEffects for {} - clouds={}, rain={}, atmosphere={}, breathable={}",
+            builder.getName(), hasClouds, hasRain, hasAtmosphere, breathable);
 
-            @Override
-            public boolean isFoggyAt(int x, int z) {
-                return hasFog;
+        // Create a dimension effects instance that uses builder values directly
+        // instead of relying on a Planet object
+        return new BuilderDimensionEffects(hasClouds, hasRain, hasAtmosphere, breathable);
+    }
+
+    /**
+     * A DimensionSpecialEffects implementation that uses builder values directly.
+     * This fixes the issue where the anonymous class with planet=null couldn't set cloud height/rain.
+     */
+    private static class BuilderDimensionEffects extends DimensionSpecialEffects {
+        private final boolean hasAtmosphere;
+        private final boolean breathable;
+
+        public BuilderDimensionEffects(boolean hasClouds, boolean hasRain, boolean hasAtmosphere, boolean breathable) {
+            super(
+                hasClouds ? 192.0f : Float.NaN,  // Cloud height
+                hasRain,                          // Has precipitation
+                SkyType.NORMAL,                   // Sky type
+                false,                            // Force bright lightmap
+                !breathable                       // Force dark water (true for harsh environments)
+            );
+            this.hasAtmosphere = hasAtmosphere;
+            this.breathable = breathable;
+        }
+
+        @Override
+        public @NotNull Vec3 getBrightnessDependentFogColor(@NotNull Vec3 fogColor, float brightness) {
+            if (!hasAtmosphere) {
+                // No atmosphere = black space (like End but darker)
+                return fogColor.scale(0.05);
             }
 
-            // Note: Cloud height and precipitation are set in the parent constructor,
-            // so we can't override them here. The parent will use planet=null which means:
-            // - cloudHeight = Float.NaN (no clouds)
-            // - hasRain = false
-            // This is acceptable for fallback - proper effects load from JSON when available
-        };
+            // Follow vanilla Overworld pattern: multiply input fog color by brightness factors
+            // This preserves the biome's fog color while adjusting for day/night cycle
+            return fogColor.multiply(
+                brightness * 0.94F + 0.06F,
+                brightness * 0.94F + 0.06F,
+                brightness * 0.91F + 0.09F
+            );
+        }
+
+        @Override
+        public boolean isFoggyAt(int x, int z) {
+            // Follow vanilla Overworld: NOT foggy (return false)
+            // Dense fog is controlled by biome effects, not dimension effects
+            return false;
+        }
+
+        @Override
+        public float[] getSunriseColor(float timeOfDay, float partialTicks) {
+            if (!hasAtmosphere) {
+                return null; // No sunrise colors in space
+            }
+
+            // Show sunrise/sunset colors during appropriate times
+            if (timeOfDay > 0.23f && timeOfDay < 0.27f) {
+                // Sunrise window
+                float intensity = 1.0f - Math.abs(timeOfDay - 0.25f) / 0.02f;
+                return new float[]{intensity * 0.85f, intensity * 0.5f, intensity * 0.4f, intensity};
+            } else if (timeOfDay > 0.73f && timeOfDay < 0.77f) {
+                // Sunset window
+                float intensity = 1.0f - Math.abs(timeOfDay - 0.75f) / 0.02f;
+                return new float[]{intensity * 0.85f, intensity * 0.5f, intensity * 0.4f, intensity};
+            }
+
+            return null;
+        }
     }
 
     /**

@@ -57,14 +57,8 @@
       "maxCount": 2
     },
     {
-      "type": "minecraft:spider",
-      "weight": 5,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
       "type": "minecraft:creeper",
-      "weight": 4,
+      "weight": 6,
       "minCount": 1,
       "maxCount": 1
     }

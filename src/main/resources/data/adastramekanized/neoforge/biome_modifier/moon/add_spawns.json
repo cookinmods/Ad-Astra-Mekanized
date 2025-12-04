@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:moon_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:silverfish",
+      "weight": 1000,
+      "minCount": 32,
+      "maxCount": 64
+    }
+  ]
+}

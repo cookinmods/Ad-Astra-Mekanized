@@ -7,12 +7,12 @@
     {
       "type": "patchouli:text",
       "title": "Planetary Data",
-      "text": "$(bold)Gravity:$() 100.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #DDAA66$(br)$(bold)Ambient Light:$() 90.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() No"
+      "text": "$(bold)Gravity:$() 100.0% of Earth$(br)$(bold)Atmosphere:$() Breathable$(br)$(bold)Temperature:$() 35 C$(br)$(bold)Ambient Light:$() 90.0%$(br)$(bold)Clouds:$() Yes$(br)$(bold)Rain:$() No"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Copper (Common)$(br)• Gold (Common)$(br)• Diamond (Uncommon)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Copper (Common)$(br)• Gold (Common)$(br)• Iron (Uncommon)$(br)• Lead (Uncommon)$(br)• Diamond (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

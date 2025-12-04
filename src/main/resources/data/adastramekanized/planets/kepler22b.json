@@ -23,7 +23,7 @@
     "is_orbital": false,
     "sky_color": 7255551,
     "fog_color": 10408703,
-    "ambient_light": 0.9
+    "ambient_light": 0.0
   },
   "rendering": {
     "sky": {

@@ -7,12 +7,12 @@
     {
       "type": "patchouli:text",
       "title": "Planetary Data",
-      "text": "$(bold)Gravity:$() 38.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #D2691E$(br)$(bold)Ambient Light:$() 20.0%$(br)$(bold)Clouds:$() No$(br)$(bold)Rain:$() No"
+      "text": "$(bold)Gravity:$() 38.0% of Earth$(br)$(bold)Atmosphere:$() Toxic$(br)$(bold)Temperature:$() -65 C$(br)$(bold)Ambient Light:$() 20.0%$(br)$(bold)Clouds:$() No$(br)$(bold)Rain:$() No"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Iron (Common)$(br)• Copper (Common)$(br)• Redstone (Common)$(br)• Ostrum (Rare)$(br)• Diamond (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Redstone (Common)$(br)• Copper (Common)$(br)• Osmium (Uncommon)$(br)• Ostrum (Rare)$(br)• Desh (Rare)$(br)• Etrium (Rare)$(br)"
     },
     {
       "type": "patchouli:text",
@@ -22,7 +22,7 @@
     {
       "type": "patchouli:text",
       "title": "Surface Composition",
-      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Mars Sand$(br)• $(bold)Subsurface:$() Mars Stone$(br)• $(bold)Deep:$() Mars Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Mars Sand$(br)• $(bold)Subsurface:$() Mars Stone$(br)• $(bold)Deep:$() Basalt$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
     }
   ]
 }

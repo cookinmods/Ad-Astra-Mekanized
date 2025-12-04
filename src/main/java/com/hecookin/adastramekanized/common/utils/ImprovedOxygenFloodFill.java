@@ -2,6 +2,7 @@ package com.hecookin.adastramekanized.common.utils;
 
 import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.common.atmosphere.GlobalOxygenManager;
+import com.hecookin.adastramekanized.common.gravity.GlobalGravityManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
@@ -427,5 +428,163 @@ public class ImprovedOxygenFloodFill {
         PathResult(boolean hasPath) {
             this.hasPath = hasPath;
         }
+    }
+
+    // =====================================================================
+    // GRAVITY-SPECIFIC METHODS
+    // Uses GlobalGravityManager instead of GlobalOxygenManager
+    // =====================================================================
+
+    /**
+     * Finds area for gravity normalization, using GlobalGravityManager for ownership.
+     * Similar to oxygen flood fill but uses the gravity manager.
+     */
+    public static Set<BlockPos> findGravityNormalizableArea(
+            Level level,
+            BlockPos normalizerPos,
+            int currentRadius,
+            int maxBlocks,
+            long currentTick) {
+
+        Set<BlockPos> gravityPositions = new LinkedHashSet<>();
+        Set<BlockPos> visitedPositions = new HashSet<>();
+        ResourceKey<Level> dimension = level.dimension();
+        GlobalGravityManager gravityManager = GlobalGravityManager.getInstance();
+
+        AdAstraMekanized.LOGGER.debug("GravityFloodFill: Starting from normalizer {} with radius {}, max blocks {}",
+            normalizerPos, currentRadius, maxBlocks);
+
+        // PRIORITY PHASE: Immediately claim 3x3x3 cube around normalizer
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    BlockPos cubePos = normalizerPos.offset(dx, dy, dz);
+
+                    // Skip the normalizer itself
+                    if (cubePos.equals(normalizerPos)) {
+                        continue;
+                    }
+
+                    // Check if position needs gravity normalization
+                    if (canClaimGravityPosition(level, cubePos, normalizerPos, dimension, gravityManager)) {
+                        gravityPositions.add(cubePos);
+                        visitedPositions.add(cubePos);
+
+                        if (gravityPositions.size() >= maxBlocks) {
+                            return gravityPositions;
+                        }
+                    }
+                }
+            }
+        }
+
+        AdAstraMekanized.LOGGER.debug("Gravity priority cube claimed {} blocks", gravityPositions.size());
+
+        // Priority queue for ring-based expansion
+        PriorityQueue<PositionWithDistance> expansionQueue = new PriorityQueue<>(
+            Comparator.comparingInt(pwd -> pwd.distance)
+        );
+
+        // Add all claimed priority cube positions as starting points
+        for (BlockPos claimedPos : gravityPositions) {
+            expansionQueue.offer(new PositionWithDistance(claimedPos, 0));
+        }
+
+        // If we couldn't claim ANY blocks in the priority cube, we're blocked
+        if (gravityPositions.isEmpty()) {
+            AdAstraMekanized.LOGGER.debug("GravityFloodFill: Could not claim any blocks in priority cube - normalizer is blocked");
+            return gravityPositions;
+        }
+
+        // EXPANSION PHASE
+        while (!expansionQueue.isEmpty() && gravityPositions.size() < maxBlocks) {
+            PositionWithDistance current = expansionQueue.poll();
+
+            if (current.distance > currentRadius) {
+                continue;
+            }
+
+            // Check if we can claim this position
+            if (canClaimGravityPosition(level, current.pos, normalizerPos, dimension, gravityManager)) {
+                // Simplified path check - just check if gravity can pass through
+                if (canGravityPassThrough(level, normalizerPos, current.pos, normalizerPos, dimension, gravityManager)) {
+                    gravityPositions.add(current.pos);
+
+                    // Add adjacent positions
+                    for (Direction dir : DIRECTIONS) {
+                        BlockPos adjacent = current.pos.relative(dir);
+                        if (!visitedPositions.contains(adjacent)) {
+                            visitedPositions.add(adjacent);
+                            int newDistance = current.distance + 1;
+                            if (newDistance <= currentRadius) {
+                                expansionQueue.offer(new PositionWithDistance(adjacent, newDistance));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        AdAstraMekanized.LOGGER.debug("GravityFloodFill: Total {} positions found", gravityPositions.size());
+        return gravityPositions;
+    }
+
+    /**
+     * Check if a position can be claimed for gravity normalization.
+     * Uses GlobalGravityManager instead of GlobalOxygenManager.
+     */
+    private static boolean canClaimGravityPosition(
+            Level level,
+            BlockPos pos,
+            BlockPos normalizerPos,
+            ResourceKey<Level> dimension,
+            GlobalGravityManager gravityManager) {
+
+        // Check if position can be normalized (uses same logic as oxygen for air/passable blocks)
+        if (!needsOxygen(level, pos)) {
+            return false;
+        }
+
+        // Check ownership in GlobalGravityManager (NOT GlobalOxygenManager)
+        BlockPos owner = gravityManager.getBlockOwner(dimension, pos);
+
+        // Can claim if:
+        // 1. Not owned by anyone (owner == null)
+        // 2. Already owned by us (owner.equals(normalizerPos))
+        return owner == null || owner.equals(normalizerPos);
+    }
+
+    /**
+     * Simple check if gravity can pass between positions.
+     * Gravity is more permissive than oxygen - it can pass through any non-full-solid block.
+     */
+    private static boolean canGravityPassThrough(
+            Level level,
+            BlockPos from,
+            BlockPos to,
+            BlockPos normalizerPos,
+            ResourceKey<Level> dimension,
+            GlobalGravityManager gravityManager) {
+
+        // Check if the destination is owned by another normalizer
+        BlockPos owner = gravityManager.getBlockOwner(dimension, to);
+        if (owner != null && !owner.equals(normalizerPos)) {
+            return false;
+        }
+
+        BlockState toState = level.getBlockState(to);
+
+        // Can always pass into air
+        if (toState.isAir()) {
+            return true;
+        }
+
+        // Can pass through partial blocks
+        if (!toState.isCollisionShapeFullBlock(level, to)) {
+            return true;
+        }
+
+        // Can't pass through full solid blocks
+        return false;
     }
 }

@@ -14,13 +14,7 @@
         "type": "minecraft:skeleton",
         "minCount": 1,
         "maxCount": 2,
-        "weight": 8
-      },
-      {
-        "type": "minecraft:spider",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 5
+        "weight": 10
       }
     ],
     "creature": [
@@ -67,8 +61,9 @@
     [
       "adastramekanized:gliese667c_ore_gold_simple",
       "adastramekanized:gliese667c_ore_diamond_simple",
-      "adastramekanized:gliese667c_ore_iron_simple",
-      "adastramekanized:gliese667c_ore_emerald_simple"
+      "adastramekanized:gliese667c_ore_osmium_simple",
+      "adastramekanized:gliese667c_ore_emerald_simple",
+      "adastramekanized:gliese667c_ore_redstone_simple"
     ],
     [
       "minecraft:ore_infested"

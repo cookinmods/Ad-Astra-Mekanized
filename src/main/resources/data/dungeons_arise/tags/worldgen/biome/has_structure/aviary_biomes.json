@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "adastramekanized:kepler442b_forest",
+    "adastramekanized:kepler442b_birch_forest",
+    "adastramekanized:kepler442b_plains",
+    "adastramekanized:terra_nova_plains",
+    "adastramekanized:terra_nova_forest",
+    "adastramekanized:terra_nova_taiga"
+  ]
+}

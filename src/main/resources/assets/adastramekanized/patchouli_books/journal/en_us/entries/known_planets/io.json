@@ -1,18 +1,18 @@
 {
   "name": "Io",
-  "icon": "minecraft:yellow_concrete",
+  "icon": "minecraft:yellow_terracotta",
   "category": "adastramekanized:known_planets",
   "advancement": "adastramekanized:planets/visited_io",
   "pages": [
     {
       "type": "patchouli:text",
       "title": "Planetary Data",
-      "text": "$(bold)Gravity:$() 18.0% of Earth$(br)$(bold)Atmosphere:$() Yes$(br)$(bold)Temperature:$() [Not Yet Implemented]$(br)$(bold)Sky Color:$() #2A1A0A$(br)$(bold)Ambient Light:$() 40.0%$(br)$(bold)Clouds:$() No$(br)$(bold)Rain:$() No"
+      "text": "$(bold)Gravity:$() 18.0% of Earth$(br)$(bold)Atmosphere:$() Toxic$(br)$(bold)Temperature:$() -130 C$(br)$(bold)Ambient Light:$() 40.0%$(br)$(bold)Clouds:$() No$(br)$(bold)Rain:$() No"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Redstone (Common)$(br)• Gold (Common)$(br)• Iron (Common)$(br)• Diamond (Uncommon)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Gold (Common)$(br)• Redstone (Common)$(br)• Nickel (Uncommon)$(br)• Diamond (Rare)$(br)"
     },
     {
       "type": "patchouli:text",
@@ -22,7 +22,7 @@
     {
       "type": "patchouli:text",
       "title": "Surface Composition",
-      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Yellow Concrete$(br)• $(bold)Subsurface:$() Orange Concrete$(br)• $(bold)Deep:$() Netherrack$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d20"
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Yellow Terracotta$(br)• $(bold)Subsurface:$() Orange Terracotta$(br)• $(bold)Deep:$() Netherrack$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d20"
     }
   ]
 }

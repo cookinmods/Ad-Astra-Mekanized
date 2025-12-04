@@ -3,20 +3,8 @@
   "biomes": "#adastramekanized:profundus_biomes",
   "spawners": [
     {
-      "type": "minecraft:spider",
-      "weight": 15,
-      "minCount": 1,
-      "maxCount": 2
-    },
-    {
-      "type": "minecraft:cave_spider",
-      "weight": 20,
-      "minCount": 1,
-      "maxCount": 2
-    },
-    {
       "type": "minecraft:silverfish",
-      "weight": 10,
+      "weight": 15,
       "minCount": 2,
       "maxCount": 4
     }

@@ -22,15 +22,9 @@
     },
     {
       "type": "minecraft:skeleton",
-      "weight": 8,
+      "weight": 10,
       "minCount": 1,
       "maxCount": 2
-    },
-    {
-      "type": "minecraft:spider",
-      "weight": 5,
-      "minCount": 1,
-      "maxCount": 1
     }
   ]
 }

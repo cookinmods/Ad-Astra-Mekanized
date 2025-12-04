@@ -1,0 +1,54 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "kobolds"
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:profundus_biomes",
+  "spawners": [
+    {
+      "type": "kobolds:kobold",
+      "weight": 50,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "kobolds:kobold_warrior",
+      "weight": 25,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "kobolds:kobold_enchanter",
+      "weight": 16,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "kobolds:kobold_engineer",
+      "weight": 25,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "kobolds:kobold_zombie",
+      "weight": 15,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "kobolds:kobold_skeleton",
+      "weight": 15,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "kobolds:witherbold",
+      "weight": 5,
+      "minCount": 1,
+      "maxCount": 2
+    }
+  ]
+}

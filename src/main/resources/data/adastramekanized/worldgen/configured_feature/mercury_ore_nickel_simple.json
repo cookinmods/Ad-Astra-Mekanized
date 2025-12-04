@@ -8,7 +8,7 @@
           "tag": "minecraft:stone_ore_replaceables"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -17,7 +17,7 @@
           "tag": "minecraft:deepslate_ore_replaceables"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -26,7 +26,7 @@
           "block": "minecraft:dirt"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -35,7 +35,7 @@
           "block": "minecraft:gravel"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -44,7 +44,7 @@
           "block": "minecraft:sand"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -53,7 +53,7 @@
           "block": "minecraft:sandstone"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -62,7 +62,7 @@
           "block": "minecraft:terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -71,7 +71,7 @@
           "block": "minecraft:white_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -80,7 +80,7 @@
           "block": "minecraft:orange_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -89,7 +89,7 @@
           "block": "minecraft:magenta_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -98,7 +98,7 @@
           "block": "minecraft:light_blue_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -107,7 +107,7 @@
           "block": "minecraft:yellow_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -116,7 +116,7 @@
           "block": "minecraft:lime_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -125,7 +125,7 @@
           "block": "minecraft:pink_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -134,7 +134,7 @@
           "block": "minecraft:gray_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -143,7 +143,7 @@
           "block": "minecraft:light_gray_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -152,7 +152,7 @@
           "block": "minecraft:cyan_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -161,7 +161,7 @@
           "block": "minecraft:purple_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -170,7 +170,7 @@
           "block": "minecraft:blue_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -179,7 +179,7 @@
           "block": "minecraft:brown_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -188,7 +188,7 @@
           "block": "minecraft:green_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -197,7 +197,7 @@
           "block": "minecraft:red_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -206,7 +206,7 @@
           "block": "minecraft:black_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -215,7 +215,7 @@
           "block": "minecraft:netherrack"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -224,7 +224,7 @@
           "block": "minecraft:basalt"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -233,7 +233,7 @@
           "block": "minecraft:blackstone"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -242,7 +242,7 @@
           "block": "minecraft:end_stone"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -251,7 +251,7 @@
           "block": "minecraft:grass_block"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -260,7 +260,7 @@
           "block": "minecraft:podzol"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -269,7 +269,7 @@
           "block": "minecraft:mycelium"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -278,7 +278,7 @@
           "block": "minecraft:coarse_dirt"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -287,7 +287,7 @@
           "block": "minecraft:red_sand"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -296,7 +296,7 @@
           "block": "minecraft:red_sandstone"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -305,7 +305,7 @@
           "block": "minecraft:clay"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -314,7 +314,7 @@
           "block": "minecraft:packed_ice"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -323,7 +323,7 @@
           "block": "minecraft:blue_ice"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -332,7 +332,7 @@
           "block": "minecraft:snow_block"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -341,7 +341,7 @@
           "block": "minecraft:powder_snow"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -350,7 +350,7 @@
           "block": "minecraft:gray_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -359,7 +359,7 @@
           "block": "minecraft:stone"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       },
       {
@@ -368,7 +368,7 @@
           "block": "minecraft:gray_terracotta"
         },
         "state": {
-          "Name": "minecraft:copper_ore"
+          "Name": "immersiveengineering:ore_nickel"
         }
       }
     ],

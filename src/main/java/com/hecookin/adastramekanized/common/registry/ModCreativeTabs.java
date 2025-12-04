@@ -235,6 +235,7 @@ public class ModCreativeTabs {
 
                         // Mekanism-Compatible Workstations
                         output.accept(ModBlocks.OXYGEN_DISTRIBUTOR.get());
+                        output.accept(ModBlocks.GRAVITY_NORMALIZER.get());
                         output.accept(ModBlocks.WIRELESS_POWER_RELAY.get());
                         output.accept(ModBlocks.NASA_WORKBENCH.get());
                         // Oxygen Network Monitor removed - incomplete feature
