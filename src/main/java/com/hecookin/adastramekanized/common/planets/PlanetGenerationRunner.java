@@ -344,11 +344,11 @@ public class PlanetGenerationRunner {
      * - .lavaTunnels(true) - Underground lava channels
      */
     private static void configurePlanets() {
-        // Moon planet - FLAT PLAINS-LIKE TERRAIN with Moon blocks
-        // Uses vanillaQualityFlat preset for gentle rolling hills, no mountains
-        // Caves remain enabled for underground exploration
+        // Moon planet - ULTRA-FLAT PLAINS-LIKE TERRAIN with Moon blocks
+        // Uses vanillaQualityUltraFlat preset with flat splines for truly flat terrain
+        // No hills, no mountains - just flat lunar surface like plains biome
         PlanetMaker.PlanetBuilder moon = registerPlanet("moon")
-            .vanillaQualityFlat()          // Flat terrain with gentle rolling hills
+            .vanillaQualityUltraFlat()     // Ultra-flat terrain with constant splines (no hills)
             .coordinateShift(5000, 5000)   // Shift coordinates for unique Moon terrain
             // Physical properties
             .gravity(0.166f)  // Moon has 1/6 Earth gravity

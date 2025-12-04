@@ -425,6 +425,10 @@ public class PlanetMaker {
         // When true, generates full vanilla density function files with planet-specific references
         private boolean useVanillaQualityTerrain = false;
 
+        // Flat splines mode - uses constant values instead of vanilla splines for truly flat terrain
+        // When true with useVanillaQualityTerrain, uses flat_offset.json, flat_factor.json, flat_jaggedness.json
+        private boolean useFlatSplines = false;
+
         // Vanilla caves mode - when true, adds vanilla carvers to biomes for full cave generation
         // Automatically enabled when useIdenticalVanillaTerrain is true
         private boolean useVanillaCaves = false;
@@ -1006,6 +1010,30 @@ public class PlanetMaker {
             this.terrainFactor = 2.0f;       // Less dramatic terrain
             this.base3DNoiseXZFactor = 40.0f; // Smaller features
             this.jaggednessNoiseScale = 2000.0f;  // Larger mountain spacing
+            return this;
+        }
+
+        /**
+         * VANILLA-QUALITY: Ultra-flat terrain like plains biome
+         * Uses constant spline values instead of vanilla's complex splines.
+         * Produces truly flat terrain with minimal height variation.
+         */
+        public PlanetBuilder vanillaQualityUltraFlat() {
+            vanillaQualityStandard();
+            this.useFlatSplines = true;      // Use flat_offset.json, flat_factor.json, flat_jaggedness.json
+            this.terrainFactor = 1.0f;       // Minimal terrain scale
+            this.base3DNoiseXZFactor = 20.0f; // Very small horizontal features
+            this.base3DNoiseYFactor = 40.0f;  // Reduced vertical variation
+            this.jaggednessNoiseScale = 5000.0f;  // Mountains very far apart (effectively none)
+            return this;
+        }
+
+        /**
+         * Enable flat splines for truly flat terrain.
+         * Uses constant values instead of vanilla's complex spline system.
+         */
+        public PlanetBuilder useFlatSplines() {
+            this.useFlatSplines = true;
             return this;
         }
 
@@ -5056,20 +5084,41 @@ public class PlanetMaker {
         ridgesFolded.add("argument2", rfAdd);
         writeJsonFile(path + "ridges_folded.json", ridgesFolded);
 
-        // 5. Copy and transform offset.json (replace minecraft:overworld/ with planet ref)
-        String offsetContent = readFileToString(templatePath + "vanilla_offset.json");
-        offsetContent = offsetContent.replace("minecraft:overworld/", planetRef + "/");
-        writeStringToFile(path + "offset.json", offsetContent);
+        // 5. Copy and transform offset.json (use flat or vanilla based on useFlatSplines)
+        if (planet.useFlatSplines) {
+            // Use flat constant value for truly flat terrain
+            String offsetContent = readFileToString(templatePath + "flat_offset.json");
+            writeStringToFile(path + "offset.json", offsetContent);
+            AdAstraMekanized.LOGGER.info("Planet '{}' using FLAT offset spline (constant value)", planet.name);
+        } else {
+            String offsetContent = readFileToString(templatePath + "vanilla_offset.json");
+            offsetContent = offsetContent.replace("minecraft:overworld/", planetRef + "/");
+            writeStringToFile(path + "offset.json", offsetContent);
+        }
 
-        // 6. Copy and transform factor.json
-        String factorContent = readFileToString(templatePath + "vanilla_factor.json");
-        factorContent = factorContent.replace("minecraft:overworld/", planetRef + "/");
-        writeStringToFile(path + "factor.json", factorContent);
+        // 6. Copy and transform factor.json (use flat or vanilla based on useFlatSplines)
+        if (planet.useFlatSplines) {
+            // Use minimal constant factor for flat terrain
+            String factorContent = readFileToString(templatePath + "flat_factor.json");
+            writeStringToFile(path + "factor.json", factorContent);
+            AdAstraMekanized.LOGGER.info("Planet '{}' using FLAT factor spline (minimal value)", planet.name);
+        } else {
+            String factorContent = readFileToString(templatePath + "vanilla_factor.json");
+            factorContent = factorContent.replace("minecraft:overworld/", planetRef + "/");
+            writeStringToFile(path + "factor.json", factorContent);
+        }
 
-        // 7. Copy and transform jaggedness.json
-        String jaggednessContent = readFileToString(templatePath + "vanilla_jaggedness.json");
-        jaggednessContent = jaggednessContent.replace("minecraft:overworld/", planetRef + "/");
-        writeStringToFile(path + "jaggedness.json", jaggednessContent);
+        // 7. Copy and transform jaggedness.json (use flat or vanilla based on useFlatSplines)
+        if (planet.useFlatSplines) {
+            // Use zero jaggedness for no mountains
+            String jaggednessContent = readFileToString(templatePath + "flat_jaggedness.json");
+            writeStringToFile(path + "jaggedness.json", jaggednessContent);
+            AdAstraMekanized.LOGGER.info("Planet '{}' using FLAT jaggedness spline (zero value)", planet.name);
+        } else {
+            String jaggednessContent = readFileToString(templatePath + "vanilla_jaggedness.json");
+            jaggednessContent = jaggednessContent.replace("minecraft:overworld/", planetRef + "/");
+            writeStringToFile(path + "jaggedness.json", jaggednessContent);
+        }
 
         // 8. Generate depth.json (references planet's offset)
         JsonObject depth = new JsonObject();
