@@ -1,0 +1,34 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:mechanical_crafting",
+  "key": {
+    "E": {
+      "item": "adastramekanized:etrionic_capacitor"
+    },
+    "T": {
+      "item": "adastramekanized:large_gas_tank"
+    },
+    "O": {
+      "item": "adastramekanized:ostrum_sheet"
+    },
+    "F": {
+      "item": "adastramekanized:fan"
+    }
+  },
+  "pattern": [
+    "   E   ",
+    " T O T ",
+    " O T O ",
+    " F F F ",
+    "   F   "
+  ],
+  "result": {
+    "id": "adastramekanized:gravity_normalizer"
+  },
+  "accept_mirrored": false
+}

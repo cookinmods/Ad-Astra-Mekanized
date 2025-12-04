@@ -1,0 +1,34 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:mechanical_crafting",
+  "key": {
+    "S": {
+      "item": "adastramekanized:steel_sheet"
+    },
+    "P": {
+      "item": "minecraft:repeater"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "F": {
+      "item": "adastramekanized:fan"
+    }
+  },
+  "pattern": [
+    "  P C  ",
+    "  C P  ",
+    " S F S ",
+    " S F S ",
+    "   S   "
+  ],
+  "result": {
+    "id": "adastramekanized:redstone_toggle_relay"
+  },
+  "accept_mirrored": false
+}

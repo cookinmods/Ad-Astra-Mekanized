@@ -1,0 +1,34 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:mechanical_crafting",
+  "key": {
+    "F": {
+      "item": "adastramekanized:fan"
+    },
+    "G": {
+      "item": "adastramekanized:gas_tank"
+    },
+    "D": {
+      "item": "adastramekanized:desh_sheet"
+    },
+    "O": {
+      "item": "adastramekanized:oxygen_gear"
+    }
+  },
+  "pattern": [
+    "   F   ",
+    " G D G ",
+    " D O D ",
+    " F F F ",
+    "   F   "
+  ],
+  "result": {
+    "id": "adastramekanized:oxygen_distributor"
+  },
+  "accept_mirrored": false
+}

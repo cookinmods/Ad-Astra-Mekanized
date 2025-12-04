@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:mechanical_crafting",
+  "key": {
+    "L": {
+      "item": "minecraft:lightning_rod"
+    },
+    "F": {
+      "item": "adastramekanized:fan"
+    },
+    "D": {
+      "item": "adastramekanized:desh_sheet"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "E": {
+      "item": "adastramekanized:etrionic_capacitor"
+    }
+  },
+  "pattern": [
+    "  L  ",
+    " F F ",
+    " D E ",
+    " C C "
+  ],
+  "result": {
+    "id": "adastramekanized:oxygen_network_controller"
+  },
+  "accept_mirrored": false
+}

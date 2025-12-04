@@ -63,11 +63,8 @@ public class StarfieldLoadingOverlay extends LoadingOverlay {
         // Use the shared starfield renderer
         StarfieldRenderer.getInstance().render(guiGraphics, screenWidth, screenHeight, alpha);
 
-        // Render loading progress bar
+        // Render loading progress bar (no text - font not available during early loading)
         renderProgressBar(guiGraphics, screenWidth, screenHeight, alpha);
-
-        // Render mod name
-        renderModName(guiGraphics, screenWidth, screenHeight, alpha);
 
         // Call super to handle the actual loading logic (but not rendering)
         // We need to trigger the completion callback
@@ -77,8 +74,7 @@ public class StarfieldLoadingOverlay extends LoadingOverlay {
     }
 
     private void renderProgressBar(GuiGraphics guiGraphics, int screenWidth, int screenHeight, float alpha) {
-        // Don't render if alpha is too low or font not available
-        if (alpha < 0.1f || this.mc.font == null) {
+        if (alpha < 0.1f) {
             return;
         }
 
@@ -87,7 +83,7 @@ public class StarfieldLoadingOverlay extends LoadingOverlay {
         int barWidth = 200;
         int barHeight = 4;
         int barX = (screenWidth - barWidth) / 2;
-        int barY = screenHeight / 2 + 40;
+        int barY = screenHeight / 2;
 
         int bgAlpha = (int) (alpha * 100);
         int fgAlpha = (int) (alpha * 255);
@@ -107,28 +103,6 @@ public class StarfieldLoadingOverlay extends LoadingOverlay {
             guiGraphics.fill(barX, barY, barX + fillWidth, barY + 1,
                 (fgAlpha << 24) | 0x99BBFF);
         }
-
-        // Percentage text - use full opacity white, alpha controls visibility via threshold
-        String percentText = String.format("%.0f%%", progress * 100);
-        guiGraphics.drawCenteredString(this.mc.font, percentText,
-            screenWidth / 2, barY + barHeight + 6, 0xFFFFFFFF);
-    }
-
-    private void renderModName(GuiGraphics guiGraphics, int screenWidth, int screenHeight, float alpha) {
-        // Don't render if alpha is too low or font not available
-        if (alpha < 0.1f || this.mc.font == null) {
-            return;
-        }
-
-        // Mod title - use full opacity, color indicates theme
-        String title = "AD ASTRA MEKANIZED";
-        guiGraphics.drawCenteredString(this.mc.font, title,
-            screenWidth / 2, screenHeight / 2 - 20, 0xFF6688FF);
-
-        // Tagline
-        String tagline = "Explore the cosmos";
-        guiGraphics.drawCenteredString(this.mc.font, tagline,
-            screenWidth / 2, screenHeight / 2 - 5, 0xFFAAAAAA);
     }
 
     @Override
