@@ -5,7 +5,6 @@ import com.hecookin.adastramekanized.common.blockentities.machines.OxygenDistrib
 import com.hecookin.adastramekanized.common.blocks.base.SidedMachineBlock;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,11 +15,11 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
+import org.joml.Quaternionf;
 
 public class OxygenDistributorBlockEntityRenderer implements BlockEntityRenderer<OxygenDistributorBlockEntity> {
 
@@ -55,21 +54,50 @@ public class OxygenDistributorBlockEntityRenderer implements BlockEntityRenderer
         return lastAngle + diff * partialTick;
     }
 
-    private static void renderTopPart(BlockState state, float yRot, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    private static void renderTopPart(BlockState state, float spinAngle, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         Minecraft minecraft = Minecraft.getInstance();
         BakedModel topModel = minecraft.getModelManager().getModel(ModelResourceLocation.standalone(TOP_MODEL));
 
         if (topModel == null) {
-            // Fallback if model is not found
             return;
         }
 
         poseStack.pushPose();
         try {
-            // Center the rotation
-            poseStack.translate(0.5, 0, 0.5);
-            poseStack.mulPose(Axis.YP.rotationDegrees(-yRot));
-            poseStack.translate(-0.5, 0, -0.5);
+            // Get orientation from block state
+            AttachFace face = state.getValue(SidedMachineBlock.FACE);
+            Direction facing = state.getValue(SidedMachineBlock.FACING);
+
+            // Calculate blockstate-equivalent rotation angles
+            float xRot = switch (face) {
+                case FLOOR -> 0f;
+                case WALL -> 90f;
+                case CEILING -> 180f;
+            };
+
+            float yBlockRot = switch (facing) {
+                case EAST -> 90f;
+                case SOUTH -> 180f;
+                case WEST -> 270f;
+                default -> 0f; // NORTH
+            };
+
+            // Rotate around block center, matching Minecraft's blockstate rotation
+            // then apply spin in local space so it spins around the correct axis
+            poseStack.translate(0.5, 0.5, 0.5);
+
+            // Apply orientation matching blockstate: rotateYXZ(-y, -x, 0)
+            Quaternionf orientation = new Quaternionf().rotateYXZ(
+                (float) Math.toRadians(-yBlockRot),
+                (float) Math.toRadians(-xRot),
+                0.0F
+            );
+            poseStack.mulPose(orientation);
+
+            // Apply spin rotation in local space (around model's local Y axis)
+            poseStack.mulPose(Axis.YP.rotationDegrees(-spinAngle));
+
+            poseStack.translate(-0.5, -0.5, -0.5);
 
             // Render the top model
             minecraft.getBlockRenderer().getModelRenderer().renderModel(
