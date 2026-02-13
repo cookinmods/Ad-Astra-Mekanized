@@ -754,8 +754,8 @@ public class PlanetGenerationRunner {
                     {"monster", "minecraft:silverfish", "15", "1", "2"}
                 },
                 new String[][] {
-                    {"monster", "undead_revamp2:skeleton_vanguard", "20", "1", "2"},
-                    {"monster", "undead_revamp2:zombie_brute", "15", "1", "1"}
+                    {"monster", "undead_revamp2:thehunter", "20", "1", "2"},
+                    {"monster", "undead_revamp2:theheavy", "15", "1", "1"}
                 }
             )
             .allowPeacefulMobs(false)
