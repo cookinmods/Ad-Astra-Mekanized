@@ -6,11 +6,15 @@
     }
   ],
   "type": "createaddition:rolling",
-  "input": {
-    "item": "adastramekanized:steel_sheet"
-  },
-  "result": {
-    "count": 2,
-    "id": "adastramekanized:steel_rod"
-  }
+  "ingredients": [
+    {
+      "item": "adastramekanized:steel_sheet"
+    }
+  ],
+  "results": [
+    {
+      "count": 2,
+      "id": "adastramekanized:steel_rod"
+    }
+  ]
 }

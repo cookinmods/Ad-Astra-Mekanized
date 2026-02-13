@@ -10,6 +10,9 @@
     "D": {
       "item": "adastramekanized:desh_sheet"
     },
+    "E": {
+      "item": "mekanism:electrolytic_core"
+    },
     "G": {
       "item": "adastramekanized:gas_tank"
     },
@@ -21,8 +24,8 @@
     }
   },
   "pattern": [
+    "    E    ",
     "   D D   ",
-    "    D    ",
     "   G G   ",
     "   R R   ",
     " S S S S "

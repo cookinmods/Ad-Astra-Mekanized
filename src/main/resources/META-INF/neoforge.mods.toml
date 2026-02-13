@@ -68,12 +68,20 @@ versionRange = "[10.7.8,)"
 ordering = "AFTER"
 side = "BOTH"
 
-# Create dependency
+# Create dependency (required for mechanical crafting recipes)
 [[dependencies.adastramekanized]]
 modId = "create"
-type = "optional"
+type = "required"
 versionRange = "[0.5.1,)"
 ordering = "BEFORE"
+side = "BOTH"
+
+# Create Crafts & Additions dependency (required for rolling machine rod recipes)
+[[dependencies.adastramekanized]]
+modId = "createaddition"
+type = "required"
+versionRange = "[1.0.0,)"
+ordering = "AFTER"
 side = "BOTH"
 
 # Immersive Engineering dependency

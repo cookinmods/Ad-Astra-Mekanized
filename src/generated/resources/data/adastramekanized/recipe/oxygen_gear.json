@@ -2,7 +2,7 @@
   "type": "adastramekanized:nasa_workbench",
   "ingredients": [
     {
-      "item": "adastramekanized:desh_sheet"
+      "item": "mekanism:electrolytic_core"
     },
     {
       "item": "adastramekanized:desh_sheet"

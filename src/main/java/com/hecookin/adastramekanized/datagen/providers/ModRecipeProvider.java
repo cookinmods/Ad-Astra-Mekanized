@@ -146,8 +146,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "large_gas_tank"));
 
         // Oxygen Gear - 10 items, requires desh nuggets
+        // Top-left slot uses Mekanism Electrolytic Core (oxygen separation component)
         NasaWorkbenchRecipeBuilder.builder(RecipeCategory.MISC, ModItems.OXYGEN_GEAR.get(), 1)
-            .addIngredient(ModItems.DESH_SHEET.get(), 3)
+            .addIngredient(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("mekanism", "electrolytic_core")), 1)
+            .addIngredient(ModItems.DESH_SHEET.get(), 2)
             .addIngredient(ModItems.GAS_TANK.get(), 2)
             .addIngredient(ModItems.STEEL_ROD.get(),2)
             .addIngredient(ModItems.STEEL_SHEET.get(),4)

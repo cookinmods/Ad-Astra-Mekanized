@@ -8,13 +8,13 @@
   "type": "createaddition:rolling",
   "ingredients": [
     {
-      "item": "adastramekanized:etrium_sheet"
+      "item": "create:iron_sheet"
     }
   ],
   "results": [
     {
       "count": 2,
-      "id": "adastramekanized:etrium_rod"
+      "id": "adastramekanized:iron_rod"
     }
   ]
 }
