@@ -28,21 +28,11 @@ public record NasaWorkbenchRecipe(
         ItemStack result
 ) implements Recipe<RecipeInput> {
 
-    static {
-        AdAstraMekanized.LOGGER.error("NASA_WORKBENCH: Static initializer called - Recipe class loading!");
-    }
-
     public static final MapCodec<NasaWorkbenchRecipe> CODEC = RecordCodecBuilder.mapCodec(
-            instance -> {
-                AdAstraMekanized.LOGGER.error("NASA_WORKBENCH CODEC: Starting to build codec instance");
-                return instance.group(
+            instance -> instance.group(
                     Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(recipe -> recipe.ingredients),
                     ItemStack.CODEC.fieldOf("result").forGetter(recipe -> recipe.result)
-                ).apply(instance, (ingredients, result) -> {
-                    AdAstraMekanized.LOGGER.error("NASA_WORKBENCH CODEC: Creating recipe with {} ingredients", ingredients.size());
-                    return new NasaWorkbenchRecipe(ingredients, result);
-                });
-            });
+            ).apply(instance, NasaWorkbenchRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, NasaWorkbenchRecipe> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()), NasaWorkbenchRecipe::ingredients,

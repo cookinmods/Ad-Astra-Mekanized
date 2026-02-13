@@ -688,3 +688,4 @@ registerPlanet("habitable_world")
 - always update planetGenerationRunner when adding/editing planet generation
 - always ensure gradle makePlanets is updated to generate proper changes when we alter planets and biom generation
 - do not directly modify the generated files of planets, modify planetGenerationRunner so when gradle makePlanets is run it update properly
+- consult existing terrain documentation every time before modifying planet terrain/bioms

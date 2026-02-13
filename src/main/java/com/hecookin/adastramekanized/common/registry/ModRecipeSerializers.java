@@ -19,21 +19,16 @@ public class ModRecipeSerializers {
 
     public static final Supplier<RecipeSerializer<NasaWorkbenchRecipe>> NASA_WORKBENCH =
             RECIPE_SERIALIZERS.register("nasa_workbench",
-                    () -> {
-                        AdAstraMekanized.LOGGER.error("NASA_WORKBENCH SERIALIZER: Creating serializer instance");
-                        return new RecipeSerializer<NasaWorkbenchRecipe>() {
-                            @Override
-                            public MapCodec<NasaWorkbenchRecipe> codec() {
-                                AdAstraMekanized.LOGGER.error("NASA_WORKBENCH SERIALIZER: codec() method called - returning CODEC");
-                                return NasaWorkbenchRecipe.CODEC;
-                            }
+                    () -> new RecipeSerializer<NasaWorkbenchRecipe>() {
+                        @Override
+                        public MapCodec<NasaWorkbenchRecipe> codec() {
+                            return NasaWorkbenchRecipe.CODEC;
+                        }
 
-                            @Override
-                            public StreamCodec<RegistryFriendlyByteBuf, NasaWorkbenchRecipe> streamCodec() {
-                                AdAstraMekanized.LOGGER.error("NASA_WORKBENCH SERIALIZER: streamCodec() method called");
-                                return NasaWorkbenchRecipe.STREAM_CODEC;
-                            }
-                        };
+                        @Override
+                        public StreamCodec<RegistryFriendlyByteBuf, NasaWorkbenchRecipe> streamCodec() {
+                            return NasaWorkbenchRecipe.STREAM_CODEC;
+                        }
                     });
 
     public static void register(IEventBus modEventBus) {

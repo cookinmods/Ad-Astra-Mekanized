@@ -15,16 +15,11 @@ public class ModRecipeTypes {
             DeferredRegister.create(Registries.RECIPE_TYPE, AdAstraMekanized.MOD_ID);
 
     public static final Supplier<RecipeType<NasaWorkbenchRecipe>> NASA_WORKBENCH =
-            RECIPE_TYPES.register("nasa_workbench", () -> {
-                AdAstraMekanized.LOGGER.error("NASA_WORKBENCH TYPE: Creating RecipeType instance");
-                return new RecipeType<>() {
-                    @Override
-                    public String toString() {
-                        String id = AdAstraMekanized.MOD_ID + ":nasa_workbench";
-                        AdAstraMekanized.LOGGER.error("NASA_WORKBENCH TYPE: toString() called, returning: {}", id);
-                        return id;
-                    }
-                };
+            RECIPE_TYPES.register("nasa_workbench", () -> new RecipeType<>() {
+                @Override
+                public String toString() {
+                    return AdAstraMekanized.MOD_ID + ":nasa_workbench";
+                }
             });
 
     public static void register(IEventBus modEventBus) {

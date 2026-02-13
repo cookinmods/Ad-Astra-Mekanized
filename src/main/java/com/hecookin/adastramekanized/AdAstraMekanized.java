@@ -88,9 +88,6 @@ public class AdAstraMekanized {
         // Register networking
         modEventBus.addListener(this::registerNetworking);
 
-        // Register debug events on mod bus
-        modEventBus.register(com.hecookin.adastramekanized.common.events.RegistrationDebugEvents.class);
-
         // Register capabilities for Mekanism integration
         modEventBus.addListener(MekanismCapabilityProvider::registerCapabilities);
 

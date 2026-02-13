@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Coal (Common)$(br)• Lead (Common)$(br)• Redstone (Uncommon)$(br)• Gold (Uncommon)$(br)• Calorite (Rare)$(br)• Etrium (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Coal (Common)$(br)• Lead (Common)$(br)• Redstone (Uncommon)$(br)• Calorite (Rare)$(br)• Etrium (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

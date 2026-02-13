@@ -101,7 +101,7 @@ public class LevelRendererMixin {
 
         // Map vanilla dimensions to our planet IDs if we have planet data for them
         return switch (dimensionLocation.toString()) {
-            case "minecraft:overworld" -> ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "earth");
+            case "minecraft:overworld" -> null; // Use vanilla sky rendering
             case "minecraft:the_nether" -> null; // No celestial bodies in Nether
             case "minecraft:the_end" -> null; // No celestial bodies in End
             default -> null;

@@ -274,10 +274,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
                 .addIngredient(ModItems.FAN.get(),2)
             .addIngredient(ModItems.DESH_SHEET.get())
-            .addIngredient(ModItems.LARGE_GAS_TANK.get(), 1)
+            .addIngredient(ModItems.ETRIONIC_CAPACITOR.get(),1)
                 .addIngredient(Items.COMPARATOR)
-                .addIngredient(ModItems.ETRIONIC_CAPACITOR.get(),2)
-            .unlockedBy("has_etrionic_capacitor", has(ModItems.ETRIONIC_CAPACITOR.get()))
+                .addIngredient(Items.COMPARATOR)
+            .unlockedBy("has_etrionic_core", has(ModItems.ETRIONIC_CAPACITOR.get()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "oxygen_network_controller"));
 
         // Redstone Toggle Relay - 9 items
@@ -300,18 +300,22 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .addIngredient(ModItems.GAS_TANK.get()).addIngredient(ModItems.OXYGEN_GEAR.get())
 
             .addIngredient(ModItems.DESH_SHEET.get()).addIngredient(ModItems.FAN.get())
-                .addIngredient(ModItems.FAN.get())
-                .addIngredient(ModItems.FAN.get()).addIngredient(ModItems.FAN.get())
+            .addIngredient(ModItems.FAN.get())
+            .addIngredient(ModItems.FAN.get()).addIngredient(ModItems.FAN.get())
             .unlockedBy("has_oxygen_gear", has(ModItems.OXYGEN_GEAR.get()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "oxygen_distributor"));
 
         // Gravity Normalizer - 10 items (uses argon/etrium for gravity manipulation theme)
         NasaWorkbenchRecipeBuilder.builder(RecipeCategory.MISC, ModBlocks.GRAVITY_NORMALIZER.get(), 1)
-            .addIngredient(ModItems.ETRIONIC_CORE.get())
-            .addIngredient(ModItems.LARGE_GAS_TANK.get()).addIngredient(ModItems.OSTRUM_SHEET.get())
+            .addIngredient(ModItems.ETRIONIC_CAPACITOR.get())
+            .addIngredient(ModItems.LARGE_GAS_TANK.get())
             .addIngredient(ModItems.OSTRUM_SHEET.get())
-            .addIngredient(ModItems.LARGE_GAS_TANK.get()).addIngredient(ModItems.ETRIONIC_CAPACITOR.get())
-            .addIngredient(ModItems.OSTRUM_SHEET.get()).addIngredient(ModItems.FAN.get())
+            .addIngredient(ModItems.OSTRUM_SHEET.get())
+            .addIngredient(ModItems.LARGE_GAS_TANK.get())
+            .addIngredient(ModItems.LARGE_GAS_TANK.get())
+            .addIngredient(ModItems.OSTRUM_SHEET.get())
+            .addIngredient(ModItems.FAN.get())
+            .addIngredient(ModItems.FAN.get())
             .addIngredient(ModItems.FAN.get())
             .addIngredient(ModItems.FAN.get())
             .unlockedBy("has_etrionic_capacitor", has(ModItems.ETRIONIC_CAPACITOR.get()))

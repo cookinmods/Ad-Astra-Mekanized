@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Gold (Common)$(br)• Silver (Common)$(br)• Iron (Uncommon)$(br)• Diamond (Rare)$(br)• Etrium (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Gold (Common)$(br)• Silver (Common)$(br)• Iron (Uncommon)$(br)• Etrium (Rare)$(br)"
     },
     {
       "type": "patchouli:text",
