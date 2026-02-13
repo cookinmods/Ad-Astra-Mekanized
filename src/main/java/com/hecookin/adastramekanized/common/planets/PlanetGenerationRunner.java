@@ -260,56 +260,6 @@ public class PlanetGenerationRunner {
      */
 
     /**
-     * Apply Moon mob preset
-     */
-    private static void applyMoonMobPreset(PlanetMaker.PlanetBuilder planet) {
-        // Moon-specific mob spawning - matches the biome_modifier configuration
-        planet.clearAllMobSpawns()  // Clear any default spawns
-              .addMobSpawn("monster", "minecraft:silverfish", 1000, 32, 64)  // Silverfish swarms (from biome_modifier)
-
-                //.addMowziesMob("naga", 5, 1, 2)     // Nagas near water
-
-              // Example: Equipped zombie variant (requires PlanetMobSpawnHandler)
-              // This would spawn zombies with leather armor on the moon
-              // NOTE: Equipment is handled by PlanetMobSpawnHandler event system
-              /*.addEquippedMobSpawn("monster", "minecraft:zombie", 30, 1, 3,
-                      "minecraft:leather_helmet", "minecraft:leather_chestplate", null, null,
-                      "minecraft:stone_sword", null)*/
-
-
-              // Example: Armored skeleton (like WDA's skeleton_armored variants)
-              /*.addEquippedMobSpawn("monster", "minecraft:skeleton", 30, 1, 2,
-                      "minecraft:chainmail_helmet", "minecraft:chainmail_chestplate",
-                      "minecraft:chainmail_leggings", "minecraft:chainmail_boots",
-                      "minecraft:bow", null)*/
-
-              .allowPeacefulMobs(false);  // No peaceful mobs on moon
-    }
-
-    /**
-     * Apply Mars mob preset
-     */
-    private static void applyMarsMobPreset(PlanetMaker.PlanetBuilder planet) {
-        // Hostile mobs for Mars - harsh environment (no spiders in space)
-        planet.addMobSpawn("monster", "minecraft:husk", 30, 2, 4)
-              .addMobSpawn("monster", "minecraft:phantom", 10, 1, 2)
-              .addMobSpawn("monster", "minecraft:enderman", 5, 1, 1);
-    }
-
-    /**
-     * Apply test planet mob preset
-     */
-    private static void applyTestPlanetMobPreset(PlanetMaker.PlanetBuilder planet) {
-        // Standard overworld mobs for testing
-        planet.addMobSpawn("monster", "minecraft:zombie", 25, 2, 4)
-              .addMobSpawn("monster", "minecraft:skeleton", 25, 2, 4)
-              .addMobSpawn("monster", "minecraft:creeper", 25, 1, 2)
-              .addMobSpawn("monster", "minecraft:spider", 25, 1, 3)
-              .addMobSpawn("creature", "minecraft:sheep", 10, 2, 3)
-              .addMobSpawn("creature", "minecraft:pig", 10, 2, 3);
-    }
-
-    /**
      * Configure planets using PlanetMaker builder pattern
      *
      * TECTONIC GENERATION MODE:
@@ -344,11 +294,11 @@ public class PlanetGenerationRunner {
      * - .lavaTunnels(true) - Underground lava channels
      */
     private static void configurePlanets() {
-        // Moon planet - ULTRA-FLAT PLAINS-LIKE TERRAIN with Moon blocks
-        // Uses vanillaQualityUltraFlat preset with flat splines for truly flat terrain
-        // No hills, no mountains - just flat lunar surface like plains biome
+        // Moon planet - FLAT PLAINS-LIKE TERRAIN with Moon blocks
+        // Uses vanillaQualityFlat preset for gentle rolling hills, no mountains
+        // Caves remain enabled for underground exploration
         PlanetMaker.PlanetBuilder moon = registerPlanet("moon")
-            .vanillaQualityUltraFlat()     // Ultra-flat terrain with constant splines (no hills)
+            .vanillaQualityFlat()          // Flat terrain with gentle rolling hills
             .coordinateShift(5000, 5000)   // Shift coordinates for unique Moon terrain
             // Physical properties
             .gravity(0.166f)  // Moon has 1/6 Earth gravity
@@ -399,9 +349,19 @@ public class PlanetGenerationRunner {
             .configureOre("cheese", 4)      // Moon cheese ore - classic Ad Astra feature
             .configureOre("moon_etrium", 2); // ENDGAME ORE - unchanged
 
-        // Apply Moon mob preset
-        applyMoonMobPreset(moon);
-        moon.generate();
+        moon.clearAllMobSpawns()
+            .addModReplacementSpawns("kobolds",
+                new String[][] {
+                    {"monster", "minecraft:silverfish", "30", "2", "4"},
+                    {"monster", "minecraft:endermite", "15", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "kobolds:kobold", "30", "2", "4"},
+                    {"monster", "kobolds:kobold_warrior", "15", "1", "2"}
+                }
+            )
+            .allowPeacefulMobs(false)
+            .generate();
 
         // EARTH'S ORBIT - Space station dimension with Earth view below
         // This is a VOID DIMENSION - no terrain generation, just a spawn platform
@@ -487,11 +447,22 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)  // Dry desert planet - no water
             .oreVeinsEnabled(true)
-            // Mob spawning - Mars sparse hostile environment (reduced rates)
-            .addMobSpawn("monster", "minecraft:husk", 25, 1, 3)
-            .addMobSpawn("monster", "minecraft:enderman", 8, 1, 1)
-            // Born in Chaos undead - Mars harsh wasteland (reduced)
-            .addBornInChaosUndead(12)
+            .clearAllMobSpawns()
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"monster", "minecraft:husk", "30", "1", "3"},
+                    {"monster", "minecraft:enderman", "10", "1", "1"},
+                    {"monster", "minecraft:skeleton", "15", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:decrepit_skeleton", "12", "1", "2"},
+                    {"monster", "born_in_chaos_v1:skeleton_demoman", "7", "1", "1"},
+                    {"monster", "born_in_chaos_v1:decaying_zombie", "12", "1", "2"},
+                    {"monster", "born_in_chaos_v1:barrel_zombie", "7", "1", "1"},
+                    {"monster", "born_in_chaos_v1:bonescaller", "6", "1", "1"},
+                    {"monster", "born_in_chaos_v1:bone_imp", "7", "1", "1"}
+                }
+            )
             // Add custom biomes for Mars (vanilla climate parameters work with vanilla noise!)
             .clearBiomes()
             .addBiome("adastramekanized:mars_highlands", -0.2f, -0.7f, 0.6f, -0.1f, 0.5f, 0.0f, "Martian Highlands")
@@ -552,13 +523,22 @@ public class PlanetGenerationRunner {
             .configureOre("redstone", 15)  // tertiary - volcanic thermal energy
             .configureOre("calorite", 4)   // PROGRESSION ORE - needed for Tier 4 rocket
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
-            // Sparse hostile mobs - too hostile for most life (no nether creatures in space)
             .clearAllMobSpawns()
-            // Born in Chaos undead - toxic hellscape survivors
-            .addBornInChaosUndead(25)
-            // Reptilian survivors - sparse heat-adapted lizards
-            .addReptilianCreature("gecko", 8, 1, 1)
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"monster", "minecraft:husk", "25", "1", "2"},
+                    {"monster", "minecraft:witch", "15", "1", "1"},
+                    {"monster", "minecraft:slime", "20", "2", "3"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:decrepit_skeleton", "25", "1", "2"},
+                    {"monster", "born_in_chaos_v1:decaying_zombie", "20", "1", "2"},
+                    {"monster", "born_in_chaos_v1:door_knight", "5", "1", "1"},
+                    {"monster", "born_in_chaos_v1:skeleton_thrasher", "8", "1", "1"}
+                }
+            )
             .allowPeacefulMobs(false)
+            .addReptilianCreature("gecko", 15, 1, 1)
             .clearBiomes()
             .addBiome("minecraft:desert", 0.9f, -0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Venusian Wasteland")
             .skyColor(0xFFCC66)
@@ -598,12 +578,18 @@ public class PlanetGenerationRunner {
             .configureOre("redstone", 15)  // tertiary - thermal energy from sun proximity
             .configureOre("ostrum", 4)     // PROGRESSION ORE - needed for Tier 3 rocket
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
-            // Sparse parasitic mobs + cave-dwelling kobolds
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:silverfish", 30, 2, 4)
-            .addMobSpawn("monster", "minecraft:endermite", 10, 1, 2)
-            // Sparse kobold cave dwellers
-            .addKoboldsMobs(8)
+            .addModReplacementSpawns("kobolds",
+                new String[][] {
+                    {"monster", "minecraft:silverfish", "30", "2", "4"},
+                    {"monster", "minecraft:endermite", "10", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "kobolds:kobold", "30", "2", "4"},
+                    {"monster", "kobolds:kobold_warrior", "15", "1", "2"},
+                    {"monster", "kobolds:kobold_engineer", "10", "1", "2"}
+                }
+            )
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:desert", -0.9f, -0.9f, 0.5f, 0.0f, 0.0f, 0.0f, "Mercurian Craters")
@@ -648,11 +634,18 @@ public class PlanetGenerationRunner {
             .configureOre("silver", 20)    // secondary - IE ore, frozen deposits
             .configureOre("iron", 15)      // tertiary - rocky core deposits
             .configureOre("etrium", 6)     // ENDGAME ORE - unchanged
-            // Very sparse aquatic-themed mobs
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:drowned", 15, 1, 2)
-            .addMobSpawn("creature", "minecraft:glow_squid", 10, 1, 3)
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"monster", "minecraft:drowned", "25", "1", "2"},
+                    {"water_creature", "minecraft:glow_squid", "15", "1", "3"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:corpse_fish", "25", "2", "4"},
+                    {"monster", "born_in_chaos_v1:glutton_fish", "15", "1", "2"},
+                    {"monster", "born_in_chaos_v1:zombie_fisherman", "10", "1", "2"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:frozen_ocean", -1.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, "Europan Ice Plains")
             .skyColor(0x1a1a2e)
@@ -697,12 +690,20 @@ public class PlanetGenerationRunner {
             .configureOre("redstone", 20)  // secondary - thermal energy
             .configureOre("nickel", 15)    // tertiary - IE ore, volcanic metal
             .configureOre("diamond", 5)    // rare - forged in heat
-            // MCDoom demons ONLY - volcanic hellscape (no other mobs to avoid infighting)
             .clearAllMobSpawns()
-            .addMCDoomDemon("imp", 40, 2, 4)
-            .addMCDoomDemon("lost_soul", 30, 1, 3)
-            .addMCDoomDemon("cacodemon", 15, 1, 1)
-            .addMCDoomDemon("pinky", 10, 1, 2)
+            .addModReplacementSpawns("doom",
+                new String[][] {
+                    {"monster", "minecraft:magma_cube", "30", "1", "3"},
+                    {"monster", "minecraft:ghast", "10", "1", "1"},
+                    {"monster", "minecraft:blaze", "15", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "doom:imp", "40", "2", "4"},
+                    {"monster", "doom:lost_soul", "30", "1", "3"},
+                    {"monster", "doom:cacodemon", "15", "1", "1"},
+                    {"monster", "doom:pinky", "10", "1", "2"}
+                }
+            )
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:basalt_deltas", 1.0f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, "Io Volcanic Fields")
@@ -746,9 +747,17 @@ public class PlanetGenerationRunner {
             .configureOre("iron", 20)      // secondary - rocky moon deposits
             .configureOre("copper", 15)    // tertiary - basic metal
             .configureOre("diamond", 5)    // rare - deep deposits
-            // Moderate mob spawning (no spiders in space)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:skeleton", 25, 1, 2)
+            .addModReplacementSpawns("undead_revamp2",
+                new String[][] {
+                    {"monster", "minecraft:skeleton", "25", "1", "2"},
+                    {"monster", "minecraft:silverfish", "15", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "undead_revamp2:skeleton_vanguard", "20", "1", "2"},
+                    {"monster", "undead_revamp2:zombie_brute", "15", "1", "1"}
+                }
+            )
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:plains", -0.5f, 0.0f, 0.2f, 0.0f, 0.0f, 0.0f, "Ganymedean Plains")
@@ -788,11 +797,17 @@ public class PlanetGenerationRunner {
             .configureOre("iron", 15)      // tertiary - rocky moon core
             .configureOre("gold", 12)      // uncommon - precious metal seams
             .configureOre("diamond", 5)    // rare - impact diamonds
-            // Very sparse mobs + underground kobolds
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:endermite", 10, 1, 1)
-            // Sparse kobold underground population
-            .addKoboldsMobs(8)
+            .addModReplacementSpawns("kobolds",
+                new String[][] {
+                    {"monster", "minecraft:endermite", "20", "1", "2"},
+                    {"monster", "minecraft:silverfish", "10", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "kobolds:kobold", "20", "2", "4"},
+                    {"monster", "kobolds:kobold_warrior", "10", "1", "2"}
+                }
+            )
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:desert", -0.7f, -0.5f, 0.3f, 0.0f, 0.0f, 0.0f, "Callisto Craters")
@@ -836,12 +851,18 @@ public class PlanetGenerationRunner {
             .configureOre("redstone", 12)  // uncommon - chemical energy from hydrocarbons
             .configureOre("calorite", 3)   // rare - Tier 4 progression ore
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
-            // Alien-themed mobs
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:slime", 30, 2, 4)
-            .addMobSpawn("monster", "minecraft:witch", 15, 1, 1)
-            .addMobSpawn("creature", "minecraft:axolotl", 20, 2, 4)
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("shineals_prehistoric_expansion",
+                new String[][] {
+                    {"monster", "minecraft:slime", "25", "2", "4"},
+                    {"monster", "minecraft:witch", "15", "1", "1"},
+                    {"creature", "minecraft:axolotl", "20", "2", "4"}
+                },
+                new String[][] {
+                    {"monster", "shineals_prehistoric_expansion:utahraptor", "20", "1", "2"},
+                    {"creature", "shineals_prehistoric_expansion:mammoth", "15", "1", "2"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:swamp", 0.3f, 0.8f, 0.0f, 0.0f, 0.0f, 0.0f, "Titan Methane Lakes")
             .skyColor(0xCC8844)
@@ -879,9 +900,17 @@ public class PlanetGenerationRunner {
             .configureOre("silver", 25)    // primary - IE ore, geyser deposits
             .configureOre("copper", 20)    // secondary - frozen metal seams
             .configureOre("diamond", 6)    // rare - pristine ice preserves gems
-            // Almost no mobs
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:stray", 5, 1, 1)
+            .addModReplacementSpawns("luminousworld",
+                new String[][] {
+                    {"monster", "minecraft:stray", "10", "1", "1"},
+                    {"monster", "minecraft:phantom", "5", "1", "1"}
+                },
+                new String[][] {
+                    {"monster", "luminousworld:bone_stalker", "8", "1", "1"},
+                    {"monster", "luminousworld:yeti", "6", "1", "1"}
+                }
+            )
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, 0.0f, 0.2f, 0.0f, 0.0f, 0.0f, "Enceladus Ice Fields")
@@ -923,9 +952,17 @@ public class PlanetGenerationRunner {
             .configureOre("copper", 12)    // tertiary - frozen metal seams
             .configureOre("diamond", 6)    // rare - pristine ancient deposits
             .configureOre("ostrum", 3)     // rare - Tier 3 progression ore
-            // Almost lifeless
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:phantom", 5, 1, 1)
+            .addModReplacementSpawns("luminousworld",
+                new String[][] {
+                    {"monster", "minecraft:phantom", "10", "1", "1"},
+                    {"monster", "minecraft:stray", "5", "1", "1"}
+                },
+                new String[][] {
+                    {"monster", "luminousworld:bone_stalker", "8", "1", "1"},
+                    {"monster", "luminousworld:mummy", "6", "1", "1"}
+                }
+            )
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, -0.8f, 0.0f, 0.0f, 0.0f, 0.0f, "Triton Nitrogen Plains")
@@ -967,11 +1004,18 @@ public class PlanetGenerationRunner {
             .configureOre("iron", 15)      // tertiary - basic asteroid metal
             .configureOre("silver", 4)     // rare - IE ore, precious deposits
             .configureOre("etrium", 4)     // ENDGAME ORE - unchanged
-            // Minimal life + asteroid cave kobolds
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:silverfish", 20, 2, 4)
-            // Sparse kobold miners in asteroid caves
-            .addKoboldsMobs(10)
+            .addModReplacementSpawns("kobolds",
+                new String[][] {
+                    {"monster", "minecraft:silverfish", "25", "2", "4"},
+                    {"monster", "minecraft:endermite", "10", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "kobolds:kobold", "25", "2", "4"},
+                    {"monster", "kobolds:kobold_warrior", "12", "1", "2"},
+                    {"monster", "kobolds:kobold_engineer", "12", "1", "2"}
+                }
+            )
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:desert", -0.5f, -0.9f, 0.3f, 0.0f, 0.0f, 0.0f, "Ceres Mining Zone")
@@ -1010,9 +1054,16 @@ public class PlanetGenerationRunner {
             .configureOre("silver", 20)    // secondary - IE ore, frozen silver veins
             .configureOre("iron", 12)      // tertiary - rocky core deposits
             .configureOre("etrium", 5)     // ENDGAME ORE - unchanged
-            // Very sparse
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:phantom", 3, 1, 1)
+            .addModReplacementSpawns("mobs_of_mythology",
+                new String[][] {
+                    {"monster", "minecraft:phantom", "10", "1", "1"},
+                    {"monster", "minecraft:stray", "5", "1", "1"}
+                },
+                new String[][] {
+                    {"monster", "mobs_of_mythology:chupacabra", "8", "1", "1"}
+                }
+            )
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, -0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Pluto Ice Fields")
@@ -1051,8 +1102,16 @@ public class PlanetGenerationRunner {
             .configureOre("copper", 20)    // secondary - frozen metal seams
             .configureOre("iron", 15)      // tertiary - rocky core deposits
             .configureOre("diamond", 6)    // rare - pristine ancient deposits
-            // Almost no life
             .clearAllMobSpawns()
+            .addModReplacementSpawns("mobs_of_mythology",
+                new String[][] {
+                    {"monster", "minecraft:endermite", "8", "1", "1"},
+                    {"monster", "minecraft:phantom", "5", "1", "1"}
+                },
+                new String[][] {
+                    {"monster", "mobs_of_mythology:automaton", "5", "1", "1"}
+                }
+            )
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, "Eris Dark Plains")
@@ -1095,17 +1154,22 @@ public class PlanetGenerationRunner {
             .configureOre("copper", 15)    // tertiary - underwater deposits
             .configureOre("diamond", 5)    // rare - deep ocean floor
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
-            // Reduced mob spawns for performance
             .clearAllMobSpawns()
             .addMobSpawn("creature", "minecraft:dolphin", 8, 1, 2)
             .addMobSpawn("creature", "minecraft:turtle", 6, 1, 2)
-            .addMobSpawn("creature", "minecraft:cod", 10, 2, 3)
-            .addMobSpawn("creature", "minecraft:salmon", 8, 2, 3)
-            .addMobSpawn("creature", "minecraft:tropical_fish", 12, 2, 4)
-            .addMobSpawn("monster", "minecraft:drowned", 5, 1, 1)
-            // Born in Chaos aquatic undead - deep ocean horrors
-            .addBornInChaosAquatic(15)
-            .allowPeacefulMobs(true)
+            .addMobSpawn("water_ambient", "minecraft:cod", 10, 2, 3)
+            .addMobSpawn("water_ambient", "minecraft:salmon", 8, 2, 3)
+            .addMobSpawn("water_ambient", "minecraft:tropical_fish", 12, 2, 4)
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"monster", "minecraft:drowned", "15", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:corpse_fish", "15", "2", "4"},
+                    {"monster", "born_in_chaos_v1:glutton_fish", "10", "1", "2"},
+                    {"monster", "born_in_chaos_v1:zombie_fisherman", "12", "1", "2"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:beach", 0.5f, 0.7f, 0.0f, 0.0f, 0.0f, 0.0f, "Kepler Island Shores")
             .addBiome("minecraft:warm_ocean", 0.7f, 0.8f, -0.3f, 0.0f, 0.0f, 0.0f, "Kepler Warm Seas")
@@ -1148,19 +1212,32 @@ public class PlanetGenerationRunner {
             .configureOre("coal", 20)      // secondary - organic-rich soils
             .configureOre("osmium", 15)    // tertiary - Mekanism ore, colony tech
             .configureOre("copper", 12)    // rare - forest floor deposits
-            // Forest life (reduced for performance)
             .clearAllMobSpawns()
-            .addMobSpawn("creature", "minecraft:cow", 8, 2, 3)
-            .addMobSpawn("creature", "minecraft:pig", 8, 2, 3)
-            .addMobSpawn("creature", "minecraft:sheep", 8, 2, 3)
-            .addMobSpawn("creature", "minecraft:chicken", 10, 2, 4)
-            .addMobSpawn("creature", "minecraft:rabbit", 6, 1, 2)
-            .addMobSpawn("creature", "minecraft:fox", 4, 1, 1)
-            .addMobSpawn("creature", "minecraft:wolf", 3, 1, 2)
-            .addMobSpawn("monster", "minecraft:zombie", 8, 1, 2)
-            .addMobSpawn("monster", "minecraft:skeleton", 8, 1, 2)
-            .addMobSpawn("monster", "minecraft:creeper", 6, 1, 1)
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"creature", "minecraft:cow", "8", "2", "3"},
+                    {"creature", "minecraft:pig", "8", "2", "3"},
+                    {"creature", "minecraft:sheep", "8", "2", "3"},
+                    {"creature", "minecraft:chicken", "10", "2", "4"},
+                    {"creature", "minecraft:rabbit", "6", "1", "2"},
+                    {"creature", "minecraft:fox", "4", "1", "1"},
+                    {"creature", "minecraft:wolf", "3", "1", "2"},
+                    {"monster", "minecraft:zombie", "8", "1", "2"},
+                    {"monster", "minecraft:skeleton", "8", "1", "2"},
+                    {"monster", "minecraft:creeper", "6", "1", "1"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:baby_spider", "10", "1", "2"},
+                    {"monster", "born_in_chaos_v1:mother_spider", "5", "1", "1"},
+                    {"monster", "born_in_chaos_v1:dread_hound", "8", "1", "2"},
+                    {"monster", "born_in_chaos_v1:phantom_creeper", "6", "1", "1"},
+                    {"monster", "born_in_chaos_v1:swarmer", "8", "2", "3"},
+                    {"creature", "minecraft:cow", "8", "2", "3"},
+                    {"creature", "minecraft:pig", "8", "2", "3"},
+                    {"creature", "minecraft:sheep", "8", "2", "3"},
+                    {"creature", "minecraft:chicken", "10", "2", "4"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:forest", 0.5f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f, "Kepler Woodlands")
             .addBiome("minecraft:birch_forest", 0.4f, 0.5f, 0.1f, 0.0f, 0.0f, 0.0f, "Kepler Birch Groves")
@@ -1201,11 +1278,18 @@ public class PlanetGenerationRunner {
             .configureOre("lead", 20)      // secondary - IE ore, heavy metal deposits
             .configureOre("copper", 15)    // tertiary - twilight zone deposits
             .configureOre("gold", 10)      // rare - precious metal seams
-            // Sparse but adapted life (no spiders in space)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:husk", 30, 2, 3)
-            .addMobSpawn("creature", "minecraft:rabbit", 18, 2, 3)
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"monster", "minecraft:husk", "30", "2", "3"},
+                    {"creature", "minecraft:rabbit", "18", "2", "3"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:decaying_zombie", "20", "1", "2"},
+                    {"monster", "born_in_chaos_v1:bonescaller", "10", "1", "1"},
+                    {"creature", "minecraft:rabbit", "18", "2", "3"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:badlands", 0.8f, -0.7f, 0.3f, 0.0f, 0.0f, 0.0f, "Proxima Twilight Zone")
             .skyColor(0xFF6B6B)
@@ -1244,17 +1328,29 @@ public class PlanetGenerationRunner {
             .configureOre("coal", 20)      // secondary - dense organic life
             .configureOre("osmium", 15)    // tertiary - Mekanism ore, colony tech
             .configureOre("diamond", 5)    // rare - deep geological deposits
-            // Lush life (reduced for performance)
             .clearAllMobSpawns()
-            .addMobSpawn("creature", "minecraft:cow", 10, 2, 3)
-            .addMobSpawn("creature", "minecraft:pig", 10, 2, 3)
-            .addMobSpawn("creature", "minecraft:sheep", 10, 2, 3)
-            .addMobSpawn("creature", "minecraft:chicken", 12, 2, 4)
-            .addMobSpawn("creature", "minecraft:bee", 8, 1, 2)
-            .addMobSpawn("creature", "minecraft:frog", 6, 1, 2)
-            .addMobSpawn("monster", "minecraft:zombie", 6, 1, 1)
-            .addMobSpawn("monster", "minecraft:skeleton", 6, 1, 1)
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"creature", "minecraft:cow", "10", "2", "3"},
+                    {"creature", "minecraft:pig", "10", "2", "3"},
+                    {"creature", "minecraft:sheep", "10", "2", "3"},
+                    {"creature", "minecraft:chicken", "12", "2", "4"},
+                    {"creature", "minecraft:bee", "8", "1", "2"},
+                    {"creature", "minecraft:frog", "6", "1", "2"},
+                    {"monster", "minecraft:zombie", "6", "1", "1"},
+                    {"monster", "minecraft:skeleton", "6", "1", "1"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:baby_spider", "8", "1", "2"},
+                    {"monster", "born_in_chaos_v1:thornshell_crab", "6", "1", "1"},
+                    {"creature", "minecraft:cow", "10", "2", "3"},
+                    {"creature", "minecraft:pig", "10", "2", "3"},
+                    {"creature", "minecraft:sheep", "10", "2", "3"},
+                    {"creature", "minecraft:chicken", "12", "2", "4"},
+                    {"creature", "minecraft:bee", "8", "1", "2"},
+                    {"creature", "minecraft:frog", "6", "1", "2"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:flower_forest", 0.6f, 0.7f, 0.0f, 0.0f, 0.0f, 0.0f, "Trappist Gardens")
             .addBiome("minecraft:meadow", 0.5f, 0.6f, 0.2f, 0.0f, 0.0f, 0.0f, "Trappist Meadows")
@@ -1295,15 +1391,21 @@ public class PlanetGenerationRunner {
             .configureOre("redstone", 15)  // tertiary - active tectonic energy
             .configureOre("gold", 12)      // uncommon - precious mountain veins
             .configureOre("diamond", 6)    // rare - deep mountain deposits
-            // Mountain-adapted life (reduced for performance)
             .clearAllMobSpawns()
             .addMobSpawn("creature", "minecraft:goat", 12, 2, 3)
             .addMobSpawn("creature", "minecraft:llama", 8, 1, 2)
             .addMobSpawn("creature", "minecraft:sheep", 8, 1, 2)
-            .addMobSpawn("monster", "minecraft:skeleton", 10, 1, 2)
-            // Born in Chaos bosses - advanced difficulty world
-            .addBornInChaosBosses(10)
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"monster", "minecraft:skeleton", "10", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:supreme_bonescaller", "5", "1", "1"},
+                    {"monster", "born_in_chaos_v1:lifestealer", "5", "1", "1"},
+                    {"monster", "born_in_chaos_v1:krampus", "3", "1", "1"},
+                    {"monster", "born_in_chaos_v1:missioner", "5", "1", "1"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:windswept_hills", 0.3f, 0.3f, 0.5f, 0.0f, 0.0f, 0.0f, "Gliese Highlands")
             .addBiome("minecraft:stony_peaks", 0.2f, 0.1f, 0.7f, 0.0f, 0.0f, 0.0f, "Gliese Peaks")
@@ -1348,11 +1450,19 @@ public class PlanetGenerationRunner {
             .configureOre("nickel", 20)    // secondary - IE ore, molten metal seams
             .configureOre("redstone", 15)  // tertiary - thermal energy
             .configureOre("calorite", 3)   // rare - Tier 4 progression ore
-            // Keep only ghasts and striders (no blazes/magma cubes/wither skeletons in space)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:ghast", 8, 1, 1)
-            .addMobSpawn("creature", "minecraft:strider", 15, 1, 2)
+            .addModReplacementSpawns("rottencreatures",
+                new String[][] {
+                    {"monster", "minecraft:ghast", "15", "1", "1"},
+                    {"monster", "minecraft:magma_cube", "25", "1", "3"}
+                },
+                new String[][] {
+                    {"monster", "rottencreatures:burned", "20", "1", "2"},
+                    {"monster", "rottencreatures:immortal", "15", "1", "1"}
+                }
+            )
             .allowPeacefulMobs(false)
+            .addMobSpawn("creature", "minecraft:strider", 20, 1, 2)
             .clearBiomes()
             .addBiome("minecraft:basalt_deltas", 1.0f, -0.8f, 0.4f, 0.0f, 0.0f, 0.0f, "Pyrios Lava Fields")
             .skyColor(0x330000)
@@ -1391,14 +1501,22 @@ public class PlanetGenerationRunner {
             .configureOre("coal", 20)      // secondary - ancient organic matter
             .configureOre("copper", 15)    // tertiary - frozen metal seams
             .configureOre("diamond", 5)    // rare - preserved in ice
-            // Sparse but dangerous ice creatures
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:stray", 30, 2, 3)
-            .addMobSpawn("creature", "minecraft:polar_bear", 15, 1, 2)
-            .addMobSpawn("monster", "minecraft:skeleton", 20, 1, 2)
-            // Born in Chaos creatures - frozen wasteland predators
-            .addBornInChaosCreatures(18)
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"monster", "minecraft:stray", "30", "2", "3"},
+                    {"monster", "minecraft:skeleton", "20", "1", "2"},
+                    {"creature", "minecraft:polar_bear", "15", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:baby_spider", "10", "1", "2"},
+                    {"monster", "born_in_chaos_v1:mother_spider", "5", "1", "1"},
+                    {"monster", "born_in_chaos_v1:dread_hound", "10", "1", "2"},
+                    {"monster", "born_in_chaos_v1:dire_hound_leader", "3", "1", "1"},
+                    {"monster", "born_in_chaos_v1:nightmare_stalker", "5", "1", "1"},
+                    {"creature", "minecraft:polar_bear", "15", "1", "2"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, "Frigidum Ice Fields")
             .addBiome("minecraft:ice_spikes", -1.0f, 0.3f, 0.3f, 0.0f, 0.0f, 0.0f, "Frigidum Ice Formations")
@@ -1442,14 +1560,18 @@ public class PlanetGenerationRunner {
             .configureOre("redstone", 12)  // uncommon - thermal energy from twin suns
             .configureOre("gold", 10)      // rare - ancient buried treasure
             .configureOre("diamond", 4)    // rare - deep desert veins
-            // Desert creatures + Reptilian mobs (no spiders in space)
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:husk", 40, 2, 4)
-            .addMobSpawn("creature", "minecraft:rabbit", 15, 2, 3)
-            // Reptilian mod - desert lizards thrive here
-            .addReptilianCreature("gecko", 12, 1, 2)
-            .addReptilianCreature("komodo_dragon", 10, 1, 2)
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("reptilian",
+                new String[][] {
+                    {"monster", "minecraft:husk", "40", "2", "4"},
+                    {"creature", "minecraft:rabbit", "15", "2", "3"}
+                },
+                new String[][] {
+                    {"creature", "reptilian:gecko", "12", "1", "2"},
+                    {"creature", "reptilian:komodo_dragon", "10", "1", "2"},
+                    {"creature", "minecraft:rabbit", "15", "2", "3"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:desert", 1.0f, -0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Arenos Dunes")
             .skyColor(0xFFDD88)
@@ -1490,19 +1612,14 @@ public class PlanetGenerationRunner {
             .configureOre("gold", 20)      // secondary - ancient silt deposits
             .configureOre("lead", 15)      // tertiary - IE ore, heavy metals in mud
             .configureOre("copper", 10)    // rare - oxidized deposits
-            // Swamp creatures + Ribbits frog civilization (no spiders in space)
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:slime", 15, 1, 2)
             .addMobSpawn("monster", "minecraft:witch", 8, 1, 1)
             .addMobSpawn("monster", "minecraft:drowned", 10, 1, 2)
             .addMobSpawn("creature", "minecraft:frog", 10, 2, 3)
             .addMobSpawn("creature", "minecraft:axolotl", 6, 1, 2)
-            // Ribbits frog civilization - main inhabitants of the swamp world
-            // Note: Ribbits mod only has one entity type "ribbits:ribbit" with professions assigned randomly
-            .addMobSpawn("creature", "ribbits:ribbit", 50, 2, 5)
-            // Born in Chaos aquatic undead - murky swamp horrors
+            .addRibbitsMobs(50)
             .addBornInChaosAquatic(18)
-            .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:swamp", 0.8f, 0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Paludis Swamps")
             .addBiome("minecraft:mangrove_swamp", 0.9f, 0.9f, -0.1f, 0.0f, 0.0f, 0.0f, "Paludis Mangroves")
@@ -1546,15 +1663,22 @@ public class PlanetGenerationRunner {
             .configureOre("lapis", 20)     // secondary - bioluminescent crystals
             .configureOre("gold", 15)      // tertiary - jungle treasure
             .configureOre("diamond", 6)    // rare - deep gem veins
-            // Alien life (no spiders in space)
             .clearAllMobSpawns()
             .addMobSpawn("creature", "minecraft:glow_squid", 12, 1, 2)
             .addMobSpawn("creature", "minecraft:axolotl", 12, 1, 2)
             .addMobSpawn("creature", "minecraft:parrot", 10, 1, 2)
             .addMobSpawn("creature", "minecraft:ocelot", 6, 1, 1)
-            .addMobSpawn("monster", "minecraft:phantom", 6, 1, 1)
-            .addBornInChaosSpirits(18)     // Born in Chaos spirits - mystical bioluminescent jungle
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"monster", "minecraft:phantom", "6", "1", "1"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:restless_spirit", "18", "1", "2"},
+                    {"monster", "born_in_chaos_v1:seared_spirit", "13", "1", "1"},
+                    {"monster", "born_in_chaos_v1:firelight", "13", "1", "1"},
+                    {"monster", "born_in_chaos_v1:pumpkin_spirit", "10", "1", "1"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:jungle", 0.9f, 0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Luxoria Rainforest")
             .addBiome("minecraft:lush_caves", 0.8f, 0.9f, -0.2f, 0.0f, 0.0f, 0.0f, "Luxoria Glowing Caves")
@@ -1598,12 +1722,20 @@ public class PlanetGenerationRunner {
             .configureOre("calorite", 3)   // PROGRESSION ORE - needed for Tier 4 rocket
             .configureOre("glacio_etrium", 3) // ENDGAME ORE - unchanged
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:stray", 30, 2, 3)
-            .addMobSpawn("creature", "minecraft:polar_bear", 20, 1, 2)
-            .addMobSpawn("monster", "minecraft:skeleton", 15, 1, 2)
-            // Sparse kobold presence in ice caves
-            .addKoboldsMobs(8)
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("kobolds",
+                new String[][] {
+                    {"monster", "minecraft:stray", "30", "2", "3"},
+                    {"monster", "minecraft:skeleton", "15", "1", "2"},
+                    {"creature", "minecraft:polar_bear", "20", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "kobolds:kobold", "20", "2", "4"},
+                    {"monster", "kobolds:kobold_warrior", "10", "1", "2"},
+                    {"monster", "kobolds:kobold_enchanter", "5", "1", "1"},
+                    {"monster", "kobolds:kobold_engineer", "10", "1", "2"},
+                    {"creature", "minecraft:polar_bear", "20", "1", "2"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:snowy_taiga", -0.8f, 0.4f, 0.0f, 0.0f, 0.0f, 0.0f, "Glacio Tundra")
             .addBiome("minecraft:frozen_river", -0.9f, 0.5f, -0.2f, 0.0f, 0.0f, 0.0f, "Glacio Frozen Rivers")
@@ -1644,12 +1776,20 @@ public class PlanetGenerationRunner {
             .configureOre("nickel", 20)    // secondary - IE ore, volcanic metal deposits
             .configureOre("gold", 15)      // tertiary - volcanic treasure
             .configureOre("diamond", 6)    // rare - pressure-formed gems
-            // MCDoom demons ONLY - volcanic rocky world (no other mobs to avoid infighting)
             .clearAllMobSpawns()
-            .addMCDoomDemon("imp", 35, 2, 4)
-            .addMCDoomDemon("lost_soul", 25, 1, 3)
-            .addMCDoomDemon("cacodemon", 12, 1, 1)
-            .addMCDoomDemon("pinky", 8, 1, 2)
+            .addModReplacementSpawns("doom",
+                new String[][] {
+                    {"monster", "minecraft:magma_cube", "30", "1", "3"},
+                    {"monster", "minecraft:ghast", "10", "1", "1"},
+                    {"monster", "minecraft:blaze", "15", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "doom:imp", "35", "2", "4"},
+                    {"monster", "doom:lost_soul", "25", "1", "3"},
+                    {"monster", "doom:cacodemon", "12", "1", "1"},
+                    {"monster", "doom:pinky", "8", "1", "2"}
+                }
+            )
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:basalt_deltas", 0.8f, -0.6f, 0.3f, 0.0f, 0.0f, 0.0f, "Vulcan Lava Fields")
@@ -1686,20 +1826,32 @@ public class PlanetGenerationRunner {
             .configureOre("osmium", 20)    // secondary - Mekanism ore, alien geology
             .configureOre("emerald", 15)   // tertiary - terraformed gem deposits
             .configureOre("copper", 10)    // rare - oxidized veins
-            // Earth-like life (no spiders in space)
             .clearAllMobSpawns()
-            .addMobSpawn("creature", "minecraft:cow", 25, 2, 4)
-            .addMobSpawn("creature", "minecraft:pig", 25, 2, 4)
-            .addMobSpawn("creature", "minecraft:sheep", 25, 2, 4)
-            .addMobSpawn("creature", "minecraft:chicken", 30, 3, 5)
-            .addMobSpawn("creature", "minecraft:horse", 10, 2, 4)
-            .addMobSpawn("monster", "minecraft:zombie", 20, 2, 3)
-            .addMobSpawn("monster", "minecraft:skeleton", 20, 2, 3)
-            .addMobSpawn("monster", "minecraft:creeper", 12, 1, 1)
-            // Born in Chaos creatures - strange colony world with twisted wildlife
-            .addBornInChaosCreatures(18)  // Hounds, crabs - year-round spawns
-            .addBornInChaosClowns(12)     // Zombie clowns spawn year-round
-            .allowPeacefulMobs(true)
+            .addModReplacementSpawns("born_in_chaos_v1",
+                new String[][] {
+                    {"creature", "minecraft:cow", "25", "2", "4"},
+                    {"creature", "minecraft:pig", "25", "2", "4"},
+                    {"creature", "minecraft:sheep", "25", "2", "4"},
+                    {"creature", "minecraft:chicken", "30", "3", "5"},
+                    {"creature", "minecraft:horse", "10", "2", "4"},
+                    {"monster", "minecraft:zombie", "20", "2", "3"},
+                    {"monster", "minecraft:skeleton", "20", "2", "3"},
+                    {"monster", "minecraft:creeper", "12", "1", "1"}
+                },
+                new String[][] {
+                    {"monster", "born_in_chaos_v1:baby_spider", "10", "1", "2"},
+                    {"monster", "born_in_chaos_v1:mother_spider", "5", "1", "1"},
+                    {"monster", "born_in_chaos_v1:dread_hound", "10", "1", "2"},
+                    {"monster", "born_in_chaos_v1:phantom_creeper", "8", "1", "1"},
+                    {"monster", "born_in_chaos_v1:swarmer", "8", "2", "3"},
+                    {"monster", "born_in_chaos_v1:zombie_clown", "12", "1", "2"},
+                    {"creature", "minecraft:cow", "25", "2", "4"},
+                    {"creature", "minecraft:pig", "25", "2", "4"},
+                    {"creature", "minecraft:sheep", "25", "2", "4"},
+                    {"creature", "minecraft:chicken", "30", "3", "5"},
+                    {"creature", "minecraft:horse", "10", "2", "4"}
+                }
+            )
             .clearBiomes()
             .addBiome("minecraft:plains", 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, "Terra Nova Plains")
             .addBiome("minecraft:forest", 0.5f, 0.6f, 0.1f, 0.0f, 0.0f, 0.0f, "Terra Nova Forests")
@@ -1744,17 +1896,22 @@ public class PlanetGenerationRunner {
             .configureOre("lead", 20)      // secondary - IE ore, ancient buried metals
             .configureOre("emerald", 15)   // tertiary - jungle temple treasure
             .configureOre("copper", 12)    // rare - oxidized jungle deposits
-            // Mowzie's Mobs jungle creatures (no spiders in space)
             .clearAllMobSpawns()
-            .addMowziesMobsPreset("jungle")
             .addMobSpawn("creature", "minecraft:parrot", 18, 2, 3)
             .addMobSpawn("creature", "minecraft:ocelot", 12, 1, 2)
-            // Boss-tier mobs (very rare)
-            .addMowziesMob("ferrous_wroughtnaut", 2, 1, 1)
-            .addMowziesMob("naga", 5, 1, 1)
-            // Born in Chaos creatures - dense jungle infested
+            .addModReplacementSpawns("mowziesmobs",
+                new String[][] {
+                    {"monster", "minecraft:spider", "20", "1", "2"},
+                    {"monster", "minecraft:skeleton", "10", "1", "1"}
+                },
+                new String[][] {
+                    {"monster", "mowziesmobs:foliaath", "70", "1", "4"},
+                    {"monster", "mowziesmobs:baby_foliaath", "40", "2", "3"},
+                    {"monster", "mowziesmobs:ferrous_wroughtnaut", "2", "1", "1"},
+                    {"monster", "mowziesmobs:naga", "5", "1", "1"}
+                }
+            )
             .addBornInChaosCreatures(22)
-            .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:jungle", 0.95f, 0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Primordium Jungle")
             .addBiome("minecraft:bamboo_jungle", 0.95f, 0.85f, -0.1f, 0.0f, 0.0f, 0.0f, "Primordium Bamboo Groves")
@@ -1797,14 +1954,20 @@ public class PlanetGenerationRunner {
             .configureOre("iron", 15)      // tertiary - tribal metalworking
             .configureOre("lead", 12)      // uncommon - IE ore, heavy metal veins
             .configureOre("diamond", 5)    // rare - deep savanna gems
-            // Mowzie's Mobs Umvuthana civilization
             .clearAllMobSpawns()
-            .addMowziesMobsPreset("savanna")
-            .addMobSpawn("monster", "minecraft:husk", 15, 1, 2)
             .addMobSpawn("creature", "minecraft:llama", 15, 2, 4)
-            // Born in Chaos Halloween mobs - tribal warrior world
+            .addModReplacementSpawns("mowziesmobs",
+                new String[][] {
+                    {"monster", "minecraft:husk", "25", "1", "2"},
+                    {"monster", "minecraft:skeleton", "15", "1", "1"}
+                },
+                new String[][] {
+                    {"monster", "mowziesmobs:umvuthana_raptor", "50", "1", "1"},
+                    {"monster", "mowziesmobs:umvuthana_crane", "30", "1", "1"},
+                    {"monster", "mowziesmobs:umvuthana", "40", "1", "2"}
+                }
+            )
             .addBornInChaosPumpkin(18)
-            .allowPeacefulMobs(true)
             .clearBiomes()
             .addBiome("minecraft:savanna", 0.95f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, "Bellator Savanna")
             .addBiome("minecraft:savanna_plateau", 0.9f, -0.2f, 0.3f, 0.0f, 0.0f, 0.0f, "Bellator Highlands")
@@ -1850,12 +2013,23 @@ public class PlanetGenerationRunner {
             .configureOre("lead", 15)      // tertiary - IE ore, heavy underground metals
             .configureOre("nickel", 12)    // uncommon - IE ore, kobold mining
             .configureOre("emerald", 8)    // rare - kobold treasure hoards
-            // Kobold civilization - high spawn rates (no spiders in space)
             .clearAllMobSpawns()
-            .addKoboldsMobs(50)            // Main kobold variants with high weight
-            .addHostileKobolds(15)         // Hostile variants (zombies, skeletons, witherbolds)
-            .addBornInChaosSpirits(20)     // Born in Chaos spirits - fits dark underground theme
-            .addMobSpawn("monster", "minecraft:silverfish", 15, 2, 4)
+            .addModReplacementSpawns("kobolds",
+                new String[][] {
+                    {"monster", "minecraft:silverfish", "30", "2", "4"},
+                    {"monster", "minecraft:cave_spider", "15", "1", "2"}
+                },
+                new String[][] {
+                    {"monster", "kobolds:kobold", "50", "2", "4"},
+                    {"monster", "kobolds:kobold_warrior", "25", "1", "2"},
+                    {"monster", "kobolds:kobold_enchanter", "16", "1", "1"},
+                    {"monster", "kobolds:kobold_engineer", "25", "1", "2"},
+                    {"monster", "kobolds:kobold_zombie", "15", "2", "4"},
+                    {"monster", "kobolds:kobold_skeleton", "15", "2", "4"},
+                    {"monster", "kobolds:witherbold", "5", "1", "2"}
+                }
+            )
+            .addBornInChaosSpirits(20)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:dripstone_caves", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, "Profundus Caverns")

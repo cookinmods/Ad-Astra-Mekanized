@@ -9,20 +9,7 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:silverfish",
-        "minCount": 2,
-        "maxCount": 4,
-        "weight": 30
-      },
-      {
-        "type": "minecraft:endermite",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 10
-      }
-    ],
+    "monster": [],
     "creature": [],
     "ambient": [],
     "water_creature": [],
@@ -48,7 +35,6 @@
     [
       "adastramekanized:mercury_ore_nickel_simple",
       "adastramekanized:mercury_ore_iron_simple",
-      "adastramekanized:mercury_ore_silver_simple",
       "adastramekanized:mercury_ore_redstone_simple",
       "adastramekanized:mercury_ore_ostrum_simple",
       "adastramekanized:mercury_ore_etrium_simple"

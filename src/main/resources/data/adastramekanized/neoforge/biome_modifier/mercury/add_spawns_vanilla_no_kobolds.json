@@ -1,4 +1,13 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "kobolds"
+      }
+    }
+  ],
   "type": "neoforge:add_spawns",
   "biomes": "#adastramekanized:mercury_biomes",
   "spawners": [

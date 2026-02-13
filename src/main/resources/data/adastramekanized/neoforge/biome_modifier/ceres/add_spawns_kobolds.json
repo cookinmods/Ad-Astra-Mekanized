@@ -10,25 +10,19 @@
   "spawners": [
     {
       "type": "kobolds:kobold",
-      "weight": 10,
+      "weight": 25,
       "minCount": 2,
       "maxCount": 4
     },
     {
       "type": "kobolds:kobold_warrior",
-      "weight": 5,
+      "weight": 12,
       "minCount": 1,
       "maxCount": 2
     },
     {
-      "type": "kobolds:kobold_enchanter",
-      "weight": 3,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
       "type": "kobolds:kobold_engineer",
-      "weight": 5,
+      "weight": 12,
       "minCount": 1,
       "maxCount": 2
     }

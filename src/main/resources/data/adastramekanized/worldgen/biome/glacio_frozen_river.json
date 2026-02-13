@@ -9,28 +9,8 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:stray",
-        "minCount": 2,
-        "maxCount": 3,
-        "weight": 30
-      },
-      {
-        "type": "minecraft:skeleton",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 15
-      }
-    ],
-    "creature": [
-      {
-        "type": "minecraft:polar_bear",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 20
-      }
-    ],
+    "monster": [],
+    "creature": [],
     "ambient": [],
     "water_creature": [],
     "water_ambient": [],
@@ -53,7 +33,6 @@
     [],
     [],
     [
-      "adastramekanized:glacio_ore_diamond_simple",
       "adastramekanized:glacio_ore_calorite_simple",
       "adastramekanized:glacio_ore_coal_simple",
       "adastramekanized:glacio_ore_silver_simple",

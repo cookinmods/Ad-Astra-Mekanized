@@ -9,40 +9,8 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:slime",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 15
-      },
-      {
-        "type": "minecraft:witch",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 8
-      },
-      {
-        "type": "minecraft:drowned",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 10
-      }
-    ],
-    "creature": [
-      {
-        "type": "minecraft:frog",
-        "minCount": 2,
-        "maxCount": 3,
-        "weight": 10
-      },
-      {
-        "type": "minecraft:axolotl",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 6
-      }
-    ],
+    "monster": [],
+    "creature": [],
     "ambient": [],
     "water_creature": [],
     "water_ambient": [],

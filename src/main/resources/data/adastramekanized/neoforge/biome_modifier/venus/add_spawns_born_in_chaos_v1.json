@@ -11,72 +11,24 @@
     {
       "type": "born_in_chaos_v1:decrepit_skeleton",
       "weight": 25,
-      "minCount": 2,
-      "maxCount": 4
-    },
-    {
-      "type": "born_in_chaos_v1:skeleton_demoman",
-      "weight": 20,
       "minCount": 1,
       "maxCount": 2
     },
     {
       "type": "born_in_chaos_v1:decaying_zombie",
-      "weight": 25,
-      "minCount": 2,
-      "maxCount": 4
-    },
-    {
-      "type": "born_in_chaos_v1:barrel_zombie",
       "weight": 20,
       "minCount": 1,
       "maxCount": 2
     },
     {
       "type": "born_in_chaos_v1:door_knight",
-      "weight": 15,
+      "weight": 5,
       "minCount": 1,
       "maxCount": 1
     },
     {
       "type": "born_in_chaos_v1:skeleton_thrasher",
-      "weight": 17,
-      "minCount": 1,
-      "maxCount": 2
-    },
-    {
-      "type": "born_in_chaos_v1:bonescaller",
-      "weight": 12,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
-      "type": "born_in_chaos_v1:bone_imp",
-      "weight": 20,
-      "minCount": 1,
-      "maxCount": 3
-    },
-    {
-      "type": "born_in_chaos_v1:zombie_bruiser",
-      "weight": 15,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
-      "type": "born_in_chaos_v1:siamese_skeletons",
       "weight": 8,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
-      "type": "born_in_chaos_v1:fallen_chaos_knight",
-      "weight": 6,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
-      "type": "born_in_chaos_v1:scarlet_persecutor",
-      "weight": 6,
       "minCount": 1,
       "maxCount": 1
     }

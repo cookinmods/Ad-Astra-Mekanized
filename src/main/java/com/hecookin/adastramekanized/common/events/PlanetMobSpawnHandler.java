@@ -1,16 +1,20 @@
 package com.hecookin.adastramekanized.common.events;
 
 import com.hecookin.adastramekanized.AdAstraMekanized;
+import com.hecookin.adastramekanized.common.atmosphere.OxygenManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.HashMap;
@@ -53,6 +57,49 @@ public class PlanetMobSpawnHandler {
     }
 
 
+    /**
+     * Tags naturally-spawned mobs on non-breathable planets with SpaceAdapted flag.
+     * This makes them immune to oxygen damage (checked by OxygenDamageHandler).
+     * Mobs from spawn eggs, commands, or spawners do NOT get this tag.
+     */
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public static void onFinalizeSpawn(FinalizeSpawnEvent event) {
+        Mob mob = event.getEntity();
+        Level level = event.getLevel().getLevel();
+
+        // Only process in our planetary dimensions
+        if (!level.dimension().location().getNamespace().equals(AdAstraMekanized.MOD_ID)) {
+            return;
+        }
+
+        // Only tag natural spawns, not manual spawns (spawn eggs, commands, spawners)
+        if (isManualSpawn(event.getSpawnType())) {
+            return;
+        }
+
+        // Check if this planet has a non-breathable atmosphere
+        // OxygenManager.hasOxygen(Level) returns true if breathable, false if not
+        if (!OxygenManager.getInstance().hasOxygen(level)) {
+            mob.getPersistentData().putBoolean("SpaceAdapted", true);
+        }
+    }
+
+    /**
+     * Check if a spawn type is manual (player-initiated).
+     * Mirrors ModdedMobSpawnController.isManualSpawn() logic.
+     */
+    private static boolean isManualSpawn(MobSpawnType spawnType) {
+        return spawnType == MobSpawnType.SPAWN_EGG ||
+               spawnType == MobSpawnType.SPAWNER ||
+               spawnType == MobSpawnType.TRIAL_SPAWNER ||
+               spawnType == MobSpawnType.COMMAND ||
+               spawnType == MobSpawnType.DISPENSER ||
+               spawnType == MobSpawnType.BUCKET ||
+               spawnType == MobSpawnType.BREEDING ||
+               spawnType == MobSpawnType.MOB_SUMMONED ||
+               spawnType == MobSpawnType.CONVERSION;
+    }
+
     @SubscribeEvent
     public static void onMobSpawn(EntityJoinLevelEvent event) {
         if (!(event.getEntity() instanceof Mob mob)) return;
@@ -72,14 +119,7 @@ public class PlanetMobSpawnHandler {
         if (dimensionEquipment == null) {
             // Only log for our planets to avoid spam
             if (dimensionId.getNamespace().equals("adastramekanized")) {
-                AdAstraMekanized.LOGGER.info("No equipment config for dimension: " + dimensionId +
-                    " (Total configs loaded: " + PLANET_MOB_EQUIPMENT.size() + ")");
-                // Log what dimensions we DO have
-                if (PLANET_MOB_EQUIPMENT.isEmpty()) {
-                    AdAstraMekanized.LOGGER.warn("No equipment configurations loaded at all!");
-                } else {
-                    AdAstraMekanized.LOGGER.info("Available dimensions: " + PLANET_MOB_EQUIPMENT.keySet());
-                }
+                AdAstraMekanized.LOGGER.debug("No equipment config for dimension: " + dimensionId);
             }
             return;
         }
@@ -92,7 +132,7 @@ public class PlanetMobSpawnHandler {
         }
 
         // Apply equipment
-        AdAstraMekanized.LOGGER.info("Equipping " + mobId + " with gear on " + dimensionId);
+        AdAstraMekanized.LOGGER.debug("Equipping " + mobId + " with gear on " + dimensionId);
         config.applyToMob(mob, level.getRandom());
     }
 

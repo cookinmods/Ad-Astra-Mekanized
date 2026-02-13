@@ -9,22 +9,8 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:drowned",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 15
-      }
-    ],
-    "creature": [
-      {
-        "type": "minecraft:glow_squid",
-        "minCount": 1,
-        "maxCount": 3,
-        "weight": 10
-      }
-    ],
+    "monster": [],
+    "creature": [],
     "ambient": [],
     "water_creature": [],
     "water_ambient": [],
@@ -47,9 +33,7 @@
     [],
     [],
     [
-      "adastramekanized:europa_ore_diamond_simple",
       "adastramekanized:europa_ore_iron_simple",
-      "adastramekanized:europa_ore_copper_simple",
       "adastramekanized:europa_ore_lapis_simple",
       "adastramekanized:europa_ore_silver_simple",
       "adastramekanized:europa_ore_etrium_simple"

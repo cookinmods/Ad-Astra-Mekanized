@@ -10,20 +10,7 @@
   },
   "spawners": {
     "monster": [],
-    "creature": [
-      {
-        "type": "minecraft:parrot",
-        "minCount": 2,
-        "maxCount": 3,
-        "weight": 18
-      },
-      {
-        "type": "minecraft:ocelot",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 12
-      }
-    ],
+    "creature": [],
     "ambient": [],
     "water_creature": [],
     "water_ambient": [],

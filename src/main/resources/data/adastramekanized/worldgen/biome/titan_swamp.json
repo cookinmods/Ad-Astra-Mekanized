@@ -9,28 +9,8 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:slime",
-        "minCount": 2,
-        "maxCount": 4,
-        "weight": 30
-      },
-      {
-        "type": "minecraft:witch",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 15
-      }
-    ],
-    "creature": [
-      {
-        "type": "minecraft:axolotl",
-        "minCount": 2,
-        "maxCount": 4,
-        "weight": 20
-      }
-    ],
+    "monster": [],
+    "creature": [],
     "ambient": [],
     "water_creature": [],
     "water_ambient": [],

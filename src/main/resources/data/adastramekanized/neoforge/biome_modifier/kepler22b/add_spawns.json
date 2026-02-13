@@ -3,18 +3,6 @@
   "biomes": "#adastramekanized:kepler22b_biomes",
   "spawners": [
     {
-      "type": "minecraft:dolphin",
-      "weight": 8,
-      "minCount": 1,
-      "maxCount": 2
-    },
-    {
-      "type": "minecraft:turtle",
-      "weight": 6,
-      "minCount": 1,
-      "maxCount": 2
-    },
-    {
       "type": "minecraft:cod",
       "weight": 10,
       "minCount": 2,
@@ -33,10 +21,16 @@
       "maxCount": 4
     },
     {
-      "type": "minecraft:drowned",
-      "weight": 5,
+      "type": "minecraft:dolphin",
+      "weight": 8,
       "minCount": 1,
-      "maxCount": 1
+      "maxCount": 2
+    },
+    {
+      "type": "minecraft:turtle",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 2
     }
   ]
 }

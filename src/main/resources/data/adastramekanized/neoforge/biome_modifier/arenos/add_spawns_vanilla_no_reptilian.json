@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "reptilian"
+      }
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:arenos_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:husk",
+      "weight": 40,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "minecraft:rabbit",
+      "weight": 15,
+      "minCount": 2,
+      "maxCount": 3
+    }
+  ]
+}

@@ -9,14 +9,7 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:phantom",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 3
-      }
-    ],
+    "monster": [],
     "creature": [],
     "ambient": [],
     "water_creature": [],
@@ -41,7 +34,6 @@
     [],
     [
       "adastramekanized:pluto_ore_gold_simple",
-      "adastramekanized:pluto_ore_diamond_simple",
       "adastramekanized:pluto_ore_iron_simple",
       "adastramekanized:pluto_ore_silver_simple",
       "adastramekanized:pluto_ore_etrium_simple"

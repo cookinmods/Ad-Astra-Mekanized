@@ -425,10 +425,6 @@ public class PlanetMaker {
         // When true, generates full vanilla density function files with planet-specific references
         private boolean useVanillaQualityTerrain = false;
 
-        // Flat splines mode - uses constant values instead of vanilla splines for truly flat terrain
-        // When true with useVanillaQualityTerrain, uses flat_offset.json, flat_factor.json, flat_jaggedness.json
-        private boolean useFlatSplines = false;
-
         // Vanilla caves mode - when true, adds vanilla carvers to biomes for full cave generation
         // Automatically enabled when useIdenticalVanillaTerrain is true
         private boolean useVanillaCaves = false;
@@ -571,6 +567,9 @@ public class PlanetMaker {
         private java.util.Map<String, java.util.List<MobSpawnEntry>> mobSpawns = new java.util.HashMap<>();
         private java.util.Map<String, SpawnCost> spawnCosts = new java.util.HashMap<>();
         private java.util.Set<String> usedModNamespaces = new java.util.HashSet<>();  // Track mod namespaces for spawn control
+        // Mod replacement groups: modId -> (vanillaFallbacks, moddedReplacements)
+        // When mod IS installed: moddedReplacements spawn. When NOT: vanillaFallbacks spawn.
+        private java.util.Map<String, ModReplacementGroup> modReplacementGroups = new java.util.LinkedHashMap<>();
         private boolean allowHostileMobs = true;
         private boolean allowPeacefulMobs = true;
         private boolean enableDeepslateOres = true;
@@ -1010,30 +1009,6 @@ public class PlanetMaker {
             this.terrainFactor = 2.0f;       // Less dramatic terrain
             this.base3DNoiseXZFactor = 40.0f; // Smaller features
             this.jaggednessNoiseScale = 2000.0f;  // Larger mountain spacing
-            return this;
-        }
-
-        /**
-         * VANILLA-QUALITY: Ultra-flat terrain like plains biome
-         * Uses constant spline values instead of vanilla's complex splines.
-         * Produces truly flat terrain with minimal height variation.
-         */
-        public PlanetBuilder vanillaQualityUltraFlat() {
-            vanillaQualityStandard();
-            this.useFlatSplines = true;      // Use flat_offset.json, flat_factor.json, flat_jaggedness.json
-            this.terrainFactor = 1.0f;       // Minimal terrain scale
-            this.base3DNoiseXZFactor = 20.0f; // Very small horizontal features
-            this.base3DNoiseYFactor = 40.0f;  // Reduced vertical variation
-            this.jaggednessNoiseScale = 5000.0f;  // Mountains very far apart (effectively none)
-            return this;
-        }
-
-        /**
-         * Enable flat splines for truly flat terrain.
-         * Uses constant values instead of vanilla's complex spline system.
-         */
-        public PlanetBuilder useFlatSplines() {
-            this.useFlatSplines = true;
             return this;
         }
 
@@ -1521,6 +1496,37 @@ public class PlanetMaker {
             // Track mod namespace for spawn control (if not minecraft)
             if (mobId.contains(":")) {
                 String namespace = mobId.substring(0, mobId.indexOf(":"));
+                if (!namespace.equals("minecraft")) {
+                    usedModNamespaces.add(namespace);
+                }
+            }
+
+            return this;
+        }
+
+        /**
+         * Add mob spawns with conditional modded replacement.
+         * When the specified mod IS installed, moddedSpawns are used instead of vanillaSpawns.
+         * When the mod is NOT installed, vanillaSpawns are used as fallback.
+         *
+         * Each String[] is: {category, mobId, weight, minGroup, maxGroup}
+         * Example: {"monster", "minecraft:silverfish", "30", "2", "4"}
+         */
+        public PlanetBuilder addModReplacementSpawns(String modId, String[][] vanillaSpawns, String[][] moddedSpawns) {
+            ModReplacementGroup group = modReplacementGroups.computeIfAbsent(modId, ModReplacementGroup::new);
+
+            for (String[] spawn : vanillaSpawns) {
+                group.addVanillaFallback(spawn[0],
+                    new MobSpawnEntry(spawn[1], Integer.parseInt(spawn[2]),
+                        Integer.parseInt(spawn[3]), Integer.parseInt(spawn[4])));
+            }
+
+            for (String[] spawn : moddedSpawns) {
+                group.addModdedReplacement(spawn[0],
+                    new MobSpawnEntry(spawn[1], Integer.parseInt(spawn[2]),
+                        Integer.parseInt(spawn[3]), Integer.parseInt(spawn[4])));
+                // Track mod namespace for whitelist registration
+                String namespace = spawn[1].contains(":") ? spawn[1].substring(0, spawn[1].indexOf(":")) : "minecraft";
                 if (!namespace.equals("minecraft")) {
                     usedModNamespaces.add(namespace);
                 }
@@ -4047,6 +4053,29 @@ public class PlanetMaker {
         }
 
         /**
+         * A group of vanilla mobs and their modded replacements.
+         * When the mod IS installed, only moddedReplacements spawn.
+         * When the mod is NOT installed, only vanillaFallbacks spawn.
+         */
+        static class ModReplacementGroup {
+            final String modId;
+            final java.util.Map<String, java.util.List<MobSpawnEntry>> vanillaFallbacks = new java.util.LinkedHashMap<>();
+            final java.util.Map<String, java.util.List<MobSpawnEntry>> moddedReplacements = new java.util.LinkedHashMap<>();
+
+            ModReplacementGroup(String modId) {
+                this.modId = modId;
+            }
+
+            void addVanillaFallback(String category, MobSpawnEntry entry) {
+                vanillaFallbacks.computeIfAbsent(category, k -> new java.util.ArrayList<>()).add(entry);
+            }
+
+            void addModdedReplacement(String category, MobSpawnEntry entry) {
+                moddedReplacements.computeIfAbsent(category, k -> new java.util.ArrayList<>()).add(entry);
+            }
+        }
+
+        /**
          * Inner class for biome configuration entries
          */
         private static class BiomeConfigEntry {
@@ -5084,41 +5113,20 @@ public class PlanetMaker {
         ridgesFolded.add("argument2", rfAdd);
         writeJsonFile(path + "ridges_folded.json", ridgesFolded);
 
-        // 5. Copy and transform offset.json (use flat or vanilla based on useFlatSplines)
-        if (planet.useFlatSplines) {
-            // Use flat constant value for truly flat terrain
-            String offsetContent = readFileToString(templatePath + "flat_offset.json");
-            writeStringToFile(path + "offset.json", offsetContent);
-            AdAstraMekanized.LOGGER.info("Planet '{}' using FLAT offset spline (constant value)", planet.name);
-        } else {
-            String offsetContent = readFileToString(templatePath + "vanilla_offset.json");
-            offsetContent = offsetContent.replace("minecraft:overworld/", planetRef + "/");
-            writeStringToFile(path + "offset.json", offsetContent);
-        }
+        // 5. Copy and transform offset.json (replace minecraft:overworld/ with planet ref)
+        String offsetContent = readFileToString(templatePath + "vanilla_offset.json");
+        offsetContent = offsetContent.replace("minecraft:overworld/", planetRef + "/");
+        writeStringToFile(path + "offset.json", offsetContent);
 
-        // 6. Copy and transform factor.json (use flat or vanilla based on useFlatSplines)
-        if (planet.useFlatSplines) {
-            // Use minimal constant factor for flat terrain
-            String factorContent = readFileToString(templatePath + "flat_factor.json");
-            writeStringToFile(path + "factor.json", factorContent);
-            AdAstraMekanized.LOGGER.info("Planet '{}' using FLAT factor spline (minimal value)", planet.name);
-        } else {
-            String factorContent = readFileToString(templatePath + "vanilla_factor.json");
-            factorContent = factorContent.replace("minecraft:overworld/", planetRef + "/");
-            writeStringToFile(path + "factor.json", factorContent);
-        }
+        // 6. Copy and transform factor.json
+        String factorContent = readFileToString(templatePath + "vanilla_factor.json");
+        factorContent = factorContent.replace("minecraft:overworld/", planetRef + "/");
+        writeStringToFile(path + "factor.json", factorContent);
 
-        // 7. Copy and transform jaggedness.json (use flat or vanilla based on useFlatSplines)
-        if (planet.useFlatSplines) {
-            // Use zero jaggedness for no mountains
-            String jaggednessContent = readFileToString(templatePath + "flat_jaggedness.json");
-            writeStringToFile(path + "jaggedness.json", jaggednessContent);
-            AdAstraMekanized.LOGGER.info("Planet '{}' using FLAT jaggedness spline (zero value)", planet.name);
-        } else {
-            String jaggednessContent = readFileToString(templatePath + "vanilla_jaggedness.json");
-            jaggednessContent = jaggednessContent.replace("minecraft:overworld/", planetRef + "/");
-            writeStringToFile(path + "jaggedness.json", jaggednessContent);
-        }
+        // 7. Copy and transform jaggedness.json
+        String jaggednessContent = readFileToString(templatePath + "vanilla_jaggedness.json");
+        jaggednessContent = jaggednessContent.replace("minecraft:overworld/", planetRef + "/");
+        writeStringToFile(path + "jaggedness.json", jaggednessContent);
 
         // 8. Generate depth.json (references planet's offset)
         JsonObject depth = new JsonObject();
@@ -7526,79 +7534,124 @@ public class PlanetMaker {
 
     /**
      * Generate NeoForge biome modifier files for mob spawning control.
-     * Creates separate files for vanilla and modded mobs:
-     * - add_spawns.json: Vanilla (minecraft:) mobs, always active
+     * Creates separate files for different spawn scenarios:
+     * - add_spawns.json: Unconditional vanilla (minecraft:) mobs from addMobSpawn(), always active
      * - add_spawns_[modid].json: Modded mobs with neoforge:mod_loaded condition
+     * - add_spawns_vanilla_no_[modid].json: Vanilla fallbacks that only spawn when mod is NOT installed
      *
      * File location: neoforge/biome_modifier/[planet]/
      */
     private static void generateBiomeModifier(PlanetBuilder planet) throws IOException {
-        // Create planet-specific directory
         new File(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name).mkdirs();
+        String biomeTag = "#adastramekanized:" + planet.name + "_biomes";
 
-        // Collect vanilla mob spawns
-        JsonArray vanillaSpawners = new JsonArray();
-
-        // Group modded mobs by their mod ID
-        java.util.Map<String, JsonArray> moddedSpawnersByMod = new java.util.HashMap<>();
-
-        for (java.util.Map.Entry<String, java.util.List<PlanetBuilder.MobSpawnEntry>> entry : planet.mobSpawns.entrySet()) {
-            for (PlanetBuilder.MobSpawnEntry mob : entry.getValue()) {
+        // === 1. Unconditional vanilla spawns (from addMobSpawn with minecraft: prefix) ===
+        JsonArray unconditionalVanilla = new JsonArray();
+        for (java.util.Map.Entry<String, java.util.List<PlanetBuilder.MobSpawnEntry>> categoryEntry : planet.mobSpawns.entrySet()) {
+            for (PlanetBuilder.MobSpawnEntry mob : categoryEntry.getValue()) {
                 String modid = mob.mobId.contains(":") ? mob.mobId.split(":")[0] : "minecraft";
-
-                JsonObject spawner = new JsonObject();
-                spawner.addProperty("type", mob.mobId);
-                spawner.addProperty("weight", mob.weight);
-                spawner.addProperty("minCount", mob.minCount);
-                spawner.addProperty("maxCount", mob.maxCount);
-
                 if (modid.equals("minecraft")) {
-                    vanillaSpawners.add(spawner);
-                } else {
-                    // Group by mod ID for conditional loading
-                    moddedSpawnersByMod.computeIfAbsent(modid, k -> new JsonArray()).add(spawner);
+                    JsonObject spawner = new JsonObject();
+                    spawner.addProperty("type", mob.mobId);
+                    spawner.addProperty("weight", mob.weight);
+                    spawner.addProperty("minCount", mob.minCount);
+                    spawner.addProperty("maxCount", mob.maxCount);
+                    unconditionalVanilla.add(spawner);
                 }
             }
         }
 
-        // Generate vanilla spawns file (no conditions needed)
-        if (vanillaSpawners.size() > 0) {
-            JsonObject biomeModifier = new JsonObject();
-            biomeModifier.addProperty("type", "neoforge:add_spawns");
-            biomeModifier.addProperty("biomes", "#adastramekanized:" + planet.name + "_biomes");
-            biomeModifier.add("spawners", vanillaSpawners);
-
-            writeJsonFile(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name + "/add_spawns.json", biomeModifier);
-
-            AdAstraMekanized.LOGGER.debug("Generated biome modifier for planet '{}' with {} vanilla spawn entries",
-                planet.name, vanillaSpawners.size());
+        if (unconditionalVanilla.size() > 0) {
+            JsonObject vanillaModifier = new JsonObject();
+            vanillaModifier.addProperty("type", "neoforge:add_spawns");
+            vanillaModifier.addProperty("biomes", biomeTag);
+            vanillaModifier.add("spawners", unconditionalVanilla);
+            writeJsonFile(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name + "/add_spawns.json", vanillaModifier);
         }
 
-        // Generate conditional modded spawns files (one per mod)
-        for (java.util.Map.Entry<String, JsonArray> moddedEntry : moddedSpawnersByMod.entrySet()) {
-            String modid = moddedEntry.getKey();
-            JsonArray moddedSpawners = moddedEntry.getValue();
-
-            if (moddedSpawners.size() > 0) {
-                JsonObject biomeModifier = new JsonObject();
-
-                // Add NeoForge condition for mod to be loaded
-                JsonArray conditions = new JsonArray();
-                JsonObject modLoadedCondition = new JsonObject();
-                modLoadedCondition.addProperty("type", "neoforge:mod_loaded");
-                modLoadedCondition.addProperty("modid", modid);
-                conditions.add(modLoadedCondition);
-                biomeModifier.add("neoforge:conditions", conditions);
-
-                biomeModifier.addProperty("type", "neoforge:add_spawns");
-                biomeModifier.addProperty("biomes", "#adastramekanized:" + planet.name + "_biomes");
-                biomeModifier.add("spawners", moddedSpawners);
-
-                writeJsonFile(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name + "/add_spawns_" + modid + ".json", biomeModifier);
-
-                AdAstraMekanized.LOGGER.debug("Generated conditional biome modifier for planet '{}' with {} {} spawn entries",
-                    planet.name, moddedSpawners.size(), modid);
+        // === 2. Modded mobs from regular addMobSpawn (existing behavior) ===
+        java.util.Map<String, JsonArray> moddedFromRegular = new java.util.LinkedHashMap<>();
+        for (java.util.Map.Entry<String, java.util.List<PlanetBuilder.MobSpawnEntry>> categoryEntry : planet.mobSpawns.entrySet()) {
+            for (PlanetBuilder.MobSpawnEntry mob : categoryEntry.getValue()) {
+                String modid = mob.mobId.contains(":") ? mob.mobId.split(":")[0] : "minecraft";
+                if (!modid.equals("minecraft")) {
+                    JsonObject spawner = new JsonObject();
+                    spawner.addProperty("type", mob.mobId);
+                    spawner.addProperty("weight", mob.weight);
+                    spawner.addProperty("minCount", mob.minCount);
+                    spawner.addProperty("maxCount", mob.maxCount);
+                    moddedFromRegular.computeIfAbsent(modid, k -> new JsonArray()).add(spawner);
+                }
             }
+        }
+
+        // === 3. Process replacement groups ===
+        for (java.util.Map.Entry<String, PlanetBuilder.ModReplacementGroup> groupEntry : planet.modReplacementGroups.entrySet()) {
+            String modId = groupEntry.getKey();
+            PlanetBuilder.ModReplacementGroup group = groupEntry.getValue();
+
+            // 3a. Vanilla fallbacks: spawn ONLY when mod is NOT installed
+            JsonArray vanillaFallbacks = new JsonArray();
+            for (java.util.Map.Entry<String, java.util.List<PlanetBuilder.MobSpawnEntry>> catEntry : group.vanillaFallbacks.entrySet()) {
+                for (PlanetBuilder.MobSpawnEntry mob : catEntry.getValue()) {
+                    JsonObject spawner = new JsonObject();
+                    spawner.addProperty("type", mob.mobId);
+                    spawner.addProperty("weight", mob.weight);
+                    spawner.addProperty("minCount", mob.minCount);
+                    spawner.addProperty("maxCount", mob.maxCount);
+                    vanillaFallbacks.add(spawner);
+                }
+            }
+
+            if (vanillaFallbacks.size() > 0) {
+                JsonObject vanillaCondModifier = new JsonObject();
+                // Add NOT mod_loaded condition
+                JsonArray conditions = new JsonArray();
+                JsonObject notCondition = new JsonObject();
+                notCondition.addProperty("type", "neoforge:not");
+                JsonObject modLoadedInner = new JsonObject();
+                modLoadedInner.addProperty("type", "neoforge:mod_loaded");
+                modLoadedInner.addProperty("modid", modId);
+                notCondition.add("value", modLoadedInner);
+                conditions.add(notCondition);
+                vanillaCondModifier.add("neoforge:conditions", conditions);
+                vanillaCondModifier.addProperty("type", "neoforge:add_spawns");
+                vanillaCondModifier.addProperty("biomes", biomeTag);
+                vanillaCondModifier.add("spawners", vanillaFallbacks);
+                writeJsonFile(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name + "/add_spawns_vanilla_no_" + modId + ".json", vanillaCondModifier);
+            }
+
+            // 3b. Modded replacements: merge into modded spawns keyed by the replacement group's modId
+            // Use the group's modId (not the entity namespace) so minecraft: creatures in modded
+            // replacement lists end up in the mod-conditioned file, not a spurious add_spawns_minecraft.json
+            for (java.util.Map.Entry<String, java.util.List<PlanetBuilder.MobSpawnEntry>> catEntry : group.moddedReplacements.entrySet()) {
+                for (PlanetBuilder.MobSpawnEntry mob : catEntry.getValue()) {
+                    JsonObject spawner = new JsonObject();
+                    spawner.addProperty("type", mob.mobId);
+                    spawner.addProperty("weight", mob.weight);
+                    spawner.addProperty("minCount", mob.minCount);
+                    spawner.addProperty("maxCount", mob.maxCount);
+                    moddedFromRegular.computeIfAbsent(modId, k -> new JsonArray()).add(spawner);
+                }
+            }
+        }
+
+        // === 4. Write all modded spawn files with mod_loaded conditions ===
+        for (java.util.Map.Entry<String, JsonArray> moddedEntry : moddedFromRegular.entrySet()) {
+            String modId = moddedEntry.getKey();
+            JsonArray spawners = moddedEntry.getValue();
+
+            JsonObject moddedModifier = new JsonObject();
+            JsonArray conditions = new JsonArray();
+            JsonObject modLoadedCondition = new JsonObject();
+            modLoadedCondition.addProperty("type", "neoforge:mod_loaded");
+            modLoadedCondition.addProperty("modid", modId);
+            conditions.add(modLoadedCondition);
+            moddedModifier.add("neoforge:conditions", conditions);
+            moddedModifier.addProperty("type", "neoforge:add_spawns");
+            moddedModifier.addProperty("biomes", biomeTag);
+            moddedModifier.add("spawners", spawners);
+            writeJsonFile(RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name + "/add_spawns_" + modId + ".json", moddedModifier);
         }
     }
 
@@ -7621,31 +7674,11 @@ public class PlanetMaker {
         effects.addProperty("water_fog_color", 329011);
         biome.add("effects", effects);
 
-        // Mob spawners - only add VANILLA mobs directly to biome JSON
-        // Modded mobs are handled by biome_modifier with NeoForge conditions (see generateBiomeModifier)
+        // Mob spawners - ALL spawns now handled exclusively by biome_modifier files
+        // Biome JSON spawner sections are intentionally empty to prevent duplication
         JsonObject spawners = new JsonObject();
         for (String category : new String[]{"monster", "creature", "ambient", "water_creature", "water_ambient", "misc"}) {
-            JsonArray categorySpawns = new JsonArray();
-
-            // Add configured spawns for this category, but ONLY vanilla (minecraft) entities
-            // Modded entities will be added via biome_modifier which supports neoforge:conditions
-            if (planet.mobSpawns.containsKey(category)) {
-                for (PlanetBuilder.MobSpawnEntry mob : planet.mobSpawns.get(category)) {
-                    // Only add vanilla minecraft entities to biome JSON
-                    // Modded entities are handled by generateBiomeModifier() with NeoForge conditions
-                    String modid = mob.mobId.contains(":") ? mob.mobId.split(":")[0] : "minecraft";
-                    if (modid.equals("minecraft")) {
-                        JsonObject spawn = new JsonObject();
-                        spawn.addProperty("type", mob.mobId);
-                        spawn.addProperty("minCount", mob.minCount);
-                        spawn.addProperty("maxCount", mob.maxCount);
-                        spawn.addProperty("weight", mob.weight);
-                        categorySpawns.add(spawn);
-                    }
-                }
-            }
-
-            spawners.add(category, categorySpawns);
+            spawners.add(category, new JsonArray());
         }
         biome.add("spawners", spawners);
 

@@ -9,58 +9,8 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:zombie",
-        "minCount": 2,
-        "maxCount": 3,
-        "weight": 20
-      },
-      {
-        "type": "minecraft:skeleton",
-        "minCount": 2,
-        "maxCount": 3,
-        "weight": 20
-      },
-      {
-        "type": "minecraft:creeper",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 12
-      }
-    ],
-    "creature": [
-      {
-        "type": "minecraft:cow",
-        "minCount": 2,
-        "maxCount": 4,
-        "weight": 25
-      },
-      {
-        "type": "minecraft:pig",
-        "minCount": 2,
-        "maxCount": 4,
-        "weight": 25
-      },
-      {
-        "type": "minecraft:sheep",
-        "minCount": 2,
-        "maxCount": 4,
-        "weight": 25
-      },
-      {
-        "type": "minecraft:chicken",
-        "minCount": 3,
-        "maxCount": 5,
-        "weight": 30
-      },
-      {
-        "type": "minecraft:horse",
-        "minCount": 2,
-        "maxCount": 4,
-        "weight": 10
-      }
-    ],
+    "monster": [],
+    "creature": [],
     "ambient": [],
     "water_creature": [],
     "water_ambient": [],

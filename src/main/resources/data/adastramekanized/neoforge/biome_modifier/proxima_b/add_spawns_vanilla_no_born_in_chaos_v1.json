@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "born_in_chaos_v1"
+      }
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:proxima_b_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:husk",
+      "weight": 30,
+      "minCount": 2,
+      "maxCount": 3
+    },
+    {
+      "type": "minecraft:rabbit",
+      "weight": 18,
+      "minCount": 2,
+      "maxCount": 3
+    }
+  ]
+}

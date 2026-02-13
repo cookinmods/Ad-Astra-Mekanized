@@ -9,14 +9,7 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:phantom",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 5
-      }
-    ],
+    "monster": [],
     "creature": [],
     "ambient": [],
     "water_creature": [],

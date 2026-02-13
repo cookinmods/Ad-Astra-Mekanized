@@ -9,20 +9,7 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:husk",
-        "minCount": 1,
-        "maxCount": 3,
-        "weight": 25
-      },
-      {
-        "type": "minecraft:enderman",
-        "minCount": 1,
-        "maxCount": 1,
-        "weight": 8
-      }
-    ],
+    "monster": [],
     "creature": [],
     "ambient": [],
     "water_creature": [],
@@ -47,7 +34,6 @@
     [],
     [
       "adastramekanized:mars_ore_desh_simple",
-      "adastramekanized:mars_ore_copper_simple",
       "adastramekanized:mars_ore_osmium_simple",
       "adastramekanized:mars_ore_redstone_simple",
       "adastramekanized:mars_ore_ostrum_simple",

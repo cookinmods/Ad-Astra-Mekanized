@@ -9,34 +9,8 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:skeleton",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 10
-      }
-    ],
-    "creature": [
-      {
-        "type": "minecraft:goat",
-        "minCount": 2,
-        "maxCount": 3,
-        "weight": 12
-      },
-      {
-        "type": "minecraft:llama",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 8
-      },
-      {
-        "type": "minecraft:sheep",
-        "minCount": 1,
-        "maxCount": 2,
-        "weight": 8
-      }
-    ],
+    "monster": [],
+    "creature": [],
     "ambient": [],
     "water_creature": [],
     "water_ambient": [],

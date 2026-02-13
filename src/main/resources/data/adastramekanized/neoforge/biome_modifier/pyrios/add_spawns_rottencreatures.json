@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "rottencreatures"
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:pyrios_biomes",
+  "spawners": [
+    {
+      "type": "rottencreatures:burned",
+      "weight": 20,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "rottencreatures:immortal",
+      "weight": 15,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "born_in_chaos_v1"
+      }
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:kepler22b_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:drowned",
+      "weight": 15,
+      "minCount": 1,
+      "maxCount": 2
+    }
+  ]
+}

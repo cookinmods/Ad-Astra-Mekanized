@@ -46,12 +46,26 @@ public class OxygenDamageHandler {
             if (entityId.contains("reptilian")) {
                 return; // Reptilian creatures are exempt - adapted to harsh environments
             }
-            if (entityId.contains("lumination")) {
-                return; // Lumination mobs are exempt - magical creatures
+            if (entityId.contains("lumination") || entityId.contains("luminousworld")) {
+                return; // Luminous World mobs are exempt - magical creatures
             }
             if (entityId.contains("born_in_chaos")) {
                 return; // Born in Chaos mobs are exempt - supernatural creatures
             }
+            if (entityId.contains("mobs_of_mythology")) {
+                return; // Mythology mobs are exempt - mythical beings
+            }
+            if (entityId.contains("rottencreatures")) {
+                return; // Rotten Creatures are exempt - undead adapted to harsh environments
+            }
+            if (entityId.contains("shineals_prehistoric_expansion")) {
+                return; // Prehistoric creatures are exempt - ancient adaptations
+            }
+        }
+
+        // Check if entity was tagged as space-adapted during natural spawning
+        if (living.getPersistentData().getBoolean("SpaceAdapted")) {
+            return; // Naturally spawned on this planet - immune to oxygen damage
         }
 
         // Skip spectators and creative players

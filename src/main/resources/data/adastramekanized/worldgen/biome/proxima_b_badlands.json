@@ -9,22 +9,8 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:husk",
-        "minCount": 2,
-        "maxCount": 3,
-        "weight": 30
-      }
-    ],
-    "creature": [
-      {
-        "type": "minecraft:rabbit",
-        "minCount": 2,
-        "maxCount": 3,
-        "weight": 18
-      }
-    ],
+    "monster": [],
+    "creature": [],
     "ambient": [],
     "water_creature": [],
     "water_ambient": [],

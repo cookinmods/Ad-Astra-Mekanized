@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "luminousworld"
+      }
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:enceladus_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:stray",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "minecraft:phantom",
+      "weight": 5,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

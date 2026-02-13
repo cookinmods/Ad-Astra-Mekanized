@@ -9,14 +9,7 @@
     "water_fog_color": 329011
   },
   "spawners": {
-    "monster": [
-      {
-        "type": "minecraft:silverfish",
-        "minCount": 32,
-        "maxCount": 64,
-        "weight": 1000
-      }
-    ],
+    "monster": [],
     "creature": [],
     "ambient": [],
     "water_creature": [],

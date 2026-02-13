@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "born_in_chaos_v1"
+      }
+    }
+  ],
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:europa_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:drowned",
+      "weight": 25,
+      "minCount": 1,
+      "maxCount": 2
+    },
+    {
+      "type": "minecraft:glow_squid",
+      "weight": 15,
+      "minCount": 1,
+      "maxCount": 3
+    }
+  ]
+}
