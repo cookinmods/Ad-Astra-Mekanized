@@ -92,6 +92,14 @@ versionRange = "[10.7.8,)"
 ordering = "AFTER"
 side = "BOTH"
 
+# Mekanism More Machines dependency
+[[dependencies.adastramekanized]]
+modId = "mekmm"
+type = "required"
+versionRange = "[1.0.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
 # Create dependency (optional - adds mechanical crafting and pressing recipes)
 [[dependencies.adastramekanized]]
 modId = "create"

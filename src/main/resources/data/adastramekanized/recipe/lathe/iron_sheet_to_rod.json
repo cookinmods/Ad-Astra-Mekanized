@@ -1,0 +1,5 @@
+{
+  "type": "mekmm:lathe",
+  "input": { "count": 1, "id": "create:iron_sheet" },
+  "output": { "count": 2, "id": "adastramekanized:iron_rod" }
+}
