@@ -319,8 +319,8 @@ ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.STEEL
 2. **Planet Examples Implemented**:
    - ✅ **Moon**: Craterous lunar landscape with moon-specific materials
    - ✅ **Mars**: Dramatic Martian terrain with canyons and highlands
-   - ✅ **Hemphy**: Extreme stress test planet (lava world with maximum parameters)
-   - ✅ **Oretest**: Balanced test planet with Earth-like characteristics
+   - ✅ **Venus**: Thick toxic atmosphere with sulfuric acid rain
+   - ✅ **Glacio**: Icy world with thin atmosphere and frozen terrain
 
 3. **Technical Features**:
    - ✅ Automatic JSON generation for dimensions and noise settings
@@ -330,7 +330,7 @@ ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.STEEL
    - ✅ Advanced hill/mountain generation with jaggedness controls
 
 #### Current Working Features:
-- ✅ Planet teleportation: `/planet teleport moon`, `/planet teleport mars`, `/planet teleport hemphy`, `/planet teleport oretest`
+- ✅ Planet teleportation: `/planet teleport moon`, `/planet teleport mars`, `/planet teleport venus`, `/planet teleport glacio`
 - ✅ Planet information: `/planet info <planet_name>` for detailed planet characteristics
 - ✅ Planet listing: `/planet list` to view all available worlds
 - ✅ Automatic planet file generation with `PlanetGenerationRunner`
@@ -375,8 +375,8 @@ ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.STEEL
 /planet list                          # View all generated planets
 /planet teleport moon                 # Travel to Moon (craterous lunar landscape)
 /planet teleport mars                 # Travel to Mars (dramatic Martian terrain)
-/planet teleport hemphy               # Travel to Hemphy (extreme stress test planet)
-/planet teleport oretest              # Travel to Oretest (balanced test planet)
+/planet teleport venus                # Travel to Venus (toxic sulfuric atmosphere)
+/planet teleport glacio               # Travel to Glacio (icy frozen world)
 /planet info <planet_name>           # View detailed planet characteristics
 
 # Time progression testing
@@ -411,44 +411,45 @@ PlanetGenerationRunner (Java Code - Single Definition)
 **IMPORTANT:** Always use `registerPlanet(id)` instead of `PlanetMaker.planet(id)` to ensure automatic dimension effects registration.
 
 ```java
-// Example: Balanced test planet with automatic registration
-registerPlanet("oretest")
-    .continentalScale(2.0f)            // Continental landmass control (lower = more connected)
-    .erosionScale(3.0f)                // Erosion pattern intensity
-    .ridgeScale(1.0f)                  // Ridge formation strength
-    .heightVariation(0.8f, 0.5f, 0.3f, 0.2f)  // Multi-level height control (gentle)
-    .jaggednessScale(0.15f)            // Mountain sharpness (0.15 = gentle hills)
-    .jaggednessNoiseScale(600.0f)      // Mountain feature scale
+// Example: Mars with vanilla-quality mountainous terrain
+registerPlanet("mars")
+    .vanillaQualityMountainous()       // Dramatic terrain preset
+    .coordinateShift(15000, 15000)     // Unique terrain offset
+    .gravity(0.38f)                    // Mars has 3/8 Earth gravity
+    .temperature(-65)                  // Mars average surface temperature
 
     // Surface blocks
-    .surfaceBlock("minecraft:grass_block")
-    .subsurfaceBlock("minecraft:dirt")
-    .deepBlock("minecraft:stone")
+    .surfaceBlock("adastramekanized:mars_sand")
+    .subsurfaceBlock("adastramekanized:mars_stone")
+    .defaultBlock("adastramekanized:mars_stone")
     .bedrockBlock("minecraft:bedrock")
 
-    // World dimensions
-    .worldDimensions(-32, 256)         // World height bounds (reduced underground)
-    .seaLevel(64)                      // Sea level height
+    // World configuration
+    .seaLevel(0)
+    .aquifersEnabled(false)            // Dry desert planet
 
     // Atmosphere and visuals
-    .skyColor(0x87CEEB)                // Sky color (hex)
-    .fogColor(0xC0C0C0)                // Fog color
-    .hasAtmosphere(true)               // Has breathable atmosphere
-    .ambientLight(0.8f)                // Ambient light level
+    .skyColor(0xD2691E)                // Orange-brown Martian sky
+    .fogColor(0xCD853F)                // Sandy fog
+    .hasAtmosphere(true)               // Has atmosphere (not breathable)
+    .breathableAtmosphere(false)       // Requires oxygen gear
+    .ambientLight(0.2f)                // Dim ambient light
 
     // Weather and celestial
-    .cloudsEnabled(true)               // Show clouds
-    .rainEnabled(true)                 // Allow rain
+    .cloudsEnabled(false)              // No clouds
+    .rainEnabled(false)                // No rain
     .starsVisibleDuringDay(false)      // Stars only at night
 
     // Ore generation
     .oreVeinsEnabled(true)             // Enable vanilla ore system
-    .configureOre("diamond", 4)        // Custom ore veins per chunk
+    .configureOre("redstone", 25)      // Thermal energy deposits
+    .configureOre("osmium", 15)        // Mekanism ore
+    .configureOre("ostrum", 5)         // Progression ore
 
     // Biomes
     .clearBiomes()
-    .addBiome("minecraft:plains", 0.30f)
-    .addBiome("minecraft:forest", 0.25f)
+    .addBiome("adastramekanized:mars_highlands", ...)
+    .addBiome("adastramekanized:mars_canyons", ...)
 
     .generate();                       // Adds to generation queue AND registry
 ```
@@ -555,26 +556,50 @@ worldgen/density_function/{planet}/
 └── sloped_cheese.json     # Core terrain formula
 ```
 
-### Available Planets (13 Total)
+### Available Planets (31 Total)
 
-The mod includes 13 pre-configured planets in `PlanetGenerationRunner.configurePlanets()`:
+The mod includes 31 pre-configured planets in `PlanetGenerationRunner.configurePlanets()`:
 
-#### Playable Worlds
+#### Solar System
 1. **moon** - Airless lunar landscape with Earth visible, lava oceans, 1/6 gravity
-2. **mars** - Red planet with canyons, thin atmosphere, two moons (Phobos & Deimos)
-3. **earth_orbit** - Space station dimension, void world with Earth below
+2. **earth_orbit** - Space station dimension, void world with Earth below
+3. **mars** - Red planet with canyons, thin atmosphere, two moons (Phobos & Deimos)
 4. **venus** - Thick toxic atmosphere, heavy fog, yellowish sky
 5. **mercury** - Airless metallic world, extreme temperatures
-6. **glacio** - Icy world with thin atmosphere, snow and ice
-7. **earth_example** - Earth-like breathable world for testing
-8. **binary_world** - Toxic atmosphere with dual stars
 
-#### Test/Development Worlds
-9. **cavetest** - Extreme cave generation testing (maximum caves, decorations)
-10. **hemphy** - Absolute stress test (maximum ALL parameters, lava world)
-11. **oretest** - Balanced Overworld-like planet for ore testing
-12. **primal** - Jungle world (Mowzie's Mobs integration)
-13. **tribal** - Savanna world (Mowzie's Mobs Umvuthana civilization)
+#### Jovian Moons
+6. **europa** - Icy moon of Jupiter
+7. **io** - Volcanic moon of Jupiter
+8. **ganymede** - Largest moon in the solar system
+9. **callisto** - Heavily cratered Jovian moon
+
+#### Outer Solar System
+10. **titan** - Saturn's largest moon with thick atmosphere
+11. **enceladus** - Icy Saturn moon with geysers
+12. **triton** - Neptune's retrograde moon
+13. **ceres** - Dwarf planet in the asteroid belt
+14. **pluto** - Dwarf planet at the edge of the solar system
+15. **eris** - Distant dwarf planet
+
+#### Exoplanets
+16. **kepler22b** - First confirmed habitable-zone exoplanet
+17. **kepler442b** - Super-Earth in habitable zone
+18. **proxima_b** - Nearest exoplanet to Earth
+19. **trappist1e** - TRAPPIST-1 system habitable zone planet
+20. **gliese667c** - Triple-star system exoplanet
+
+#### Original Planets
+21. **pyrios** - Extreme volcanic world
+22. **frigidum** - Ultra-cold frozen world
+23. **arenos** - Arid desert world
+24. **paludis** - Swamp/wetland world
+25. **luxoria** - Bioluminescent exotic world
+26. **glacio** - Icy world with thin atmosphere, snow and ice
+27. **vulcan** - Volcanic rocky world
+28. **terra_nova** - Earth-like habitable world
+29. **primordium** - Primordial ancient world
+30. **bellator** - War-torn hostile world
+31. **profundus** - Deep ocean/cave world
 
 ### Automated Dimension Effects System
 
@@ -668,22 +693,13 @@ registerPlanet("habitable_world")
     .generate();
 ```
 
-#### Extreme Testing (Hemphy)
-- Continental scale: 0.5 (very low for connected hellscape)
-- Erosion scale: 1.0 (minimal for stability)
-- Jaggedness: 1.0 with 2000.0 noise scale (maximum terrain drama)
-- Ore density: N/A (uses vanilla ore system)
-- World height: -64 to 384 (reduced from extreme to manageable)
-- Surface: Magma blocks, netherrack, crying obsidian
-- Lava oceans at Y=32
-
-#### Balanced Testing (Oretest)
-- Continental scale: 2.0 (lower for connected landmasses)
-- Erosion scale: 3.0 (minimal erosion for stability)
-- Jaggedness: 0.15 with 600.0 noise scale (gentle rolling hills)
-- Ore density: 1.0x (normal ore spawning via vanilla system)
-- World height: -32 to 256 (reduced underground for gameplay)
-- Surface: Grass, dirt, stone (Overworld-like)
+#### Icy World (Glacio)
+- Vanilla-quality standard terrain with coordinate shift (60000, 90000)
+- Gravity: 0.8, Temperature: -50
+- Surface: Snow blocks, ice, packed ice
+- Sea level: 50 with water oceans
+- Ores: Coal (25), Silver (20), Calorite (3), Etrium (3)
+- Atmosphere: Breathable, clouds enabled, snow enabled, no rain
 
 ## Project Documentation References
 

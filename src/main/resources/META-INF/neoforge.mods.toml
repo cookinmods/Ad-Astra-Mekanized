@@ -68,6 +68,30 @@ versionRange = "[10.7.8,)"
 ordering = "AFTER"
 side = "BOTH"
 
+# Mekanism Additions dependency
+[[dependencies.adastramekanized]]
+modId = "mekanismadditions"
+type = "required"
+versionRange = "[10.7.8,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# Mekanism Generators dependency
+[[dependencies.adastramekanized]]
+modId = "mekanismgenerators"
+type = "required"
+versionRange = "[10.7.8,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# Mekanism Tools dependency
+[[dependencies.adastramekanized]]
+modId = "mekanismtools"
+type = "required"
+versionRange = "[10.7.8,)"
+ordering = "AFTER"
+side = "BOTH"
+
 # Create dependency (optional - adds mechanical crafting and pressing recipes)
 [[dependencies.adastramekanized]]
 modId = "create"

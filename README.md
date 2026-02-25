@@ -110,17 +110,6 @@ The mod supports optional integration with Create (mechanical crafting automatio
 | Luxoria | 80% | Toxic | 32°C | Emerald, Lapis, Diamond |
 | Profundus | 85% | Toxic | 20°C | Osmium, Emerald |
 
-### Themed Worlds
-
-| Planet | Gravity | Atmosphere | Theme |
-|--------|---------|------------|-------|
-| Cretaceous | 100% | Breathable | Prehistoric jungle with dinosaur-era terrain |
-| Decay | 100% | Breathable | Post-apocalyptic wasteland |
-| Necropolis | 100% | Breathable | Dark undead realm with soul sand valleys |
-| Olympus | 100% | Breathable | Mythic mountain realm |
-| Scaleland | 90% | Breathable | Reptilian desert and savanna |
-| Glowworld | 90% | Breathable | Bioluminescent mushroom caverns |
-| Ribbits Swamp | 100% | Breathable | Frog villager swamplands |
 
 ## Rocket Tiers
 
