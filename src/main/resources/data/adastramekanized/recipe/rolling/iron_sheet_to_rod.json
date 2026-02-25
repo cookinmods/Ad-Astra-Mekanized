@@ -8,7 +8,7 @@
   "type": "createaddition:rolling",
   "ingredients": [
     {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     }
   ],
   "results": [

@@ -11,7 +11,7 @@
       "item": "adastramekanized:gas_tank"
     },
     "B": {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     },
     "C": {
       "item": "adastramekanized:steel_rod"

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "adastramekanized:iron_sheet",
+    {
+      "id": "create:iron_sheet",
+      "required": false
+    }
+  ]
+}

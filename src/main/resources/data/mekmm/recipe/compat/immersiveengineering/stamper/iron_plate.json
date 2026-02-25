@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": { "type": "neoforge:mod_loaded", "modid": "adastramekanized" }
+    }
+  ],
+  "type": "mekmm:stamper",
+  "input": {
+    "count": 1,
+    "tag": "c:ingots/iron"
+  },
+  "mold": {
+    "count": 1,
+    "item": "immersiveengineering:mold_plate"
+  },
+  "output": {
+    "count": 1,
+    "id": "immersiveengineering:plate_iron"
+  }
+}

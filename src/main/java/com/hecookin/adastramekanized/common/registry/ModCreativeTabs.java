@@ -60,6 +60,9 @@ public class ModCreativeTabs {
                         output.accept(ModItems.STEEL_ROD.get());
                         output.accept(ModItems.ETRIUM_ROD.get());
 
+                        // Tools & Molds
+                        output.accept(ModItems.SHEET_DIE.get());
+
                         // Special Materials
                         output.accept(ModItems.ETRIONIC_CORE.get());
                         output.accept(ModItems.CHEESE.get());

@@ -9,6 +9,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -27,6 +29,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
+
+    private static final TagKey<Item> IRON_SHEET_TAG = TagKey.create(Registries.ITEM,
+            ResourceLocation.fromNamespaceAndPath("c", "plates/iron"));
 
     private Item getIronSheet() {
         return ModItems.IRON_SHEET.get();
@@ -79,7 +84,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         // Gas Tank (prerequisite for steel tank) - 10 items
         NasaWorkbenchRecipeBuilder.builder(RecipeCategory.MISC, ModItems.GAS_TANK.get(), 1)
                 .addIngredient(ModItems.IRON_ROD.get())
-                .addIngredient(getIronSheet())
+                .addIngredient(Ingredient.of(IRON_SHEET_TAG))
             .addIngredient(ModItems.STEEL_ROD.get())
             .addIngredient(ModItems.STEEL_SHEET.get())
                 .addIngredient(ModItems.STEEL_ROD.get())
@@ -124,7 +129,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         // Steel Tank - 10 items
         NasaWorkbenchRecipeBuilder.builder(RecipeCategory.MISC, ModItems.STEEL_TANK.get(), 1)
                 .addIngredient(ModItems.GAS_TANK.get())
-                .addIngredient(getIronSheet())
+                .addIngredient(Ingredient.of(IRON_SHEET_TAG))
                 .addIngredient(ModItems.STEEL_ROD.get())
                 .addIngredient(ModItems.STEEL_SHEET.get())
                 .addIngredient(ModItems.STEEL_ROD.get())
@@ -423,7 +428,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         // Sheet Block Compression (9 sheets -> 1 block)
         ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.IRON_SHEETBLOCK.get())
-            .requires(getIronSheet(), 9)
+            .requires(Ingredient.of(IRON_SHEET_TAG), 9)
             .unlockedBy("has_iron_sheet", has(getIronSheet()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "iron_sheetblock"));
 
@@ -644,7 +649,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("#I#")
             .pattern("III")
             .pattern("#I#")
-            .define('#', getIronSheet())
+            .define('#', IRON_SHEET_TAG)
             .define('I', Items.IRON_INGOT)
             .unlockedBy("has_iron_sheet", has(getIronSheet()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "iron_panel"));
@@ -706,7 +711,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("###")
             .pattern("###")
             .pattern("###")
-            .define('#', getIronSheet())
+            .define('#', IRON_SHEET_TAG)
             .unlockedBy("has_iron_sheet", has(getIronSheet()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "iron_plating"));
 
@@ -834,7 +839,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("###")
             .pattern("#I#")
             .pattern("###")
-            .define('#', getIronSheet())
+            .define('#', IRON_SHEET_TAG)
             .define('I', Items.IRON_INGOT)
             .unlockedBy("has_iron_sheet", has(getIronSheet()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "iron_factory_block"));
@@ -856,7 +861,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("III")
             .pattern("###")
             .pattern("III")
-            .define('#', getIronSheet())
+            .define('#', IRON_SHEET_TAG)
             .define('I', BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("mekanism", "ingot_steel")))
             .unlockedBy("has_iron_sheet", has(getIronSheet()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "encased_iron_block"));

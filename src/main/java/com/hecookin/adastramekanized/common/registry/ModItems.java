@@ -99,6 +99,11 @@ public class ModItems {
     public static final Supplier<Item> CALORITE_SHEET = ITEMS.register("calorite_sheet",
             () -> new Item(new Item.Properties()));
 
+    // ========== TOOLS & MOLDS ==========
+
+    public static final Supplier<Item> SHEET_DIE = ITEMS.register("sheet_die",
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
     // ========== SPECIAL MATERIALS ==========
 
     public static final Supplier<Item> ETRIONIC_CORE = ITEMS.register("etrionic_core",

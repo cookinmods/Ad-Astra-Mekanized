@@ -3,31 +3,31 @@
   "category": "building",
   "ingredients": [
     {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     },
     {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     },
     {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     },
     {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     },
     {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     },
     {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     },
     {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     },
     {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     },
     {
-      "item": "adastramekanized:iron_sheet"
+      "tag": "c:plates/iron"
     }
   ],
   "result": {

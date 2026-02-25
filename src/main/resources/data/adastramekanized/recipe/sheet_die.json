@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": { "type": "neoforge:mod_loaded", "modid": "immersiveengineering" }
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SIS",
+    "I I",
+    "SIS"
+  ],
+  "key": {
+    "S": { "item": "mekanism:ingot_steel" },
+    "I": { "item": "minecraft:iron_ingot" }
+  },
+  "result": {
+    "id": "adastramekanized:sheet_die",
+    "count": 1
+  }
+}
