@@ -71,7 +71,9 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
 
     // ========== PROCESSED MATERIALS ==========
-    // Note: Iron sheet provided by Create (create:iron_sheet)
+
+    public static final Supplier<Item> IRON_SHEET = ITEMS.register("iron_sheet",
+            () -> new Item(new Item.Properties()));
 
     public static final Supplier<Item> IRON_ROD = ITEMS.register("iron_rod",
             () -> new Item(new Item.Properties()));

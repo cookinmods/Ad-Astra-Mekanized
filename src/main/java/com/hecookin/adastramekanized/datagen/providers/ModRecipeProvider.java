@@ -28,8 +28,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         super(output, registries);
     }
 
-    private Item getCreateIronSheet() {
-        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("create", "iron_sheet"));
+    private Item getIronSheet() {
+        return ModItems.IRON_SHEET.get();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         // Gas Tank (prerequisite for steel tank) - 10 items
         NasaWorkbenchRecipeBuilder.builder(RecipeCategory.MISC, ModItems.GAS_TANK.get(), 1)
                 .addIngredient(ModItems.IRON_ROD.get())
-                .addIngredient(getCreateIronSheet())
+                .addIngredient(getIronSheet())
             .addIngredient(ModItems.STEEL_ROD.get())
             .addIngredient(ModItems.STEEL_SHEET.get())
                 .addIngredient(ModItems.STEEL_ROD.get())
@@ -124,7 +124,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         // Steel Tank - 10 items
         NasaWorkbenchRecipeBuilder.builder(RecipeCategory.MISC, ModItems.STEEL_TANK.get(), 1)
                 .addIngredient(ModItems.GAS_TANK.get())
-                .addIngredient(getCreateIronSheet())
+                .addIngredient(getIronSheet())
                 .addIngredient(ModItems.STEEL_ROD.get())
                 .addIngredient(ModItems.STEEL_SHEET.get())
                 .addIngredient(ModItems.STEEL_ROD.get())
@@ -423,8 +423,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         // Sheet Block Compression (9 sheets -> 1 block)
         ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.IRON_SHEETBLOCK.get())
-            .requires(getCreateIronSheet(), 9)
-            .unlockedBy("has_iron_sheet", has(getCreateIronSheet()))
+            .requires(getIronSheet(), 9)
+            .unlockedBy("has_iron_sheet", has(getIronSheet()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "iron_sheetblock"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.STEEL_SHEETBLOCK.get())
@@ -453,7 +453,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "calorite_sheetblock"));
 
         // Sheet Block Decompression (1 block -> 9 sheets)
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, getCreateIronSheet(), 9)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, getIronSheet(), 9)
             .requires(ModBlocks.IRON_SHEETBLOCK.get())
             .unlockedBy("has_iron_sheetblock", has(ModBlocks.IRON_SHEETBLOCK.get()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "iron_sheet_from_sheetblock"));
@@ -644,9 +644,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("#I#")
             .pattern("III")
             .pattern("#I#")
-            .define('#', getCreateIronSheet())
+            .define('#', getIronSheet())
             .define('I', Items.IRON_INGOT)
-            .unlockedBy("has_iron_sheet", has(getCreateIronSheet()))
+            .unlockedBy("has_iron_sheet", has(getIronSheet()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "iron_panel"));
 
         // Steel Panel: 3 steel sheets + 5 steel ingots -> 1 panel
@@ -706,8 +706,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("###")
             .pattern("###")
             .pattern("###")
-            .define('#', getCreateIronSheet())
-            .unlockedBy("has_iron_sheet", has(getCreateIronSheet()))
+            .define('#', getIronSheet())
+            .unlockedBy("has_iron_sheet", has(getIronSheet()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "iron_plating"));
 
         // Steel Plating: 9 steel sheets -> 1 plating
@@ -834,9 +834,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("###")
             .pattern("#I#")
             .pattern("###")
-            .define('#', getCreateIronSheet())
+            .define('#', getIronSheet())
             .define('I', Items.IRON_INGOT)
-            .unlockedBy("has_iron_sheet", has(getCreateIronSheet()))
+            .unlockedBy("has_iron_sheet", has(getIronSheet()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "iron_factory_block"));
 
         // Steel Factory Block: 8 steel sheets + 1 steel ingot -> 1 factory block
@@ -856,9 +856,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("III")
             .pattern("###")
             .pattern("III")
-            .define('#', getCreateIronSheet())
+            .define('#', getIronSheet())
             .define('I', BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("mekanism", "ingot_steel")))
-            .unlockedBy("has_iron_sheet", has(getCreateIronSheet()))
+            .unlockedBy("has_iron_sheet", has(getIronSheet()))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(AdAstraMekanized.MOD_ID, "encased_iron_block"));
 
         // Encased Steel Block: 6 steel sheets + 3 steel ingots -> 1 encased block

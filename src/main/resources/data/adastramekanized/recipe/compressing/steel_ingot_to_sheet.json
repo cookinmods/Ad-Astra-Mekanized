@@ -1,0 +1,16 @@
+{
+  "type": "mekanism:compressing",
+  "item_input": {
+    "count": 1,
+    "tag": "c:ingots/steel"
+  },
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanism:osmium"
+  },
+  "output": {
+    "count": 1,
+    "id": "adastramekanized:steel_sheet"
+  },
+  "per_tick_usage": true
+}
