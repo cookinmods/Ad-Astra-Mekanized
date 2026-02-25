@@ -8,7 +8,7 @@
   "type": "neoforge:remove_features",
   "biomes": "#adastramekanized:callisto_biomes",
   "features": [
-    "adastramekanized:callisto_ore_tin_simple"
+    "adastramekanized:callisto_ore_iron_simple"
   ],
   "steps": [
     "underground_ores"

@@ -8,7 +8,7 @@
   "type": "neoforge:remove_features",
   "biomes": "#adastramekanized:pluto_biomes",
   "features": [
-    "adastramekanized:pluto_ore_tin_simple"
+    "adastramekanized:pluto_ore_gold_simple"
   ],
   "steps": [
     "underground_ores"

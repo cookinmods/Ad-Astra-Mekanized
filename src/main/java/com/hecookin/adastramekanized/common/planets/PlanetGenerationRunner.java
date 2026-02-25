@@ -343,12 +343,12 @@ public class PlanetGenerationRunner {
             .rainEnabled(false)
             .snowEnabled(false)
             // Moon ores - industrial starter metal
-            .configureOre("tin", 8)        // primary - Mekanism ore, industrial starter metal (fallback for silver)
-            .configureOre("iron", 10)       // tertiary - lunar regolith deposits
+            .configureOre("iron", 10)       // secondary - lunar regolith deposits (IE: silver replaces this)
+            .configureOre("tin", 8)         // tertiary - Mekanism ore, industrial starter metal
             .configureOre("desh", 5)        // PROGRESSION ORE - needed for Tier 2 rocket
             .configureOre("cheese", 4)      // Moon cheese ore - classic Ad Astra feature
             .configureOre("moon_etrium", 2) // ENDGAME ORE - unchanged
-            .configureConditionalOre("silver", 8, "immersiveengineering", "tin"); // IE: silver replaces tin
+            .configureConditionalOre("silver", 10, "immersiveengineering", "iron"); // IE: silver replaces iron
 
         moon.clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
@@ -573,13 +573,13 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Mercury ores - radioactive scorched world + redstone
-            .configureOre("uranium", 25)   // primary - Mekanism ore, radioactive core (fallback for nickel)
-            .configureOre("iron", 20)      // secondary - iron-rich regolith
-            .configureOre("redstone", 15)  // tertiary - thermal energy from sun proximity
+            // Mercury ores - scorched metallic world near the sun
+            .configureOre("iron", 25)      // primary - iron-rich metallic core
+            .configureOre("redstone", 20)  // secondary - thermal energy from sun proximity (IE: nickel replaces this)
+            .configureOre("uranium", 12)   // uncommon - radioactive core deposits
             .configureOre("ostrum", 4)     // PROGRESSION ORE - needed for Tier 3 rocket
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
-            .configureConditionalOre("nickel", 25, "immersiveengineering", "uranium") // IE: nickel replaces uranium
+            .configureConditionalOre("nickel", 20, "immersiveengineering", "redstone") // IE: nickel replaces redstone
             .clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
                 new String[][] {
@@ -631,12 +631,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // Europa ores - ice moon with tin and gems + iron
-            .configureOre("lapis", 25)     // primary - blue gems in blue ice
-            .configureOre("tin", 20)       // secondary - Mekanism ore, frozen industrial deposits (fallback for silver)
+            // Europa ores - ice moon with tin and gems
+            .configureOre("lapis", 25)     // primary - blue gems in blue ice (IE: silver replaces this)
+            .configureOre("tin", 20)       // secondary - Mekanism ore, frozen industrial deposits
             .configureOre("iron", 15)      // tertiary - rocky core deposits
             .configureOre("etrium", 6)     // ENDGAME ORE - unchanged
-            .configureConditionalOre("silver", 20, "immersiveengineering", "tin") // IE: silver replaces tin
+            .configureConditionalOre("silver", 25, "immersiveengineering", "lapis") // IE: silver replaces lapis
             .clearAllMobSpawns()
             .addModReplacementSpawns("born_in_chaos_v1",
                 new String[][] {
@@ -688,12 +688,13 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Io ores - Plan B: volcanic moon with gold and nickel
+            // Io ores - volcanic moon with gold and thermal deposits
             .configureOre("gold", 25)      // primary - volcanic gold deposits
-            .configureOre("redstone", 20)  // secondary - thermal energy
-            .configureOre("fluorite", 15)  // tertiary - Mekanism ore, chemical processing (fallback for nickel)
+            .configureOre("redstone", 20)  // secondary - thermal energy (IE: nickel replaces this)
+            .configureOre("fluorite", 10)  // uncommon - chemical processing from volcanic vents
+            .configureOre("uranium", 6)    // rare - volcanic radioactives
             .configureOre("diamond", 5)    // rare - forged in heat
-            .configureConditionalOre("nickel", 15, "immersiveengineering", "fluorite") // IE: nickel replaces fluorite
+            .configureConditionalOre("nickel", 20, "immersiveengineering", "redstone") // IE: nickel replaces redstone
             .clearAllMobSpawns()
             .addModReplacementSpawns("doom",
                 new String[][] {
@@ -795,13 +796,14 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Callisto ores - Plan B: IE lead-rich ancient moon + iron
-            .configureOre("lead", 25)      // primary - IE ore, ancient heavy deposits
-            .configureOre("tin", 20)       // secondary - Mekanism ore, industrial metal (fallback for nickel)
-            .configureOre("iron", 15)      // tertiary - rocky moon core
+            // Callisto ores - lead-rich ancient moon with diverse minerals
+            .configureOre("lead", 25)      // primary - ancient heavy deposits
+            .configureOre("iron", 20)      // secondary - rocky moon core (IE: nickel replaces this)
+            .configureOre("tin", 15)       // uncommon - Mekanism ore, industrial metal
             .configureOre("gold", 12)      // uncommon - precious metal seams
             .configureOre("diamond", 5)    // rare - impact diamonds
-            .configureConditionalOre("nickel", 20, "immersiveengineering", "tin") // IE: nickel replaces tin
+            .configureOre("fluorite", 4)   // rare - ancient mineral deposits
+            .configureConditionalOre("nickel", 20, "immersiveengineering", "iron") // IE: nickel replaces iron
             .clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
                 new String[][] {
@@ -901,11 +903,11 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)  // Airless icy moon - no liquid water
             .oreVeinsEnabled(true)
-            // Enceladus ores - fluorite-rich geyser moon
-            .configureOre("fluorite", 25)  // primary - Mekanism ore, chemical processing deposits (fallback for silver)
-            .configureOre("copper", 20)    // secondary - frozen metal seams
+            // Enceladus ores - icy geyser moon with chemical deposits
+            .configureOre("copper", 20)    // primary - frozen metal seams (IE: silver replaces this)
+            .configureOre("fluorite", 12)  // uncommon - chemical processing from geyser vents
             .configureOre("diamond", 6)    // rare - pristine ice preserves gems
-            .configureConditionalOre("silver", 25, "immersiveengineering", "fluorite") // IE: silver replaces fluorite
+            .configureConditionalOre("silver", 20, "immersiveengineering", "copper") // IE: silver replaces copper
             .clearAllMobSpawns()
             .addModReplacementSpawns("luminousworld",
                 new String[][] {
@@ -952,10 +954,11 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Triton ores - frozen nitrogen world with lapis, iron, and ostrum
-            .configureOre("lapis", 25)     // primary - utility ore, frozen nitrogen deposits (fallback for silver)
+            // Triton ores - frozen nitrogen world with diverse minerals
+            .configureOre("lapis", 25)     // primary - frozen nitrogen deposits (IE: silver replaces this)
             .configureOre("iron", 15)      // secondary - rocky core deposits
             .configureOre("copper", 12)    // tertiary - frozen metal seams
+            .configureOre("fluorite", 6)   // rare - frozen chemical deposits
             .configureOre("diamond", 6)    // rare - pristine ancient deposits
             .configureOre("ostrum", 3)     // rare - Tier 3 progression ore
             .configureConditionalOre("silver", 25, "immersiveengineering", "lapis") // IE: silver replaces lapis
@@ -1005,14 +1008,15 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Ceres ores - Plan B: THE mining hub for Mekanism osmium
+            // Ceres ores - THE Mekanism mining hub with diverse asteroid minerals
             .configureOre("osmium", 25)    // primary - Mekanism ore, major source
-            .configureOre("uranium", 20)   // secondary - Mekanism ore, asteroid radioactives (fallback for nickel)
-            .configureOre("iron", 15)      // tertiary - basic asteroid metal
-            .configureOre("fluorite", 4)   // rare - Mekanism ore, mineral deposits (fallback for silver)
+            .configureOre("iron", 20)      // secondary - basic asteroid metal (IE: nickel replaces this)
+            .configureOre("copper", 15)    // tertiary - asteroid copper deposits (IE: silver replaces this)
+            .configureOre("uranium", 10)   // uncommon - asteroid radioactives
             .configureOre("etrium", 4)     // ENDGAME ORE - unchanged
-            .configureConditionalOre("silver", 4, "immersiveengineering", "fluorite") // IE: silver replaces fluorite
-            .configureConditionalOre("nickel", 20, "immersiveengineering", "uranium") // IE: nickel replaces uranium
+            .configureOre("fluorite", 4)   // rare - mineral deposits
+            .configureConditionalOre("nickel", 20, "immersiveengineering", "iron") // IE: nickel replaces iron
+            .configureConditionalOre("silver", 15, "immersiveengineering", "copper") // IE: silver replaces copper
             .clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
                 new String[][] {
@@ -1058,12 +1062,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Pluto ores - frozen dwarf planet with gold, tin, and iron
-            .configureOre("gold", 25)      // primary - ancient precious deposits
-            .configureOre("tin", 20)       // secondary - Mekanism ore, frozen industrial deposits (fallback for silver)
+            // Pluto ores - frozen dwarf planet at the edge
+            .configureOre("gold", 25)      // primary - ancient precious deposits (IE: silver replaces this)
+            .configureOre("tin", 20)       // secondary - Mekanism ore, frozen industrial deposits
             .configureOre("iron", 12)      // tertiary - rocky core deposits
             .configureOre("etrium", 5)     // ENDGAME ORE - unchanged
-            .configureConditionalOre("silver", 20, "immersiveengineering", "tin") // IE: silver replaces tin
+            .configureConditionalOre("silver", 25, "immersiveengineering", "gold") // IE: silver replaces gold
             .clearAllMobSpawns()
             .addModReplacementSpawns("mobs_of_mythology",
                 new String[][] {
@@ -1455,12 +1459,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Pyrios ores - volcanic hellscape with gold and uranium
-            .configureOre("gold", 25)      // primary - volcanic gold deposits
-            .configureOre("uranium", 20)   // secondary - Mekanism ore, radioactive volcanic seams (fallback for nickel)
-            .configureOre("redstone", 15)  // tertiary - thermal energy
+            // Pyrios ores - volcanic hellscape with precious metals
+            .configureOre("gold", 25)      // primary - volcanic gold deposits (IE: nickel replaces this)
+            .configureOre("redstone", 15)  // secondary - thermal energy
+            .configureOre("uranium", 12)   // uncommon - radioactive volcanic seams
             .configureOre("calorite", 3)   // rare - Tier 4 progression ore
-            .configureConditionalOre("nickel", 20, "immersiveengineering", "uranium") // IE: nickel replaces uranium
+            .configureConditionalOre("nickel", 25, "immersiveengineering", "gold") // IE: nickel replaces gold
             .clearAllMobSpawns()
             .addModReplacementSpawns("rottencreatures",
                 new String[][] {
@@ -1507,10 +1511,11 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Frigidum ores - frozen wasteland with gold
-            .configureOre("gold", 25)      // primary - precious deposits in frozen wasteland (fallback for silver)
+            // Frigidum ores - frozen wasteland with precious metals
+            .configureOre("gold", 25)      // primary - precious deposits (IE: silver replaces this)
             .configureOre("coal", 20)      // secondary - ancient organic matter
             .configureOre("copper", 15)    // tertiary - frozen metal seams
+            .configureOre("uranium", 6)    // rare - frozen radioactive deposits
             .configureOre("diamond", 5)    // rare - preserved in ice
             .configureConditionalOre("silver", 25, "immersiveengineering", "gold") // IE: silver replaces gold
             .clearAllMobSpawns()
@@ -1728,12 +1733,12 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // Glacio ores - icy world with tin and calorite
-            .configureOre("coal", 25)      // primary - ancient frozen organics
-            .configureOre("tin", 20)       // secondary - Mekanism ore, frozen industrial deposits (fallback for silver)
+            // Glacio ores - icy world with coal and Mekanism metals
+            .configureOre("coal", 25)      // primary - ancient frozen organics (IE: silver replaces this)
+            .configureOre("tin", 20)       // secondary - Mekanism ore, frozen industrial deposits
             .configureOre("calorite", 3)   // PROGRESSION ORE - needed for Tier 4 rocket
             .configureOre("glacio_etrium", 3) // ENDGAME ORE - unchanged
-            .configureConditionalOre("silver", 20, "immersiveengineering", "tin") // IE: silver replaces tin
+            .configureConditionalOre("silver", 25, "immersiveengineering", "coal") // IE: silver replaces coal
             .clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
                 new String[][] {
@@ -1784,12 +1789,13 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Vulcan ores - Plan B: volcanic world with thermal energy ores
+            // Vulcan ores - volcanic world with thermal energy and chemical deposits
             .configureOre("redstone", 25)  // primary - thermal energy from volcanic activity
-            .configureOre("fluorite", 20)  // secondary - Mekanism ore, chemical processing deposits (fallback for nickel)
-            .configureOre("gold", 15)      // tertiary - volcanic treasure
+            .configureOre("gold", 15)      // secondary - volcanic treasure (IE: nickel replaces this)
+            .configureOre("fluorite", 12)  // uncommon - chemical processing from volcanic vents
+            .configureOre("uranium", 6)    // rare - volcanic radioactives
             .configureOre("diamond", 6)    // rare - pressure-formed gems
-            .configureConditionalOre("nickel", 20, "immersiveengineering", "fluorite") // IE: nickel replaces fluorite
+            .configureConditionalOre("nickel", 15, "immersiveengineering", "gold") // IE: nickel replaces gold
             .clearAllMobSpawns()
             .addModReplacementSpawns("doom",
                 new String[][] {
@@ -2021,13 +2027,15 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)  // No surface water
             .oreVeinsEnabled(true)
-            // Profundus ores - Plan B: underground cave kingdom with osmium and iron
+            // Profundus ores - deep cave kingdom rich in Mekanism minerals
             .configureOre("osmium", 25)    // primary - Mekanism ore, deep cave deposits
-            .configureOre("iron", 20)      // secondary - kobold smithing essential
-            .configureOre("lead", 15)      // tertiary - IE ore, heavy underground metals
-            .configureOre("tin", 12)       // uncommon - Mekanism ore, industrial metal (fallback for nickel)
+            .configureOre("iron", 20)      // secondary - kobold smithing essential (IE: nickel replaces this)
+            .configureOre("lead", 15)      // tertiary - heavy underground metals
+            .configureOre("tin", 12)       // uncommon - Mekanism ore, industrial metal
             .configureOre("emerald", 8)    // rare - kobold treasure hoards
-            .configureConditionalOre("nickel", 12, "immersiveengineering", "tin") // IE: nickel replaces tin
+            .configureOre("fluorite", 6)   // rare - deep mineral caves
+            .configureOre("uranium", 4)    // rare - deep underground radioactives
+            .configureConditionalOre("nickel", 20, "immersiveengineering", "iron") // IE: nickel replaces iron
             .clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
                 new String[][] {

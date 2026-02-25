@@ -8,7 +8,7 @@
   "type": "neoforge:remove_features",
   "biomes": "#adastramekanized:vulcan_biomes",
   "features": [
-    "adastramekanized:vulcan_ore_fluorite_simple"
+    "adastramekanized:vulcan_ore_gold_simple"
   ],
   "steps": [
     "underground_ores"

@@ -13,13 +13,13 @@
       "type": "patchouli:text",
       "title": "Resources",
       "flag": "!mod:immersiveengineering",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Lapis (Common)$(br)• Iron (Uncommon)$(br)• Copper (Uncommon)$(br)• Diamond (Rare)$(br)• Ostrum (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Lapis (Common)$(br)• Iron (Uncommon)$(br)• Copper (Uncommon)$(br)• Diamond (Rare)$(br)• Fluorite (Rare)$(br)• Ostrum (Rare)$(br)"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
       "flag": "mod:immersiveengineering",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Silver (Common)$(br)• Iron (Uncommon)$(br)• Copper (Uncommon)$(br)• Diamond (Rare)$(br)• Ostrum (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Silver (Common)$(br)• Iron (Uncommon)$(br)• Copper (Uncommon)$(br)• Diamond (Rare)$(br)• Fluorite (Rare)$(br)• Ostrum (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

@@ -8,7 +8,7 @@
   "type": "neoforge:remove_features",
   "biomes": "#adastramekanized:io_biomes",
   "features": [
-    "adastramekanized:io_ore_fluorite_simple"
+    "adastramekanized:io_ore_redstone_simple"
   ],
   "steps": [
     "underground_ores"

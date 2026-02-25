@@ -8,7 +8,7 @@
   "type": "neoforge:remove_features",
   "biomes": "#adastramekanized:europa_biomes",
   "features": [
-    "adastramekanized:europa_ore_tin_simple"
+    "adastramekanized:europa_ore_lapis_simple"
   ],
   "steps": [
     "underground_ores"

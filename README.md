@@ -43,7 +43,7 @@ The mod supports optional integration with Create (mechanical crafting automatio
 |-----|-------------|
 | Create | 25 mechanical crafting recipes (rockets, engines, tanks, oxygen gear) + 5 pressing recipes (ingot-to-sheet) |
 | Create Crafts & Additions | 3 rolling machine recipes (sheet-to-rod for iron, steel, etrium) |
-| Immersive Engineering | Diesel/biodiesel rocket fuels + silver/nickel ores replace fallback ores on 14 planets |
+| Immersive Engineering | Diesel/biodiesel rocket fuels + silver/nickel ores replace common vanilla ores on 14 planets |
 | Born in Chaos | Horror mob spawning on specific planets |
 | JEI | Recipe viewer support for NASA Workbench recipes |
 
@@ -55,7 +55,7 @@ The mod supports optional integration with Create (mechanical crafting automatio
 |--------|---------|------------|------|-------------------|
 | Moon | 17% | None | -173°C | Tin, Desh, Cheese, Etrium |
 | Mars | 38% | Toxic | -65°C | Osmium, Ostrum, Desh, Etrium |
-| Mercury | 38% | None | 167°C | Uranium, Ostrum, Etrium |
+| Mercury | 38% | None | 167°C | Iron, Uranium, Ostrum, Etrium |
 | Venus | 90% | Toxic | 464°C | Lead, Calorite, Etrium |
 | Earth Orbit | 17% | None | -270°C | None (space station) |
 
@@ -64,25 +64,25 @@ The mod supports optional integration with Create (mechanical crafting automatio
 | Planet | Gravity | Atmosphere | Temp | Notable Resources |
 |--------|---------|------------|------|-------------------|
 | Europa | 13% | None | -160°C | Lapis, Tin, Etrium |
-| Io | 18% | Toxic | -130°C | Fluorite, Diamond |
+| Io | 18% | Toxic | -130°C | Fluorite, Uranium, Diamond |
 | Ganymede | 15% | None | -160°C | Osmium, Diamond |
-| Callisto | 13% | None | -139°C | Lead, Tin, Diamond |
+| Callisto | 13% | None | -139°C | Lead, Tin, Fluorite, Diamond |
 
 ### Saturn System
 
 | Planet | Gravity | Atmosphere | Temp | Notable Resources |
 |--------|---------|------------|------|-------------------|
 | Titan | 14% | Toxic | -179°C | Osmium, Calorite, Etrium |
-| Enceladus | 5% | None | -201°C | Fluorite, Diamond |
+| Enceladus | 5% | None | -201°C | Copper, Fluorite, Diamond |
 
 ### Outer Solar System
 
 | Planet | Gravity | Atmosphere | Temp | Notable Resources |
 |--------|---------|------------|------|-------------------|
-| Triton | 8% | None | -235°C | Ostrum, Diamond |
+| Triton | 8% | None | -235°C | Ostrum, Fluorite, Diamond |
 | Pluto | 6% | None | -229°C | Gold, Tin, Etrium |
 | Eris | 8% | None | -231°C | Lead, Diamond |
-| Ceres | 5% | None | -106°C | Osmium, Uranium, Etrium |
+| Ceres | 5% | None | -106°C | Osmium, Uranium, Fluorite, Etrium |
 
 ### Habitable Exoplanets
 
@@ -99,16 +99,16 @@ The mod supports optional integration with Create (mechanical crafting automatio
 | Paludis | 90% | Breathable | 28°C | Gold, Lead |
 | Arenos | 100% | Breathable | 55°C | Lead, Diamond |
 | Bellator | 100% | Breathable | 35°C | Gold, Diamond |
-| Frigidum | 110% | Breathable | -80°C | Gold, Diamond |
+| Frigidum | 110% | Breathable | -80°C | Gold, Uranium, Diamond |
 
 ### Hostile Worlds
 
 | Planet | Gravity | Atmosphere | Temp | Notable Resources |
 |--------|---------|------------|------|-------------------|
-| Vulcan | 120% | Toxic | 200°C | Fluorite, Diamond |
+| Vulcan | 120% | Toxic | 200°C | Fluorite, Uranium, Diamond |
 | Pyrios | 100% | Toxic | 800°C | Uranium, Calorite |
 | Luxoria | 80% | Toxic | 32°C | Emerald, Lapis, Diamond |
-| Profundus | 85% | Toxic | 20°C | Osmium, Emerald |
+| Profundus | 85% | Toxic | 20°C | Osmium, Emerald, Fluorite, Uranium |
 
 
 ## Rocket Tiers
@@ -200,7 +200,7 @@ When Create is installed, all major crafting recipes become available through Me
 - Diesel and biodiesel recognized as valid rocket fuel alternatives
 - Diesel: 256 RF/mB energy value
 - Biodiesel: 192 RF/mB energy value
-- **Conditional IE ores** — Silver and nickel ore deposits appear on 14 planets, replacing Mekanism/vanilla fallback ores (tin, fluorite, uranium, lapis, gold) via NeoForge biome modifiers. Without IE, fallback ores generate instead. The in-game journal automatically shows the correct ore list based on which mods are installed.
+- **Conditional IE ores** — Silver and nickel ore deposits appear on 14 planets, replacing common vanilla ores (iron, gold, copper, coal, lapis, redstone) via NeoForge biome modifiers. Without IE, vanilla fallback ores generate instead. Mekanism ores (fluorite, uranium) are never replaced and remain available on all planets regardless of IE installation. The in-game journal automatically shows the correct ore list based on which mods are installed.
 
 ### Born in Chaos (Optional)
 

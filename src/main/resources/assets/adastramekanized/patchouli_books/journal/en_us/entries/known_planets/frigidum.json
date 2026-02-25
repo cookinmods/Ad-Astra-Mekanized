@@ -13,13 +13,13 @@
       "type": "patchouli:text",
       "title": "Resources",
       "flag": "!mod:immersiveengineering",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Gold (Common)$(br)• Coal (Common)$(br)• Copper (Uncommon)$(br)• Diamond (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Gold (Common)$(br)• Coal (Common)$(br)• Copper (Uncommon)$(br)• Uranium (Rare)$(br)• Diamond (Rare)$(br)"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
       "flag": "mod:immersiveengineering",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Silver (Common)$(br)• Coal (Common)$(br)• Copper (Uncommon)$(br)• Diamond (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Silver (Common)$(br)• Coal (Common)$(br)• Copper (Uncommon)$(br)• Uranium (Rare)$(br)• Diamond (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

@@ -8,7 +8,7 @@
   "type": "neoforge:remove_features",
   "biomes": "#adastramekanized:mercury_biomes",
   "features": [
-    "adastramekanized:mercury_ore_uranium_simple"
+    "adastramekanized:mercury_ore_redstone_simple"
   ],
   "steps": [
     "underground_ores"

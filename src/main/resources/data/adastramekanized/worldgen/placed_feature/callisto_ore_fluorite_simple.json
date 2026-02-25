@@ -1,9 +1,9 @@
 {
-  "feature": "adastramekanized:callisto_ore_tin_simple",
+  "feature": "adastramekanized:callisto_ore_fluorite_simple",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 15
+      "count": 4
     },
     {
       "type": "minecraft:in_square"

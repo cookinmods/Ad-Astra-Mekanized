@@ -1,9 +1,9 @@
 {
-  "feature": "adastramekanized:callisto_ore_tin_simple",
+  "feature": "adastramekanized:vulcan_ore_uranium_simple",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 15
+      "count": 6
     },
     {
       "type": "minecraft:in_square"

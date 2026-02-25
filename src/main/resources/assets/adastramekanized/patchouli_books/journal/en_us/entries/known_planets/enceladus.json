@@ -13,13 +13,13 @@
       "type": "patchouli:text",
       "title": "Resources",
       "flag": "!mod:immersiveengineering",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Fluorite (Common)$(br)• Copper (Common)$(br)• Diamond (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Copper (Common)$(br)• Fluorite (Uncommon)$(br)• Diamond (Rare)$(br)"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
       "flag": "mod:immersiveengineering",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Silver (Common)$(br)• Copper (Common)$(br)• Diamond (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Silver (Common)$(br)• Fluorite (Uncommon)$(br)• Diamond (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

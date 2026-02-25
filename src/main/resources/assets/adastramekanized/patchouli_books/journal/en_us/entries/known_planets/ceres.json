@@ -13,13 +13,13 @@
       "type": "patchouli:text",
       "title": "Resources",
       "flag": "!mod:immersiveengineering",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Uranium (Common)$(br)• Iron (Uncommon)$(br)• Fluorite (Rare)$(br)• Etrium (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Iron (Common)$(br)• Copper (Uncommon)$(br)• Uranium (Uncommon)$(br)• Fluorite (Rare)$(br)• Etrium (Rare)$(br)"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
       "flag": "mod:immersiveengineering",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Nickel (Common)$(br)• Iron (Uncommon)$(br)• Etrium (Rare)$(br)• Silver (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Nickel (Common)$(br)• Silver (Uncommon)$(br)• Uranium (Uncommon)$(br)• Fluorite (Rare)$(br)• Etrium (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

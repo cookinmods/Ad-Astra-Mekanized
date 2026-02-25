@@ -8,8 +8,8 @@
   "type": "neoforge:add_features",
   "biomes": "#adastramekanized:ceres_biomes",
   "features": [
-    "adastramekanized:ceres_ore_silver_ie",
-    "adastramekanized:ceres_ore_nickel_ie"
+    "adastramekanized:ceres_ore_nickel_ie",
+    "adastramekanized:ceres_ore_silver_ie"
   ],
   "step": "underground_ores"
 }

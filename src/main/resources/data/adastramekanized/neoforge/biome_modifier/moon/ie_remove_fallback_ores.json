@@ -8,7 +8,7 @@
   "type": "neoforge:remove_features",
   "biomes": "#adastramekanized:moon_biomes",
   "features": [
-    "adastramekanized:moon_ore_tin_simple"
+    "adastramekanized:moon_ore_iron_simple"
   ],
   "steps": [
     "underground_ores"

@@ -8,7 +8,7 @@
   "type": "neoforge:remove_features",
   "biomes": "#adastramekanized:enceladus_biomes",
   "features": [
-    "adastramekanized:enceladus_ore_fluorite_simple"
+    "adastramekanized:enceladus_ore_copper_simple"
   ],
   "steps": [
     "underground_ores"

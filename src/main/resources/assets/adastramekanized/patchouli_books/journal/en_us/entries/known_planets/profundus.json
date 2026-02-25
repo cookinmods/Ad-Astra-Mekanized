@@ -13,13 +13,13 @@
       "type": "patchouli:text",
       "title": "Resources",
       "flag": "!mod:immersiveengineering",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Iron (Common)$(br)• Lead (Uncommon)$(br)• Tin (Uncommon)$(br)• Emerald (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Iron (Common)$(br)• Lead (Uncommon)$(br)• Tin (Uncommon)$(br)• Emerald (Rare)$(br)• Fluorite (Rare)$(br)• Uranium (Rare)$(br)"
     },
     {
       "type": "patchouli:text",
       "title": "Resources",
       "flag": "mod:immersiveengineering",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Iron (Common)$(br)• Lead (Uncommon)$(br)• Nickel (Uncommon)$(br)• Emerald (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Nickel (Common)$(br)• Lead (Uncommon)$(br)• Tin (Uncommon)$(br)• Emerald (Rare)$(br)• Fluorite (Rare)$(br)• Uranium (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

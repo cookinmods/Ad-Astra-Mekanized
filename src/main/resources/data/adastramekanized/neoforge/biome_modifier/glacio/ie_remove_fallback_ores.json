@@ -8,7 +8,7 @@
   "type": "neoforge:remove_features",
   "biomes": "#adastramekanized:glacio_biomes",
   "features": [
-    "adastramekanized:glacio_ore_tin_simple"
+    "adastramekanized:glacio_ore_coal_simple"
   ],
   "steps": [
     "underground_ores"

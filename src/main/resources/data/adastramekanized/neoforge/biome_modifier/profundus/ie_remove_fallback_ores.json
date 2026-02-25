@@ -8,7 +8,7 @@
   "type": "neoforge:remove_features",
   "biomes": "#adastramekanized:profundus_biomes",
   "features": [
-    "adastramekanized:profundus_ore_tin_simple"
+    "adastramekanized:profundus_ore_iron_simple"
   ],
   "steps": [
     "underground_ores"
