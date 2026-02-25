@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Lapis (Common)$(br)• Tin (Common)$(br)• Iron (Uncommon)$(br)• Etrium (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Lapis (Common)$(br)• Tin (Common)$(br)• Iron (Uncommon)$(br)• Etrium (Rare)$(br)$(br)$(italic)With Immersive Engineering:$()$(br)• Silver replaces Tin (Common)$(br)"
     },
     {
       "type": "patchouli:text",

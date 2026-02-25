@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
+  "type": "neoforge:remove_features",
+  "biomes": "#adastramekanized:ceres_biomes",
+  "features": [
+    "adastramekanized:ceres_ore_fluorite_simple",
+    "adastramekanized:ceres_ore_uranium_simple"
+  ],
+  "steps": [
+    "underground_ores"
+  ]
+}

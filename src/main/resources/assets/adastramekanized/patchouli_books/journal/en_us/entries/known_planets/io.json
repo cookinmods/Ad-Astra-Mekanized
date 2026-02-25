@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Gold (Common)$(br)• Redstone (Common)$(br)• Fluorite (Uncommon)$(br)• Diamond (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Gold (Common)$(br)• Redstone (Common)$(br)• Fluorite (Uncommon)$(br)• Diamond (Rare)$(br)$(br)$(italic)With Immersive Engineering:$()$(br)• Nickel replaces Fluorite (Uncommon)$(br)"
     },
     {
       "type": "patchouli:text",

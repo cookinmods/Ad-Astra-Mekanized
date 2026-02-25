@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Fluorite (Common)$(br)• Copper (Common)$(br)• Diamond (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Fluorite (Common)$(br)• Copper (Common)$(br)• Diamond (Rare)$(br)$(br)$(italic)With Immersive Engineering:$()$(br)• Silver replaces Fluorite (Common)$(br)"
     },
     {
       "type": "patchouli:text",

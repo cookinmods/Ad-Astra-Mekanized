@@ -557,6 +557,7 @@ public class PlanetMaker {
         // Enhanced ore vein configuration
         private java.util.List<String> customOreVeins = new java.util.ArrayList<>();
         private java.util.Map<String, Integer> oreVeinCounts = new java.util.HashMap<>();  // Ore type -> veins per chunk
+        private java.util.List<ConditionalOre> conditionalOres = new java.util.ArrayList<>();  // IE ores that replace fallbacks
         private float oreVeinDensity = 1.0f;
         private float oreVeinSize = 1.0f;
         private int maxOreVeinCount = 20;
@@ -1417,6 +1418,21 @@ public class PlanetMaker {
          */
         public PlanetBuilder configureOre(String oreType, int veinsPerChunk) {
             this.oreVeinCounts.put(oreType, veinsPerChunk);
+            return this;
+        }
+
+        /**
+         * Configure a conditional ore that spawns only when a specific mod is loaded,
+         * replacing a fallback ore. Used for IE ores (silver/nickel) that replace
+         * Mekanism/vanilla fallbacks when Immersive Engineering is installed.
+         *
+         * @param ieOre The IE ore type (e.g., "silver", "nickel")
+         * @param veinsPerChunk Number of veins to generate per chunk
+         * @param requiredMod The mod ID required for this ore (e.g., "immersiveengineering")
+         * @param fallbackOre The fallback ore this replaces (e.g., "tin", "fluorite")
+         */
+        public PlanetBuilder configureConditionalOre(String ieOre, int veinsPerChunk, String requiredMod, String fallbackOre) {
+            this.conditionalOres.add(new ConditionalOre(ieOre, veinsPerChunk, requiredMod, fallbackOre));
             return this;
         }
 
@@ -3606,6 +3622,24 @@ public class PlanetMaker {
                         oresText.append("Standard ore distribution enabled.");
                     }
 
+                    // Add conditional ore section (IE ores)
+                    if (!conditionalOres.isEmpty()) {
+                        oresText.append("$(br)$(italic)With Immersive Engineering:$()$(br)");
+                        for (ConditionalOre condOre : conditionalOres) {
+                            String oreName = capitalizeWords(condOre.ieOre.replace("_", " "));
+                            String fallbackName = capitalizeWords(condOre.fallbackOre.replace("_", " "));
+                            oresText.append("• ").append(oreName).append(" replaces ").append(fallbackName);
+                            if (condOre.veins >= 20) {
+                                oresText.append(" (Common)");
+                            } else if (condOre.veins >= 10) {
+                                oresText.append(" (Uncommon)");
+                            } else {
+                                oresText.append(" (Rare)");
+                            }
+                            oresText.append("$(br)");
+                        }
+                    }
+
                     oresPage.addProperty("text", oresText.toString());
                     pages.add(oresPage);
                 }
@@ -4040,6 +4074,23 @@ public class PlanetMaker {
         }
 
         /**
+         * Inner class for conditional ore entries (IE ores that replace fallback ores when a mod is loaded)
+         */
+        private static class ConditionalOre {
+            final String ieOre;         // e.g., "silver", "nickel"
+            final int veins;            // veins per chunk
+            final String requiredMod;   // e.g., "immersiveengineering"
+            final String fallbackOre;   // e.g., "tin", "fluorite" — the ore it replaces
+
+            ConditionalOre(String ieOre, int veins, String requiredMod, String fallbackOre) {
+                this.ieOre = ieOre;
+                this.veins = veins;
+                this.requiredMod = requiredMod;
+                this.fallbackOre = fallbackOre;
+            }
+        }
+
+        /**
          * Inner class for spawn costs
          */
         private static class SpawnCost {
@@ -4197,6 +4248,9 @@ public class PlanetMaker {
             generateOreFeatures(planet);
         }
 
+        // Generate conditional ore features (IE ores with mod_loaded conditions)
+        generateConditionalOreFeatures(planet);
+
         // Generate custom biomes with features
         generateCustomBiomes(planet);
 
@@ -4205,6 +4259,9 @@ public class PlanetMaker {
 
         // Generate biome modifier for mob spawning (NeoForge system)
         generateBiomeModifier(planet);
+
+        // Generate biome modifiers for conditional IE ore swaps
+        generateConditionalOreBiomeModifiers(planet);
 
         // Generate biome tags for modded structure support
         generateStructureBiomeTags(planet);
@@ -6754,6 +6811,10 @@ public class PlanetMaker {
             // Create ores - required mod
             case "zinc" -> "create:zinc_ore";
 
+            // Immersive Engineering ores - conditional (only when IE loaded)
+            case "silver" -> "immersiveengineering:ore_silver";
+            case "nickel" -> "immersiveengineering:ore_nickel";
+
             // Ores without blocks in required mods - use vanilla substitutes
             // NOTE: platinum and tungsten don't exist in Mekanism/IE/Create
             case "platinum" -> "minecraft:diamond_ore";  // FIXME: No platinum ore exists - replace in planet configs
@@ -6815,6 +6876,160 @@ public class PlanetMaker {
         }
 
         AdAstraMekanized.LOGGER.info("Completed generating ore features for planet: {}", planet.name);
+    }
+
+    /**
+     * Generate conditional ore features for IE ores that replace fallback ores when a mod is loaded.
+     * Creates configured_feature and placed_feature JSON files with neoforge:conditions.
+     */
+    private static void generateConditionalOreFeatures(PlanetBuilder planet) throws IOException {
+        if (planet.conditionalOres.isEmpty()) return;
+
+        AdAstraMekanized.LOGGER.info("Generating conditional ore features for planet: {}", planet.name);
+
+        for (PlanetBuilder.ConditionalOre condOre : planet.conditionalOres) {
+            // Generate configured feature with mod_loaded condition
+            JsonObject configuredFeature = createSimplifiedOreConfiguredFeature(condOre.ieOre, planet);
+            // Inject neoforge:conditions at root level
+            JsonArray conditions = new JsonArray();
+            JsonObject modLoaded = new JsonObject();
+            modLoaded.addProperty("type", "neoforge:mod_loaded");
+            modLoaded.addProperty("modid", condOre.requiredMod);
+            conditions.add(modLoaded);
+            configuredFeature.add("neoforge:conditions", conditions);
+
+            String configuredPath = RESOURCES_PATH + "worldgen/configured_feature/" + planet.name + "_ore_" + condOre.ieOre + "_ie.json";
+            writeJsonFile(configuredPath, configuredFeature);
+
+            // Generate placed feature with mod_loaded condition
+            // We need a custom placed feature that references the IE configured feature
+            JsonObject placedFeature = createConditionalOrePlacedFeature(condOre, planet);
+            JsonArray placedConditions = new JsonArray();
+            JsonObject placedModLoaded = new JsonObject();
+            placedModLoaded.addProperty("type", "neoforge:mod_loaded");
+            placedModLoaded.addProperty("modid", condOre.requiredMod);
+            placedConditions.add(placedModLoaded);
+            placedFeature.add("neoforge:conditions", placedConditions);
+
+            String placedPath = RESOURCES_PATH + "worldgen/placed_feature/" + planet.name + "_ore_" + condOre.ieOre + "_ie.json";
+            writeJsonFile(placedPath, placedFeature);
+
+            AdAstraMekanized.LOGGER.info("Generated conditional ore features: {} (requires {})", condOre.ieOre, condOre.requiredMod);
+        }
+    }
+
+    /**
+     * Create a placed feature for a conditional ore, using the IE configured feature reference
+     * and the conditional ore's vein count.
+     */
+    private static JsonObject createConditionalOrePlacedFeature(PlanetBuilder.ConditionalOre condOre, PlanetBuilder planet) {
+        JsonObject feature = new JsonObject();
+        feature.addProperty("feature", "adastramekanized:" + planet.name + "_ore_" + condOre.ieOre + "_ie");
+
+        JsonArray placement = new JsonArray();
+
+        // Count placement
+        JsonObject count = new JsonObject();
+        count.addProperty("type", "minecraft:count");
+        count.addProperty("count", condOre.veins);
+        placement.add(count);
+
+        // In square placement
+        JsonObject inSquare = new JsonObject();
+        inSquare.addProperty("type", "minecraft:in_square");
+        placement.add(inSquare);
+
+        // Height range - same as normal ores (not deep ore)
+        JsonObject heightRange = new JsonObject();
+        heightRange.addProperty("type", "minecraft:height_range");
+        JsonObject height = new JsonObject();
+        height.addProperty("type", "minecraft:trapezoid");
+        JsonObject minHeight = new JsonObject();
+        minHeight.addProperty("absolute", planet.minY);
+        height.add("min_inclusive", minHeight);
+        JsonObject maxHeight = new JsonObject();
+        maxHeight.addProperty("absolute", 48);
+        height.add("max_inclusive", maxHeight);
+        heightRange.add("height", height);
+        placement.add(heightRange);
+
+        // Biome filter
+        JsonObject biome = new JsonObject();
+        biome.addProperty("type", "minecraft:biome");
+        placement.add(biome);
+
+        feature.add("placement", placement);
+        return feature;
+    }
+
+    /**
+     * Generate biome modifier files that add IE ores and remove fallback ores when IE is installed.
+     * For each planet with conditional ores, creates:
+     * - ie_add_ores.json: adds IE ore placed features (with mod_loaded condition)
+     * - ie_remove_fallback_ores.json: removes fallback ore placed features (with mod_loaded condition)
+     */
+    private static void generateConditionalOreBiomeModifiers(PlanetBuilder planet) throws IOException {
+        if (planet.conditionalOres.isEmpty()) return;
+
+        String biomeModifierDir = RESOURCES_PATH + "neoforge/biome_modifier/" + planet.name + "/";
+        new File(biomeModifierDir).mkdirs();
+        String biomeTag = "#adastramekanized:" + planet.name + "_biomes";
+
+        // Group conditional ores by required mod
+        java.util.Map<String, java.util.List<PlanetBuilder.ConditionalOre>> byMod = new java.util.LinkedHashMap<>();
+        for (PlanetBuilder.ConditionalOre condOre : planet.conditionalOres) {
+            byMod.computeIfAbsent(condOre.requiredMod, k -> new java.util.ArrayList<>()).add(condOre);
+        }
+
+        for (java.util.Map.Entry<String, java.util.List<PlanetBuilder.ConditionalOre>> modEntry : byMod.entrySet()) {
+            String modId = modEntry.getKey();
+            java.util.List<PlanetBuilder.ConditionalOre> ores = modEntry.getValue();
+
+            // === Add IE ores modifier ===
+            JsonObject addModifier = new JsonObject();
+            JsonArray addConditions = new JsonArray();
+            JsonObject addModLoaded = new JsonObject();
+            addModLoaded.addProperty("type", "neoforge:mod_loaded");
+            addModLoaded.addProperty("modid", modId);
+            addConditions.add(addModLoaded);
+            addModifier.add("neoforge:conditions", addConditions);
+            addModifier.addProperty("type", "neoforge:add_features");
+            addModifier.addProperty("biomes", biomeTag);
+
+            JsonArray addFeatures = new JsonArray();
+            for (PlanetBuilder.ConditionalOre ore : ores) {
+                addFeatures.add("adastramekanized:" + planet.name + "_ore_" + ore.ieOre + "_ie");
+            }
+            addModifier.add("features", addFeatures);
+            addModifier.addProperty("step", "underground_ores");
+
+            writeJsonFile(biomeModifierDir + "ie_add_ores.json", addModifier);
+
+            // === Remove fallback ores modifier ===
+            JsonObject removeModifier = new JsonObject();
+            JsonArray removeConditions = new JsonArray();
+            JsonObject removeModLoaded = new JsonObject();
+            removeModLoaded.addProperty("type", "neoforge:mod_loaded");
+            removeModLoaded.addProperty("modid", modId);
+            removeConditions.add(removeModLoaded);
+            removeModifier.add("neoforge:conditions", removeConditions);
+            removeModifier.addProperty("type", "neoforge:remove_features");
+            removeModifier.addProperty("biomes", biomeTag);
+
+            JsonArray removeFeatures = new JsonArray();
+            for (PlanetBuilder.ConditionalOre ore : ores) {
+                removeFeatures.add("adastramekanized:" + planet.name + "_ore_" + ore.fallbackOre + "_simple");
+            }
+            removeModifier.add("features", removeFeatures);
+
+            JsonArray removeSteps = new JsonArray();
+            removeSteps.add("underground_ores");
+            removeModifier.add("steps", removeSteps);
+
+            writeJsonFile(biomeModifierDir + "ie_remove_fallback_ores.json", removeModifier);
+
+            AdAstraMekanized.LOGGER.info("Generated IE biome modifiers for planet: {} (mod: {})", planet.name, modId);
+        }
     }
 
     /**

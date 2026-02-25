@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Lapis (Common)$(br)• Iron (Uncommon)$(br)• Copper (Uncommon)$(br)• Diamond (Rare)$(br)• Ostrum (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Lapis (Common)$(br)• Iron (Uncommon)$(br)• Copper (Uncommon)$(br)• Diamond (Rare)$(br)• Ostrum (Rare)$(br)$(br)$(italic)With Immersive Engineering:$()$(br)• Silver replaces Lapis (Common)$(br)"
     },
     {
       "type": "patchouli:text",

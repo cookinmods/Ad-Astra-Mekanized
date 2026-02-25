@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Uranium (Common)$(br)• Iron (Uncommon)$(br)• Fluorite (Rare)$(br)• Etrium (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Uranium (Common)$(br)• Iron (Uncommon)$(br)• Fluorite (Rare)$(br)• Etrium (Rare)$(br)$(br)$(italic)With Immersive Engineering:$()$(br)• Silver replaces Fluorite (Rare)$(br)• Nickel replaces Uranium (Common)$(br)"
     },
     {
       "type": "patchouli:text",
