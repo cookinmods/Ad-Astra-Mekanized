@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Central planet generation system using proven TerraBlender approach.
+ * Central planet generation system for custom dimension creation.
  * Replaces StaticPlanetGenerator with builder pattern and Moon-based generation.
  */
 public class PlanetMaker {
@@ -4169,7 +4169,7 @@ public class PlanetMaker {
     }
 
     /**
-     * Generate all files for a planet using Moon's proven TerraBlender approach
+     * Generate all files for a planet using Moon's proven approach
      */
     private static void generatePlanetFiles(PlanetBuilder planet) throws IOException {
         generatePlanetData(planet);
@@ -4403,7 +4403,7 @@ public class PlanetMaker {
     }
 
     /**
-     * Generate dimension JSON following Moon's TerraBlender pattern
+     * Generate dimension JSON following Moon's dimension pattern
      */
     private static void generateDimensionData(PlanetBuilder planet) throws IOException {
         JsonObject dimensionJson = new JsonObject();

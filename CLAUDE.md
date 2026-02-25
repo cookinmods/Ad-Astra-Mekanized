@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Ad Astra Mekanized is a Minecraft 1.21.1 NeoForge mod that provides space exploration features integrated with Mekanism's infrastructure systems. It's a complete replacement for Ad Astra, combining rockets, planets, space stations, and oxygen distribution with Mekanism's chemical systems, energy systems, and Immersive Engineering fuels.
 
+## Git Commit Rules
+- **Do NOT include `Co-Authored-By` lines in commit messages.** Claude should not be listed as a contributor.
+- **Do NOT push to remote unless explicitly told to.** GitHub hooks notify Discord on push, so only push when the user says "push". Committing locally is fine without permission.
+
 ## Build System and Development Commands
 
 ### Primary Development Commands
@@ -59,10 +63,16 @@ The mod uses a **hybrid reflection-based integration approach** to support optio
 - **Graceful fallbacks** when integration mods are missing
 - **No compile-time dependencies** on integration mods
 
-#### Key Integration Points
+#### Required Dependencies
 - **Mekanism**: Chemical systems (oxygen distribution), energy systems
+- **Tectonic** + **Lithostitched**: Planet terrain density function system
+- **ChemLib Mekanized**: Chemical library (must load before this mod)
+
+#### Optional Dependencies
+- **Create**: Adds 25 mechanical crafting recipes (rockets, engines, tanks, oxygen gear) and 5 pressing recipes (ingot-to-sheet). Reflection-based kinetic/stress integration. All recipes use `neoforge:mod_loaded` conditions.
+- **Create Crafts & Additions**: Adds 3 rolling machine recipes (iron/steel/etrium sheet-to-rod). Zero Java integration, purely conditional recipe JSON.
 - **Immersive Engineering**: Fuel systems (diesel/biodiesel replace Ad Astra fuels)
-- **Create**: Mechanical systems for contraptions and automation
+- **Born in Chaos**: Horror mob integration for planet spawning
 
 #### Integration Manager Usage
 Always access integrations through the central manager:

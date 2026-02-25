@@ -63,23 +63,23 @@ side = "BOTH"
 # Mekanism dependency
 [[dependencies.adastramekanized]]
 modId = "mekanism"
-type = "optional"
+type = "required"
 versionRange = "[10.7.8,)"
 ordering = "AFTER"
 side = "BOTH"
 
-# Create dependency (required for mechanical crafting recipes)
+# Create dependency (optional - adds mechanical crafting and pressing recipes)
 [[dependencies.adastramekanized]]
 modId = "create"
-type = "required"
+type = "optional"
 versionRange = "[0.5.1,)"
 ordering = "BEFORE"
 side = "BOTH"
 
-# Create Crafts & Additions dependency (required for rolling machine rod recipes)
+# Create Crafts & Additions dependency (optional - adds rolling machine rod recipes)
 [[dependencies.adastramekanized]]
 modId = "createaddition"
-type = "required"
+type = "optional"
 versionRange = "[1.0.0,)"
 ordering = "AFTER"
 side = "BOTH"
@@ -92,20 +92,6 @@ versionRange = "[12.4.3,)"
 ordering = "AFTER"
 side = "BOTH"
 
-# World generation mod dependencies (REQUIRED for Tectonic integration)
-[[dependencies.adastramekanized]]
-modId = "terrablender"
-type = "required"
-versionRange = "[4.1.0.8,)"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.adastramekanized]]
-modId = "terralith"
-type = "optional"
-versionRange = "[2.5.0,)"
-ordering = "AFTER"
-side = "BOTH"
 
 [[dependencies.adastramekanized]]
 modId = "tectonic"
@@ -122,12 +108,6 @@ versionRange = "[1.5.0,)"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.adastramekanized]]
-modId = "biomesoplenty"
-type = "optional"
-versionRange = "[21.0.0,)"
-ordering = "AFTER"
-side = "BOTH"
 
 [[dependencies.adastramekanized]]  # Replace with your mod ID
 modId = "chemlibmekanized"

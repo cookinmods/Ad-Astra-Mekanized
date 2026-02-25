@@ -20,7 +20,7 @@ repositories {
     // ModMaven for Mekanism API
     maven { url 'https://modmaven.dev/' }
 
-    // CurseForge Maven for Terralith, Tectonic, TerraBlender and other mods
+    // CurseForge Maven for Tectonic and other mods
     maven {
         name = 'CurseMaven'
         url = 'https://cursemaven.com'
@@ -119,9 +119,6 @@ dependencies {
     localRuntime "mezz.jei:jei-${jei_minecraft}-neoforge:${jei_version}"
 
     // TECTONIC WORLDGEN SYSTEM (REQUIRED dependencies for planet generation)
-    // TerraBlender for NeoForge 1.21.1
-    implementation "curse.maven:terrablender-940057:6054947"
-
     // Tectonic for NeoForge 1.21.1
     implementation "curse.maven:tectonic-686836:7128220"
 
@@ -129,9 +126,6 @@ dependencies {
     implementation "curse.maven:lithostitched-936015:7063201"
 
     // BIOME GENERATION (Optional runtime dependencies for variety)
-    localRuntime "curse.maven:terralith-513688:6090387"
-    localRuntime "curse.maven:biomsOPlenty-220318:6501142"
-    localRuntime "curse.maven:glitchCore-955399:5660740" //dependency: biomsOPlenty
     localRuntime "curse.maven:incendium-591388:5962249"
     localRuntime "curse.maven:nullscape-570354:6402757"
 
@@ -183,14 +177,12 @@ dependencies {
     implementation "curse.maven:WhenDungeonsArise-442508:6078710"
     implementation "curse.maven:WhenDungeonsAriseSevenSeas-953637:5661269"
 
-    implementation "blank:constructionwand-1.21.1-2.12"
-    implementation "blank:chemlibmekanized-1.0.0"
+    implementation "curse.maven:chemlibmekanized-1463366:7666629"
 
     implementation "blank:ImmersiveEngineering-1.21.1-12.4.3-194"
 
 
-    // EPIC FIGHT
-    implementation "curse.maven:EpicFight-405076:6968128"
+    implementation "curse.maven:MekanismMoreMachines-1275257:7627187"
 
 
     implementation "curse.maven:geckolib-388172:6659026"

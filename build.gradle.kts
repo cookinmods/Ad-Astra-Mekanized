@@ -160,9 +160,6 @@ dependencies {
     runtimeOnly("mezz.jei:jei-1.21.1-neoforge:19.21.0.246")
 
     // TECTONIC WORLDGEN SYSTEM (REQUIRED dependencies for planet generation)
-    // TerraBlender for NeoForge 1.21.1
-    implementation("curse.maven:terrablender-940057:6054947")
-
     // Tectonic for NeoForge 1.21.1
     implementation("curse.maven:tectonic-686836:7128220")
 

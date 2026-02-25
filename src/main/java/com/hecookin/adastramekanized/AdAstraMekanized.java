@@ -18,12 +18,10 @@ import com.hecookin.adastramekanized.config.AdAstraMekanizedConfig;
 import com.hecookin.adastramekanized.common.events.ModdedMobSpawnController;
 import com.hecookin.adastramekanized.integration.ModIntegrationManager;
 import com.hecookin.adastramekanized.integration.mowziesmobs.MowziesMobsIntegration;
-import com.hecookin.adastramekanized.worldgen.biome.MoonBiomeProvider;
 import com.hecookin.adastramekanized.worldgen.biome.MoonBiomes;
 import com.hecookin.adastramekanized.worldgen.biome.PlanetBiomeRegistry;
 import com.hecookin.adastramekanized.worldgen.integration.TectonicNeoForgeIntegration;
 import net.neoforged.bus.api.IEventBus;
-import terrablender.api.Regions;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -154,10 +152,6 @@ public class AdAstraMekanized {
             MoonBiomes.register();
             LOGGER.info("Planet-specific biomes registered");
 
-            // TerraBlender regions DISABLED - TerraBlender only works for Overworld/Nether/End
-            // Custom dimensions use dimension JSON for biome distribution instead
-            // Regions.register(new MoonBiomeProvider());  // DISABLED: Was registering Moon biomes in Overworld!
-            LOGGER.info("Planet biome providers registration skipped (custom dimensions use dimension JSON)");
 
             LOGGER.info("Ad Astra Mekanized common setup complete");
         });

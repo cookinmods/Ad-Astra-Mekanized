@@ -20,7 +20,7 @@ import java.util.Optional;
 
 /**
  * Central biome registration system for planet-specific biomes.
- * Handles registration with NeoForge and TerraBlender integration.
+ * Handles registration with NeoForge biome system.
  */
 public class PlanetBiomeRegistry {
 
