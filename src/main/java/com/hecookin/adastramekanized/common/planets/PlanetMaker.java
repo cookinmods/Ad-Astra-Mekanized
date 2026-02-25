@@ -3592,56 +3592,44 @@ public class PlanetMaker {
                     oresPage.addProperty("type", "patchouli:text");
                     oresPage.addProperty("title", "Resources");
 
-                    StringBuilder oresText = new StringBuilder();
-                    oresText.append("$(bold)Ore Deposits:$()$(br)$(br)");
-
-                    if (!oreVeinCounts.isEmpty()) {
-                        List<java.util.Map.Entry<String, Integer>> sortedOres = new ArrayList<>(oreVeinCounts.entrySet());
-                        sortedOres.sort((a, b) -> b.getValue().compareTo(a.getValue()));
-
-                        for (java.util.Map.Entry<String, Integer> ore : sortedOres) {
-                            String oreKey = ore.getKey();
-                            // Planet-specific etrium ores should just display as "Etrium"
-                            if (oreKey.endsWith("_etrium")) {
-                                oreKey = "etrium";
-                            }
-                            String oreName = capitalizeWords(oreKey.replace("_", " "));
-                            oresText.append("• ").append(oreName);
-                            int veins = ore.getValue();
-                            // Only three rarity levels: Common, Uncommon, Rare
-                            if (veins >= 20) {
-                                oresText.append(" (Common)");
-                            } else if (veins >= 10) {
-                                oresText.append(" (Uncommon)");
-                            } else {
-                                oresText.append(" (Rare)");
-                            }
-                            oresText.append("$(br)");
-                        }
-                    } else {
-                        oresText.append("Standard ore distribution enabled.");
-                    }
-
-                    // Add conditional ore section (IE ores)
                     if (!conditionalOres.isEmpty()) {
-                        oresText.append("$(br)$(italic)With Immersive Engineering:$()$(br)");
-                        for (ConditionalOre condOre : conditionalOres) {
-                            String oreName = capitalizeWords(condOre.ieOre.replace("_", " "));
-                            String fallbackName = capitalizeWords(condOre.fallbackOre.replace("_", " "));
-                            oresText.append("• ").append(oreName).append(" replaces ").append(fallbackName);
-                            if (condOre.veins >= 20) {
-                                oresText.append(" (Common)");
-                            } else if (condOre.veins >= 10) {
-                                oresText.append(" (Uncommon)");
-                            } else {
-                                oresText.append(" (Rare)");
-                            }
-                            oresText.append("$(br)");
-                        }
-                    }
+                        // Two conditional pages: one for fallback ores (no IE), one for IE ores
+                        // Page A: fallback ores - shown when IE is NOT installed
+                        oresPage.addProperty("flag", "!mod:immersiveengineering");
+                        StringBuilder fallbackText = new StringBuilder();
+                        fallbackText.append("$(bold)Ore Deposits:$()$(br)$(br)");
+                        buildOreList(fallbackText, oreVeinCounts);
+                        oresPage.addProperty("text", fallbackText.toString());
+                        pages.add(oresPage);
 
-                    oresPage.addProperty("text", oresText.toString());
-                    pages.add(oresPage);
+                        // Page B: IE ores - shown when IE IS installed
+                        // Build a modified ore map: replace fallback ores with IE ores
+                        java.util.Map<String, Integer> ieOreMap = new java.util.LinkedHashMap<>(oreVeinCounts);
+                        for (ConditionalOre condOre : conditionalOres) {
+                            ieOreMap.remove(condOre.fallbackOre);
+                            ieOreMap.put(condOre.ieOre, condOre.veins);
+                        }
+                        JsonObject ieOresPage = new JsonObject();
+                        ieOresPage.addProperty("type", "patchouli:text");
+                        ieOresPage.addProperty("title", "Resources");
+                        ieOresPage.addProperty("flag", "mod:immersiveengineering");
+                        StringBuilder ieText = new StringBuilder();
+                        ieText.append("$(bold)Ore Deposits:$()$(br)$(br)");
+                        buildOreList(ieText, ieOreMap);
+                        ieOresPage.addProperty("text", ieText.toString());
+                        pages.add(ieOresPage);
+                    } else {
+                        // No conditional ores - single unconditional page
+                        StringBuilder oresText = new StringBuilder();
+                        oresText.append("$(bold)Ore Deposits:$()$(br)$(br)");
+                        if (!oreVeinCounts.isEmpty()) {
+                            buildOreList(oresText, oreVeinCounts);
+                        } else {
+                            oresText.append("Standard ore distribution enabled.");
+                        }
+                        oresPage.addProperty("text", oresText.toString());
+                        pages.add(oresPage);
+                    }
                 }
 
                 // Page 3: Biome Information
@@ -3755,6 +3743,32 @@ public class PlanetMaker {
                 }
             }
             return result.toString().trim();
+        }
+
+        /**
+         * Build a formatted ore list for Patchouli text from an ore vein count map.
+         * Sorts by vein count descending, normalizes etrium display names.
+         */
+        private void buildOreList(StringBuilder sb, java.util.Map<String, Integer> oreMap) {
+            List<java.util.Map.Entry<String, Integer>> sortedOres = new ArrayList<>(oreMap.entrySet());
+            sortedOres.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+            for (java.util.Map.Entry<String, Integer> ore : sortedOres) {
+                String oreKey = ore.getKey();
+                if (oreKey.endsWith("_etrium")) {
+                    oreKey = "etrium";
+                }
+                String oreName = capitalizeWords(oreKey.replace("_", " "));
+                sb.append("• ").append(oreName);
+                int veins = ore.getValue();
+                if (veins >= 20) {
+                    sb.append(" (Common)");
+                } else if (veins >= 10) {
+                    sb.append(" (Uncommon)");
+                } else {
+                    sb.append(" (Rare)");
+                }
+                sb.append("$(br)");
+            }
         }
 
         // Tectonic worldgen configuration methods

@@ -12,7 +12,14 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Uranium (Common)$(br)• Iron (Uncommon)$(br)• Fluorite (Rare)$(br)• Etrium (Rare)$(br)$(br)$(italic)With Immersive Engineering:$()$(br)• Silver replaces Fluorite (Rare)$(br)• Nickel replaces Uranium (Common)$(br)"
+      "flag": "!mod:immersiveengineering",
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Uranium (Common)$(br)• Iron (Uncommon)$(br)• Fluorite (Rare)$(br)• Etrium (Rare)$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Resources",
+      "flag": "mod:immersiveengineering",
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Nickel (Common)$(br)• Iron (Uncommon)$(br)• Etrium (Rare)$(br)• Silver (Rare)$(br)"
     },
     {
       "type": "patchouli:text",
