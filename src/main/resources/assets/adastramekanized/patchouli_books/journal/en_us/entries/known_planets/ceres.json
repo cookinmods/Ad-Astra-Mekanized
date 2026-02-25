@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Nickel (Common)$(br)• Iron (Uncommon)$(br)• Silver (Rare)$(br)• Etrium (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Osmium (Common)$(br)• Uranium (Common)$(br)• Iron (Uncommon)$(br)• Fluorite (Rare)$(br)• Etrium (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

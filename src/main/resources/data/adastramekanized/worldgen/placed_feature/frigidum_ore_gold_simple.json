@@ -1,9 +1,9 @@
 {
-  "feature": "adastramekanized:moon_ore_silver_simple",
+  "feature": "adastramekanized:frigidum_ore_gold_simple",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 8
+      "count": 25
     },
     {
       "type": "minecraft:in_square"

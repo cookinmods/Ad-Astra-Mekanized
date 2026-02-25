@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Gold (Common)$(br)• Nickel (Common)$(br)• Redstone (Uncommon)$(br)• Calorite (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Gold (Common)$(br)• Uranium (Common)$(br)• Redstone (Uncommon)$(br)• Calorite (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

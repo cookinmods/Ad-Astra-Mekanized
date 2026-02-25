@@ -1,9 +1,9 @@
 {
-  "feature": "adastramekanized:enceladus_ore_silver_simple",
+  "feature": "adastramekanized:vulcan_ore_fluorite_simple",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 25
+      "count": 20
     },
     {
       "type": "minecraft:in_square"

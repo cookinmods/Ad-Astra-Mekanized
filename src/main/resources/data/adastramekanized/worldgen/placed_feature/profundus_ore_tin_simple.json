@@ -1,9 +1,9 @@
 {
-  "feature": "adastramekanized:callisto_ore_nickel_simple",
+  "feature": "adastramekanized:profundus_ore_tin_simple",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 20
+      "count": 12
     },
     {
       "type": "minecraft:in_square"

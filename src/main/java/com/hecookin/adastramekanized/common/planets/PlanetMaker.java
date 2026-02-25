@@ -6751,11 +6751,6 @@ public class PlanetMaker {
             case "fluorite" -> "mekanism:fluorite_ore";
             case "lead" -> "mekanism:lead_ore";
 
-            // Immersive Engineering ores - required mod (uses ore_<metal> naming)
-            case "aluminum", "bauxite" -> "immersiveengineering:ore_bauxite";
-            case "silver" -> "immersiveengineering:ore_silver";
-            case "nickel" -> "immersiveengineering:ore_nickel";
-
             // Create ores - required mod
             case "zinc" -> "create:zinc_ore";
 
@@ -6799,8 +6794,6 @@ public class PlanetMaker {
                 "iron", "copper", "gold", "diamond", "coal", "redstone", "lapis", "emerald",
                 // Mekanism ores
                 "osmium", "tin", "uranium", "fluorite", "lead",
-                // Immersive Engineering ores
-                "aluminum", "silver", "nickel", "bauxite",
                 // Other common modded ores
                 "zinc", "platinum", "tungsten"
             );
@@ -6995,17 +6988,6 @@ public class PlanetMaker {
                     veinCount = 4;  // Uncommon
                     break;
                 case "lead":
-                    veinCount = 5;  // Medium
-                    break;
-                // Immersive Engineering ores
-                case "aluminum":
-                case "bauxite":
-                    veinCount = 7;  // Common
-                    break;
-                case "silver":
-                    veinCount = 3;  // Uncommon
-                    break;
-                case "nickel":
                     veinCount = 5;  // Medium
                     break;
                 // Ad Astra Mekanized space ores - ROCKET PROGRESSION

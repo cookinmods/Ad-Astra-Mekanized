@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "Resources",
-      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Lead (Common)$(br)• Nickel (Common)$(br)• Iron (Uncommon)$(br)• Gold (Uncommon)$(br)• Diamond (Rare)$(br)"
+      "text": "$(bold)Ore Deposits:$()$(br)$(br)• Lead (Common)$(br)• Tin (Common)$(br)• Iron (Uncommon)$(br)• Gold (Uncommon)$(br)• Diamond (Rare)$(br)"
     },
     {
       "type": "patchouli:text",

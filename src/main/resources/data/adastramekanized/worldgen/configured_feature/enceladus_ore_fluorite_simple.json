@@ -8,7 +8,7 @@
           "tag": "minecraft:stone_ore_replaceables"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -17,7 +17,7 @@
           "tag": "minecraft:deepslate_ore_replaceables"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -26,7 +26,7 @@
           "block": "minecraft:dirt"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -35,7 +35,7 @@
           "block": "minecraft:gravel"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -44,7 +44,7 @@
           "block": "minecraft:sand"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -53,7 +53,7 @@
           "block": "minecraft:sandstone"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -62,7 +62,7 @@
           "block": "minecraft:terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -71,7 +71,7 @@
           "block": "minecraft:white_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -80,7 +80,7 @@
           "block": "minecraft:orange_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -89,7 +89,7 @@
           "block": "minecraft:magenta_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -98,7 +98,7 @@
           "block": "minecraft:light_blue_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -107,7 +107,7 @@
           "block": "minecraft:yellow_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -116,7 +116,7 @@
           "block": "minecraft:lime_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -125,7 +125,7 @@
           "block": "minecraft:pink_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -134,7 +134,7 @@
           "block": "minecraft:gray_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -143,7 +143,7 @@
           "block": "minecraft:light_gray_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -152,7 +152,7 @@
           "block": "minecraft:cyan_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -161,7 +161,7 @@
           "block": "minecraft:purple_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -170,7 +170,7 @@
           "block": "minecraft:blue_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -179,7 +179,7 @@
           "block": "minecraft:brown_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -188,7 +188,7 @@
           "block": "minecraft:green_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -197,7 +197,7 @@
           "block": "minecraft:red_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -206,7 +206,7 @@
           "block": "minecraft:black_terracotta"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -215,7 +215,7 @@
           "block": "minecraft:netherrack"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -224,7 +224,7 @@
           "block": "minecraft:basalt"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -233,7 +233,7 @@
           "block": "minecraft:blackstone"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -242,7 +242,7 @@
           "block": "minecraft:end_stone"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -251,7 +251,7 @@
           "block": "minecraft:grass_block"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -260,7 +260,7 @@
           "block": "minecraft:podzol"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -269,7 +269,7 @@
           "block": "minecraft:mycelium"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -278,7 +278,7 @@
           "block": "minecraft:coarse_dirt"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -287,7 +287,7 @@
           "block": "minecraft:red_sand"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -296,7 +296,7 @@
           "block": "minecraft:red_sandstone"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -305,7 +305,7 @@
           "block": "minecraft:clay"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -314,7 +314,7 @@
           "block": "minecraft:packed_ice"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -323,7 +323,7 @@
           "block": "minecraft:blue_ice"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -332,7 +332,7 @@
           "block": "minecraft:snow_block"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -341,16 +341,7 @@
           "block": "minecraft:powder_snow"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
-        }
-      },
-      {
-        "target": {
-          "predicate_type": "minecraft:block_match",
-          "block": "minecraft:snow_block"
-        },
-        "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
@@ -359,16 +350,25 @@
           "block": "minecraft:packed_ice"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
         }
       },
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:snow_block"
+          "block": "minecraft:blue_ice"
         },
         "state": {
-          "Name": "immersiveengineering:ore_silver"
+          "Name": "mekanism:fluorite_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:packed_ice"
+        },
+        "state": {
+          "Name": "mekanism:fluorite_ore"
         }
       }
     ],

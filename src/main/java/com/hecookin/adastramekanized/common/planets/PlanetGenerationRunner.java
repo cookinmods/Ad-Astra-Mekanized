@@ -342,8 +342,8 @@ public class PlanetGenerationRunner {
             .cloudsEnabled(false)
             .rainEnabled(false)
             .snowEnabled(false)
-            // Moon ores - Plan B: silver-rich ice world
-            .configureOre("silver", 8)     // primary - IE ore, lunar silver deposits
+            // Moon ores - industrial starter metal
+            .configureOre("tin", 8)        // primary - Mekanism ore, industrial starter metal
             .configureOre("iron", 10)       // tertiary - lunar regolith deposits
             .configureOre("desh", 5)        // PROGRESSION ORE - needed for Tier 2 rocket
             .configureOre("cheese", 4)      // Moon cheese ore - classic Ad Astra feature
@@ -572,8 +572,8 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Mercury ores - Plan B: IE metal-rich scorched world + redstone
-            .configureOre("nickel", 25)    // primary - IE ore, metal-dense core
+            // Mercury ores - radioactive scorched world + redstone
+            .configureOre("uranium", 25)   // primary - Mekanism ore, radioactive core
             .configureOre("iron", 20)      // secondary - iron-rich regolith
             .configureOre("redstone", 15)  // tertiary - thermal energy from sun proximity
             .configureOre("ostrum", 4)     // PROGRESSION ORE - needed for Tier 3 rocket
@@ -629,9 +629,9 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // Europa ores - Plan B: ice moon with silver and gems + iron
+            // Europa ores - ice moon with tin and gems + iron
             .configureOre("lapis", 25)     // primary - blue gems in blue ice
-            .configureOre("silver", 20)    // secondary - IE ore, frozen deposits
+            .configureOre("tin", 20)       // secondary - Mekanism ore, frozen industrial deposits
             .configureOre("iron", 15)      // tertiary - rocky core deposits
             .configureOre("etrium", 6)     // ENDGAME ORE - unchanged
             .clearAllMobSpawns()
@@ -688,7 +688,7 @@ public class PlanetGenerationRunner {
             // Io ores - Plan B: volcanic moon with gold and nickel
             .configureOre("gold", 25)      // primary - volcanic gold deposits
             .configureOre("redstone", 20)  // secondary - thermal energy
-            .configureOre("nickel", 15)    // tertiary - IE ore, volcanic metal
+            .configureOre("fluorite", 15)  // tertiary - Mekanism ore, chemical processing
             .configureOre("diamond", 5)    // rare - forged in heat
             .clearAllMobSpawns()
             .addModReplacementSpawns("doom",
@@ -793,7 +793,7 @@ public class PlanetGenerationRunner {
             .oreVeinsEnabled(true)
             // Callisto ores - Plan B: IE lead-rich ancient moon + iron
             .configureOre("lead", 25)      // primary - IE ore, ancient heavy deposits
-            .configureOre("nickel", 20)    // secondary - IE ore, metallic core
+            .configureOre("tin", 20)       // secondary - Mekanism ore, industrial metal
             .configureOre("iron", 15)      // tertiary - rocky moon core
             .configureOre("gold", 12)      // uncommon - precious metal seams
             .configureOre("diamond", 5)    // rare - impact diamonds
@@ -896,8 +896,8 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)  // Airless icy moon - no liquid water
             .oreVeinsEnabled(true)
-            // Enceladus ores - Plan B: silver-rich geyser moon
-            .configureOre("silver", 25)    // primary - IE ore, geyser deposits
+            // Enceladus ores - fluorite-rich geyser moon
+            .configureOre("fluorite", 25)  // primary - Mekanism ore, chemical processing deposits
             .configureOre("copper", 20)    // secondary - frozen metal seams
             .configureOre("diamond", 6)    // rare - pristine ice preserves gems
             .clearAllMobSpawns()
@@ -946,8 +946,8 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Triton ores - Plan B: frozen nitrogen world with silver, iron, and ostrum
-            .configureOre("silver", 25)    // primary - IE ore, frozen nitrogen deposits
+            // Triton ores - frozen nitrogen world with lapis, iron, and ostrum
+            .configureOre("lapis", 25)     // primary - utility ore, frozen nitrogen deposits
             .configureOre("iron", 15)      // secondary - rocky core deposits
             .configureOre("copper", 12)    // tertiary - frozen metal seams
             .configureOre("diamond", 6)    // rare - pristine ancient deposits
@@ -1000,9 +1000,9 @@ public class PlanetGenerationRunner {
             .oreVeinsEnabled(true)
             // Ceres ores - Plan B: THE mining hub for Mekanism osmium
             .configureOre("osmium", 25)    // primary - Mekanism ore, major source
-            .configureOre("nickel", 20)    // secondary - IE ore, asteroid metals
+            .configureOre("uranium", 20)   // secondary - Mekanism ore, asteroid radioactives
             .configureOre("iron", 15)      // tertiary - basic asteroid metal
-            .configureOre("silver", 4)     // rare - IE ore, precious deposits
+            .configureOre("fluorite", 4)   // rare - Mekanism ore, mineral deposits
             .configureOre("etrium", 4)     // ENDGAME ORE - unchanged
             .clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
@@ -1049,9 +1049,9 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Pluto ores - Plan B: frozen dwarf planet with gold, silver, and iron
+            // Pluto ores - frozen dwarf planet with gold, tin, and iron
             .configureOre("gold", 25)      // primary - ancient precious deposits
-            .configureOre("silver", 20)    // secondary - IE ore, frozen silver veins
+            .configureOre("tin", 20)       // secondary - Mekanism ore, frozen industrial deposits
             .configureOre("iron", 12)      // tertiary - rocky core deposits
             .configureOre("etrium", 5)     // ENDGAME ORE - unchanged
             .clearAllMobSpawns()
@@ -1445,9 +1445,9 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Pyrios ores - Plan B: volcanic hellscape with gold and nickel
+            // Pyrios ores - volcanic hellscape with gold and uranium
             .configureOre("gold", 25)      // primary - volcanic gold deposits
-            .configureOre("nickel", 20)    // secondary - IE ore, molten metal seams
+            .configureOre("uranium", 20)   // secondary - Mekanism ore, radioactive volcanic seams
             .configureOre("redstone", 15)  // tertiary - thermal energy
             .configureOre("calorite", 3)   // rare - Tier 4 progression ore
             .clearAllMobSpawns()
@@ -1496,8 +1496,8 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(false)
             .oreVeinsEnabled(true)
-            // Frigidum ores - Plan B: frozen wasteland with silver
-            .configureOre("silver", 25)    // primary - IE ore, frozen precious deposits
+            // Frigidum ores - frozen wasteland with gold
+            .configureOre("gold", 25)      // primary - precious deposits in frozen wasteland
             .configureOre("coal", 20)      // secondary - ancient organic matter
             .configureOre("copper", 15)    // tertiary - frozen metal seams
             .configureOre("diamond", 5)    // rare - preserved in ice
@@ -1716,9 +1716,9 @@ public class PlanetGenerationRunner {
             .disableMobGeneration(false)
             .aquifersEnabled(true)
             .oreVeinsEnabled(true)
-            // Glacio ores - Plan B: icy world with silver and calorite
+            // Glacio ores - icy world with tin and calorite
             .configureOre("coal", 25)      // primary - ancient frozen organics
-            .configureOre("silver", 20)    // secondary - IE ore, frozen metal deposits
+            .configureOre("tin", 20)       // secondary - Mekanism ore, frozen industrial deposits
             .configureOre("calorite", 3)   // PROGRESSION ORE - needed for Tier 4 rocket
             .configureOre("glacio_etrium", 3) // ENDGAME ORE - unchanged
             .clearAllMobSpawns()
@@ -1773,7 +1773,7 @@ public class PlanetGenerationRunner {
             .oreVeinsEnabled(true)
             // Vulcan ores - Plan B: volcanic world with thermal energy ores
             .configureOre("redstone", 25)  // primary - thermal energy from volcanic activity
-            .configureOre("nickel", 20)    // secondary - IE ore, volcanic metal deposits
+            .configureOre("fluorite", 20)  // secondary - Mekanism ore, chemical processing deposits
             .configureOre("gold", 15)      // tertiary - volcanic treasure
             .configureOre("diamond", 6)    // rare - pressure-formed gems
             .clearAllMobSpawns()
@@ -2011,7 +2011,7 @@ public class PlanetGenerationRunner {
             .configureOre("osmium", 25)    // primary - Mekanism ore, deep cave deposits
             .configureOre("iron", 20)      // secondary - kobold smithing essential
             .configureOre("lead", 15)      // tertiary - IE ore, heavy underground metals
-            .configureOre("nickel", 12)    // uncommon - IE ore, kobold mining
+            .configureOre("tin", 12)       // uncommon - Mekanism ore, industrial metal
             .configureOre("emerald", 8)    // rare - kobold treasure hoards
             .clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
