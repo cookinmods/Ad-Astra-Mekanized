@@ -353,12 +353,17 @@ public class PlanetGenerationRunner {
         moon.clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
                 new String[][] {
-                    {"monster", "minecraft:silverfish", "30", "2", "4"},
-                    {"monster", "minecraft:endermite", "15", "1", "2"}
+                    {"monster", "minecraft:silverfish", "10", "2", "4"},
+                    {"monster", "minecraft:endermite", "5", "1", "2"}
                 },
                 new String[][] {
-                    {"monster", "kobolds:kobold", "30", "2", "4"},
-                    {"monster", "kobolds:kobold_warrior", "15", "1", "2"}
+                    {"monster", "kobolds:kobold", "5", "1", "2"},
+                    {"monster", "kobolds:kobold_warrior", "3", "1", "1"},
+                    {"monster", "kobolds:kobold_enchanter", "2", "1", "1"},
+                    {"monster", "kobolds:kobold_engineer", "3", "1", "1"},
+                    {"monster", "kobolds:kobold_zombie", "2", "1", "1"},
+                    {"monster", "kobolds:kobold_skeleton", "2", "1", "1"},
+                    {"monster", "kobolds:witherbold", "1", "1", "1"}
                 }
             )
             .allowPeacefulMobs(false)
@@ -449,21 +454,18 @@ public class PlanetGenerationRunner {
             .aquifersEnabled(false)  // Dry desert planet - no water
             .oreVeinsEnabled(true)
             .clearAllMobSpawns()
+            .addMobSpawn("monster", "minecraft:enderman", 4, 1, 1)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .addModReplacementSpawns("born_in_chaos_v1",
                 new String[][] {
-                    {"monster", "minecraft:husk", "30", "1", "3"},
-                    {"monster", "minecraft:enderman", "10", "1", "1"},
-                    {"monster", "minecraft:skeleton", "15", "1", "2"}
+                    {"monster", "minecraft:husk", "12", "1", "2"}
                 },
                 new String[][] {
-                    {"monster", "born_in_chaos_v1:decrepit_skeleton", "12", "1", "2"},
-                    {"monster", "born_in_chaos_v1:skeleton_demoman", "7", "1", "1"},
-                    {"monster", "born_in_chaos_v1:decaying_zombie", "12", "1", "2"},
-                    {"monster", "born_in_chaos_v1:barrel_zombie", "7", "1", "1"},
-                    {"monster", "born_in_chaos_v1:bonescaller", "6", "1", "1"},
-                    {"monster", "born_in_chaos_v1:bone_imp", "7", "1", "1"}
+                    {"monster", "born_in_chaos_v1:decrepit_skeleton", "8", "1", "2"},
+                    {"monster", "born_in_chaos_v1:bone_imp", "5", "1", "1"}
                 }
             )
+            .allowPeacefulMobs(false)
             // Add custom biomes for Mars (vanilla climate parameters work with vanilla noise!)
             .clearBiomes()
             .addBiome("adastramekanized:mars_highlands", -0.2f, -0.7f, 0.6f, -0.1f, 0.5f, 0.0f, "Martian Highlands")
@@ -525,21 +527,18 @@ public class PlanetGenerationRunner {
             .configureOre("calorite", 4)   // PROGRESSION ORE - needed for Tier 4 rocket
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             .clearAllMobSpawns()
+            .addMobSpawn("monster", "minecraft:witch", 6, 1, 1)
+            .addMobSpawn("monster", "minecraft:slime", 6, 1, 2)
             .addModReplacementSpawns("born_in_chaos_v1",
                 new String[][] {
-                    {"monster", "minecraft:husk", "25", "1", "2"},
-                    {"monster", "minecraft:witch", "15", "1", "1"},
-                    {"monster", "minecraft:slime", "20", "2", "3"}
+                    {"monster", "minecraft:husk", "10", "1", "2"}
                 },
                 new String[][] {
-                    {"monster", "born_in_chaos_v1:decrepit_skeleton", "25", "1", "2"},
-                    {"monster", "born_in_chaos_v1:decaying_zombie", "20", "1", "2"},
-                    {"monster", "born_in_chaos_v1:door_knight", "5", "1", "1"},
-                    {"monster", "born_in_chaos_v1:skeleton_thrasher", "8", "1", "1"}
+                    {"monster", "born_in_chaos_v1:decaying_zombie", "8", "1", "2"},
+                    {"monster", "born_in_chaos_v1:skeleton_thrasher", "5", "1", "1"}
                 }
             )
             .allowPeacefulMobs(false)
-            .addReptilianCreature("gecko", 15, 1, 1)
             .clearBiomes()
             .addBiome("minecraft:desert", 0.9f, -0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Venusian Wasteland")
             .skyColor(0xFFCC66)
@@ -581,17 +580,8 @@ public class PlanetGenerationRunner {
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             .configureConditionalOre("nickel", 20, "immersiveengineering", "redstone") // IE: nickel replaces redstone
             .clearAllMobSpawns()
-            .addModReplacementSpawns("kobolds",
-                new String[][] {
-                    {"monster", "minecraft:silverfish", "30", "2", "4"},
-                    {"monster", "minecraft:endermite", "10", "1", "2"}
-                },
-                new String[][] {
-                    {"monster", "kobolds:kobold", "30", "2", "4"},
-                    {"monster", "kobolds:kobold_warrior", "15", "1", "2"},
-                    {"monster", "kobolds:kobold_engineer", "10", "1", "2"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:shulker", 3, 1, 1)
+            .addMobSpawn("monster", "minecraft:endermite", 3, 1, 2)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:desert", -0.9f, -0.9f, 0.5f, 0.0f, 0.0f, 0.0f, "Mercurian Craters")
@@ -638,17 +628,17 @@ public class PlanetGenerationRunner {
             .configureOre("etrium", 6)     // ENDGAME ORE - unchanged
             .configureConditionalOre("silver", 25, "immersiveengineering", "lapis") // IE: silver replaces lapis
             .clearAllMobSpawns()
+            .addMobSpawn("monster", "minecraft:guardian", 6, 1, 2)
             .addModReplacementSpawns("born_in_chaos_v1",
                 new String[][] {
-                    {"monster", "minecraft:drowned", "25", "1", "2"},
-                    {"water_creature", "minecraft:glow_squid", "15", "1", "3"}
+                    {"monster", "minecraft:drowned", "12", "1", "2"}
                 },
                 new String[][] {
-                    {"monster", "born_in_chaos_v1:corpse_fish", "25", "2", "4"},
-                    {"monster", "born_in_chaos_v1:glutton_fish", "15", "1", "2"},
-                    {"monster", "born_in_chaos_v1:zombie_fisherman", "10", "1", "2"}
+                    {"monster", "born_in_chaos_v1:corpse_fish", "8", "2", "3"},
+                    {"monster", "born_in_chaos_v1:zombie_fisherman", "5", "1", "1"}
                 }
             )
+            .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:frozen_ocean", -1.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, "Europan Ice Plains")
             .skyColor(0x1a1a2e)
@@ -696,19 +686,9 @@ public class PlanetGenerationRunner {
             .configureOre("diamond", 5)    // rare - forged in heat
             .configureConditionalOre("nickel", 20, "immersiveengineering", "redstone") // IE: nickel replaces redstone
             .clearAllMobSpawns()
-            .addModReplacementSpawns("doom",
-                new String[][] {
-                    {"monster", "minecraft:magma_cube", "30", "1", "3"},
-                    {"monster", "minecraft:ghast", "10", "1", "1"},
-                    {"monster", "minecraft:blaze", "15", "1", "2"}
-                },
-                new String[][] {
-                    {"monster", "doom:imp", "40", "2", "4"},
-                    {"monster", "doom:lost_soul", "30", "1", "3"},
-                    {"monster", "doom:cacodemon", "15", "1", "1"},
-                    {"monster", "doom:pinky", "10", "1", "2"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:magma_cube", 12, 1, 3)
+            .addMobSpawn("monster", "minecraft:zombified_piglin", 8, 1, 2)
+            .addMobSpawn("monster", "minecraft:ghast", 2, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:basalt_deltas", 1.0f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, "Io Volcanic Fields")
@@ -753,16 +733,9 @@ public class PlanetGenerationRunner {
             .configureOre("copper", 15)    // tertiary - basic metal
             .configureOre("diamond", 5)    // rare - deep deposits
             .clearAllMobSpawns()
-            .addModReplacementSpawns("undead_revamp2",
-                new String[][] {
-                    {"monster", "minecraft:skeleton", "25", "1", "2"},
-                    {"monster", "minecraft:silverfish", "15", "1", "2"}
-                },
-                new String[][] {
-                    {"monster", "undead_revamp2:thehunter", "20", "1", "2"},
-                    {"monster", "undead_revamp2:theheavy", "15", "1", "1"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:stray", 10, 1, 2)
+            .addMobSpawn("monster", "minecraft:enderman", 3, 1, 1)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:plains", -0.5f, 0.0f, 0.2f, 0.0f, 0.0f, 0.0f, "Ganymedean Plains")
@@ -807,12 +780,19 @@ public class PlanetGenerationRunner {
             .clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
                 new String[][] {
-                    {"monster", "minecraft:endermite", "20", "1", "2"},
-                    {"monster", "minecraft:silverfish", "10", "1", "2"}
+                    {"monster", "minecraft:silverfish", "8", "2", "3"},
+                    {"monster", "minecraft:endermite", "5", "1", "2"},
+                    {"monster", "minecraft:ghast", "1", "1", "1"}
                 },
                 new String[][] {
-                    {"monster", "kobolds:kobold", "20", "2", "4"},
-                    {"monster", "kobolds:kobold_warrior", "10", "1", "2"}
+                    {"monster", "kobolds:kobold", "4", "1", "2"},
+                    {"monster", "kobolds:kobold_warrior", "3", "1", "1"},
+                    {"monster", "kobolds:kobold_enchanter", "2", "1", "1"},
+                    {"monster", "kobolds:kobold_engineer", "3", "1", "1"},
+                    {"monster", "kobolds:kobold_zombie", "2", "1", "1"},
+                    {"monster", "kobolds:kobold_skeleton", "2", "1", "1"},
+                    {"monster", "kobolds:witherbold", "1", "1", "1"},
+                    {"monster", "minecraft:ghast", "1", "1", "1"}
                 }
             )
             .allowPeacefulMobs(false)
@@ -859,17 +839,9 @@ public class PlanetGenerationRunner {
             .configureOre("calorite", 3)   // rare - Tier 4 progression ore
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             .clearAllMobSpawns()
-            .addModReplacementSpawns("shineals_prehistoric_expansion",
-                new String[][] {
-                    {"monster", "minecraft:slime", "25", "2", "4"},
-                    {"monster", "minecraft:witch", "15", "1", "1"},
-                    {"creature", "minecraft:axolotl", "20", "2", "4"}
-                },
-                new String[][] {
-                    {"monster", "shineals_prehistoric_expansion:utahraptor", "20", "1", "2"},
-                    {"creature", "shineals_prehistoric_expansion:mammoth", "15", "1", "2"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:slime", 10, 1, 3)
+            .addMobSpawn("monster", "minecraft:witch", 6, 1, 1)
+            .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:swamp", 0.3f, 0.8f, 0.0f, 0.0f, 0.0f, 0.0f, "Titan Methane Lakes")
             .skyColor(0xCC8844)
@@ -909,16 +881,8 @@ public class PlanetGenerationRunner {
             .configureOre("diamond", 6)    // rare - pristine ice preserves gems
             .configureConditionalOre("silver", 20, "immersiveengineering", "copper") // IE: silver replaces copper
             .clearAllMobSpawns()
-            .addModReplacementSpawns("luminousworld",
-                new String[][] {
-                    {"monster", "minecraft:stray", "10", "1", "1"},
-                    {"monster", "minecraft:phantom", "5", "1", "1"}
-                },
-                new String[][] {
-                    {"monster", "luminousworld:bone_stalker", "8", "1", "1"},
-                    {"monster", "luminousworld:yeti", "6", "1", "1"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:stray", 10, 1, 2)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, 0.0f, 0.2f, 0.0f, 0.0f, 0.0f, "Enceladus Ice Fields")
@@ -963,16 +927,9 @@ public class PlanetGenerationRunner {
             .configureOre("ostrum", 3)     // rare - Tier 3 progression ore
             .configureConditionalOre("silver", 25, "immersiveengineering", "lapis") // IE: silver replaces lapis
             .clearAllMobSpawns()
-            .addModReplacementSpawns("luminousworld",
-                new String[][] {
-                    {"monster", "minecraft:phantom", "10", "1", "1"},
-                    {"monster", "minecraft:stray", "5", "1", "1"}
-                },
-                new String[][] {
-                    {"monster", "luminousworld:bone_stalker", "8", "1", "1"},
-                    {"monster", "luminousworld:mummy", "6", "1", "1"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:stray", 8, 1, 2)
+            .addMobSpawn("monster", "minecraft:endermite", 5, 1, 2)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, -0.8f, 0.0f, 0.0f, 0.0f, 0.0f, "Triton Nitrogen Plains")
@@ -1020,13 +977,17 @@ public class PlanetGenerationRunner {
             .clearAllMobSpawns()
             .addModReplacementSpawns("kobolds",
                 new String[][] {
-                    {"monster", "minecraft:silverfish", "25", "2", "4"},
-                    {"monster", "minecraft:endermite", "10", "1", "2"}
+                    {"monster", "minecraft:silverfish", "10", "2", "4"},
+                    {"monster", "minecraft:endermite", "5", "1", "2"}
                 },
                 new String[][] {
-                    {"monster", "kobolds:kobold", "25", "2", "4"},
-                    {"monster", "kobolds:kobold_warrior", "12", "1", "2"},
-                    {"monster", "kobolds:kobold_engineer", "12", "1", "2"}
+                    {"monster", "kobolds:kobold", "5", "1", "2"},
+                    {"monster", "kobolds:kobold_warrior", "3", "1", "1"},
+                    {"monster", "kobolds:kobold_enchanter", "2", "1", "1"},
+                    {"monster", "kobolds:kobold_engineer", "3", "1", "1"},
+                    {"monster", "kobolds:kobold_zombie", "2", "1", "1"},
+                    {"monster", "kobolds:kobold_skeleton", "2", "1", "1"},
+                    {"monster", "kobolds:witherbold", "1", "1", "1"}
                 }
             )
             .allowPeacefulMobs(false)
@@ -1069,15 +1030,8 @@ public class PlanetGenerationRunner {
             .configureOre("etrium", 5)     // ENDGAME ORE - unchanged
             .configureConditionalOre("silver", 25, "immersiveengineering", "gold") // IE: silver replaces gold
             .clearAllMobSpawns()
-            .addModReplacementSpawns("mobs_of_mythology",
-                new String[][] {
-                    {"monster", "minecraft:phantom", "10", "1", "1"},
-                    {"monster", "minecraft:stray", "5", "1", "1"}
-                },
-                new String[][] {
-                    {"monster", "mobs_of_mythology:chupacabra", "8", "1", "1"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:endermite", 3, 1, 1)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, -0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Pluto Ice Fields")
@@ -1117,15 +1071,7 @@ public class PlanetGenerationRunner {
             .configureOre("iron", 15)      // tertiary - rocky core deposits
             .configureOre("diamond", 6)    // rare - pristine ancient deposits
             .clearAllMobSpawns()
-            .addModReplacementSpawns("mobs_of_mythology",
-                new String[][] {
-                    {"monster", "minecraft:endermite", "8", "1", "1"},
-                    {"monster", "minecraft:phantom", "5", "1", "1"}
-                },
-                new String[][] {
-                    {"monster", "mobs_of_mythology:automaton", "5", "1", "1"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:endermite", 3, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, "Eris Dark Plains")
@@ -1169,21 +1115,10 @@ public class PlanetGenerationRunner {
             .configureOre("diamond", 5)    // rare - deep ocean floor
             .configureOre("etrium", 2)     // ENDGAME ORE - unchanged
             .clearAllMobSpawns()
-            .addMobSpawn("creature", "minecraft:dolphin", 8, 1, 2)
-            .addMobSpawn("creature", "minecraft:turtle", 6, 1, 2)
-            .addMobSpawn("water_ambient", "minecraft:cod", 10, 2, 3)
-            .addMobSpawn("water_ambient", "minecraft:salmon", 8, 2, 3)
-            .addMobSpawn("water_ambient", "minecraft:tropical_fish", 12, 2, 4)
-            .addModReplacementSpawns("born_in_chaos_v1",
-                new String[][] {
-                    {"monster", "minecraft:drowned", "15", "1", "2"}
-                },
-                new String[][] {
-                    {"monster", "born_in_chaos_v1:corpse_fish", "15", "2", "4"},
-                    {"monster", "born_in_chaos_v1:glutton_fish", "10", "1", "2"},
-                    {"monster", "born_in_chaos_v1:zombie_fisherman", "12", "1", "2"}
-                }
-            )
+            .addMobSpawn("water_ambient", "minecraft:tropical_fish", 4, 2, 4)
+            .addMobSpawn("monster", "minecraft:drowned", 5, 1, 2)
+            .addRibbitsMobs(10)
+            .addBornInChaosMob("corpse_fish", 5, 1, 2)
             .clearBiomes()
             .addBiome("minecraft:beach", 0.5f, 0.7f, 0.0f, 0.0f, 0.0f, 0.0f, "Kepler Island Shores")
             .addBiome("minecraft:warm_ocean", 0.7f, 0.8f, -0.3f, 0.0f, 0.0f, 0.0f, "Kepler Warm Seas")
@@ -1227,31 +1162,11 @@ public class PlanetGenerationRunner {
             .configureOre("osmium", 15)    // tertiary - Mekanism ore, colony tech
             .configureOre("copper", 12)    // rare - forest floor deposits
             .clearAllMobSpawns()
-            .addModReplacementSpawns("born_in_chaos_v1",
-                new String[][] {
-                    {"creature", "minecraft:cow", "8", "2", "3"},
-                    {"creature", "minecraft:pig", "8", "2", "3"},
-                    {"creature", "minecraft:sheep", "8", "2", "3"},
-                    {"creature", "minecraft:chicken", "10", "2", "4"},
-                    {"creature", "minecraft:rabbit", "6", "1", "2"},
-                    {"creature", "minecraft:fox", "4", "1", "1"},
-                    {"creature", "minecraft:wolf", "3", "1", "2"},
-                    {"monster", "minecraft:zombie", "8", "1", "2"},
-                    {"monster", "minecraft:skeleton", "8", "1", "2"},
-                    {"monster", "minecraft:creeper", "6", "1", "1"}
-                },
-                new String[][] {
-                    {"monster", "born_in_chaos_v1:baby_spider", "10", "1", "2"},
-                    {"monster", "born_in_chaos_v1:mother_spider", "5", "1", "1"},
-                    {"monster", "born_in_chaos_v1:dread_hound", "8", "1", "2"},
-                    {"monster", "born_in_chaos_v1:phantom_creeper", "6", "1", "1"},
-                    {"monster", "born_in_chaos_v1:swarmer", "8", "2", "3"},
-                    {"creature", "minecraft:cow", "8", "2", "3"},
-                    {"creature", "minecraft:pig", "8", "2", "3"},
-                    {"creature", "minecraft:sheep", "8", "2", "3"},
-                    {"creature", "minecraft:chicken", "10", "2", "4"}
-                }
-            )
+            .addMobSpawn("creature", "minecraft:goat", 3, 1, 2)
+            .addMobSpawn("creature", "minecraft:llama", 3, 1, 2)
+            .addMobSpawn("monster", "minecraft:spider", 5, 1, 1)
+            .addRibbitsMobs(10)
+            .addBornInChaosMob("baby_spider", 4, 1, 2)
             .clearBiomes()
             .addBiome("minecraft:forest", 0.5f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f, "Kepler Woodlands")
             .addBiome("minecraft:birch_forest", 0.4f, 0.5f, 0.1f, 0.0f, 0.0f, 0.0f, "Kepler Birch Groves")
@@ -1293,17 +1208,17 @@ public class PlanetGenerationRunner {
             .configureOre("copper", 15)    // tertiary - twilight zone deposits
             .configureOre("gold", 10)      // rare - precious metal seams
             .clearAllMobSpawns()
+            .addMobSpawn("monster", "minecraft:enderman", 4, 1, 1)
             .addModReplacementSpawns("born_in_chaos_v1",
                 new String[][] {
-                    {"monster", "minecraft:husk", "30", "2", "3"},
-                    {"creature", "minecraft:rabbit", "18", "2", "3"}
+                    {"monster", "minecraft:husk", "12", "1", "2"}
                 },
                 new String[][] {
-                    {"monster", "born_in_chaos_v1:decaying_zombie", "20", "1", "2"},
-                    {"monster", "born_in_chaos_v1:bonescaller", "10", "1", "1"},
-                    {"creature", "minecraft:rabbit", "18", "2", "3"}
+                    {"monster", "born_in_chaos_v1:decaying_zombie", "6", "1", "2"},
+                    {"monster", "born_in_chaos_v1:bonescaller", "4", "1", "1"}
                 }
             )
+            .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:badlands", 0.8f, -0.7f, 0.3f, 0.0f, 0.0f, 0.0f, "Proxima Twilight Zone")
             .skyColor(0xFF6B6B)
@@ -1343,28 +1258,10 @@ public class PlanetGenerationRunner {
             .configureOre("osmium", 15)    // tertiary - Mekanism ore, colony tech
             .configureOre("diamond", 5)    // rare - deep geological deposits
             .clearAllMobSpawns()
-            .addModReplacementSpawns("born_in_chaos_v1",
-                new String[][] {
-                    {"creature", "minecraft:cow", "10", "2", "3"},
-                    {"creature", "minecraft:pig", "10", "2", "3"},
-                    {"creature", "minecraft:sheep", "10", "2", "3"},
-                    {"creature", "minecraft:chicken", "12", "2", "4"},
-                    {"creature", "minecraft:bee", "8", "1", "2"},
-                    {"creature", "minecraft:frog", "6", "1", "2"},
-                    {"monster", "minecraft:zombie", "6", "1", "1"},
-                    {"monster", "minecraft:skeleton", "6", "1", "1"}
-                },
-                new String[][] {
-                    {"monster", "born_in_chaos_v1:baby_spider", "8", "1", "2"},
-                    {"monster", "born_in_chaos_v1:thornshell_crab", "6", "1", "1"},
-                    {"creature", "minecraft:cow", "10", "2", "3"},
-                    {"creature", "minecraft:pig", "10", "2", "3"},
-                    {"creature", "minecraft:sheep", "10", "2", "3"},
-                    {"creature", "minecraft:chicken", "12", "2", "4"},
-                    {"creature", "minecraft:bee", "8", "1", "2"},
-                    {"creature", "minecraft:frog", "6", "1", "2"}
-                }
-            )
+            .addMobSpawn("creature", "minecraft:frog", 4, 1, 2)
+            .addMobSpawn("creature", "minecraft:goat", 3, 1, 2)
+            .addMobSpawn("monster", "minecraft:enderman", 2, 1, 1)
+            .addRibbitsMobs(10)
             .clearBiomes()
             .addBiome("minecraft:flower_forest", 0.6f, 0.7f, 0.0f, 0.0f, 0.0f, 0.0f, "Trappist Gardens")
             .addBiome("minecraft:meadow", 0.5f, 0.6f, 0.2f, 0.0f, 0.0f, 0.0f, "Trappist Meadows")
@@ -1406,20 +1303,13 @@ public class PlanetGenerationRunner {
             .configureOre("gold", 12)      // uncommon - precious mountain veins
             .configureOre("diamond", 6)    // rare - deep mountain deposits
             .clearAllMobSpawns()
-            .addMobSpawn("creature", "minecraft:goat", 12, 2, 3)
-            .addMobSpawn("creature", "minecraft:llama", 8, 1, 2)
-            .addMobSpawn("creature", "minecraft:sheep", 8, 1, 2)
-            .addModReplacementSpawns("born_in_chaos_v1",
-                new String[][] {
-                    {"monster", "minecraft:skeleton", "10", "1", "2"}
-                },
-                new String[][] {
-                    {"monster", "born_in_chaos_v1:supreme_bonescaller", "5", "1", "1"},
-                    {"monster", "born_in_chaos_v1:lifestealer", "5", "1", "1"},
-                    {"monster", "born_in_chaos_v1:krampus", "3", "1", "1"},
-                    {"monster", "born_in_chaos_v1:missioner", "5", "1", "1"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:enderman", 5, 1, 1)
+            .addMobSpawn("monster", "minecraft:shulker", 3, 1, 1)
+            .addBornInChaosMob("supreme_bonescaller", 3, 1, 1)
+            .addBornInChaosMob("lifestealer", 3, 1, 1)
+            .addBornInChaosMob("krampus", 2, 1, 1)
+            .addBornInChaosMob("missioner", 3, 1, 1)
+            .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:windswept_hills", 0.3f, 0.3f, 0.5f, 0.0f, 0.0f, 0.0f, "Gliese Highlands")
             .addBiome("minecraft:stony_peaks", 0.2f, 0.1f, 0.7f, 0.0f, 0.0f, 0.0f, "Gliese Peaks")
@@ -1466,18 +1356,12 @@ public class PlanetGenerationRunner {
             .configureOre("calorite", 3)   // rare - Tier 4 progression ore
             .configureConditionalOre("nickel", 25, "immersiveengineering", "gold") // IE: nickel replaces gold
             .clearAllMobSpawns()
-            .addModReplacementSpawns("rottencreatures",
-                new String[][] {
-                    {"monster", "minecraft:ghast", "15", "1", "1"},
-                    {"monster", "minecraft:magma_cube", "25", "1", "3"}
-                },
-                new String[][] {
-                    {"monster", "rottencreatures:burned", "20", "1", "2"},
-                    {"monster", "rottencreatures:immortal", "15", "1", "1"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:blaze", 10, 1, 2)
+            .addMobSpawn("monster", "minecraft:magma_cube", 12, 1, 3)
+            .addMobSpawn("monster", "minecraft:ghast", 2, 1, 1)
+            .addBornInChaosMob("seared_spirit", 8, 1, 1)
+            .addBornInChaosMob("barrel_zombie", 6, 1, 1)
             .allowPeacefulMobs(false)
-            .addMobSpawn("creature", "minecraft:strider", 20, 1, 2)
             .clearBiomes()
             .addBiome("minecraft:basalt_deltas", 1.0f, -0.8f, 0.4f, 0.0f, 0.0f, 0.0f, "Pyrios Lava Fields")
             .skyColor(0x330000)
@@ -1519,21 +1403,18 @@ public class PlanetGenerationRunner {
             .configureOre("diamond", 5)    // rare - preserved in ice
             .configureConditionalOre("silver", 25, "immersiveengineering", "gold") // IE: silver replaces gold
             .clearAllMobSpawns()
+            .addMobSpawn("monster", "minecraft:enderman", 3, 1, 1)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .addModReplacementSpawns("born_in_chaos_v1",
                 new String[][] {
-                    {"monster", "minecraft:stray", "30", "2", "3"},
-                    {"monster", "minecraft:skeleton", "20", "1", "2"},
-                    {"creature", "minecraft:polar_bear", "15", "1", "2"}
+                    {"monster", "minecraft:stray", "12", "1", "2"}
                 },
                 new String[][] {
-                    {"monster", "born_in_chaos_v1:baby_spider", "10", "1", "2"},
-                    {"monster", "born_in_chaos_v1:mother_spider", "5", "1", "1"},
-                    {"monster", "born_in_chaos_v1:dread_hound", "10", "1", "2"},
-                    {"monster", "born_in_chaos_v1:dire_hound_leader", "3", "1", "1"},
-                    {"monster", "born_in_chaos_v1:nightmare_stalker", "5", "1", "1"},
-                    {"creature", "minecraft:polar_bear", "15", "1", "2"}
+                    {"monster", "born_in_chaos_v1:dread_hound", "6", "1", "2"},
+                    {"monster", "born_in_chaos_v1:baby_spider", "4", "1", "2"}
                 }
             )
+            .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, "Frigidum Ice Fields")
             .addBiome("minecraft:ice_spikes", -1.0f, 0.3f, 0.3f, 0.0f, 0.0f, 0.0f, "Frigidum Ice Formations")
@@ -1578,17 +1459,18 @@ public class PlanetGenerationRunner {
             .configureOre("gold", 10)      // rare - ancient buried treasure
             .configureOre("diamond", 4)    // rare - deep desert veins
             .clearAllMobSpawns()
-            .addModReplacementSpawns("reptilian",
+            .addMobSpawn("monster", "minecraft:enderman", 4, 1, 1)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
+            .addModReplacementSpawns("born_in_chaos_v1",
                 new String[][] {
-                    {"monster", "minecraft:husk", "40", "2", "4"},
-                    {"creature", "minecraft:rabbit", "15", "2", "3"}
+                    {"monster", "minecraft:husk", "15", "1", "3"}
                 },
                 new String[][] {
-                    {"creature", "reptilian:gecko", "12", "1", "2"},
-                    {"creature", "reptilian:komodo_dragon", "10", "1", "2"},
-                    {"creature", "minecraft:rabbit", "15", "2", "3"}
+                    {"monster", "born_in_chaos_v1:bonescaller", "5", "1", "1"},
+                    {"monster", "minecraft:husk", "10", "1", "2"}
                 }
             )
+            .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:desert", 1.0f, -0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Arenos Dunes")
             .skyColor(0xFFDD88)
@@ -1630,13 +1512,11 @@ public class PlanetGenerationRunner {
             .configureOre("lead", 15)      // tertiary - IE ore, heavy metals in mud
             .configureOre("copper", 10)    // rare - oxidized deposits
             .clearAllMobSpawns()
-            .addMobSpawn("monster", "minecraft:slime", 15, 1, 2)
-            .addMobSpawn("monster", "minecraft:witch", 8, 1, 1)
-            .addMobSpawn("monster", "minecraft:drowned", 10, 1, 2)
-            .addMobSpawn("creature", "minecraft:frog", 10, 2, 3)
-            .addMobSpawn("creature", "minecraft:axolotl", 6, 1, 2)
-            .addRibbitsMobs(50)
-            .addBornInChaosAquatic(18)
+            .addMobSpawn("creature", "minecraft:frog", 6, 1, 3)
+            .addMobSpawn("monster", "minecraft:drowned", 5, 1, 2)
+            .addMobSpawn("monster", "minecraft:slime", 6, 1, 2)
+            .addRibbitsMobs(12)
+            .addBornInChaosMob("corpse_fish", 6, 1, 2)
             .clearBiomes()
             .addBiome("minecraft:swamp", 0.8f, 0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Paludis Swamps")
             .addBiome("minecraft:mangrove_swamp", 0.9f, 0.9f, -0.1f, 0.0f, 0.0f, 0.0f, "Paludis Mangroves")
@@ -1681,21 +1561,11 @@ public class PlanetGenerationRunner {
             .configureOre("gold", 15)      // tertiary - jungle treasure
             .configureOre("diamond", 6)    // rare - deep gem veins
             .clearAllMobSpawns()
-            .addMobSpawn("creature", "minecraft:glow_squid", 12, 1, 2)
-            .addMobSpawn("creature", "minecraft:axolotl", 12, 1, 2)
-            .addMobSpawn("creature", "minecraft:parrot", 10, 1, 2)
-            .addMobSpawn("creature", "minecraft:ocelot", 6, 1, 1)
-            .addModReplacementSpawns("born_in_chaos_v1",
-                new String[][] {
-                    {"monster", "minecraft:phantom", "6", "1", "1"}
-                },
-                new String[][] {
-                    {"monster", "born_in_chaos_v1:restless_spirit", "18", "1", "2"},
-                    {"monster", "born_in_chaos_v1:seared_spirit", "13", "1", "1"},
-                    {"monster", "born_in_chaos_v1:firelight", "13", "1", "1"},
-                    {"monster", "born_in_chaos_v1:pumpkin_spirit", "10", "1", "1"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:enderman", 5, 1, 1)
+            .addMobSpawn("monster", "minecraft:shulker", 3, 1, 1)
+            .addBornInChaosMob("restless_spirit", 5, 1, 1)
+            .addBornInChaosMob("seared_spirit", 4, 1, 1)
+            .addBornInChaosMob("firelight", 3, 1, 1)
             .clearBiomes()
             .addBiome("minecraft:jungle", 0.9f, 0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Luxoria Rainforest")
             .addBiome("minecraft:lush_caves", 0.8f, 0.9f, -0.2f, 0.0f, 0.0f, 0.0f, "Luxoria Glowing Caves")
@@ -1740,20 +1610,22 @@ public class PlanetGenerationRunner {
             .configureOre("glacio_etrium", 3) // ENDGAME ORE - unchanged
             .configureConditionalOre("silver", 25, "immersiveengineering", "coal") // IE: silver replaces coal
             .clearAllMobSpawns()
+            .addMobSpawn("monster", "minecraft:enderman", 3, 1, 1)
             .addModReplacementSpawns("kobolds",
                 new String[][] {
-                    {"monster", "minecraft:stray", "30", "2", "3"},
-                    {"monster", "minecraft:skeleton", "15", "1", "2"},
-                    {"creature", "minecraft:polar_bear", "20", "1", "2"}
+                    {"monster", "minecraft:stray", "10", "1", "2"}
                 },
                 new String[][] {
-                    {"monster", "kobolds:kobold", "20", "2", "4"},
-                    {"monster", "kobolds:kobold_warrior", "10", "1", "2"},
-                    {"monster", "kobolds:kobold_enchanter", "5", "1", "1"},
-                    {"monster", "kobolds:kobold_engineer", "10", "1", "2"},
-                    {"creature", "minecraft:polar_bear", "20", "1", "2"}
+                    {"monster", "kobolds:kobold", "4", "1", "2"},
+                    {"monster", "kobolds:kobold_warrior", "3", "1", "1"},
+                    {"monster", "kobolds:kobold_enchanter", "2", "1", "1"},
+                    {"monster", "kobolds:kobold_engineer", "3", "1", "1"},
+                    {"monster", "kobolds:kobold_zombie", "2", "1", "1"},
+                    {"monster", "kobolds:kobold_skeleton", "2", "1", "1"},
+                    {"monster", "kobolds:witherbold", "1", "1", "1"}
                 }
             )
+            .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_taiga", -0.8f, 0.4f, 0.0f, 0.0f, 0.0f, 0.0f, "Glacio Tundra")
             .addBiome("minecraft:frozen_river", -0.9f, 0.5f, -0.2f, 0.0f, 0.0f, 0.0f, "Glacio Frozen Rivers")
@@ -1797,19 +1669,11 @@ public class PlanetGenerationRunner {
             .configureOre("diamond", 6)    // rare - pressure-formed gems
             .configureConditionalOre("nickel", 15, "immersiveengineering", "gold") // IE: nickel replaces gold
             .clearAllMobSpawns()
-            .addModReplacementSpawns("doom",
-                new String[][] {
-                    {"monster", "minecraft:magma_cube", "30", "1", "3"},
-                    {"monster", "minecraft:ghast", "10", "1", "1"},
-                    {"monster", "minecraft:blaze", "15", "1", "2"}
-                },
-                new String[][] {
-                    {"monster", "doom:imp", "35", "2", "4"},
-                    {"monster", "doom:lost_soul", "25", "1", "3"},
-                    {"monster", "doom:cacodemon", "12", "1", "1"},
-                    {"monster", "doom:pinky", "8", "1", "2"}
-                }
-            )
+            .addMobSpawn("monster", "minecraft:wither_skeleton", 12, 1, 2)
+            .addMobSpawn("monster", "minecraft:magma_cube", 10, 1, 3)
+            .addMobSpawn("monster", "minecraft:ghast", 2, 1, 1)
+            .addBornInChaosMob("door_knight", 5, 1, 1)
+            .addBornInChaosMob("skeleton_thrasher", 6, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:basalt_deltas", 0.8f, -0.6f, 0.3f, 0.0f, 0.0f, 0.0f, "Vulcan Lava Fields")
@@ -1847,31 +1711,11 @@ public class PlanetGenerationRunner {
             .configureOre("emerald", 15)   // tertiary - terraformed gem deposits
             .configureOre("copper", 10)    // rare - oxidized veins
             .clearAllMobSpawns()
-            .addModReplacementSpawns("born_in_chaos_v1",
-                new String[][] {
-                    {"creature", "minecraft:cow", "25", "2", "4"},
-                    {"creature", "minecraft:pig", "25", "2", "4"},
-                    {"creature", "minecraft:sheep", "25", "2", "4"},
-                    {"creature", "minecraft:chicken", "30", "3", "5"},
-                    {"creature", "minecraft:horse", "10", "2", "4"},
-                    {"monster", "minecraft:zombie", "20", "2", "3"},
-                    {"monster", "minecraft:skeleton", "20", "2", "3"},
-                    {"monster", "minecraft:creeper", "12", "1", "1"}
-                },
-                new String[][] {
-                    {"monster", "born_in_chaos_v1:baby_spider", "10", "1", "2"},
-                    {"monster", "born_in_chaos_v1:mother_spider", "5", "1", "1"},
-                    {"monster", "born_in_chaos_v1:dread_hound", "10", "1", "2"},
-                    {"monster", "born_in_chaos_v1:phantom_creeper", "8", "1", "1"},
-                    {"monster", "born_in_chaos_v1:swarmer", "8", "2", "3"},
-                    {"monster", "born_in_chaos_v1:zombie_clown", "12", "1", "2"},
-                    {"creature", "minecraft:cow", "25", "2", "4"},
-                    {"creature", "minecraft:pig", "25", "2", "4"},
-                    {"creature", "minecraft:sheep", "25", "2", "4"},
-                    {"creature", "minecraft:chicken", "30", "3", "5"},
-                    {"creature", "minecraft:horse", "10", "2", "4"}
-                }
-            )
+            .addMobSpawn("creature", "minecraft:goat", 4, 1, 2)
+            .addMobSpawn("creature", "minecraft:llama", 3, 1, 2)
+            .addMobSpawn("monster", "minecraft:enderman", 3, 1, 1)
+            .addMobSpawn("monster", "minecraft:spider", 4, 1, 1)
+            .addRibbitsMobs(15)
             .clearBiomes()
             .addBiome("minecraft:plains", 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, "Terra Nova Plains")
             .addBiome("minecraft:forest", 0.5f, 0.6f, 0.1f, 0.0f, 0.0f, 0.0f, "Terra Nova Forests")
@@ -1917,21 +1761,14 @@ public class PlanetGenerationRunner {
             .configureOre("emerald", 15)   // tertiary - jungle temple treasure
             .configureOre("copper", 12)    // rare - oxidized jungle deposits
             .clearAllMobSpawns()
-            .addMobSpawn("creature", "minecraft:parrot", 18, 2, 3)
-            .addMobSpawn("creature", "minecraft:ocelot", 12, 1, 2)
-            .addModReplacementSpawns("mowziesmobs",
-                new String[][] {
-                    {"monster", "minecraft:spider", "20", "1", "2"},
-                    {"monster", "minecraft:skeleton", "10", "1", "1"}
-                },
-                new String[][] {
-                    {"monster", "mowziesmobs:foliaath", "70", "1", "4"},
-                    {"monster", "mowziesmobs:baby_foliaath", "40", "2", "3"},
-                    {"monster", "mowziesmobs:ferrous_wroughtnaut", "2", "1", "1"},
-                    {"monster", "mowziesmobs:naga", "5", "1", "1"}
-                }
-            )
-            .addBornInChaosCreatures(22)
+            .addMobSpawn("monster", "minecraft:spider", 10, 1, 2)
+            .addMobSpawn("monster", "minecraft:cave_spider", 8, 1, 2)
+            .addMobSpawn("monster", "minecraft:enderman", 4, 1, 1)
+            .addMobSpawn("monster", "minecraft:shulker", 3, 1, 1)
+            .addBornInChaosMob("baby_spider", 5, 1, 2)
+            .addBornInChaosMob("mother_spider", 3, 1, 1)
+            .addBornInChaosMob("dread_hound", 4, 1, 1)
+            .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:jungle", 0.95f, 0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Primordium Jungle")
             .addBiome("minecraft:bamboo_jungle", 0.95f, 0.85f, -0.1f, 0.0f, 0.0f, 0.0f, "Primordium Bamboo Groves")
@@ -1975,19 +1812,14 @@ public class PlanetGenerationRunner {
             .configureOre("lead", 12)      // uncommon - IE ore, heavy metal veins
             .configureOre("diamond", 5)    // rare - deep savanna gems
             .clearAllMobSpawns()
-            .addMobSpawn("creature", "minecraft:llama", 15, 2, 4)
-            .addModReplacementSpawns("mowziesmobs",
-                new String[][] {
-                    {"monster", "minecraft:husk", "25", "1", "2"},
-                    {"monster", "minecraft:skeleton", "15", "1", "1"}
-                },
-                new String[][] {
-                    {"monster", "mowziesmobs:umvuthana_raptor", "50", "1", "1"},
-                    {"monster", "mowziesmobs:umvuthana_crane", "30", "1", "1"},
-                    {"monster", "mowziesmobs:umvuthana", "40", "1", "2"}
-                }
-            )
-            .addBornInChaosPumpkin(18)
+            .addMobSpawn("monster", "minecraft:husk", 12, 1, 2)
+            .addMobSpawn("monster", "minecraft:enderman", 5, 1, 1)
+            .addMobSpawn("monster", "minecraft:piglin", 4, 1, 2)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
+            .addBornInChaosMob("pumpkin_dunce", 4, 1, 1)
+            .addBornInChaosMob("dunce_pumpkin", 4, 1, 1)
+            .addBornInChaosMob("pumpkin_spirit", 3, 1, 1)
+            .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:savanna", 0.95f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, "Bellator Savanna")
             .addBiome("minecraft:savanna_plateau", 0.9f, -0.2f, 0.3f, 0.0f, 0.0f, 0.0f, "Bellator Highlands")
@@ -2037,19 +1869,19 @@ public class PlanetGenerationRunner {
             .configureOre("uranium", 4)    // rare - deep underground radioactives
             .configureConditionalOre("nickel", 20, "immersiveengineering", "iron") // IE: nickel replaces iron
             .clearAllMobSpawns()
+            .addMobSpawn("monster", "minecraft:silverfish", 4, 1, 2)
             .addModReplacementSpawns("kobolds",
                 new String[][] {
-                    {"monster", "minecraft:silverfish", "30", "2", "4"},
-                    {"monster", "minecraft:cave_spider", "15", "1", "2"}
+                    {"monster", "minecraft:cave_spider", "6", "1", "2"}
                 },
                 new String[][] {
-                    {"monster", "kobolds:kobold", "50", "2", "4"},
-                    {"monster", "kobolds:kobold_warrior", "25", "1", "2"},
-                    {"monster", "kobolds:kobold_enchanter", "16", "1", "1"},
-                    {"monster", "kobolds:kobold_engineer", "25", "1", "2"},
-                    {"monster", "kobolds:kobold_zombie", "15", "2", "4"},
-                    {"monster", "kobolds:kobold_skeleton", "15", "2", "4"},
-                    {"monster", "kobolds:witherbold", "5", "1", "2"}
+                    {"monster", "kobolds:kobold", "10", "2", "4"},
+                    {"monster", "kobolds:kobold_warrior", "8", "1", "2"},
+                    {"monster", "kobolds:kobold_enchanter", "5", "1", "1"},
+                    {"monster", "kobolds:kobold_engineer", "8", "1", "2"},
+                    {"monster", "kobolds:kobold_zombie", "6", "2", "3"},
+                    {"monster", "kobolds:kobold_skeleton", "6", "2", "3"},
+                    {"monster", "kobolds:witherbold", "3", "1", "1"}
                 }
             )
             .addBornInChaosSpirits(20)

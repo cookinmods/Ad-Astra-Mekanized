@@ -77,6 +77,11 @@ public class AdAstraMekanizedConfig {
         public final ModConfigSpec.BooleanValue enableImmersiveEngineeringIntegration;
         public final ModConfigSpec.BooleanValue enableCreateIntegration;
 
+        // Creature Mod Spawn Control
+        public final ModConfigSpec.BooleanValue restrictBornInChaosSpawns;
+        public final ModConfigSpec.BooleanValue restrictKoboldsSpawns;
+        public final ModConfigSpec.BooleanValue restrictRibbitsSpawns;
+
         CommonConfig() {
             ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
@@ -199,6 +204,28 @@ public class AdAstraMekanizedConfig {
                     .define("enableCreateIntegration", true);
 
             builder.pop();
+
+            builder.push("Creature Mod Spawn Control");
+            builder.comment("Controls whether creature mod spawns are restricted to designated planets only.",
+                            "When ON (default): Mobs only spawn on planets they are assigned to.",
+                            "When OFF: Mobs spawn normally as if no spawn control exists (vanilla behavior).");
+
+            restrictBornInChaosSpawns = builder
+                    .comment("Restrict Born in Chaos mob spawns to designated planets only")
+                    .translation("adastramekanized.config.restrictBornInChaosSpawns")
+                    .define("restrictBornInChaosSpawns", true);
+
+            restrictKoboldsSpawns = builder
+                    .comment("Restrict Kobolds mob spawns to designated planets only")
+                    .translation("adastramekanized.config.restrictKoboldsSpawns")
+                    .define("restrictKoboldsSpawns", true);
+
+            restrictRibbitsSpawns = builder
+                    .comment("Restrict Ribbits mob spawns to designated planets only")
+                    .translation("adastramekanized.config.restrictRibbitsSpawns")
+                    .define("restrictRibbitsSpawns", true);
+
+            builder.pop();
             configSpec = builder.build();
         }
 
@@ -274,5 +301,17 @@ public class AdAstraMekanizedConfig {
 
     public static boolean isCreateIntegrationEnabled() {
         return COMMON.enableCreateIntegration.get();
+    }
+
+    public static boolean isRestrictBornInChaosEnabled() {
+        return COMMON.restrictBornInChaosSpawns.get();
+    }
+
+    public static boolean isRestrictKoboldsEnabled() {
+        return COMMON.restrictKoboldsSpawns.get();
+    }
+
+    public static boolean isRestrictRibbitsEnabled() {
+        return COMMON.restrictRibbitsSpawns.get();
     }
 }

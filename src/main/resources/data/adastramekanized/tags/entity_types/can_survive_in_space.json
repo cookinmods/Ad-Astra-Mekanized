@@ -2,18 +2,5 @@
   "replace": false,
   "values": [
     "#adastramekanized:lives_without_oxygen"
-  ],
-  "optional": [
-    {"id": "mowziesmobs:foliaath", "required": false},
-    {"id": "mowziesmobs:ferrous_wroughtnaut", "required": false},
-    {"id": "mowziesmobs:barakoa", "required": false},
-    {"id": "mowziesmobs:barakoana", "required": false},
-    {"id": "mowziesmobs:barako", "required": false},
-    {"id": "mowziesmobs:frostmaw", "required": false},
-    {"id": "mowziesmobs:grottol", "required": false},
-    {"id": "mowziesmobs:lantern", "required": false},
-    {"id": "mowziesmobs:naga", "required": false},
-    {"id": "mowziesmobs:sculptor", "required": false},
-    {"id": "mowziesmobs:umvuthi", "required": false}
   ]
 }

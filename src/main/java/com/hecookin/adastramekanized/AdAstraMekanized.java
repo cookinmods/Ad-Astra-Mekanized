@@ -17,7 +17,6 @@ import com.hecookin.adastramekanized.common.registry.ModRecipeSerializers;
 import com.hecookin.adastramekanized.config.AdAstraMekanizedConfig;
 import com.hecookin.adastramekanized.common.events.ModdedMobSpawnController;
 import com.hecookin.adastramekanized.integration.ModIntegrationManager;
-import com.hecookin.adastramekanized.integration.mowziesmobs.MowziesMobsIntegration;
 import com.hecookin.adastramekanized.worldgen.biome.MoonBiomes;
 import com.hecookin.adastramekanized.worldgen.biome.PlanetBiomeRegistry;
 import com.hecookin.adastramekanized.worldgen.integration.TectonicNeoForgeIntegration;
@@ -113,21 +112,13 @@ public class AdAstraMekanized {
             integrationManager = ModIntegrationManager.getInstance();
             LOGGER.info("Integration manager initialized: {}", integrationManager.getIntegrationStatus());
 
-            // Initialize Mowzie's Mobs integration
-            MowziesMobsIntegration.init();
-
             // Configure modded mob spawn control
-            // Controlled mods: mowziesmobs, kobolds, doom, mobs_of_mythology, luminousworld,
-            //                  undead_revamp2, rottencreatures, shineals_prehistoric_expansion, reptilian, born_in_chaos_v1
+            // Controlled mods: born_in_chaos_v1, kobolds, ribbits
             // By default, controlled mobs ONLY spawn in whitelisted dimensions/planets
             // Enable vanilla dimension spawning for mods that should spawn on Earth:
-            ModdedMobSpawnController.allowInVanillaDimensions("undead_revamp2");  // Spawn on Earth, Nether, End - blocked elsewhere
             ModdedMobSpawnController.allowInVanillaDimensions("born_in_chaos_v1"); // Spawn on Earth, Nether, End - blocked elsewhere
-            ModdedMobSpawnController.allowInVanillaDimensions("mowziesmobs");     // Spawn on Earth, Nether, End - blocked elsewhere
             ModdedMobSpawnController.allowInVanillaDimensions("kobolds");         // Spawn on Earth, Nether, End - blocked elsewhere
-            ModdedMobSpawnController.allowInNether("doom");                        // Doom mobs only in Nether and whitelisted planets
-            ModdedMobSpawnController.allowInOverworld("rottencreatures");
-            ModdedMobSpawnController.allowInOverworld("reptilian");
+            ModdedMobSpawnController.allowInVanillaDimensions("ribbits");         // Spawn on Earth, Nether, End - blocked elsewhere
 
             // To add more mob mods to spawn control:
             // ModdedMobSpawnController.addControlledMod("alexsmobs");

@@ -28,38 +28,14 @@ public class OxygenDamageHandler {
         // These mobs are configured on planets and should be immune to oxygen damage
         String entityId = living.getType().getDescriptionId();
         if (entityId != null) {
-            if (entityId.contains("mowziesmobs")) {
-                return; // All Mowzie's Mobs are exempt from oxygen damage
-            }
-            if (entityId.contains("undead_revamp2")) {
-                return; // All Undead Revamp 2 mobs are exempt from oxygen damage
-            }
-            if (entityId.contains("doom")) {
-                return; // MCDoom demons are exempt - they're from hell
-            }
             if (entityId.contains("ribbits")) {
                 return; // Ribbits frog people are exempt - magical beings
             }
             if (entityId.contains("kobolds")) {
                 return; // Kobolds are exempt - cave dwellers adapted to any atmosphere
             }
-            if (entityId.contains("reptilian")) {
-                return; // Reptilian creatures are exempt - adapted to harsh environments
-            }
-            if (entityId.contains("lumination") || entityId.contains("luminousworld")) {
-                return; // Luminous World mobs are exempt - magical creatures
-            }
             if (entityId.contains("born_in_chaos")) {
                 return; // Born in Chaos mobs are exempt - supernatural creatures
-            }
-            if (entityId.contains("mobs_of_mythology")) {
-                return; // Mythology mobs are exempt - mythical beings
-            }
-            if (entityId.contains("rottencreatures")) {
-                return; // Rotten Creatures are exempt - undead adapted to harsh environments
-            }
-            if (entityId.contains("shineals_prehistoric_expansion")) {
-                return; // Prehistoric creatures are exempt - ancient adaptations
             }
         }
 

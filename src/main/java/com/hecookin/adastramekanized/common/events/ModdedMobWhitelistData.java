@@ -23,15 +23,7 @@ public class ModdedMobWhitelistData {
 
     public ModdedMobWhitelistData() {
         // Initialize with controlled mods
-        controlledMods.add("mowziesmobs");
         controlledMods.add("kobolds");
-        controlledMods.add("doom");
-        controlledMods.add("mobs_of_mythology");
-        controlledMods.add("luminousworld");
-        controlledMods.add("undead_revamp2");
-        controlledMods.add("rottencreatures");
-        controlledMods.add("shineals_prehistoric_expansion");
-        controlledMods.add("reptilian");
         controlledMods.add("ribbits");  // Frog villagers and swamp villages
         controlledMods.add("born_in_chaos_v1");  // Born in Chaos spirits, undead, and Halloween mobs
     }

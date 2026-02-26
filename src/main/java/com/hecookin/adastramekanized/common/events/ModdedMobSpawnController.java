@@ -1,6 +1,7 @@
 package com.hecookin.adastramekanized.common.events;
 
 import com.hecookin.adastramekanized.AdAstraMekanized;
+import com.hecookin.adastramekanized.config.AdAstraMekanizedConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -66,6 +67,11 @@ public class ModdedMobSpawnController {
             return;
         }
 
+        // Check if spawn restriction is disabled for this mod via config
+        if (!isSpawnRestrictionEnabled(modNamespace)) {
+            return; // Config says don't restrict this mod, let it spawn freely
+        }
+
         // Get spawn type - this tells us HOW the mob is being spawned
         MobSpawnType spawnType = event.getSpawnType();
 
@@ -129,6 +135,11 @@ public class ModdedMobSpawnController {
             return;
         }
 
+        // Check if spawn restriction is disabled for this mod via config
+        if (!isSpawnRestrictionEnabled(modNamespace)) {
+            return;
+        }
+
         // Now we know it's a controlled mod - do remaining checks
         // Only handle Mob entities
         if (!(entity instanceof Mob mob)) {
@@ -161,6 +172,19 @@ public class ModdedMobSpawnController {
             AdAstraMekanized.LOGGER.info("[SpawnControl] BLOCKED {} join in {} biome {} - entity not whitelisted (EntityJoinLevel fallback)",
                 entityId, dimension.location(), biomeId);
         }
+    }
+
+    /**
+     * Check if spawn restriction is enabled for a specific mod namespace.
+     * When disabled via config, the mod's spawns are not controlled (vanilla behavior).
+     */
+    private static boolean isSpawnRestrictionEnabled(String modNamespace) {
+        return switch (modNamespace) {
+            case "born_in_chaos_v1" -> AdAstraMekanizedConfig.isRestrictBornInChaosEnabled();
+            case "kobolds" -> AdAstraMekanizedConfig.isRestrictKoboldsEnabled();
+            case "ribbits" -> AdAstraMekanizedConfig.isRestrictRibbitsEnabled();
+            default -> true;
+        };
     }
 
     /**

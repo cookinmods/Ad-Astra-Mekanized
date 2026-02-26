@@ -109,21 +109,13 @@ dependencies {
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
 
-    // Mekanism for full integration including IChemicalItem
-    compileOnly "mekanism:Mekanism:${mekanism_version}"
-    localRuntime "mekanism:Mekanism:${mekanism_version}"
 
 
     compileOnly "mezz.jei:jei-${jei_minecraft}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${jei_minecraft}-neoforge-api:${jei_version}"
     localRuntime "mezz.jei:jei-${jei_minecraft}-neoforge:${jei_version}"
 
-    // TECTONIC WORLDGEN SYSTEM (REQUIRED dependencies for planet generation)
-    // Tectonic for NeoForge 1.21.1
-    implementation "curse.maven:tectonic-686836:7128220"
 
-    // Lithostitched (required by Tectonic) - using latest
-    implementation "curse.maven:lithostitched-936015:7063201"
 
     // BIOME GENERATION (Optional runtime dependencies for variety)
     localRuntime "curse.maven:incendium-591388:5962249"
@@ -135,53 +127,53 @@ dependencies {
 
 
     // JourneyMap
-    implementation "curse.maven:journeyMap-32274:6689206"
-    implementation "curse.maven:journeyMapIntegration-525447:6508946"
+    localRuntime "curse.maven:journeyMap-32274:6689206"
+    localRuntime "curse.maven:journeyMapIntegration-525447:6508946"
 
 
     // FTB
-    implementation "curse.maven:FTBLibrary-404465:6016745"
+    localRuntime "curse.maven:FTBLibrary-404465:6016745"
    // implementation "curse.maven:FTBChunks-314906:5968500"
     //implementation "curse.maven:FTBTeams-404468:5882217"
     //implementation "curse.maven:FTBXMod-889915:6048646"
     //implementation "curse.maven:FTBQuests-289412:5882270"
-    implementation "curse.maven:FTBUltimine-386134:5671703"
-    implementation "curse.maven:architecturyAPI-419699:5786327"
+    localRuntime "curse.maven:FTBUltimine-386134:5671703"
+    localRuntime "curse.maven:architecturyAPI-419699:5786327"
 
     //---- PERFORMANCE ----//
-    implementation "curse.maven:ferriteCore-429235:5850121"
-    implementation "curse.maven:betterChunkLoading-899487:6005149"
-    implementation "curse.maven:cupboard-326652:5570763" //betterChunkLoading dependency
-    implementation "curse.maven:clumps-256717:5623731"
-    implementation "curse.maven:getItTogetherDrops-411045:5575483"
-    implementation "curse.maven:immediatelyFast-686911:5959911"
-    implementation "curse.maven:Embeddium-908741:5681729"
-    implementation "curse.maven:EmbeddiumExtras-558905:6041699"
-    implementation "curse.maven:EmbeddiumDynamicLights-551736:6044477"
-    implementation "curse.maven:chunky-485681:5437053"
+    localRuntime "curse.maven:ferriteCore-429235:5850121"
+    localRuntime "curse.maven:betterChunkLoading-899487:6005149"
+    localRuntime "curse.maven:cupboard-326652:5570763" //betterChunkLoading dependency
+    localRuntime "curse.maven:clumps-256717:5623731"
+    localRuntime "curse.maven:getItTogetherDrops-411045:5575483"
+    localRuntime "curse.maven:immediatelyFast-686911:5959911"
+    localRuntime "curse.maven:Embeddium-908741:5681729"
+    localRuntime "curse.maven:EmbeddiumExtras-558905:6041699"
+    localRuntime "curse.maven:EmbeddiumDynamicLights-551736:6044477"
+    localRuntime "curse.maven:chunky-485681:5437053"
     // https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator-forge
-    implementation "curse.maven:badOptimizations-949555:5961419"
+    localRuntime "curse.maven:badOptimizations-949555:5961419"
     //---- END PERFORMANCE ----//
 
-    //localRuntime "blank:create-0.5.1.j-1.21.1"
-    implementation "curse.maven:create-328085:6323264"
-    implementation "curse.maven:createCraftsAndAdditions-439890:6445614"
+    localRuntime "curse.maven:create-328085:6323264"
+    localRuntime "curse.maven:createCraftsAndAdditions-439890:6445614"
 
+    // TECTONIC WORLDGEN SYSTEM (REQUIRED dependencies for planet generation)
+    // Tectonic for NeoForge 1.21.1
+    implementation "curse.maven:tectonic-686836:7128220"
+
+    // Lithostitched (required by Tectonic) - using latest
+    implementation "curse.maven:lithostitched-936015:7063201"
 
     implementation "curse.maven:BornInChaos-686437:7150215"
 
-
-
-    // DUNGEONS
-    implementation "curse.maven:DungeonCrawl-324973:6047162"
-    implementation "curse.maven:WhenDungeonsArise-442508:6078710"
-    implementation "curse.maven:WhenDungeonsAriseSevenSeas-953637:5661269"
-
     implementation "curse.maven:chemlibmekanized-1463366:7666629"
 
-    implementation "blank:ImmersiveEngineering-1.21.1-12.4.3-194"
 
-
+    implementation "curse.maven:mekanism-268560:7621971"
+    implementation "curse.maven:MekanismAdditions-345425:7621973"
+    implementation "curse.maven:MekanismGenerators-268566:7621974"
+    implementation "curse.maven:MekanismTools-268567:7621975"
     implementation "curse.maven:MekanismMoreMachines-1275257:7627187"
 
 
@@ -189,18 +181,8 @@ dependencies {
 
 
 
-    // MOBS FOR PLANETS
-    implementation "curse.maven:MowiesMobs-250498:6700443"
+    // Creature mods for planet spawning (optional dependencies)
     implementation "curse.maven:kobolds-484967:7088059"
-    implementation "curse.maven:theundeadRevamped-479710:6778715"
-    //implementation "curse.maven:reptilian-1169666:6816483"  // Commented out - dependency download issues
-    implementation "blank:reptilian-1.1.0-neoforge-1.21.1"
-    //implementation "curse.maven:PrehistoricExpansion-909176:7011472"  // Commented out - dependency download issues
-    implementation "blank:shineals_prehistoric_expansion-1.4.3-neoforge-1.21.1"
-    implementation "curse.maven:luminousoverworld-909107:6588233"
-    implementation "curse.maven:mcdoom-368765:5729612"
-    // implementation "curse.maven:mobsOfMythology-699989:6403508"  // Commented out - Architectury API spawn placement bug (uses Operation.OR instead of REPLACE)
-    // implementation "curse.maven:rottenCreatures-371033:6677062"  // Commented out - spawn placement bug in NeoForge 1.21.1
 
     implementation "curse.maven:ribbits-622967:6988284"
     implementation "curse.maven:yungsAPI-1015100:6715463" //ribbits dependency
@@ -209,10 +191,7 @@ dependencies {
 
 
 
-    implementation "curse.maven:accessories-938917:7046407"
-    implementation "curse.maven:owo-lib-532610:6785734"
     implementation "curse.maven:smartbrainlib-661293:7055149"
-    implementation "curse.maven:azurelib-817423:7084472"
     implementation "curse.maven:platform-997634:6677047"
 
     // Patchouli for guide book
