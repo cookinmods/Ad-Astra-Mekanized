@@ -87,18 +87,18 @@ public class ModdedMobSpawnController {
         Holder<Biome> biomeHolder = level.getBiome(pos);
         ResourceLocation biomeId = getBiomeId(biomeHolder);
 
-        // Check if this mod is whitelisted for this dimension+biome
-        boolean allowed = whitelist.isModAllowed(dimension.location(), biomeId, modNamespace);
+        // Check if this entity is whitelisted for this dimension+biome
+        boolean allowed = whitelist.isEntityAllowed(dimension.location(), entityId, modNamespace);
 
         if (!allowed) {
             // Cancel natural spawn - not whitelisted for this dimension+biome
             event.setSpawnCancelled(true);
-            AdAstraMekanized.LOGGER.info("[SpawnControl] BLOCKED {} spawn ({}) in {} biome {} - not whitelisted",
+            AdAstraMekanized.LOGGER.info("[SpawnControl] BLOCKED {} spawn ({}) in {} biome {} - entity not whitelisted",
                 entityId, spawnType, dimension.location(), biomeId);
         } else {
             // Track this entity as allowed so EntityJoinLevelEvent doesn't block it
             allowedEntityIds.add(mob.getId());
-            AdAstraMekanized.LOGGER.debug("Allowed {} natural spawn ({}) in dimension {} biome {} (whitelisted)",
+            AdAstraMekanized.LOGGER.debug("Allowed {} natural spawn ({}) in dimension {} biome {} (entity whitelisted)",
                 entityId, spawnType, dimension.location(), biomeId);
         }
     }
@@ -152,13 +152,13 @@ public class ModdedMobSpawnController {
         Holder<Biome> biomeHolder = level.getBiome(pos);
         ResourceLocation biomeId = getBiomeId(biomeHolder);
 
-        // Check if this mod is whitelisted for this dimension+biome
-        boolean allowed = whitelist.isModAllowed(dimension.location(), biomeId, modNamespace);
+        // Check if this entity is whitelisted for this dimension+biome
+        boolean allowed = whitelist.isEntityAllowed(dimension.location(), entityId, modNamespace);
 
         if (!allowed) {
             // Cancel entity join - not whitelisted for this dimension+biome
             event.setCanceled(true);
-            AdAstraMekanized.LOGGER.info("[SpawnControl] BLOCKED {} join in {} biome {} - not whitelisted (EntityJoinLevel fallback)",
+            AdAstraMekanized.LOGGER.info("[SpawnControl] BLOCKED {} join in {} biome {} - entity not whitelisted (EntityJoinLevel fallback)",
                 entityId, dimension.location(), biomeId);
         }
     }
@@ -209,6 +209,16 @@ public class ModdedMobSpawnController {
         whitelist.whitelistModForBiome(dimensionId, biomeId, modNamespace);
         AdAstraMekanized.LOGGER.info("Whitelisted mod '{}' for dimension '{}' biome '{}'",
             modNamespace, dimensionId, biomeId);
+    }
+
+    /**
+     * Register a specific entity type as allowed in a dimension.
+     * Called by PlanetMaker during planet registration for entity-level spawn control.
+     */
+    public static void registerEntityWhitelist(ResourceLocation dimensionId, String entityIdStr) {
+        ResourceLocation entityId = ResourceLocation.parse(entityIdStr);
+        whitelist.whitelistEntityForDimension(dimensionId, entityId);
+        AdAstraMekanized.LOGGER.debug("Whitelisted entity '{}' for dimension '{}'", entityId, dimensionId);
     }
 
     /**

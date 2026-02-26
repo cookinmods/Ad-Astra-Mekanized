@@ -568,6 +568,7 @@ public class PlanetMaker {
         private java.util.Map<String, java.util.List<MobSpawnEntry>> mobSpawns = new java.util.HashMap<>();
         private java.util.Map<String, SpawnCost> spawnCosts = new java.util.HashMap<>();
         private java.util.Set<String> usedModNamespaces = new java.util.HashSet<>();  // Track mod namespaces for spawn control
+        private java.util.Set<String> usedEntityIds = new java.util.HashSet<>();  // Track specific entity IDs for entity-level whitelist
         // Mod replacement groups: modId -> (vanillaFallbacks, moddedReplacements)
         // When mod IS installed: moddedReplacements spawn. When NOT: vanillaFallbacks spawn.
         private java.util.Map<String, ModReplacementGroup> modReplacementGroups = new java.util.LinkedHashMap<>();
@@ -1514,6 +1515,7 @@ public class PlanetMaker {
                 String namespace = mobId.substring(0, mobId.indexOf(":"));
                 if (!namespace.equals("minecraft")) {
                     usedModNamespaces.add(namespace);
+                    usedEntityIds.add(mobId);
                 }
             }
 
@@ -1545,6 +1547,7 @@ public class PlanetMaker {
                 String namespace = spawn[1].contains(":") ? spawn[1].substring(0, spawn[1].indexOf(":")) : "minecraft";
                 if (!namespace.equals("minecraft")) {
                     usedModNamespaces.add(namespace);
+                    usedEntityIds.add(spawn[1]);
                 }
             }
 
@@ -3933,7 +3936,7 @@ public class PlanetMaker {
          * Register this planet's modded mob whitelist with the spawn controller
          */
         private void registerModdedMobWhitelist() {
-            if (usedModNamespaces.isEmpty()) {
+            if (usedEntityIds.isEmpty() && usedModNamespaces.isEmpty()) {
                 return; // No modded mobs, nothing to register
             }
 
@@ -3945,6 +3948,12 @@ public class PlanetMaker {
             for (String modNamespace : usedModNamespaces) {
                 com.hecookin.adastramekanized.common.events.ModdedMobSpawnController
                     .registerPlanetMobWhitelist(dimensionId, modNamespace);
+            }
+
+            // Register specific entity IDs for entity-level filtering
+            for (String entityId : usedEntityIds) {
+                com.hecookin.adastramekanized.common.events.ModdedMobSpawnController
+                    .registerEntityWhitelist(dimensionId, entityId);
             }
         }
 

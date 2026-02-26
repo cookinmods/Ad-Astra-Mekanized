@@ -18,6 +18,9 @@ public class ModdedMobWhitelistData {
     // Set of mod namespaces that are under spawn control
     private final Set<String> controlledMods = new HashSet<>();
 
+    // Map: Dimension ID → Set of allowed entity IDs (entity-level whitelist for planet dimensions)
+    private final Map<ResourceLocation, Set<ResourceLocation>> entityWhitelist = new HashMap<>();
+
     public ModdedMobWhitelistData() {
         // Initialize with controlled mods
         controlledMods.add("mowziesmobs");
@@ -73,6 +76,44 @@ public class ModdedMobWhitelistData {
     }
 
     /**
+     * Whitelist a specific entity type for a dimension.
+     */
+    public void whitelistEntityForDimension(ResourceLocation dimensionId, ResourceLocation entityId) {
+        entityWhitelist.computeIfAbsent(dimensionId, k -> new HashSet<>()).add(entityId);
+    }
+
+    /**
+     * Check if a specific entity is allowed in a dimension.
+     *
+     * For planet dimensions (which have entity-level entries via registerEntityWhitelist):
+     *   Only allows specific entities we configured in PlanetGenerationRunner.
+     *
+     * For vanilla dimensions (Overworld/Nether/End, which only have namespace-level entries
+     * via allowInVanillaDimensions/allowInOverworld/etc.):
+     *   Falls back to namespace-level check, allowing all entities from that mod.
+     *
+     * @param dimensionId The dimension resource location
+     * @param entityId The full entity resource location (e.g., born_in_chaos_v1:decrepit_skeleton)
+     * @param modNamespace The mod namespace (for fallback to namespace-level check)
+     * @return true if the entity is allowed to spawn in this dimension
+     */
+    public boolean isEntityAllowed(ResourceLocation dimensionId, ResourceLocation entityId, String modNamespace) {
+        // If entity-level whitelist exists for this dimension, use it (planet dimensions)
+        if (entityWhitelist.containsKey(dimensionId)) {
+            return entityWhitelist.get(dimensionId).contains(entityId);
+        }
+
+        // Fall back to namespace-level (for vanilla dimensions where we whitelist whole namespaces)
+        // Check dimension-level whitelist directly
+        if (dimensionWhitelist.containsKey(dimensionId)) {
+            return dimensionWhitelist.get(dimensionId).contains(modNamespace);
+        }
+
+        // Not whitelisted at any level
+        return false;
+    }
+
+    /**
      * Check if a mod is allowed to spawn in a specific dimension and biome.
      *
      * @param dimensionId The dimension resource location
@@ -117,6 +158,7 @@ public class ModdedMobWhitelistData {
     public void clear() {
         dimensionWhitelist.clear();
         biomeWhitelist.clear();
+        entityWhitelist.clear();
     }
 
     /**
@@ -135,6 +177,10 @@ public class ModdedMobWhitelistData {
             for (Map.Entry<ResourceLocation, Set<String>> biomeEntry : dimEntry.getValue().entrySet()) {
                 sb.append("    ").append(biomeEntry.getKey()).append(": ").append(biomeEntry.getValue()).append("\n");
             }
+        }
+        sb.append("Entity Whitelists:\n");
+        for (Map.Entry<ResourceLocation, Set<ResourceLocation>> entry : entityWhitelist.entrySet()) {
+            sb.append("  ").append(entry.getKey()).append(": ").append(entry.getValue().size()).append(" entities\n");
         }
         return sb.toString();
     }

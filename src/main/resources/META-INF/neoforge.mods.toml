@@ -155,3 +155,83 @@ type = "optional"
 versionRange = "[1.7.0,)"
 ordering = "AFTER"
 side = "BOTH"
+
+# Kobolds - Underground cave dwellers (kobold dens, 7 kobold variants)
+[[dependencies.adastramekanized]]
+modId = "kobolds"
+type = "optional"
+versionRange = "[3.4.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# MCDoom - Demonic creatures from DOOM (volcanic/hell planets)
+[[dependencies.adastramekanized]]
+modId = "doom"
+type = "optional"
+versionRange = "[5.0.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# Reptilian - Lizard and reptile creatures (desert/tropical planets)
+[[dependencies.adastramekanized]]
+modId = "reptilian"
+type = "optional"
+versionRange = "[1.1.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# Ribbits - Frog villagers and swamp villages (Paludis)
+[[dependencies.adastramekanized]]
+modId = "ribbits"
+type = "optional"
+versionRange = "[1.2.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# Luminous World - Glowing magical creatures (icy moons)
+[[dependencies.adastramekanized]]
+modId = "luminousworld"
+type = "optional"
+versionRange = "[1.0.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# Mowzie's Mobs - Exotic jungle and tribal creatures (Primordium, Bellator)
+[[dependencies.adastramekanized]]
+modId = "mowziesmobs"
+type = "optional"
+versionRange = "[1.7.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# The Undead Revamped - Enhanced undead mobs (Ganymede)
+[[dependencies.adastramekanized]]
+modId = "undead_revamp2"
+type = "optional"
+versionRange = "[1.0.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# Rotten Creatures - Fire-themed undead (Pyrios)
+[[dependencies.adastramekanized]]
+modId = "rottencreatures"
+type = "optional"
+versionRange = "[1.0.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# Shineal's Prehistoric Expansion - Dinosaurs and prehistoric creatures (Titan)
+[[dependencies.adastramekanized]]
+modId = "shineals_prehistoric_expansion"
+type = "optional"
+versionRange = "[1.4.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+# Mobs of Mythology - Mythological creatures (Pluto, Eris)
+[[dependencies.adastramekanized]]
+modId = "mobs_of_mythology"
+type = "optional"
+versionRange = "[1.0.0,)"
+ordering = "AFTER"
+side = "BOTH"
