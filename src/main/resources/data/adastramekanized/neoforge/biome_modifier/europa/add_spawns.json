@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:europa_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:guardian",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 2
+    }
+  ]
+}

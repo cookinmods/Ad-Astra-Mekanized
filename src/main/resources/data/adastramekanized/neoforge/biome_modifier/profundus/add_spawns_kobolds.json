@@ -10,45 +10,45 @@
   "spawners": [
     {
       "type": "kobolds:kobold",
-      "weight": 50,
+      "weight": 10,
       "minCount": 2,
       "maxCount": 4
     },
     {
       "type": "kobolds:kobold_warrior",
-      "weight": 25,
+      "weight": 8,
       "minCount": 1,
       "maxCount": 2
     },
     {
       "type": "kobolds:kobold_enchanter",
-      "weight": 16,
+      "weight": 5,
       "minCount": 1,
       "maxCount": 1
     },
     {
       "type": "kobolds:kobold_engineer",
-      "weight": 25,
+      "weight": 8,
       "minCount": 1,
       "maxCount": 2
     },
     {
       "type": "kobolds:kobold_zombie",
-      "weight": 15,
+      "weight": 6,
       "minCount": 2,
-      "maxCount": 4
+      "maxCount": 3
     },
     {
       "type": "kobolds:kobold_skeleton",
-      "weight": 15,
+      "weight": 6,
       "minCount": 2,
-      "maxCount": 4
+      "maxCount": 3
     },
     {
       "type": "kobolds:witherbold",
-      "weight": 5,
+      "weight": 3,
       "minCount": 1,
-      "maxCount": 2
+      "maxCount": 1
     }
   ]
 }

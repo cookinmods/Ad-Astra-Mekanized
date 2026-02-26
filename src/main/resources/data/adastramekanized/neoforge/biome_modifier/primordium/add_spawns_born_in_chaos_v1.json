@@ -10,67 +10,19 @@
   "spawners": [
     {
       "type": "born_in_chaos_v1:baby_spider",
-      "weight": 22,
-      "minCount": 2,
-      "maxCount": 4
+      "weight": 5,
+      "minCount": 1,
+      "maxCount": 2
     },
     {
       "type": "born_in_chaos_v1:mother_spider",
-      "weight": 7,
+      "weight": 3,
       "minCount": 1,
       "maxCount": 1
     },
     {
       "type": "born_in_chaos_v1:dread_hound",
-      "weight": 17,
-      "minCount": 1,
-      "maxCount": 3
-    },
-    {
-      "type": "born_in_chaos_v1:dire_hound_leader",
-      "weight": 7,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
-      "type": "born_in_chaos_v1:phantom_creeper",
-      "weight": 17,
-      "minCount": 1,
-      "maxCount": 2
-    },
-    {
-      "type": "born_in_chaos_v1:swarmer",
-      "weight": 17,
-      "minCount": 2,
-      "maxCount": 4
-    },
-    {
-      "type": "born_in_chaos_v1:thornshell_crab",
-      "weight": 14,
-      "minCount": 1,
-      "maxCount": 2
-    },
-    {
-      "type": "born_in_chaos_v1:maggot",
-      "weight": 22,
-      "minCount": 3,
-      "maxCount": 6
-    },
-    {
-      "type": "born_in_chaos_v1:corpse_fly",
-      "weight": 17,
-      "minCount": 2,
-      "maxCount": 4
-    },
-    {
-      "type": "born_in_chaos_v1:bloody_gadfly",
-      "weight": 14,
-      "minCount": 1,
-      "maxCount": 3
-    },
-    {
-      "type": "born_in_chaos_v1:nightmare_stalker",
-      "weight": 5,
+      "weight": 4,
       "minCount": 1,
       "maxCount": 1
     }

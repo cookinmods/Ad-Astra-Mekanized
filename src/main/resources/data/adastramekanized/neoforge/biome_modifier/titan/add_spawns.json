@@ -1,0 +1,18 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:titan_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:slime",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 3
+    },
+    {
+      "type": "minecraft:witch",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

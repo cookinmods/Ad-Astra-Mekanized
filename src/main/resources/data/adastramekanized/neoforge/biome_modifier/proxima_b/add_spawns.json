@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#adastramekanized:proxima_b_biomes",
+  "spawners": [
+    {
+      "type": "minecraft:enderman",
+      "weight": 4,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

@@ -1,22 +1,16 @@
 {
   "type": "neoforge:add_spawns",
-  "biomes": "#adastramekanized:bellator_biomes",
+  "biomes": "#adastramekanized:triton_biomes",
   "spawners": [
     {
-      "type": "minecraft:husk",
-      "weight": 12,
+      "type": "minecraft:stray",
+      "weight": 8,
       "minCount": 1,
       "maxCount": 2
     },
     {
-      "type": "minecraft:enderman",
+      "type": "minecraft:endermite",
       "weight": 5,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
-      "type": "minecraft:piglin",
-      "weight": 4,
       "minCount": 1,
       "maxCount": 2
     },

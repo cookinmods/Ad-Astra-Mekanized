@@ -13,13 +13,13 @@
   "spawners": [
     {
       "type": "minecraft:silverfish",
-      "weight": 30,
+      "weight": 10,
       "minCount": 2,
       "maxCount": 4
     },
     {
       "type": "minecraft:endermite",
-      "weight": 15,
+      "weight": 5,
       "minCount": 1,
       "maxCount": 2
     }

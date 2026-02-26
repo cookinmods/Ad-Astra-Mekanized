@@ -2,20 +2,20 @@
   "neoforge:conditions": [
     {
       "type": "neoforge:mod_loaded",
-      "modid": "luminousworld"
+      "modid": "born_in_chaos_v1"
     }
   ],
   "type": "neoforge:add_spawns",
-  "biomes": "#adastramekanized:triton_biomes",
+  "biomes": "#adastramekanized:vulcan_biomes",
   "spawners": [
     {
-      "type": "luminousworld:bone_stalker",
-      "weight": 8,
+      "type": "born_in_chaos_v1:door_knight",
+      "weight": 5,
       "minCount": 1,
       "maxCount": 1
     },
     {
-      "type": "luminousworld:mummy",
+      "type": "born_in_chaos_v1:skeleton_thrasher",
       "weight": 6,
       "minCount": 1,
       "maxCount": 1

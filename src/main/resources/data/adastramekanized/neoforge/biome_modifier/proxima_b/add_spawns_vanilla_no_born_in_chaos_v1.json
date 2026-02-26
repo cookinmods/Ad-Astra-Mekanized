@@ -13,15 +13,9 @@
   "spawners": [
     {
       "type": "minecraft:husk",
-      "weight": 30,
-      "minCount": 2,
-      "maxCount": 3
-    },
-    {
-      "type": "minecraft:rabbit",
-      "weight": 18,
-      "minCount": 2,
-      "maxCount": 3
+      "weight": 12,
+      "minCount": 1,
+      "maxCount": 2
     }
   ]
 }

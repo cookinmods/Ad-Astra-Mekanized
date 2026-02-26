@@ -2,17 +2,17 @@
   "neoforge:conditions": [
     {
       "type": "neoforge:mod_loaded",
-      "modid": "born_in_chaos_v1"
+      "modid": "ribbits"
     }
   ],
   "type": "neoforge:add_spawns",
   "biomes": "#adastramekanized:kepler22b_biomes",
   "spawners": [
     {
-      "type": "born_in_chaos_v1:corpse_fish",
-      "weight": 5,
-      "minCount": 1,
-      "maxCount": 2
+      "type": "ribbits:ribbit",
+      "weight": 10,
+      "minCount": 2,
+      "maxCount": 5
     }
   ]
 }

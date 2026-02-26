@@ -9,26 +9,14 @@
   "biomes": "#adastramekanized:venus_biomes",
   "spawners": [
     {
-      "type": "born_in_chaos_v1:decrepit_skeleton",
-      "weight": 25,
-      "minCount": 1,
-      "maxCount": 2
-    },
-    {
       "type": "born_in_chaos_v1:decaying_zombie",
-      "weight": 20,
+      "weight": 8,
       "minCount": 1,
       "maxCount": 2
-    },
-    {
-      "type": "born_in_chaos_v1:door_knight",
-      "weight": 5,
-      "minCount": 1,
-      "maxCount": 1
     },
     {
       "type": "born_in_chaos_v1:skeleton_thrasher",
-      "weight": 8,
+      "weight": 5,
       "minCount": 1,
       "maxCount": 1
     }

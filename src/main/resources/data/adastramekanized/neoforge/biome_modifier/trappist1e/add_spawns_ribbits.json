@@ -6,11 +6,11 @@
     }
   ],
   "type": "neoforge:add_spawns",
-  "biomes": "#adastramekanized:paludis_biomes",
+  "biomes": "#adastramekanized:trappist1e_biomes",
   "spawners": [
     {
       "type": "ribbits:ribbit",
-      "weight": 12,
+      "weight": 10,
       "minCount": 2,
       "maxCount": 5
     }

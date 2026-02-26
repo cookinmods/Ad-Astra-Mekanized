@@ -10,19 +10,7 @@
   "spawners": [
     {
       "type": "born_in_chaos_v1:corpse_fish",
-      "weight": 18,
-      "minCount": 2,
-      "maxCount": 4
-    },
-    {
-      "type": "born_in_chaos_v1:glutton_fish",
-      "weight": 13,
-      "minCount": 1,
-      "maxCount": 2
-    },
-    {
-      "type": "born_in_chaos_v1:zombie_fisherman",
-      "weight": 15,
+      "weight": 6,
       "minCount": 1,
       "maxCount": 2
     }

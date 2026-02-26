@@ -10,25 +10,25 @@
   "spawners": [
     {
       "type": "born_in_chaos_v1:supreme_bonescaller",
-      "weight": 5,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
-      "type": "born_in_chaos_v1:lifestealer",
-      "weight": 5,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
-      "type": "born_in_chaos_v1:krampus",
       "weight": 3,
       "minCount": 1,
       "maxCount": 1
     },
     {
+      "type": "born_in_chaos_v1:lifestealer",
+      "weight": 3,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "born_in_chaos_v1:krampus",
+      "weight": 2,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
       "type": "born_in_chaos_v1:missioner",
-      "weight": 5,
+      "weight": 3,
       "minCount": 1,
       "maxCount": 1
     }

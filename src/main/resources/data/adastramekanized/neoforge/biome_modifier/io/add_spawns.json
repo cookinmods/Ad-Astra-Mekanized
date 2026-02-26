@@ -1,18 +1,18 @@
 {
   "type": "neoforge:add_spawns",
-  "biomes": "#adastramekanized:pyrios_biomes",
+  "biomes": "#adastramekanized:io_biomes",
   "spawners": [
-    {
-      "type": "minecraft:blaze",
-      "weight": 10,
-      "minCount": 1,
-      "maxCount": 2
-    },
     {
       "type": "minecraft:magma_cube",
       "weight": 12,
       "minCount": 1,
       "maxCount": 3
+    },
+    {
+      "type": "minecraft:zombified_piglin",
+      "weight": 8,
+      "minCount": 1,
+      "maxCount": 2
     },
     {
       "type": "minecraft:ghast",

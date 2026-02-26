@@ -2,21 +2,21 @@
   "neoforge:conditions": [
     {
       "type": "neoforge:mod_loaded",
-      "modid": "rottencreatures"
+      "modid": "born_in_chaos_v1"
     }
   ],
   "type": "neoforge:add_spawns",
   "biomes": "#adastramekanized:pyrios_biomes",
   "spawners": [
     {
-      "type": "rottencreatures:burned",
-      "weight": 20,
+      "type": "born_in_chaos_v1:seared_spirit",
+      "weight": 8,
       "minCount": 1,
-      "maxCount": 2
+      "maxCount": 1
     },
     {
-      "type": "rottencreatures:immortal",
-      "weight": 15,
+      "type": "born_in_chaos_v1:barrel_zombie",
+      "weight": 6,
       "minCount": 1,
       "maxCount": 1
     }

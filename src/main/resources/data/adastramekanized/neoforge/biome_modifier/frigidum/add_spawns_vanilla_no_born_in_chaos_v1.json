@@ -13,19 +13,7 @@
   "spawners": [
     {
       "type": "minecraft:stray",
-      "weight": 30,
-      "minCount": 2,
-      "maxCount": 3
-    },
-    {
-      "type": "minecraft:skeleton",
-      "weight": 20,
-      "minCount": 1,
-      "maxCount": 2
-    },
-    {
-      "type": "minecraft:polar_bear",
-      "weight": 15,
+      "weight": 12,
       "minCount": 1,
       "maxCount": 2
     }

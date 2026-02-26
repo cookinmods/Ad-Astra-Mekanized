@@ -2,29 +2,23 @@
   "neoforge:conditions": [
     {
       "type": "neoforge:mod_loaded",
-      "modid": "reptilian"
+      "modid": "born_in_chaos_v1"
     }
   ],
   "type": "neoforge:add_spawns",
   "biomes": "#adastramekanized:arenos_biomes",
   "spawners": [
     {
-      "type": "reptilian:gecko",
-      "weight": 12,
+      "type": "born_in_chaos_v1:bonescaller",
+      "weight": 5,
       "minCount": 1,
-      "maxCount": 2
+      "maxCount": 1
     },
     {
-      "type": "reptilian:komodo_dragon",
+      "type": "minecraft:husk",
       "weight": 10,
       "minCount": 1,
       "maxCount": 2
-    },
-    {
-      "type": "minecraft:rabbit",
-      "weight": 15,
-      "minCount": 2,
-      "maxCount": 3
     }
   ]
 }
