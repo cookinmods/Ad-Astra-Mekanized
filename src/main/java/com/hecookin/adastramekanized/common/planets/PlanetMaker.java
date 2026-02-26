@@ -1937,7 +1937,7 @@ public class PlanetMaker {
         /**
          * Add generic modded mob spawn.
          * Use this for any mod that isn't specifically supported with helper methods.
-         * @param modNamespace The mod namespace (e.g., "mobs_of_mythology")
+         * @param modNamespace The mod namespace (e.g., "born_in_chaos_v1")
          * @param mobName The mob name without namespace (e.g., "cyclops")
          * @param category Spawn category (usually "monster" or "creature")
          * @param weight Spawn weight

@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Controls spawning of modded mobs to restrict them to specific dimensions and biomes.
  *
  * This system:
- * - Tracks which mod namespaces are "controlled" (e.g., mowziesmobs, kobolds)
+ * - Tracks which mod namespaces are "controlled" (e.g., born_in_chaos_v1, kobolds, ribbits)
  * - Allows manual spawns (eggs, spawners, commands) EVERYWHERE for all spawn types
  * - Blocks NATURAL spawns (world generation, reinforcements) unless whitelisted
  * - For custom dimensions, only allows natural spawns if explicitly whitelisted
@@ -260,7 +260,7 @@ public class ModdedMobSpawnController {
      * Allow a mod to spawn in the Overworld.
      * Use this if you want to preserve vanilla spawning behavior for a specific mod.
      *
-     * @param modNamespace The mod namespace (e.g., "mowziesmobs")
+     * @param modNamespace The mod namespace (e.g., "kobolds")
      */
     public static void allowInOverworld(String modNamespace) {
         whitelist.whitelistModForDimension(ResourceLocation.withDefaultNamespace("overworld"), modNamespace);
