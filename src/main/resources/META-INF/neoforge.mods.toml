@@ -160,7 +160,7 @@ side = "BOTH"
 [[dependencies.adastramekanized]]
 modId = "kobolds"
 type = "optional"
-versionRange = "[3.4.0,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -168,7 +168,7 @@ side = "BOTH"
 [[dependencies.adastramekanized]]
 modId = "doom"
 type = "optional"
-versionRange = "[5.0.0,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -176,7 +176,7 @@ side = "BOTH"
 [[dependencies.adastramekanized]]
 modId = "reptilian"
 type = "optional"
-versionRange = "[1.1.0,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -184,7 +184,7 @@ side = "BOTH"
 [[dependencies.adastramekanized]]
 modId = "ribbits"
 type = "optional"
-versionRange = "[1.2.0,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -192,7 +192,7 @@ side = "BOTH"
 [[dependencies.adastramekanized]]
 modId = "luminousworld"
 type = "optional"
-versionRange = "[1.0.0,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -200,7 +200,7 @@ side = "BOTH"
 [[dependencies.adastramekanized]]
 modId = "mowziesmobs"
 type = "optional"
-versionRange = "[1.7.0,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -208,7 +208,7 @@ side = "BOTH"
 [[dependencies.adastramekanized]]
 modId = "undead_revamp2"
 type = "optional"
-versionRange = "[1.0.0,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -216,7 +216,7 @@ side = "BOTH"
 [[dependencies.adastramekanized]]
 modId = "rottencreatures"
 type = "optional"
-versionRange = "[1.0.0,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -224,7 +224,7 @@ side = "BOTH"
 [[dependencies.adastramekanized]]
 modId = "shineals_prehistoric_expansion"
 type = "optional"
-versionRange = "[1.4.0,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
 
@@ -232,6 +232,6 @@ side = "BOTH"
 [[dependencies.adastramekanized]]
 modId = "mobs_of_mythology"
 type = "optional"
-versionRange = "[1.0.0,)"
+versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
