@@ -30,6 +30,11 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Pink Terracotta$(br)• $(bold)Subsurface:$() White Terracotta$(br)• $(bold)Deep:$() Light Gray Terracotta$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "text": "• Stray$(br)• Endermite$(br)• Ghast"
     }
   ]
 }

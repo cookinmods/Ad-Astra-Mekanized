@@ -30,6 +30,11 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Yellow Terracotta$(br)• $(bold)Subsurface:$() Orange Terracotta$(br)• $(bold)Deep:$() Netherrack$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d20"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "text": "• Magma Cube$(br)• Zombified Piglin$(br)• Ghast"
     }
   ]
 }

@@ -23,6 +23,24 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Grass Block$(br)• $(bold)Subsurface:$() Dirt$(br)• $(bold)Deep:$() Deepslate$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d63"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "!mod:born_in_chaos_v1",
+      "text": "$(bold)Passive:$()$(br)• Goat$(br)• Llama$(br)$(br2)$(bold)Hostile:$()$(br)• Spider"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:born_in_chaos_v1",
+      "text": "$(bold)Passive:$()$(br)• Goat$(br)• Llama$(br)$(br2)$(bold)Hostile:$()$(br)• Spider$(br)• Baby Spider"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:ribbits",
+      "text": "• Ribbits"
     }
   ]
 }

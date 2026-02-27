@@ -23,6 +23,18 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Grass Block$(br)• $(bold)Subsurface:$() Dirt$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d50"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "!mod:born_in_chaos_v1",
+      "text": "• Husk$(br)• Enderman$(br)• Piglin$(br)• Ghast"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:born_in_chaos_v1",
+      "text": "• Husk$(br)• Enderman$(br)• Piglin$(br)• Ghast$(br)• Pumpkin Dunce$(br)• Pumpkin Spirit"
     }
   ]
 }

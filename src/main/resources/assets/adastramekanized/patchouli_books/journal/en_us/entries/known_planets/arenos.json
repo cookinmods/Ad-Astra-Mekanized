@@ -23,6 +23,18 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Sand$(br)• $(bold)Subsurface:$() Sandstone$(br)• $(bold)Deep:$() Smooth Sandstone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "!mod:born_in_chaos_v1",
+      "text": "• Enderman$(br)• Ghast$(br)• Husk"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:born_in_chaos_v1",
+      "text": "• Enderman$(br)• Ghast$(br)• Bonescaller$(br)• Husk"
     }
   ]
 }

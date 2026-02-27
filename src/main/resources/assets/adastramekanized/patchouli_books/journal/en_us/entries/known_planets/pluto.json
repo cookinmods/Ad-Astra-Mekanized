@@ -30,6 +30,11 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Powder Snow$(br)• $(bold)Subsurface:$() Snow Block$(br)• $(bold)Deep:$() Packed Ice$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "text": "• Endermite$(br)• Ghast"
     }
   ]
 }

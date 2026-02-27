@@ -23,6 +23,18 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Dirt$(br)• $(bold)Subsurface:$() Dirt$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d63"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "!mod:ribbits",
+      "text": "$(bold)Passive:$()$(br)• Frog$(br)• Goat$(br)$(br2)$(bold)Hostile:$()$(br)• Enderman"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:ribbits",
+      "text": "$(bold)Passive:$()$(br)• Frog$(br)• Goat$(br)• Ribbits$(br)$(br2)$(bold)Hostile:$()$(br)• Enderman"
     }
   ]
 }

@@ -1,6 +1,13 @@
 {
   "replace": false,
   "values": [
+    "adastramekanized:moon_highlands",
+    "adastramekanized:moon_maria",
+    "adastramekanized:moon_polar",
+    "adastramekanized:callisto_desert",
+    "adastramekanized:ceres_desert",
+    "adastramekanized:glacio_snowy_taiga",
+    "adastramekanized:glacio_frozen_river",
     "adastramekanized:profundus_dripstone_caves",
     "adastramekanized:profundus_lush_caves",
     "adastramekanized:profundus_deep_dark"

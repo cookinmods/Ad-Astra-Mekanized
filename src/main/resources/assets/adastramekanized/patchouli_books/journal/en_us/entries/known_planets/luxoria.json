@@ -23,6 +23,18 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Moss Block$(br)• $(bold)Subsurface:$() Rooted Dirt$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d63"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "!mod:born_in_chaos_v1",
+      "text": "• Enderman$(br)• Shulker"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:born_in_chaos_v1",
+      "text": "• Enderman$(br)• Shulker$(br)• Restless Spirit$(br)• Seared Spirit$(br)• Firelight"
     }
   ]
 }

@@ -23,6 +23,24 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Mud$(br)• $(bold)Subsurface:$() Muddy Mangrove Roots$(br)• $(bold)Deep:$() Clay$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d58"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "!mod:born_in_chaos_v1",
+      "text": "$(bold)Passive:$()$(br)• Frog$(br)$(br2)$(bold)Hostile:$()$(br)• Drowned$(br)• Slime"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:born_in_chaos_v1",
+      "text": "$(bold)Passive:$()$(br)• Frog$(br)$(br2)$(bold)Hostile:$()$(br)• Drowned$(br)• Slime$(br)• Corpse Fish"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:ribbits",
+      "text": "• Ribbits"
     }
   ]
 }

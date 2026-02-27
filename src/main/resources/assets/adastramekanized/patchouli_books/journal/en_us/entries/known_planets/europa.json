@@ -30,6 +30,18 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Blue Ice$(br)• $(bold)Subsurface:$() Packed Ice$(br)• $(bold)Deep:$() Ice$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d32"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "!mod:born_in_chaos_v1",
+      "text": "• Guardian$(br)• Drowned"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:born_in_chaos_v1",
+      "text": "• Guardian$(br)• Corpse Fish$(br)• Zombie Fisherman"
     }
   ]
 }

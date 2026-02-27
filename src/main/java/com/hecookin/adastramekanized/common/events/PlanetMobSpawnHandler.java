@@ -16,9 +16,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.EntityType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import net.minecraft.util.RandomSource;
 
 /**
@@ -32,6 +34,11 @@ public class PlanetMobSpawnHandler {
     // Map of dimension -> mob type -> equipment configuration
     private static Map<ResourceLocation, Map<String, EquipmentConfig>> PLANET_MOB_EQUIPMENT = new HashMap<>();
     private static boolean configsLoaded = false;
+
+    // Vanilla mobs that should never naturally spawn on planets (they have no biome entry but can leak through)
+    private static final Set<EntityType<?>> BLOCKED_PLANET_MOBS = Set.of(
+        EntityType.ZOMBIE_VILLAGER  // Spawns as 5% of zombie spawns, but no zombies are intended on most planets
+    );
 
     /**
      * Load equipment configurations on first spawn event (fallback for development)
@@ -72,8 +79,16 @@ public class PlanetMobSpawnHandler {
             return;
         }
 
-        // Only tag natural spawns, not manual spawns (spawn eggs, commands, spawners)
+        // Only process natural spawns, not manual spawns (spawn eggs, commands, spawners)
         if (isManualSpawn(event.getSpawnType())) {
+            return;
+        }
+
+        // Block vanilla mobs that should never naturally spawn on planets
+        if (BLOCKED_PLANET_MOBS.contains(mob.getType())) {
+            event.setSpawnCancelled(true);
+            AdAstraMekanized.LOGGER.debug("[SpawnControl] Blocked {} natural spawn on planet {}",
+                BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()), level.dimension().location());
             return;
         }
 

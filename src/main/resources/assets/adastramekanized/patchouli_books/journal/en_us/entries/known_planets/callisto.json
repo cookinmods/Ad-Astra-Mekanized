@@ -30,6 +30,18 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Gray Terracotta$(br)• $(bold)Subsurface:$() Brown Terracotta$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "!mod:kobolds",
+      "text": "• Silverfish$(br)• Endermite$(br)• Ghast"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:kobolds",
+      "text": "• Kobolds$(br)• Ghast"
     }
   ]
 }

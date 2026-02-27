@@ -23,6 +23,11 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Orange Terracotta$(br)• $(bold)Subsurface:$() Brown Terracotta$(br)• $(bold)Deep:$() Gray Terracotta$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d50"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "text": "• Slime$(br)• Witch"
     }
   ]
 }

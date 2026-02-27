@@ -23,6 +23,11 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Gray Terracotta$(br)• $(bold)Subsurface:$() Light Gray Terracotta$(br)• $(bold)Deep:$() Stone$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "text": "• Stray$(br)• Enderman$(br)• Ghast"
     }
   ]
 }

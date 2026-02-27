@@ -367,6 +367,7 @@ public class PlanetGenerationRunner {
                 }
             )
             .allowPeacefulMobs(false)
+            .enableKoboldsStructures()
             .generate();
 
         // EARTH'S ORBIT - Space station dimension with Earth view below
@@ -796,6 +797,7 @@ public class PlanetGenerationRunner {
                 }
             )
             .allowPeacefulMobs(false)
+            .enableKoboldsStructures()
             .clearBiomes()
             .addBiome("minecraft:desert", -0.7f, -0.5f, 0.3f, 0.0f, 0.0f, 0.0f, "Callisto Craters")
             .skyColor(0x050508)
@@ -991,6 +993,7 @@ public class PlanetGenerationRunner {
                 }
             )
             .allowPeacefulMobs(false)
+            .enableKoboldsStructures()
             .clearBiomes()
             .addBiome("minecraft:desert", -0.5f, -0.9f, 0.3f, 0.0f, 0.0f, 0.0f, "Ceres Mining Zone")
             .skyColor(0x000000)
@@ -1626,6 +1629,7 @@ public class PlanetGenerationRunner {
                 }
             )
             .allowPeacefulMobs(false)
+            .enableKoboldsStructures()
             .clearBiomes()
             .addBiome("minecraft:snowy_taiga", -0.8f, 0.4f, 0.0f, 0.0f, 0.0f, 0.0f, "Glacio Tundra")
             .addBiome("minecraft:frozen_river", -0.9f, 0.5f, -0.2f, 0.0f, 0.0f, 0.0f, "Glacio Frozen Rivers")
@@ -1817,7 +1821,6 @@ public class PlanetGenerationRunner {
             .addMobSpawn("monster", "minecraft:piglin", 4, 1, 2)
             .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .addBornInChaosMob("pumpkin_dunce", 4, 1, 1)
-            .addBornInChaosMob("dunce_pumpkin", 4, 1, 1)
             .addBornInChaosMob("pumpkin_spirit", 3, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()

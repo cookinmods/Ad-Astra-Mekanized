@@ -3471,6 +3471,9 @@ public class PlanetMaker {
                 surfacePage.addProperty("text", surfaceText.toString());
                 pages.add(surfacePage);
 
+                // Page 5+: Wildlife - conditional pages based on installed mods
+                generateWildlifePages(pages);
+
                 entry.add("pages", pages);
 
                 String patchouliPath = "src/main/resources/assets/adastramekanized/patchouli_books/journal/en_us/entries/known_planets/" + name + ".json";
@@ -3479,6 +3482,239 @@ public class PlanetMaker {
             } catch (Exception e) {
                 AdAstraMekanized.LOGGER.error("Failed to generate Patchouli entry for planet: {}", name, e);
             }
+        }
+
+        /**
+         * Generate Wildlife pages for the Patchouli entry.
+         * Uses Patchouli page-level flags so the correct mob list shows based on installed mods.
+         *
+         * For replacement spawns (kobolds replacing silverfish): flag-swapped pages
+         * For additive spawns (BiC/Ribbits added alongside vanilla): flag-swapped pages
+         * For multi-mod planets: swap for primary mod + conditional page for secondary mod
+         * All kobold types shown as "Kobolds", all ribbit types as "Ribbits"
+         */
+        private void generateWildlifePages(JsonArray pages) {
+            // Collect all vanilla mob display names (from mobSpawns, non-modded namespace)
+            java.util.List<String> vanillaMobs = new java.util.ArrayList<>();
+            java.util.List<String> creatureVanillaMobs = new java.util.ArrayList<>();
+            // Collect modded mobs by mod namespace
+            java.util.Map<String, java.util.List<String>> moddedMobsByMod = new java.util.LinkedHashMap<>();
+            java.util.Map<String, java.util.List<String>> moddedCreaturesByMod = new java.util.LinkedHashMap<>();
+
+            for (java.util.Map.Entry<String, java.util.List<MobSpawnEntry>> catEntry : mobSpawns.entrySet()) {
+                String category = catEntry.getKey();
+                for (MobSpawnEntry mob : catEntry.getValue()) {
+                    String namespace = mob.mobId.contains(":") ? mob.mobId.substring(0, mob.mobId.indexOf(":")) : "minecraft";
+                    String displayName = getMobDisplayName(mob.mobId);
+
+                    if (namespace.equals("minecraft")) {
+                        if (category.equals("creature")) {
+                            if (!creatureVanillaMobs.contains(displayName)) creatureVanillaMobs.add(displayName);
+                        } else {
+                            if (!vanillaMobs.contains(displayName)) vanillaMobs.add(displayName);
+                        }
+                    } else {
+                        if (category.equals("creature")) {
+                            moddedCreaturesByMod.computeIfAbsent(namespace, k -> new java.util.ArrayList<>());
+                            String grouped = getGroupedModName(namespace, displayName);
+                            if (!moddedCreaturesByMod.get(namespace).contains(grouped))
+                                moddedCreaturesByMod.get(namespace).add(grouped);
+                        } else {
+                            moddedMobsByMod.computeIfAbsent(namespace, k -> new java.util.ArrayList<>());
+                            String grouped = getGroupedModName(namespace, displayName);
+                            if (!moddedMobsByMod.get(namespace).contains(grouped))
+                                moddedMobsByMod.get(namespace).add(grouped);
+                        }
+                    }
+                }
+            }
+
+            // Also collect vanilla fallbacks from replacement groups
+            java.util.Map<String, java.util.List<String>> replacementVanillaByMod = new java.util.LinkedHashMap<>();
+            java.util.Map<String, java.util.List<String>> replacementModdedByMod = new java.util.LinkedHashMap<>();
+            for (java.util.Map.Entry<String, ModReplacementGroup> groupEntry : modReplacementGroups.entrySet()) {
+                String modId = groupEntry.getKey();
+                ModReplacementGroup group = groupEntry.getValue();
+                java.util.List<String> vanillaNames = new java.util.ArrayList<>();
+                java.util.List<String> moddedNames = new java.util.ArrayList<>();
+                for (java.util.List<MobSpawnEntry> mobs : group.vanillaFallbacks.values()) {
+                    for (MobSpawnEntry mob : mobs) {
+                        String dn = getMobDisplayName(mob.mobId);
+                        if (!vanillaNames.contains(dn)) vanillaNames.add(dn);
+                    }
+                }
+                for (java.util.List<MobSpawnEntry> mobs : group.moddedReplacements.values()) {
+                    for (MobSpawnEntry mob : mobs) {
+                        String namespace = mob.mobId.contains(":") ? mob.mobId.substring(0, mob.mobId.indexOf(":")) : "minecraft";
+                        String dn = namespace.equals("minecraft") ? getMobDisplayName(mob.mobId) : getGroupedModName(namespace, getMobDisplayName(mob.mobId));
+                        if (!moddedNames.contains(dn)) moddedNames.add(dn);
+                    }
+                }
+                replacementVanillaByMod.put(modId, vanillaNames);
+                replacementModdedByMod.put(modId, moddedNames);
+            }
+
+            // Skip if no mobs at all
+            boolean hasMobs = !vanillaMobs.isEmpty() || !creatureVanillaMobs.isEmpty()
+                || !moddedMobsByMod.isEmpty() || !moddedCreaturesByMod.isEmpty()
+                || !modReplacementGroups.isEmpty();
+            if (!hasMobs) return;
+
+            // Determine which mods need conditional pages
+            java.util.Set<String> allMods = new java.util.LinkedHashSet<>();
+            allMods.addAll(modReplacementGroups.keySet());
+            allMods.addAll(moddedMobsByMod.keySet());
+            allMods.addAll(moddedCreaturesByMod.keySet());
+
+            if (allMods.isEmpty()) {
+                // No mods - single unconditional Wildlife page
+                JsonObject wildlifePage = new JsonObject();
+                wildlifePage.addProperty("type", "patchouli:text");
+                wildlifePage.addProperty("title", "Wildlife");
+                wildlifePage.addProperty("text", buildWildlifeText(creatureVanillaMobs, vanillaMobs));
+                pages.add(wildlifePage);
+                return;
+            }
+
+            // Determine primary mod (the one with replacement spawns, or the first additive mod)
+            String primaryMod = null;
+            if (!modReplacementGroups.isEmpty()) {
+                primaryMod = modReplacementGroups.keySet().iterator().next();
+            } else {
+                primaryMod = allMods.iterator().next();
+            }
+            java.util.Set<String> secondaryMods = new java.util.LinkedHashSet<>(allMods);
+            secondaryMods.remove(primaryMod);
+
+            // Build base vanilla mob list (without replacement mobs, those go in fallback)
+            java.util.List<String> baseVanillaHostile = new java.util.ArrayList<>(vanillaMobs);
+            java.util.List<String> baseVanillaPassive = new java.util.ArrayList<>(creatureVanillaMobs);
+
+            // Page A: Without primary mod
+            String primaryModFlag = getModFlag(primaryMod);
+            JsonObject noModPage = new JsonObject();
+            noModPage.addProperty("type", "patchouli:text");
+            noModPage.addProperty("title", "Wildlife");
+            noModPage.addProperty("flag", "!mod:" + primaryModFlag);
+
+            // Vanilla mobs + replacement fallback mobs
+            java.util.List<String> noModPassive = new java.util.ArrayList<>(baseVanillaPassive);
+            java.util.List<String> noModHostile = new java.util.ArrayList<>(baseVanillaHostile);
+            if (replacementVanillaByMod.containsKey(primaryMod)) {
+                for (String name : replacementVanillaByMod.get(primaryMod)) {
+                    if (!noModHostile.contains(name)) noModHostile.add(name);
+                }
+            }
+            noModPage.addProperty("text", buildWildlifeText(noModPassive, noModHostile));
+            pages.add(noModPage);
+
+            // Page B: With primary mod
+            JsonObject withModPage = new JsonObject();
+            withModPage.addProperty("type", "patchouli:text");
+            withModPage.addProperty("title", "Wildlife");
+            withModPage.addProperty("flag", "mod:" + primaryModFlag);
+
+            java.util.List<String> withModPassive = new java.util.ArrayList<>(baseVanillaPassive);
+            java.util.List<String> withModHostile = new java.util.ArrayList<>(baseVanillaHostile);
+            // Add replacement modded mobs
+            if (replacementModdedByMod.containsKey(primaryMod)) {
+                for (String name : replacementModdedByMod.get(primaryMod)) {
+                    if (!withModHostile.contains(name)) withModHostile.add(name);
+                }
+            }
+            // Add additive mobs from primary mod
+            if (moddedMobsByMod.containsKey(primaryMod)) {
+                for (String name : moddedMobsByMod.get(primaryMod)) {
+                    if (!withModHostile.contains(name)) withModHostile.add(name);
+                }
+            }
+            if (moddedCreaturesByMod.containsKey(primaryMod)) {
+                for (String name : moddedCreaturesByMod.get(primaryMod)) {
+                    if (!withModPassive.contains(name)) withModPassive.add(name);
+                }
+            }
+            withModPage.addProperty("text", buildWildlifeText(withModPassive, withModHostile));
+            pages.add(withModPage);
+
+            // Pages C+: Each secondary mod gets its own conditional page
+            for (String secondaryMod : secondaryMods) {
+                JsonObject secPage = new JsonObject();
+                secPage.addProperty("type", "patchouli:text");
+                secPage.addProperty("title", "Wildlife");
+                secPage.addProperty("flag", "mod:" + getModFlag(secondaryMod));
+
+                java.util.List<String> secMobs = new java.util.ArrayList<>();
+                if (moddedMobsByMod.containsKey(secondaryMod)) secMobs.addAll(moddedMobsByMod.get(secondaryMod));
+                if (moddedCreaturesByMod.containsKey(secondaryMod)) secMobs.addAll(moddedCreaturesByMod.get(secondaryMod));
+                if (replacementModdedByMod.containsKey(secondaryMod)) secMobs.addAll(replacementModdedByMod.get(secondaryMod));
+
+                StringBuilder text = new StringBuilder();
+                for (String mob : secMobs) {
+                    text.append("• ").append(mob).append("$(br)");
+                }
+                secPage.addProperty("text", trimTrailingBr(text.toString()));
+                pages.add(secPage);
+            }
+        }
+
+        /**
+         * Build wildlife text with optional Passive/Hostile headers.
+         * Only uses headers if there are both passive and hostile mobs.
+         */
+        private String buildWildlifeText(java.util.List<String> passiveMobs, java.util.List<String> hostileMobs) {
+            StringBuilder text = new StringBuilder();
+            boolean hasPassive = !passiveMobs.isEmpty();
+            boolean hasHostile = !hostileMobs.isEmpty();
+
+            if (hasPassive && hasHostile) {
+                text.append("$(bold)Passive:$()$(br)");
+                for (String mob : passiveMobs) text.append("• ").append(mob).append("$(br)");
+                text.append("$(br2)$(bold)Hostile:$()$(br)");
+                for (String mob : hostileMobs) text.append("• ").append(mob).append("$(br)");
+            } else if (hasHostile) {
+                for (String mob : hostileMobs) text.append("• ").append(mob).append("$(br)");
+            } else if (hasPassive) {
+                for (String mob : passiveMobs) text.append("• ").append(mob).append("$(br)");
+            }
+            return trimTrailingBr(text.toString());
+        }
+
+        /**
+         * Get human-readable display name for a mob ID.
+         */
+        private String getMobDisplayName(String mobId) {
+            String name = mobId.contains(":") ? mobId.substring(mobId.indexOf(":") + 1) : mobId;
+            // Special case for BiC spirit_of_chaos
+            if (name.equals("spiritof_chaos")) return "Spirit of Chaos";
+            return capitalizeWords(name.replace("_", " "));
+        }
+
+        /**
+         * Group mod entities under a single display name where appropriate.
+         * All kobold variants → "Kobolds", all ribbit variants → "Ribbits"
+         */
+        private String getGroupedModName(String namespace, String displayName) {
+            if (namespace.equals("kobolds")) return "Kobolds";
+            if (namespace.equals("ribbits")) return "Ribbits";
+            return displayName;
+        }
+
+        /**
+         * Get the mod flag string for Patchouli conditions.
+         */
+        private String getModFlag(String modNamespace) {
+            // born_in_chaos_v1 is the actual mod ID
+            return modNamespace;
+        }
+
+        /**
+         * Remove trailing $(br) from text.
+         */
+        private String trimTrailingBr(String text) {
+            while (text.endsWith("$(br)")) {
+                text = text.substring(0, text.length() - 5);
+            }
+            return text;
         }
 
         /**

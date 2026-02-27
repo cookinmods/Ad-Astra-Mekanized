@@ -15,12 +15,6 @@
       "maxCount": 1
     },
     {
-      "type": "born_in_chaos_v1:dunce_pumpkin",
-      "weight": 4,
-      "minCount": 1,
-      "maxCount": 1
-    },
-    {
       "type": "born_in_chaos_v1:pumpkin_spirit",
       "weight": 3,
       "minCount": 1,

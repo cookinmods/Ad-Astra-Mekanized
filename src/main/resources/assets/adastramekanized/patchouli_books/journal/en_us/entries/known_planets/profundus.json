@@ -30,6 +30,24 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Cobblestone$(br)• $(bold)Subsurface:$() Stone$(br)• $(bold)Deep:$() Deepslate$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "!mod:kobolds",
+      "text": "• Silverfish$(br)• Cave Spider"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:kobolds",
+      "text": "• Silverfish$(br)• Kobolds"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:born_in_chaos_v1",
+      "text": "• Restless Spirit$(br)• Seared Spirit$(br)• Firelight$(br)• Pumpkin Spirit$(br)• Infernal Spirit$(br)• Dark Vortex$(br)• Spirit of Chaos"
     }
   ]
 }

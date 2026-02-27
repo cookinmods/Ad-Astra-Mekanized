@@ -30,6 +30,18 @@
       "type": "patchouli:text",
       "title": "Surface Composition",
       "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Tuff$(br)• $(bold)Subsurface:$() Basalt$(br)• $(bold)Deep:$() Deepslate$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d30"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "!mod:born_in_chaos_v1",
+      "text": "• Wither Skeleton$(br)• Magma Cube$(br)• Ghast"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wildlife",
+      "flag": "mod:born_in_chaos_v1",
+      "text": "• Wither Skeleton$(br)• Magma Cube$(br)• Ghast$(br)• Door Knight$(br)• Skeleton Thrasher"
     }
   ]
 }
