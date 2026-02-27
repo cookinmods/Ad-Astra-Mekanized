@@ -260,38 +260,15 @@ public class PlanetGenerationRunner {
      */
 
     /**
-     * Configure planets using PlanetMaker builder pattern
+     * Configure planets using PlanetMaker builder pattern.
+     * All planets use vanilla-quality terrain with coordinate shifting for uniqueness.
      *
-     * TECTONIC GENERATION MODE:
-     * For advanced terrain with continental systems, erosion, ridges, and Tectonic features,
-     * use .withTectonicGeneration() to enable the full Tectonic worldgen system.
-     *
-     * Example with Tectonic preset:
+     * Example:
      *   registerPlanet("moon")
-     *       .withTectonicGeneration()
-     *       .withTectonicConfig(NoiseRouterBuilder.TectonicConfig.moon())
+     *       .vanillaQualityCratered()
+     *       .coordinateShift(5000, 5000)
      *       .surfaceBlock("adastramekanized:moon_sand")
      *       .generate();
-     *
-     * Example with custom Tectonic config:
-     *   registerPlanet("mars")
-     *       .withTectonicGeneration()
-     *       .continentalScale(0.004f)
-     *       .erosionScale(0.003f)
-     *       .ridgeScale(0.008f)
-     *       .withMountainSharpness(1.5f)
-     *       .withDesertDunes(15.0f, 200.0f)
-     *       .withIslands(true)
-     *       .surfaceBlock("adastramekanized:mars_sand")
-     *       .generate();
-     *
-     * Tectonic features available:
-     * - .withIslands(true) - Enable island generation
-     * - .withMountainSharpness(float) - Control peak sharpness
-     * - .withDesertDunes(height, wavelength) - Add desert dunes
-     * - .withJunglePillars(height) - Add vertical spires
-     * - .undergroundRivers(true) - Underground water channels
-     * - .lavaTunnels(true) - Underground lava channels
      */
     private static void configurePlanets() {
         // Moon planet - FLAT PLAINS-LIKE TERRAIN with Moon blocks

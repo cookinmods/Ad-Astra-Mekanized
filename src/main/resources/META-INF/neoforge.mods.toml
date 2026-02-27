@@ -125,21 +125,6 @@ ordering = "AFTER"
 side = "BOTH"
 
 
-[[dependencies.adastramekanized]]
-modId = "tectonic"
-type = "required"
-versionRange = "[3.0.16,)"
-ordering = "AFTER"
-side = "BOTH"
-
-# Lithostitched dependency (required by Tectonic)
-[[dependencies.adastramekanized]]
-modId = "lithostitched"
-type = "required"
-versionRange = "[1.5.0,)"
-ordering = "AFTER"
-side = "BOTH"
-
 
 [[dependencies.adastramekanized]]  # Replace with your mod ID
 modId = "chemlibmekanized"

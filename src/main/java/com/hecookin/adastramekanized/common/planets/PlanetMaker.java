@@ -640,31 +640,6 @@ public class PlanetMaker {
         private boolean enableIceCaves = false; // Ice-themed cave generation
         private java.util.List<CaveDecorationEntry> caveDecorations = new java.util.ArrayList<>();
 
-        // Tectonic-inspired terrain features
-        private float verticalTerrainScale = 1.0f; // 0.5-2.0, stretches terrain vertically (Tectonic default: 1.125)
-        private boolean undergroundRivers = false; // Generate underground water channels
-        private boolean rollingHills = false; // Add gentle terrain variation
-        private boolean junglePillars = false; // Generate dramatic vertical spires
-        private boolean lavaTunnels = false; // Generate underground lava channels
-        private float flatTerrainSkew = 0.0f; // 0.0-1.0, controls amount of flat terrain (0=none, 1=mostly flat)
-        private float oceanOffset = -0.8f; // -1.0 to 1.0, controls ocean vs land ratio (negative=more ocean)
-        private float caveDepthCutoffStart = 0.1f; // 0.0-1.0, where caves start to fade out
-        private float caveDepthCutoffSize = 0.1f; // 0.0-1.0, size of cave cutoff gradient
-        private float cheeseCaveAdditive = 0.27f; // -1.0 to 1.0, controls large cave intensity
-        private float noodleCaveAdditive = -0.075f; // -1.0 to 1.0, controls small cave intensity
-        private boolean enableIncreasedHeight = false; // Increase world height limits (experimental)
-        private boolean enableUltrasmooth = false; // Ultra-smooth terrain generation (less dramatic)
-        private int snowStartOffset = 128; // Y level offset where snow starts forming
-
-        // Full Tectonic generation mode
-        private boolean useTectonicGeneration = false; // Enable complete Tectonic worldgen system
-        private boolean enableIslands = false; // Enable island generation in Tectonic mode
-        private float mountainSharpness = 1.0f; // Mountain sharpness multiplier for Tectonic
-        private boolean enableDesertDunes = false; // Enable desert dune features
-        private float duneHeight = 10.0f; // Height of desert dunes
-        private float duneWavelength = 200.0f; // Wavelength of dune patterns
-        private float pillarHeight = 30.0f; // Height of jungle pillars
-
         // Dimension properties
         private int skyColor = 0x78A7FF;
         private int fogColor = 0xC0D8FF;
@@ -695,22 +670,6 @@ public class PlanetMaker {
         private boolean fireDamage = false;
         private float fireDamageAmount = 1.0f;
         private int surfaceTemperature = 15;  // Surface temperature in Celsius (Earth default)
-
-        // Tectonic worldgen configuration system
-        private CraterConfig craterConfig = null;
-        private CanyonConfig canyonConfig = null;
-        private VolcanoConfig volcanoConfig = null;
-        private PolarCapConfig polarCapConfig = null;
-        private DuneConfig duneConfig = null;
-        private MariaConfig mariaConfig = null;
-        private AtmosphereConfig atmosphereEffectsConfig = null;
-        private ScarpConfig scarpConfig = null;
-        private BasinConfig basinConfig = null;
-        private RegolithConfig regolithConfig = null;
-        private java.util.List<BiomeConfigEntry> biomeConfigs = new java.util.ArrayList<>();
-        private BiomeZoneConfig biomeZoneConfig = null;
-        private TectonicNoiseConfig tectonicNoiseConfig = null;
-        private SurfaceRuleConfig surfaceRuleConfig = null;
 
         private PlanetBuilder(String name) {
             this.name = name;
@@ -2999,298 +2958,6 @@ public class PlanetMaker {
             return this;
         }
 
-        // ========== TECTONIC-INSPIRED TERRAIN FEATURES ==========
-
-        /**
-         * Set vertical terrain scaling (Tectonic-inspired)
-         * Stretches terrain vertically for more dramatic height variation
-         * @param scale Vertical scale multiplier (0.5-2.0, default 1.0, Tectonic default 1.125)
-         */
-        public PlanetBuilder verticalTerrainScale(float scale) {
-            this.verticalTerrainScale = Math.max(0.5f, Math.min(2.0f, scale));
-            return this;
-        }
-
-        /**
-         * Enable underground river generation (Tectonic-inspired)
-         * Creates underground water channels for interesting cave systems
-         * @param enabled True to enable underground rivers
-         */
-        public PlanetBuilder undergroundRivers(boolean enabled) {
-            this.undergroundRivers = enabled;
-            return this;
-        }
-
-        /**
-         * Enable rolling hills terrain variation (Tectonic-inspired)
-         * Adds gentle undulating terrain for more natural landscapes
-         * @param enabled True to enable rolling hills
-         */
-        public PlanetBuilder rollingHills(boolean enabled) {
-            this.rollingHills = enabled;
-            return this;
-        }
-
-        /**
-         * Enable jungle pillar generation (Tectonic-inspired)
-         * Creates dramatic vertical stone spires in suitable biomes
-         * @param enabled True to enable jungle pillars
-         */
-        public PlanetBuilder junglePillars(boolean enabled) {
-            this.junglePillars = enabled;
-            return this;
-        }
-
-        /**
-         * Enable lava tunnel generation (Tectonic-inspired)
-         * Creates underground lava channels and tubes
-         * @param enabled True to enable lava tunnels
-         */
-        public PlanetBuilder lavaTunnels(boolean enabled) {
-            this.lavaTunnels = enabled;
-            return this;
-        }
-
-        /**
-         * Set flat terrain skew (Tectonic-inspired)
-         * Controls the amount of flat terrain vs varied terrain
-         * @param skew Flat terrain amount (0.0=no flat terrain, 1.0=mostly flat, default 0.0)
-         */
-        public PlanetBuilder flatTerrainSkew(float skew) {
-            this.flatTerrainSkew = Math.max(0.0f, Math.min(1.0f, skew));
-            return this;
-        }
-
-        /**
-         * Set ocean offset (Tectonic-inspired)
-         * Controls the ocean vs land ratio
-         * @param offset Ocean amount (-1.0=all ocean, 1.0=all land, default -0.8)
-         */
-        public PlanetBuilder oceanOffset(float offset) {
-            this.oceanOffset = Math.max(-1.0f, Math.min(1.0f, offset));
-            return this;
-        }
-
-        /**
-         * Configure cave depth cutoff (Tectonic-inspired)
-         * Controls where caves fade out vertically
-         * @param start Where cave cutoff starts (0.0-1.0, default 0.1)
-         * @param size Size of cutoff gradient (0.0-1.0, default 0.1)
-         */
-        public PlanetBuilder caveDepthCutoff(float start, float size) {
-            this.caveDepthCutoffStart = Math.max(0.0f, Math.min(1.0f, start));
-            this.caveDepthCutoffSize = Math.max(0.0f, Math.min(1.0f, size));
-            return this;
-        }
-
-        /**
-         * Configure cheese cave intensity (Tectonic-inspired)
-         * Controls large open cave system generation
-         * @param additive Cave intensity (-1.0 to 1.0, default 0.27)
-         */
-        public PlanetBuilder cheeseCaveIntensity(float additive) {
-            this.cheeseCaveAdditive = Math.max(-1.0f, Math.min(1.0f, additive));
-            return this;
-        }
-
-        /**
-         * Configure noodle cave intensity (Tectonic-inspired)
-         * Controls small winding tunnel generation
-         * @param additive Cave intensity (-1.0 to 1.0, default -0.075)
-         */
-        public PlanetBuilder noodleCaveIntensity(float additive) {
-            this.noodleCaveAdditive = Math.max(-1.0f, Math.min(1.0f, additive));
-            return this;
-        }
-
-        /**
-         * Enable increased world height (Tectonic-inspired)
-         * Experimental feature to increase world height limits
-         * @param enabled True to enable increased height
-         */
-        public PlanetBuilder increasedHeight(boolean enabled) {
-            this.enableIncreasedHeight = enabled;
-            if (enabled) {
-                // Automatically adjust world height when enabled
-                this.minY = -128;
-                this.worldHeight = 512;
-            }
-            return this;
-        }
-
-        /**
-         * Enable ultrasmooth terrain (Tectonic-inspired)
-         * Creates smoother, less dramatic terrain
-         * @param enabled True to enable ultrasmooth
-         */
-        public PlanetBuilder ultrasmooth(boolean enabled) {
-            this.enableUltrasmooth = enabled;
-            return this;
-        }
-
-        /**
-         * Set snow start offset (Tectonic-inspired)
-         * Y level offset where snow begins forming
-         * @param offset Snow start Y offset (default 128)
-         */
-        public PlanetBuilder snowStartOffset(int offset) {
-            this.snowStartOffset = offset;
-            return this;
-        }
-
-        /**
-         * Apply a Tectonic-inspired preset configuration
-         * Combines multiple features for common terrain styles
-         * @param preset Preset name: "enhanced_earth", "alien_world", "volcanic", "frozen"
-         */
-        public PlanetBuilder tectonicPreset(String preset) {
-            switch (preset.toLowerCase()) {
-                case "enhanced_earth":
-                    // Earth-like with Tectonic enhancements
-                    verticalTerrainScale(1.125f);
-                    undergroundRivers(true);
-                    rollingHills(true);
-                    flatTerrainSkew(0.1f);
-                    oceanOffset(-0.8f);
-                    break;
-
-                case "alien_world":
-                    // Dramatic alien terrain
-                    verticalTerrainScale(1.4f);
-                    rollingHills(false);
-                    flatTerrainSkew(0.0f);
-                    oceanOffset(-0.5f);
-                    junglePillars(true);
-                    cheeseCaveIntensity(0.4f);
-                    break;
-
-                case "volcanic":
-                    // Volcanic world with lava features
-                    verticalTerrainScale(1.3f);
-                    lavaTunnels(true);
-                    undergroundRivers(false);
-                    flatTerrainSkew(0.05f);
-                    oceanOffset(-0.3f);
-                    cheeseCaveIntensity(0.35f);
-                    break;
-
-                case "frozen":
-                    // Icy world with smooth terrain
-                    verticalTerrainScale(1.1f);
-                    ultrasmooth(true);
-                    rollingHills(true);
-                    flatTerrainSkew(0.2f);
-                    oceanOffset(-0.9f);
-                    snowStartOffset(64);
-                    break;
-
-                case "extreme_mountains":
-                    // Maximum vertical drama
-                    verticalTerrainScale(1.8f);
-                    rollingHills(false);
-                    flatTerrainSkew(0.0f);
-                    oceanOffset(0.3f);
-                    junglePillars(true);
-                    break;
-
-                case "flat_plains":
-                    // Mostly flat with gentle variation
-                    verticalTerrainScale(0.8f);
-                    ultrasmooth(true);
-                    rollingHills(true);
-                    flatTerrainSkew(0.7f);
-                    oceanOffset(-0.6f);
-                    break;
-            }
-            return this;
-        }
-
-        /**
-         * Enable full Tectonic worldgen system with advanced density functions.
-         * This uses the complete NoiseRouterBuilder for Tectonic-quality terrain.
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withTectonicGeneration() {
-            this.useTectonicGeneration = true;
-            return this;
-        }
-
-        /**
-         * Configure islands in Tectonic generation mode.
-         * @param enable Whether to generate islands
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withIslands(boolean enable) {
-            this.enableIslands = enable;
-            return this;
-        }
-
-        /**
-         * Configure mountain sharpness for Tectonic generation.
-         * @param sharpness Sharpness multiplier (0.1-2.0, default 1.0)
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withMountainSharpness(float sharpness) {
-            this.mountainSharpness = sharpness;
-            return this;
-        }
-
-        /**
-         * Enable desert dune generation.
-         * @param height Dune height in blocks
-         * @param wavelength Dune wavelength in blocks
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withDesertDunes(float height, float wavelength) {
-            this.enableDesertDunes = true;
-            this.duneHeight = height;
-            this.duneWavelength = wavelength;
-            return this;
-        }
-
-        /**
-         * Enable jungle pillars with specified height.
-         * @param height Pillar height in blocks
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withJunglePillars(float height) {
-            this.junglePillars = true;
-            this.pillarHeight = height;
-            return this;
-        }
-
-        /**
-         * Configure complete Tectonic terrain using preset.
-         * @param config TectonicConfig preset
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withTectonicConfig(com.hecookin.adastramekanized.worldgen.builder.NoiseRouterBuilder.TectonicConfig config) {
-            this.useTectonicGeneration = true;
-            this.continentalScale = config.continentScale;
-            this.erosionScale = config.erosionScale;
-            this.ridgeScale = config.ridgeScale;
-            this.mountainSharpness = config.mountainSharpness;
-            this.enableIslands = config.enableIslands;
-            this.enableCheeseCaves = config.cheeseCaves;
-            this.enableNoodleCaves = config.noodleCaves;
-            this.undergroundRivers = config.undergroundRivers;
-            this.lavaTunnels = config.lavaTunnels;
-            this.enableDesertDunes = config.desertDunes;
-            this.duneHeight = config.duneHeight;
-            this.duneWavelength = config.duneWavelength;
-            this.junglePillars = config.junglePillars;
-            this.pillarHeight = config.pillarHeight;
-            return this;
-        }
-
-        /**
-         * Check if this planet uses full Tectonic generation.
-         * @return true if Tectonic generation is enabled
-         */
-        public boolean usesTectonicGeneration() {
-            return useTectonicGeneration;
-        }
-
         // ========== GETTERS FOR DIMENSION EFFECTS FALLBACK ==========
 
         /**
@@ -3806,149 +3473,6 @@ public class PlanetMaker {
                 }
                 sb.append("$(br)");
             }
-        }
-
-        // Tectonic worldgen configuration methods
-
-        /**
-         * Configure crater generation for this planet
-         * @param config Crater configuration with frequency, size, depth, rim properties
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withCraters(CraterConfig config) {
-            this.craterConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure canyon generation for this planet
-         * @param config Canyon configuration with depth, width, sinuosity, branching
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withCanyons(CanyonConfig config) {
-            this.canyonConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure volcano generation for this planet
-         * @param config Volcano configuration with height, slope, caldera, lava flows
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withVolcanoes(VolcanoConfig config) {
-            this.volcanoConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure polar cap generation for this planet
-         * @param config Polar cap configuration with size, thickness, composition
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withPolarCaps(PolarCapConfig config) {
-            this.polarCapConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure dune generation for this planet
-         * @param config Dune configuration with wavelength, height, orientation
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withDunes(DuneConfig config) {
-            this.duneConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure maria (dark plains) generation for this planet
-         * @param config Maria configuration with size, depth, composition
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withMaria(MariaConfig config) {
-            this.mariaConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure atmospheric visual effects for this planet
-         * @param config Atmosphere configuration with haze, fog, color effects
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withAtmosphericEffects(AtmosphereConfig config) {
-            this.atmosphereEffectsConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure scarp (cliff face) generation for this planet
-         * @param config Scarp configuration with height, steepness, frequency
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withScarps(ScarpConfig config) {
-            this.scarpConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure basin generation for this planet
-         * @param config Basin configuration with size, depth, features
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withBasins(BasinConfig config) {
-            this.basinConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure regolith layer depth for this planet
-         * @param config Regolith configuration with min/max depth, variation
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withRegolithDepth(RegolithConfig config) {
-            this.regolithConfig = config;
-            return this;
-        }
-
-        /**
-         * Add a custom biome with detailed configuration
-         * @param biomeName Biome identifier (will be prefixed with planet name)
-         * @param config Biome configuration with temperature, colors, blocks, features
-         * @return this builder for chaining
-         */
-        public PlanetBuilder addBiome(String biomeName, BiomeConfig config) {
-            this.biomeConfigs.add(new BiomeConfigEntry(biomeName, config));
-            return this;
-        }
-
-        /**
-         * Configure biome distribution zones (altitude, noise-based, feature-based)
-         * @param config Biome zone configuration with zone definitions
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withBiomeZones(BiomeZoneConfig config) {
-            this.biomeZoneConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure Tectonic noise integration
-         * @param config Tectonic noise configuration with continents, erosion, ridges
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withTectonicNoise(TectonicNoiseConfig config) {
-            this.tectonicNoiseConfig = config;
-            return this;
-        }
-
-        /**
-         * Configure custom surface rules for terrain generation
-         * @param config Surface rule configuration with biome-specific rules
-         * @return this builder for chaining
-         */
-        public PlanetBuilder withSurfaceRules(SurfaceRuleConfig config) {
-            this.surfaceRuleConfig = config;
-            return this;
         }
 
         /**
@@ -5566,17 +5090,8 @@ public class PlanetMaker {
             noiseRouter.addProperty("vein_gap", planet.vanillaNoiseReference + "/noise_router/vein_gap");
             noiseSettings.add("noise_router", noiseRouter);
         } else {
-            // Legacy custom noise generation (complex and error-prone)
-            JsonObject noiseRouter;
-            if (planet.useTectonicGeneration) {
-                // Use advanced Tectonic noise router
-                noiseRouter = createTectonicNoiseRouter(planet);
-                // Generate additional Tectonic files
-                generateTectonicFiles(planet);
-            } else {
-                // Use simple noise router
-                noiseRouter = createNoiseRouter(planet);
-            }
+            // Legacy custom noise generation
+            JsonObject noiseRouter = createNoiseRouter(planet);
             noiseSettings.add("noise_router", noiseRouter);
         }
 
@@ -5724,16 +5239,7 @@ public class PlanetMaker {
         continentalnessNoise.addProperty("shift_x", "minecraft:shift_x");
         continentalnessNoise.addProperty("shift_y", 0);
         continentalnessNoise.addProperty("shift_z", "minecraft:shift_z");
-        // Apply ocean offset (Tectonic-inspired) to continentalness
-        if (planet.oceanOffset != -0.8f) {
-            JsonObject offsetContinentalness = new JsonObject();
-            offsetContinentalness.addProperty("type", "minecraft:add");
-            offsetContinentalness.add("argument1", continentalnessNoise);
-            offsetContinentalness.addProperty("argument2", planet.oceanOffset);
-            mulContinentalness.add("argument1", offsetContinentalness);
-        } else {
-            mulContinentalness.add("argument1", continentalnessNoise);
-        }
+        mulContinentalness.add("argument1", continentalnessNoise);
 
         mulContinentalness.addProperty("argument2", getSeedVariation(planet, "height_var1", planet.heightVariation1 * planet.depthFactor * planet.terrainFactor, planet.heightVariation1 * 0.25f));
         addArgument1.add("argument2", mulContinentalness);
@@ -5943,7 +5449,7 @@ public class PlanetMaker {
     }
 
     /**
-     * Create base terrain (Tectonic's "sloped_cheese" equivalent)
+     * Create base terrain ("sloped_cheese" equivalent)
      * Combines continentalness and erosion noise for core terrain shape
      */
     private static JsonObject createBaseTerrain(PlanetBuilder planet) {
@@ -5964,15 +5470,7 @@ public class PlanetMaker {
         continentalnessNoise.addProperty("shift_y", 0);
         continentalnessNoise.addProperty("shift_z", "minecraft:shift_z");
 
-        if (planet.oceanOffset != -0.8f) {
-            JsonObject offsetContinentalness = new JsonObject();
-            offsetContinentalness.addProperty("type", "minecraft:add");
-            offsetContinentalness.add("argument1", continentalnessNoise);
-            offsetContinentalness.addProperty("argument2", planet.oceanOffset);
-            mulContinentalness.add("argument1", offsetContinentalness);
-        } else {
-            mulContinentalness.add("argument1", continentalnessNoise);
-        }
+        mulContinentalness.add("argument1", continentalnessNoise);
 
         mulContinentalness.addProperty("argument2", getSeedVariation(planet, "height_var3",
             planet.heightVariation3, planet.heightVariation3 * 0.25f));
@@ -6004,98 +5502,12 @@ public class PlanetMaker {
      * Applies vertical terrain scaling and shaping factors
      */
     private static float getUpperSlopeFactor(PlanetBuilder planet) {
-        float effectiveShaping = planet.terrainShapingFactor * (1.0f - (planet.flatTerrainSkew * 0.5f));
-        return effectiveShaping * planet.verticalTerrainScale;
+        return planet.terrainShapingFactor;
     }
 
-    /**
-     * Create underground rivers carving (Tectonic methodology)
-     * Returns density function that carves rivers (negative values)
-     */
-    private static JsonObject createUndergroundRivers(PlanetBuilder planet) {
-        if (!planet.undergroundRivers) {
-            JsonObject noop = new JsonObject();
-            noop.addProperty("type", "minecraft:constant");
-            noop.addProperty("argument", 0.0);
-            return noop;
-        }
-
-        JsonObject riverDensity = new JsonObject();
-        riverDensity.addProperty("type", "minecraft:mul");
-
-        JsonObject riverNoise = new JsonObject();
-        riverNoise.addProperty("type", "minecraft:shifted_noise");
-        riverNoise.addProperty("noise", "minecraft:ridge");
-        riverNoise.addProperty("xz_scale", 1.0);
-        riverNoise.addProperty("y_scale", 0.3);
-        riverNoise.addProperty("shift_x", "minecraft:shift_x");
-        riverNoise.addProperty("shift_y", 0);
-        riverNoise.addProperty("shift_z", "minecraft:shift_z");
-        riverDensity.add("argument1", riverNoise);
-        riverDensity.addProperty("argument2", -0.05);
-
-        return riverDensity;
-    }
 
     /**
-     * Create lava tunnels carving (Tectonic methodology)
-     * Returns density function that carves tunnels (negative values)
-     */
-    private static JsonObject createLavaTunnels(PlanetBuilder planet) {
-        if (!planet.lavaTunnels) {
-            JsonObject noop = new JsonObject();
-            noop.addProperty("type", "minecraft:constant");
-            noop.addProperty("argument", 0.0);
-            return noop;
-        }
-
-        JsonObject tunnelDensity = new JsonObject();
-        tunnelDensity.addProperty("type", "minecraft:mul");
-
-        JsonObject tunnelNoise = new JsonObject();
-        tunnelNoise.addProperty("type", "minecraft:shifted_noise");
-        tunnelNoise.addProperty("noise", "minecraft:ridge");
-        tunnelNoise.addProperty("xz_scale", 0.8);
-        tunnelNoise.addProperty("y_scale", 0.1);
-        tunnelNoise.addProperty("shift_x", "minecraft:shift_x");
-        tunnelNoise.addProperty("shift_y", 0);
-        tunnelNoise.addProperty("shift_z", "minecraft:shift_z");
-        tunnelDensity.add("argument1", tunnelNoise);
-        tunnelDensity.addProperty("argument2", -0.08);
-
-        return tunnelDensity;
-    }
-
-    /**
-     * Create rolling hills variation (additive, not carving)
-     */
-    private static JsonObject createRollingHills(PlanetBuilder planet) {
-        if (!planet.rollingHills) {
-            JsonObject noop = new JsonObject();
-            noop.addProperty("type", "minecraft:constant");
-            noop.addProperty("argument", 0.0);
-            return noop;
-        }
-
-        JsonObject hillsDensity = new JsonObject();
-        hillsDensity.addProperty("type", "minecraft:mul");
-
-        JsonObject hillsNoise = new JsonObject();
-        hillsNoise.addProperty("type", "minecraft:shifted_noise");
-        hillsNoise.addProperty("noise", "minecraft:continentalness");
-        hillsNoise.addProperty("xz_scale", 8.0);
-        hillsNoise.addProperty("y_scale", 0);
-        hillsNoise.addProperty("shift_x", "minecraft:shift_x");
-        hillsNoise.addProperty("shift_y", 0);
-        hillsNoise.addProperty("shift_z", "minecraft:shift_z");
-        hillsDensity.add("argument1", hillsNoise);
-        hillsDensity.addProperty("argument2", 0.05);
-
-        return hillsDensity;
-    }
-
-    /**
-     * Create final density using Tectonic's modular composition methodology
+     * Create final density using modular composition
      *
      * Structure: add(
      *   min(
@@ -6141,7 +5553,7 @@ public class PlanetMaker {
         JsonObject yGradient = new JsonObject();
         yGradient.addProperty("type", "minecraft:y_clamped_gradient");
         yGradient.addProperty("from_y", planet.gradientFromY);
-        yGradient.addProperty("to_y", planet.minY + 24);  // Tectonic uses -40 for bottom cutoff
+        yGradient.addProperty("to_y", planet.minY + 24);
         yGradient.addProperty("from_value", 0.0);
         yGradient.addProperty("to_value", 1.0);
         yGradientBottom.add("argument1", yGradient);
@@ -6183,7 +5595,7 @@ public class PlanetMaker {
         squeezed.add("argument", mulBy064);
         minWithNoodle.add("argument1", squeezed);
 
-        // Noodle caves (applied separately, Tectonic style)
+        // Noodle caves (applied separately)
         if (planet.enableNoodleCaves) {
             minWithNoodle.add("argument2", createCaveDensity(planet));
         } else {
@@ -6193,209 +5605,9 @@ public class PlanetMaker {
             minWithNoodle.add("argument2", noNoodle);
         }
 
-        outerAdd.add("argument1", minWithNoodle);
-
-        // Right side: add(underground_rivers, lava_tunnels, rolling_hills)
-        JsonObject carvingFeatures = new JsonObject();
-        carvingFeatures.addProperty("type", "minecraft:add");
-
-        JsonObject riversAndTunnels = new JsonObject();
-        riversAndTunnels.addProperty("type", "minecraft:add");
-        riversAndTunnels.add("argument1", createUndergroundRivers(planet));
-        riversAndTunnels.add("argument2", createLavaTunnels(planet));
-
-        carvingFeatures.add("argument1", riversAndTunnels);
-        carvingFeatures.add("argument2", createRollingHills(planet));
-
-        outerAdd.add("argument2", carvingFeatures);
-
-        return outerAdd;
+        return minWithNoodle;
     }
 
-    /**
-     * Create Tectonic noise router using NoiseRouterBuilder for advanced terrain.
-     */
-    private static JsonObject createTectonicNoiseRouter(PlanetBuilder planet) {
-        AdAstraMekanized.LOGGER.info("Generating Tectonic noise router for planet: {}", planet.name);
-
-        // Create Tectonic configuration
-        com.hecookin.adastramekanized.worldgen.builder.NoiseRouterBuilder.TectonicConfig config =
-            new com.hecookin.adastramekanized.worldgen.builder.NoiseRouterBuilder.TectonicConfig();
-
-        // Apply planet settings to config
-        config.continentScale = planet.continentalScale;
-        config.erosionScale = planet.erosionScale;
-        config.ridgeScale = planet.ridgeScale;
-        config.mountainSharpness = planet.mountainSharpness;
-        config.enableIslands = planet.enableIslands;
-        config.cheeseCaves = planet.enableCheeseCaves;
-        config.noodleCaves = planet.enableNoodleCaves;
-        config.undergroundRivers = planet.undergroundRivers;
-        config.lavaTunnels = planet.lavaTunnels;
-        config.desertDunes = planet.enableDesertDunes;
-        config.duneHeight = planet.duneHeight;
-        config.duneWavelength = planet.duneWavelength;
-        config.junglePillars = planet.junglePillars;
-        config.pillarHeight = planet.pillarHeight;
-
-        // Build the complete Tectonic noise router
-        com.hecookin.adastramekanized.worldgen.builder.NoiseRouterBuilder builder =
-            com.hecookin.adastramekanized.worldgen.builder.NoiseRouterBuilder.createTectonicTerrain(
-                planet.name,
-                planet.minY,
-                planet.minY + planet.worldHeight,
-                planet.seaLevel,
-                config
-            );
-
-        return builder.build();
-    }
-
-    /**
-     * Generate additional Tectonic files (noise definitions and density functions).
-     */
-    private static void generateTectonicFiles(PlanetBuilder planet) {
-        try {
-            AdAstraMekanized.LOGGER.info("Generating Tectonic worldgen files for planet: {}", planet.name);
-
-            // Create directories for Tectonic files
-            new File(RESOURCES_PATH + "worldgen/noise").mkdirs();
-            new File(RESOURCES_PATH + "worldgen/density_function/" + planet.name).mkdirs();
-
-            // Generate noise definitions
-            generateTectonicNoiseDefinitions(planet);
-
-            // Generate density functions
-            generateTectonicDensityFunctions(planet);
-
-            AdAstraMekanized.LOGGER.info("Successfully generated Tectonic files for: {}", planet.name);
-        } catch (Exception e) {
-            AdAstraMekanized.LOGGER.error("Failed to generate Tectonic files for planet: {}", planet.name, e);
-        }
-    }
-
-    /**
-     * Helper method to create a JsonArray from double values.
-     */
-    private static com.google.gson.JsonArray createAmplitudesArray(double... values) {
-        com.google.gson.JsonArray array = new com.google.gson.JsonArray();
-        for (double value : values) {
-            array.add(value);
-        }
-        return array;
-    }
-
-    /**
-     * Generate Tectonic noise definitions for a planet.
-     */
-    private static void generateTectonicNoiseDefinitions(PlanetBuilder planet) throws IOException {
-        // Generate continents noise (matching Tectonic's exact settings)
-        JsonObject continentsNoise = new JsonObject();
-        continentsNoise.addProperty("firstOctave", -10);  // Was -9, now -10 for larger scale
-        continentsNoise.add("amplitudes", createAmplitudesArray(1.75, 1.0, 2.0, 3.0, 2.0, 2.0, 1.0, 1.0, 1.0));
-        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_continents.json", continentsNoise);
-
-        // Generate islands noise (always create for noise router compatibility)
-        JsonObject islandsNoise = new JsonObject();
-        islandsNoise.addProperty("firstOctave", -9);
-        islandsNoise.add("amplitudes", createAmplitudesArray(1.0, 1.0, 0.0, 0.0, 0.0, 0.0));
-        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_islands.json", islandsNoise);
-
-        // Generate erosion noise (matching Tectonic's exact settings)
-        JsonObject erosionNoise = new JsonObject();
-        erosionNoise.addProperty("firstOctave", -10);  // Was -9, now -10 for larger scale
-        erosionNoise.add("amplitudes", createAmplitudesArray(2.0, 1.75, 1.5, 1.5, 1.3, 1.0, 1.0, 1.0, 1.0));
-        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_erosion.json", erosionNoise);
-
-        // Generate ridges noise (matching Tectonic's exact settings)
-        JsonObject ridgesNoise = new JsonObject();
-        ridgesNoise.addProperty("firstOctave", -8);  // Was -7, now -8 for larger scale
-        ridgesNoise.add("amplitudes", createAmplitudesArray(1.0, 2.0, 1.0));
-        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_ridges.json", ridgesNoise);
-
-        // Generate temperature noise
-        JsonObject temperatureNoise = new JsonObject();
-        temperatureNoise.addProperty("firstOctave", -10);
-        temperatureNoise.add("amplitudes", createAmplitudesArray(1.5, 0.0, 1.0, 0.0, 0.0, 0.0));
-        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_temperature.json", temperatureNoise);
-
-        // Generate vegetation noise
-        JsonObject vegetationNoise = new JsonObject();
-        vegetationNoise.addProperty("firstOctave", -8);
-        vegetationNoise.add("amplitudes", createAmplitudesArray(1.0, 1.0, 0.0, 0.0, 0.0, 0.0));
-        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_vegetation.json", vegetationNoise);
-
-        // Generate jaggedness noise (always create for noise router compatibility)
-        JsonObject jaggednessNoise = new JsonObject();
-        jaggednessNoise.addProperty("firstOctave", -15);
-        jaggednessNoise.add("amplitudes", createAmplitudesArray(1.0, 1.0, 1.0, 0.0));
-        writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_jagged.json", jaggednessNoise);
-
-        // Generate cave noises
-        if (planet.enableCheeseCaves) {
-            JsonObject cheeseNoise = new JsonObject();
-            cheeseNoise.addProperty("firstOctave", -8);
-            cheeseNoise.add("amplitudes", createAmplitudesArray(1.0, 0.5, 0.5, 0.5));
-            writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_cave_cheese.json", cheeseNoise);
-        }
-
-        // Generate underground river noise
-        if (planet.undergroundRivers) {
-            JsonObject riverNoise = new JsonObject();
-            riverNoise.addProperty("firstOctave", -6);
-            riverNoise.add("amplitudes", createAmplitudesArray(1.0, 1.0, 1.0));
-            writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_underground_river.json", riverNoise);
-        }
-
-        // Generate lava tunnel noise
-        if (planet.lavaTunnels) {
-            JsonObject tunnelNoise = new JsonObject();
-            tunnelNoise.addProperty("firstOctave", -7);
-            tunnelNoise.add("amplitudes", createAmplitudesArray(1.0, 1.0));
-            writeJsonFile(RESOURCES_PATH + "worldgen/noise/" + planet.name + "_lava_tunnel.json", tunnelNoise);
-        }
-
-        AdAstraMekanized.LOGGER.info("Generated Tectonic noise definitions for: {}", planet.name);
-    }
-
-    /**
-     * Generate Tectonic density function files for a planet.
-     */
-    private static void generateTectonicDensityFunctions(PlanetBuilder planet) throws IOException {
-        // Generate raw continents density function
-        JsonObject rawContinents = new JsonObject();
-        rawContinents.addProperty("type", "minecraft:noise");
-        rawContinents.addProperty("noise", "adastramekanized:" + planet.name + "_continents");
-        rawContinents.addProperty("xz_scale", planet.continentalScale);
-        rawContinents.addProperty("y_scale", 0.0);
-        writeJsonFile(RESOURCES_PATH + "worldgen/density_function/" + planet.name + "/noise/raw_continents.json", rawContinents);
-
-        // Generate raw erosion density function
-        JsonObject rawErosion = new JsonObject();
-        rawErosion.addProperty("type", "minecraft:noise");
-        rawErosion.addProperty("noise", "adastramekanized:" + planet.name + "_erosion");
-        rawErosion.addProperty("xz_scale", planet.erosionScale);
-        rawErosion.addProperty("y_scale", 0.0);
-        writeJsonFile(RESOURCES_PATH + "worldgen/density_function/" + planet.name + "/noise/raw_erosion.json", rawErosion);
-
-        // Generate raw ridges density function
-        JsonObject rawRidges = new JsonObject();
-        rawRidges.addProperty("type", "minecraft:noise");
-        rawRidges.addProperty("noise", "adastramekanized:" + planet.name + "_ridges");
-        rawRidges.addProperty("xz_scale", planet.ridgeScale);
-        rawRidges.addProperty("y_scale", 0.0);
-        writeJsonFile(RESOURCES_PATH + "worldgen/density_function/" + planet.name + "/noise/raw_ridges.json", rawRidges);
-
-        // Generate vegetation density function (for spline coordinates)
-        JsonObject vegetationDF = new JsonObject();
-        vegetationDF.addProperty("type", "minecraft:noise");
-        vegetationDF.addProperty("noise", "adastramekanized:" + planet.name + "_vegetation");
-        vegetationDF.addProperty("xz_scale", 0.25);
-        vegetationDF.addProperty("y_scale", 0.0);
-        writeJsonFile(RESOURCES_PATH + "worldgen/density_function/" + planet.name + "_vegetation.json", vegetationDF);
-
-        AdAstraMekanized.LOGGER.info("Generated Tectonic density functions for: {}", planet.name);
-    }
 
     /**
      * Create surface rule using Moon's proven pattern with configurable blocks.
@@ -7635,10 +6847,13 @@ public class PlanetMaker {
             AdAstraMekanized.LOGGER.info("Generated Ribbits village biome tag for planet '{}'", planet.name);
         }
 
-        // Generate Kobolds structure biome tag
+        // Generate Kobolds structure biome tag and structure override
         if (planet.enableKoboldsStructures) {
-            generateModdedStructureBiomeTag("kobolds", "tags/worldgen/biome", "kobold_den_biomes", planetBiomes);
-            AdAstraMekanized.LOGGER.info("Generated Kobolds den biome tag for planet '{}'", planet.name);
+            // Add planet biomes to kobold_den_biomes tag (includes #minecraft:is_overworld to preserve overworld spawning)
+            generateKoboldsDenBiomeTag(planetBiomes);
+            // Override kobold_den structure to use #kobolds:kobold_den_biomes instead of #minecraft:is_overworld
+            generateKoboldsDenStructureOverride();
+            AdAstraMekanized.LOGGER.info("Generated Kobolds den biome tag and structure override for planet '{}'", planet.name);
         }
 
         // Generate WhenDungeonsArise structure biome tags
@@ -7694,6 +6909,87 @@ public class PlanetMaker {
         tagFile.add("values", values);
 
         writeJsonFile(filePath, tagFile);
+    }
+
+    /**
+     * Generate the kobold_den_biomes tag with #minecraft:is_overworld included.
+     * The original kobold_den structure uses #minecraft:is_overworld as its biome filter,
+     * but we override it to use #kobolds:kobold_den_biomes. Including #minecraft:is_overworld
+     * in this tag preserves overworld den spawning while also adding our planet biomes.
+     */
+    private static void generateKoboldsDenBiomeTag(java.util.List<String> planetBiomes) throws IOException {
+        String dirPath = RESOURCES_PATH.replace("adastramekanized", "kobolds") + "tags/worldgen/biome";
+        new File(dirPath).mkdirs();
+
+        String filePath = dirPath + "/kobold_den_biomes.json";
+        java.util.Set<String> allValues = new java.util.LinkedHashSet<>();
+
+        // Always include #minecraft:is_overworld so dens still spawn in overworld biomes
+        allValues.add("#minecraft:is_overworld");
+
+        // Read existing file if present to merge planet biomes from multiple planets
+        File existingFile = new File(filePath);
+        if (existingFile.exists()) {
+            try (java.io.FileReader reader = new java.io.FileReader(existingFile)) {
+                JsonObject existing = new com.google.gson.Gson().fromJson(reader, JsonObject.class);
+                if (existing != null && existing.has("values")) {
+                    JsonArray existingValues = existing.getAsJsonArray("values");
+                    for (int i = 0; i < existingValues.size(); i++) {
+                        allValues.add(existingValues.get(i).getAsString());
+                    }
+                }
+            } catch (Exception e) {
+                // If reading fails, start fresh with just overworld tag
+            }
+        }
+
+        // Add new planet biomes
+        allValues.addAll(planetBiomes);
+
+        JsonObject tagFile = new JsonObject();
+        tagFile.addProperty("replace", false);
+        JsonArray values = new JsonArray();
+        for (String value : allValues) {
+            values.add(value);
+        }
+        tagFile.add("values", values);
+
+        writeJsonFile(filePath, tagFile);
+    }
+
+    /**
+     * Generate a structure override for kobold_den that uses #kobolds:kobold_den_biomes
+     * instead of #minecraft:is_overworld. This allows kobold dens to spawn on planets
+     * whose biomes are added to the kobold_den_biomes tag.
+     * Only generated once (idempotent) since the structure definition is static.
+     */
+    private static void generateKoboldsDenStructureOverride() throws IOException {
+        String dirPath = RESOURCES_PATH.replace("adastramekanized", "kobolds") + "worldgen/structure";
+        new File(dirPath).mkdirs();
+
+        String filePath = dirPath + "/kobold_den.json";
+
+        JsonObject structure = new JsonObject();
+        structure.addProperty("type", "kobolds:kobold_den");
+        structure.addProperty("start_pool", "kobolds:kobold_den");
+        structure.addProperty("biomes", "#kobolds:kobold_den_biomes");
+        structure.addProperty("step", "underground_structures");
+        structure.addProperty("terrain_adaptation", "beard_box");
+        structure.addProperty("liquid_settings", "ignore_waterlogging");
+
+        JsonObject startHeight = new JsonObject();
+        startHeight.addProperty("type", "minecraft:uniform");
+        JsonObject minInclusive = new JsonObject();
+        minInclusive.addProperty("absolute", 12);
+        startHeight.add("min_inclusive", minInclusive);
+        JsonObject maxInclusive = new JsonObject();
+        maxInclusive.addProperty("absolute", 32);
+        startHeight.add("max_inclusive", maxInclusive);
+        structure.add("start_height", startHeight);
+
+        structure.add("spawn_overrides", new JsonObject());
+
+        writeJsonFile(filePath, structure);
     }
 
     /**

@@ -19,7 +19,6 @@ import com.hecookin.adastramekanized.common.events.ModdedMobSpawnController;
 import com.hecookin.adastramekanized.integration.ModIntegrationManager;
 import com.hecookin.adastramekanized.worldgen.biome.MoonBiomes;
 import com.hecookin.adastramekanized.worldgen.biome.PlanetBiomeRegistry;
-import com.hecookin.adastramekanized.worldgen.integration.TectonicNeoForgeIntegration;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -75,9 +74,6 @@ public class AdAstraMekanized {
 
         // Register planet biome system
         PlanetBiomeRegistry.register(modEventBus);
-
-        // Initialize Tectonic worldgen integration
-        TectonicNeoForgeIntegration.initialize(modEventBus);
 
         // Register mod setup
         modEventBus.addListener(this::commonSetup);

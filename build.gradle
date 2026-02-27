@@ -20,7 +20,7 @@ repositories {
     // ModMaven for Mekanism API
     maven { url 'https://modmaven.dev/' }
 
-    // CurseForge Maven for Tectonic and other mods
+    // CurseForge Maven for mod dependencies
     maven {
         name = 'CurseMaven'
         url = 'https://cursemaven.com'
@@ -158,12 +158,9 @@ dependencies {
     localRuntime "curse.maven:create-328085:6323264"
     localRuntime "curse.maven:createCraftsAndAdditions-439890:6445614"
 
-    // TECTONIC WORLDGEN SYSTEM (REQUIRED dependencies for planet generation)
-    // Tectonic for NeoForge 1.21.1
-    implementation "curse.maven:tectonic-686836:7128220"
 
-    // Lithostitched (required by Tectonic) - using latest
-    implementation "curse.maven:lithostitched-936015:7063201"
+    localRuntime "curse.maven:structureCompass-319598:5774341"
+
 
     implementation "curse.maven:BornInChaos-686437:7150215"
 
@@ -187,7 +184,6 @@ dependencies {
     implementation "curse.maven:ribbits-622967:6988284"
     implementation "curse.maven:yungsAPI-1015100:6715463" //ribbits dependency
 
-    implementation "curse.maven:structureCompass-319598:5774341"
 
 
 

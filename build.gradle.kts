@@ -159,12 +159,6 @@ dependencies {
     compileOnly("mezz.jei:jei-1.21.1-neoforge-api:19.21.0.246")
     runtimeOnly("mezz.jei:jei-1.21.1-neoforge:19.21.0.246")
 
-    // TECTONIC WORLDGEN SYSTEM (REQUIRED dependencies for planet generation)
-    // Tectonic for NeoForge 1.21.1
-    implementation("curse.maven:tectonic-686836:7128220")
-
-    // Lithostitched (required by Tectonic) - using latest
-    implementation("curse.maven:lithostitched-936015:7063201")
 
     // Testing dependencies
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
