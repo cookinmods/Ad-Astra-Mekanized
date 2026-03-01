@@ -1,0 +1,19 @@
+{
+  "type": "kobolds:kobold_den",
+  "start_pool": "kobolds:kobold_den",
+  "biomes": "#adastramekanized:planet_kobold_biomes",
+  "surface_biomes": "#adastramekanized:planet_kobold_biomes",
+  "step": "underground_structures",
+  "terrain_adaptation": "beard_box",
+  "liquid_settings": "ignore_waterlogging",
+  "start_height": {
+    "type": "minecraft:uniform",
+    "min_inclusive": {
+      "absolute": 40
+    },
+    "max_inclusive": {
+      "absolute": 55
+    }
+  },
+  "spawn_overrides": {}
+}

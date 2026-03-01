@@ -4947,12 +4947,16 @@ public class PlanetMaker {
             // Reference vanilla noise density functions - proven and tested!
             // This creates a noise_router object that references vanilla density functions
             JsonObject noiseRouter = new JsonObject();
-            noiseRouter.addProperty("barrier", planet.vanillaNoiseReference + "/noise_router/barrier");
-            noiseRouter.addProperty("fluid_level_floodedness", planet.vanillaNoiseReference + "/noise_router/fluid_level_floodedness");
-            noiseRouter.addProperty("fluid_level_spread", planet.vanillaNoiseReference + "/noise_router/fluid_level_spread");
-            noiseRouter.addProperty("lava", planet.vanillaNoiseReference + "/noise_router/lava");
-            noiseRouter.addProperty("temperature", planet.vanillaNoiseReference + "/noise_router/temperature");
-            noiseRouter.addProperty("vegetation", planet.vanillaNoiseReference + "/noise_router/vegetation");
+            // Use constant values for aquifer/fluid/biome noise fields
+            // These don't exist as separate density function entries in vanilla
+            // (vanilla defines them inline in NoiseRouterData.java)
+            // Planets use their own ore/fluid systems, so constants are correct
+            noiseRouter.addProperty("barrier", planet.barrierNoise);
+            noiseRouter.addProperty("fluid_level_floodedness", planet.fluidLevelFloodedness);
+            noiseRouter.addProperty("fluid_level_spread", planet.fluidLevelSpread);
+            noiseRouter.addProperty("lava", planet.lavaNoise);
+            noiseRouter.addProperty("temperature", planet.temperatureNoise);
+            noiseRouter.addProperty("vegetation", planet.vegetationNoise);
 
             // Check if coordinate shifting is enabled (for unique terrain per planet)
             boolean hasCoordinateShift = planet.coordinateShiftX != 0 || planet.coordinateShiftZ != 0;
@@ -4962,13 +4966,14 @@ public class PlanetMaker {
             // UNLESS coordinate shifting is enabled, in which case we generate unique terrain
             if (planet.useIdenticalVanillaTerrain && !hasCoordinateShift) {
                 // All 4 terrain shape functions - direct vanilla references
-                noiseRouter.addProperty("continents", planet.vanillaNoiseReference + "/noise_router/continents");
-                noiseRouter.addProperty("erosion", planet.vanillaNoiseReference + "/noise_router/erosion");
-                noiseRouter.addProperty("depth", planet.vanillaNoiseReference + "/noise_router/depth");
-                noiseRouter.addProperty("ridges", planet.vanillaNoiseReference + "/noise_router/ridges");
+                // Vanilla density functions are at "overworld/X", NOT "overworld/noise_router/X"
+                noiseRouter.addProperty("continents", planet.vanillaNoiseReference + "/continents");
+                noiseRouter.addProperty("erosion", planet.vanillaNoiseReference + "/erosion");
+                noiseRouter.addProperty("depth", planet.vanillaNoiseReference + "/depth");
+                noiseRouter.addProperty("ridges", planet.vanillaNoiseReference + "/ridges");
                 // 3D terrain and caves - direct vanilla references (includes full cave system)
-                noiseRouter.addProperty("initial_density_without_jaggedness", planet.vanillaNoiseReference + "/noise_router/initial_density_without_jaggedness");
-                noiseRouter.addProperty("final_density", planet.vanillaNoiseReference + "/noise_router/final_density");
+                noiseRouter.addProperty("initial_density_without_jaggedness", planet.vanillaNoiseReference + "/initial_density_without_jaggedness");
+                noiseRouter.addProperty("final_density", planet.vanillaNoiseReference + "/final_density");
 
                 AdAstraMekanized.LOGGER.info("Planet '{}' using IDENTICAL vanilla terrain from '{}'", planet.name, planet.vanillaNoiseReference);
             } else if (planet.useIdenticalVanillaTerrain && hasCoordinateShift) {
@@ -5040,54 +5045,54 @@ public class PlanetMaker {
                     // Apply legacy frequency modulation if set
                     if (planet.continentsMultiplier != 1.0 || planet.continentsNoiseOffset != 0.0) {
                         noiseRouter.add("continents", createModulatedNoise(
-                            planet.vanillaNoiseReference + "/noise_router/continents",
+                            planet.vanillaNoiseReference + "/continents",
                             planet.continentsMultiplier,
                             planet.continentsNoiseOffset
                         ));
                     } else {
-                        noiseRouter.addProperty("continents", planet.vanillaNoiseReference + "/noise_router/continents");
+                        noiseRouter.addProperty("continents", planet.vanillaNoiseReference + "/continents");
                     }
 
                     if (planet.erosionMultiplier != 1.0 || planet.erosionNoiseOffset != 0.0) {
                         noiseRouter.add("erosion", createModulatedNoise(
-                            planet.vanillaNoiseReference + "/noise_router/erosion",
+                            planet.vanillaNoiseReference + "/erosion",
                             planet.erosionMultiplier,
                             planet.erosionNoiseOffset
                         ));
                     } else {
-                        noiseRouter.addProperty("erosion", planet.vanillaNoiseReference + "/noise_router/erosion");
+                        noiseRouter.addProperty("erosion", planet.vanillaNoiseReference + "/erosion");
                     }
 
                     if (planet.depthMultiplier != 1.0 || planet.depthNoiseOffset != 0.0) {
                         noiseRouter.add("depth", createModulatedNoise(
-                            planet.vanillaNoiseReference + "/noise_router/depth",
+                            planet.vanillaNoiseReference + "/depth",
                             planet.depthMultiplier,
                             planet.depthNoiseOffset
                         ));
                     } else {
-                        noiseRouter.addProperty("depth", planet.vanillaNoiseReference + "/noise_router/depth");
+                        noiseRouter.addProperty("depth", planet.vanillaNoiseReference + "/depth");
                     }
 
                     if (planet.ridgesMultiplier != 1.0 || planet.ridgesNoiseOffset != 0.0) {
                         noiseRouter.add("ridges", createModulatedNoise(
-                            planet.vanillaNoiseReference + "/noise_router/ridges",
+                            planet.vanillaNoiseReference + "/ridges",
                             planet.ridgesMultiplier,
                             planet.ridgesNoiseOffset
                         ));
                     } else {
-                        noiseRouter.addProperty("ridges", planet.vanillaNoiseReference + "/noise_router/ridges");
+                        noiseRouter.addProperty("ridges", planet.vanillaNoiseReference + "/ridges");
                     }
 
                     // For vanilla terrain path, use vanilla references for density functions
-                    noiseRouter.addProperty("initial_density_without_jaggedness", planet.vanillaNoiseReference + "/noise_router/initial_density_without_jaggedness");
-                    noiseRouter.addProperty("final_density", planet.vanillaNoiseReference + "/noise_router/final_density");
+                    noiseRouter.addProperty("initial_density_without_jaggedness", planet.vanillaNoiseReference + "/initial_density_without_jaggedness");
+                    noiseRouter.addProperty("final_density", planet.vanillaNoiseReference + "/final_density");
                 }
             }
 
-            // Common noise router properties for both custom and vanilla terrain
-            noiseRouter.addProperty("vein_toggle", planet.vanillaNoiseReference + "/noise_router/vein_toggle");
-            noiseRouter.addProperty("vein_ridged", planet.vanillaNoiseReference + "/noise_router/vein_ridged");
-            noiseRouter.addProperty("vein_gap", planet.vanillaNoiseReference + "/noise_router/vein_gap");
+            // Ore vein noise fields - use constants (planets use their own ore system)
+            noiseRouter.addProperty("vein_toggle", planet.veinToggle);
+            noiseRouter.addProperty("vein_ridged", planet.veinRidged);
+            noiseRouter.addProperty("vein_gap", planet.veinGap);
             noiseSettings.add("noise_router", noiseRouter);
         } else {
             // Legacy custom noise generation
@@ -6847,13 +6852,13 @@ public class PlanetMaker {
             AdAstraMekanized.LOGGER.info("Generated Ribbits village biome tag for planet '{}'", planet.name);
         }
 
-        // Generate Kobolds structure biome tag and structure override
+        // Generate planet-specific kobold den (surface placement, separate from overworld underground dens)
         if (planet.enableKoboldsStructures) {
-            // Add planet biomes to kobold_den_biomes tag (includes #minecraft:is_overworld to preserve overworld spawning)
-            generateKoboldsDenBiomeTag(planetBiomes);
-            // Override kobold_den structure to use #kobolds:kobold_den_biomes instead of #minecraft:is_overworld
-            generateKoboldsDenStructureOverride();
-            AdAstraMekanized.LOGGER.info("Generated Kobolds den biome tag and structure override for planet '{}'", planet.name);
+            generatePlanetKoboldDenBiomeTag(planetBiomes);
+            generatePlanetKoboldDenStructure();
+            generatePlanetKoboldDenStructureSet();
+            cleanupLegacyKoboldOverrides();
+            AdAstraMekanized.LOGGER.info("Generated planet kobold den structure for planet '{}'", planet.name);
         }
 
         // Generate WhenDungeonsArise structure biome tags
@@ -6912,20 +6917,16 @@ public class PlanetMaker {
     }
 
     /**
-     * Generate the kobold_den_biomes tag with #minecraft:is_overworld included.
-     * The original kobold_den structure uses #minecraft:is_overworld as its biome filter,
-     * but we override it to use #kobolds:kobold_den_biomes. Including #minecraft:is_overworld
-     * in this tag preserves overworld den spawning while also adding our planet biomes.
+     * Generate biome tag for planet kobold dens at adastramekanized:planet_kobold_biomes.
+     * This is separate from the kobolds mod's own tag - the original underground dens
+     * continue using kobolds:kobold_den_biomes for overworld spawning.
      */
-    private static void generateKoboldsDenBiomeTag(java.util.List<String> planetBiomes) throws IOException {
-        String dirPath = RESOURCES_PATH.replace("adastramekanized", "kobolds") + "tags/worldgen/biome";
+    private static void generatePlanetKoboldDenBiomeTag(java.util.List<String> planetBiomes) throws IOException {
+        String dirPath = RESOURCES_PATH + "tags/worldgen/biome";
         new File(dirPath).mkdirs();
 
-        String filePath = dirPath + "/kobold_den_biomes.json";
+        String filePath = dirPath + "/planet_kobold_biomes.json";
         java.util.Set<String> allValues = new java.util.LinkedHashSet<>();
-
-        // Always include #minecraft:is_overworld so dens still spawn in overworld biomes
-        allValues.add("#minecraft:is_overworld");
 
         // Read existing file if present to merge planet biomes from multiple planets
         File existingFile = new File(filePath);
@@ -6939,7 +6940,7 @@ public class PlanetMaker {
                     }
                 }
             } catch (Exception e) {
-                // If reading fails, start fresh with just overworld tag
+                // If reading fails, start fresh
             }
         }
 
@@ -6958,38 +6959,115 @@ public class PlanetMaker {
     }
 
     /**
-     * Generate a structure override for kobold_den that uses #kobolds:kobold_den_biomes
-     * instead of #minecraft:is_overworld. This allows kobold dens to spawn on planets
-     * whose biomes are added to the kobold_den_biomes tag.
+     * Generate a planet-specific kobold den structure that spawns at the surface.
+     * Uses the kobolds:kobold_den structure type and jigsaw pool but with surface placement.
+     * The surface_biomes field satisfies AbstractKoboldStructure's underCheck() validation.
      * Only generated once (idempotent) since the structure definition is static.
      */
-    private static void generateKoboldsDenStructureOverride() throws IOException {
-        String dirPath = RESOURCES_PATH.replace("adastramekanized", "kobolds") + "worldgen/structure";
+    private static void generatePlanetKoboldDenStructure() throws IOException {
+        String dirPath = RESOURCES_PATH + "worldgen/structure";
         new File(dirPath).mkdirs();
 
-        String filePath = dirPath + "/kobold_den.json";
+        String filePath = dirPath + "/planet_kobold_den.json";
 
         JsonObject structure = new JsonObject();
         structure.addProperty("type", "kobolds:kobold_den");
         structure.addProperty("start_pool", "kobolds:kobold_den");
-        structure.addProperty("biomes", "#kobolds:kobold_den_biomes");
+        structure.addProperty("biomes", "#adastramekanized:planet_kobold_biomes");
+        structure.addProperty("surface_biomes", "#adastramekanized:planet_kobold_biomes");
         structure.addProperty("step", "underground_structures");
+        // beard_box carves a cavity around the structure, guaranteeing access
+        // unlike encapsulate which fills terrain solid around the bounding box
         structure.addProperty("terrain_adaptation", "beard_box");
         structure.addProperty("liquid_settings", "ignore_waterlogging");
 
+        // Place just below typical surface level (Y 40-55) so the carved cavity
+        // is shallow enough that players can find it by digging or it breaks through
         JsonObject startHeight = new JsonObject();
         startHeight.addProperty("type", "minecraft:uniform");
         JsonObject minInclusive = new JsonObject();
-        minInclusive.addProperty("absolute", 12);
+        minInclusive.addProperty("absolute", 40);
         startHeight.add("min_inclusive", minInclusive);
         JsonObject maxInclusive = new JsonObject();
-        maxInclusive.addProperty("absolute", 32);
+        maxInclusive.addProperty("absolute", 55);
         startHeight.add("max_inclusive", maxInclusive);
         structure.add("start_height", startHeight);
 
         structure.add("spawn_overrides", new JsonObject());
 
         writeJsonFile(filePath, structure);
+    }
+
+    /**
+     * Generate a structure_set for the planet kobold den with appropriate spacing.
+     * Only generated once (idempotent).
+     */
+    private static void generatePlanetKoboldDenStructureSet() throws IOException {
+        String dirPath = RESOURCES_PATH + "worldgen/structure_set";
+        new File(dirPath).mkdirs();
+
+        String filePath = dirPath + "/planet_kobold_den.json";
+
+        JsonObject structureSet = new JsonObject();
+
+        JsonArray structures = new JsonArray();
+        JsonObject entry = new JsonObject();
+        entry.addProperty("structure", "adastramekanized:planet_kobold_den");
+        entry.addProperty("weight", 1);
+        structures.add(entry);
+        structureSet.add("structures", structures);
+
+        JsonObject placement = new JsonObject();
+        placement.addProperty("type", "minecraft:random_spread");
+        placement.addProperty("spacing", 16);
+        placement.addProperty("separation", 8);
+        placement.addProperty("salt", 482957163);
+        structureSet.add("placement", placement);
+
+        writeJsonFile(filePath, structureSet);
+    }
+
+    /**
+     * Remove legacy kobold override files that are no longer needed.
+     * Previously we overrode kobolds:kobold_den structure and biome tag directly;
+     * now we use our own separate planet_kobold_den structure.
+     */
+    private static void cleanupLegacyKoboldOverrides() {
+        String koboldStructurePath = RESOURCES_PATH.replace("adastramekanized", "kobolds") + "worldgen/structure/kobold_den.json";
+        String koboldBiomeTagPath = RESOURCES_PATH.replace("adastramekanized", "kobolds") + "tags/worldgen/biome/kobold_den_biomes.json";
+
+        File structureFile = new File(koboldStructurePath);
+        if (structureFile.exists()) {
+            structureFile.delete();
+            AdAstraMekanized.LOGGER.info("Cleaned up legacy kobold_den structure override");
+        }
+
+        File biomeTagFile = new File(koboldBiomeTagPath);
+        if (biomeTagFile.exists()) {
+            biomeTagFile.delete();
+            AdAstraMekanized.LOGGER.info("Cleaned up legacy kobold_den_biomes tag override");
+        }
+
+        // Clean up empty parent directories
+        cleanupEmptyDirs(new File(RESOURCES_PATH.replace("adastramekanized", "kobolds")));
+    }
+
+    /**
+     * Recursively remove empty directories.
+     */
+    private static void cleanupEmptyDirs(File dir) {
+        if (dir == null || !dir.isDirectory()) return;
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory()) cleanupEmptyDirs(f);
+            }
+            // Re-check after cleaning children
+            files = dir.listFiles();
+            if (files != null && files.length == 0) {
+                dir.delete();
+            }
+        }
     }
 
     /**
@@ -7273,8 +7351,10 @@ public class PlanetMaker {
                         stepFeatures.add("minecraft:amethyst_geode");
                         break;
                     case 3: // underground_structures
-                        stepFeatures.add("minecraft:monster_room");
-                        stepFeatures.add("minecraft:monster_room_deep");
+                        // Note: minecraft:monster_room and monster_room_deep intentionally excluded
+                        // Vanilla dungeon spawners bypass the biome modifier spawn system,
+                        // spawning zombies/skeletons/spiders regardless of planet config.
+                        // Planet mob spawning is controlled exclusively via biome modifiers.
                         break;
                     case 6: // underground_ores
                         if (useCustomOres) {
