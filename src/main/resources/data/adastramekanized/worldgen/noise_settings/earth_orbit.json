@@ -1,7 +1,7 @@
 {
   "sea_level": 100,
   "disable_mob_generation": true,
-  "aquifers_enabled": true,
+  "aquifers_enabled": false,
   "ore_veins_enabled": false,
   "legacy_random_source": false,
   "default_block": {

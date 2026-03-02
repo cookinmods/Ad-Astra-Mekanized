@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "adastramekanized:terra_nova_plains",
+    "adastramekanized:terra_nova_forest",
+    "adastramekanized:terra_nova_taiga",
+    "adastramekanized:primordium_jungle",
+    "adastramekanized:primordium_bamboo_jungle",
+    "adastramekanized:primordium_sparse_jungle"
+  ]
+}

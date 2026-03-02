@@ -19,10 +19,7 @@
   "spawn_costs": {},
   "features": [
     [],
-    [
-      "minecraft:lake_lava_underground",
-      "minecraft:lake_lava_surface"
-    ],
+    [],
     [
       "minecraft:amethyst_geode"
     ],
@@ -39,10 +36,7 @@
     [
       "minecraft:ore_infested"
     ],
-    [
-      "minecraft:spring_water",
-      "minecraft:spring_lava"
-    ],
+    [],
     [
       "minecraft:glow_lichen"
     ],

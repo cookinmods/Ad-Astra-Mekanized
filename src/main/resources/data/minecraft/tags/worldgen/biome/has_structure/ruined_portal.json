@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "adastramekanized:mars_highlands",
+    "adastramekanized:mars_canyons",
+    "adastramekanized:mars_polar",
+    "adastramekanized:glacio_snowy_taiga",
+    "adastramekanized:glacio_frozen_river",
+    "adastramekanized:terra_nova_plains",
+    "adastramekanized:terra_nova_forest",
+    "adastramekanized:terra_nova_taiga",
+    "adastramekanized:bellator_savanna",
+    "adastramekanized:bellator_savanna_plateau",
+    "adastramekanized:bellator_windswept_savanna"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "adastramekanized:mars_highlands",
+    "adastramekanized:mars_canyons",
+    "adastramekanized:mars_polar",
+    "adastramekanized:mercury_desert",
+    "adastramekanized:callisto_desert",
+    "adastramekanized:ceres_desert",
+    "adastramekanized:gliese667c_windswept_hills",
+    "adastramekanized:gliese667c_stony_peaks"
+  ]
+}

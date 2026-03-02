@@ -477,6 +477,8 @@ public class PlanetGenerationRunner {
             .configureOre("ostrum", 5)      // PROGRESSION ORE - needed for Tier 3 rocket
             .configureOre("desh", 3)        // rare - secondary desh source
             .configureOre("mars_etrium", 2) // ENDGAME ORE - unchanged
+            .enableVanillaStructure("mineshaft")
+            .enableVanillaStructure("ruined_portal")
             .generate();
 
         // ==================== SOLAR SYSTEM INNER PLANETS ====================
@@ -531,6 +533,7 @@ public class PlanetGenerationRunner {
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("minimal_airless")
+            .enableVanillaStructure("desert_pyramid")
             .generate();
 
         // MERCURY - Airless scorched world closest to sun
@@ -577,6 +580,7 @@ public class PlanetGenerationRunner {
             .starBrightness(2.0f)
             .addSun()
             .addCavePreset("minimal_airless")
+            .enableVanillaStructure("mineshaft")
             .generate();
 
         // ==================== JUPITER'S MOONS ====================
@@ -788,6 +792,7 @@ public class PlanetGenerationRunner {
             .starBrightness(2.3f)
             .addSun()
             .addCavePreset("minimal_airless")
+            .enableVanillaStructure("mineshaft")
             .generate();
 
         // ==================== SATURN'S MOONS ====================
@@ -876,6 +881,7 @@ public class PlanetGenerationRunner {
             .starBrightness(2.5f)
             .addSun()
             .addCavePreset("frozen")
+            .enableVanillaStructure("igloo")
             .generate();
 
         // ==================== NEPTUNE'S MOON ====================
@@ -923,6 +929,7 @@ public class PlanetGenerationRunner {
             .starBrightness(2.8f)
             .addSun()
             .addCavePreset("minimal_airless")
+            .enableVanillaStructure("igloo")
             .generate();
 
         // ==================== DWARF PLANETS ====================
@@ -984,6 +991,7 @@ public class PlanetGenerationRunner {
             .starBrightness(2.6f)
             .addSun()
             .addCavePreset("minimal_airless")
+            .enableVanillaStructure("mineshaft")
             .generate();
 
         // PLUTO - Distant frozen dwarf planet
@@ -1026,6 +1034,7 @@ public class PlanetGenerationRunner {
             .starBrightness(3.0f)
             .addSun()
             .addCavePreset("minimal_airless")
+            .enableVanillaStructure("igloo")
             .generate();
 
         // ERIS - Most distant dwarf planet
@@ -1213,6 +1222,7 @@ public class PlanetGenerationRunner {
             .addCavePreset("balanced_vanilla")
             // Enable badlands WhenDungeonsArise structures (coliseum, ceryneian hind)
             .enableDungeonsAriseStructures("badlands")
+            .enableVanillaStructure("mineshaft_mesa")
             .generate();
 
         // TRAPPIST1E - Red dwarf star system, habitable
@@ -1307,6 +1317,7 @@ public class PlanetGenerationRunner {
             .enableBornInChaosStructures()   // Enable Born in Chaos structures (Dark Tower, etc.)
             // Enable mountain WhenDungeonsArise structures (keep kayra, foundry, mechanical nest)
             .enableDungeonsAriseStructures("mountain")
+            .enableVanillaStructure("mineshaft")
             .generate();
 
         // ==================== ALIEN WORLDS ====================
@@ -1412,6 +1423,7 @@ public class PlanetGenerationRunner {
             .enableBornInChaosStructures()   // Enable Born in Chaos structures
             // Enable snowy WhenDungeonsArise structures
             .enableDungeonsAriseStructures("snowy")
+            .enableVanillaStructure("igloo")
             .generate();
 
         // ARENOS - Desert with twin suns
@@ -1466,6 +1478,8 @@ public class PlanetGenerationRunner {
             .addCavePreset("minimal_airless")
             // Enable desert WhenDungeonsArise structures
             .enableDungeonsAriseStructures("desert")
+            .enableVanillaStructure("mineshaft_mesa")
+            .enableVanillaStructure("desert_pyramid")
             .generate();
 
         // PALUDIS - Swamp world
@@ -1623,6 +1637,7 @@ public class PlanetGenerationRunner {
             .addCavePreset("frozen")
             // Enable snowy WhenDungeonsArise structures (plague asylum, frozen ruins)
             .enableDungeonsAriseStructures("snowy")
+            .enableVanillaStructure("ruined_portal")
             .generate();
 
         // VULCAN - Volcanic rocky world (more survivable volcanic world)
@@ -1714,6 +1729,8 @@ public class PlanetGenerationRunner {
             .enableBornInChaosStructures()   // Enable Born in Chaos structures (Clown Caravan, etc.)
             // Enable plains and forest WhenDungeonsArise structures (bandit villages, campsites, etc.)
             .enableDungeonsAriseStructures("plains", "forest")
+            .enableVanillaStructure("ruined_portal")
+            .enableVanillaStructure("trail_ruins")
             .generate();
 
         // ==================== MOWZIES MOBS PLANETS ====================
@@ -1767,6 +1784,8 @@ public class PlanetGenerationRunner {
             .enableBornInChaosStructures()   // Enable Born in Chaos structures
             // Enable jungle WhenDungeonsArise structures (jungle tree houses, infested temples)
             .enableDungeonsAriseStructures("jungle")
+            .enableVanillaStructure("stronghold")
+            .enableVanillaStructure("trail_ruins")
             .generate();
 
         // BELLATOR - Savanna world with Umvuthana civilization (Latin: warrior)
@@ -1817,6 +1836,7 @@ public class PlanetGenerationRunner {
             .enableBornInChaosStructures()   // Enable Born in Chaos structures
             // Enable plains WhenDungeonsArise structures (campsites, windmills fit savanna)
             .enableDungeonsAriseStructures("plains")
+            .enableVanillaStructure("ruined_portal")
             .generate();
 
         // ==================== PROFUNDUS ====================
@@ -1886,6 +1906,8 @@ public class PlanetGenerationRunner {
             .enableBornInChaosStructures()   // Enable Born in Chaos structures (Dark Tower, etc.)
             // Enable underground WhenDungeonsArise structures (mining systems, etc.)
             .enableDungeonsAriseStructures("underground")
+            .enableVanillaStructure("stronghold")
+            .enableVanillaStructure("ancient_city")
             .generate();
     }
 }

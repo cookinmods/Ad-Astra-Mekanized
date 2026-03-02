@@ -601,6 +601,15 @@ public class PlanetMaker {
         private boolean enableSevenSeasStructures = false;  // WhenDungeonsArise Seven Seas ships
         private java.util.Set<String> dungeonsAriseStructureTypes = new java.util.HashSet<>();  // Specific structure types to enable
 
+        // Vanilla structure whitelisting - adds planet biomes to vanilla structure biome tags
+        private java.util.Set<String> vanillaStructures = new java.util.LinkedHashSet<>();
+
+        // Valid vanilla structure names that map to minecraft:has_structure/{name} biome tags
+        private static final java.util.Set<String> VALID_VANILLA_STRUCTURES = java.util.Set.of(
+            "mineshaft", "mineshaft_mesa", "stronghold", "ruined_portal",
+            "desert_pyramid", "igloo", "ancient_city", "trail_ruins", "trial_chambers"
+        );
+
         // Feature placement system (vegetation, rocks, etc.)
         private java.util.List<FeatureEntry> customFeatures = new java.util.ArrayList<>();
         private float treeFrequency = 0.0f;
@@ -620,7 +629,7 @@ public class PlanetMaker {
         private boolean enableUndergroundLiquids = false;
         private String undergroundLiquid = "minecraft:water";
         private int lavaLakeLevel = -60; // Y level for lava lakes
-        private float lavaLakeFrequency = 0.05f;
+        private float lavaLakeFrequency = 0.0f;  // Default off; only planets with lava oceans/volcanic activity should enable
 
         // Cave system configuration
         private float caveFrequency = 1.0f; // 0.0-2.0, base cave generation frequency
@@ -1666,6 +1675,22 @@ public class PlanetMaker {
             addMobSpawn("monster", "kobolds:kobold_zombie", weight, 2, 4);
             addMobSpawn("monster", "kobolds:kobold_skeleton", weight, 2, 4);
             addMobSpawn("monster", "kobolds:witherbold", weight / 3, 1, 2);
+            return this;
+        }
+
+        /**
+         * Enable a vanilla Minecraft structure on this planet by adding the planet's biomes
+         * to the vanilla has_structure biome tag. Valid structures: mineshaft, mineshaft_mesa,
+         * stronghold, ruined_portal, desert_pyramid, igloo, ancient_city, trail_ruins, trial_chambers.
+         * @param structureName The vanilla structure name (e.g. "mineshaft")
+         */
+        public PlanetBuilder enableVanillaStructure(String structureName) {
+            if (!VALID_VANILLA_STRUCTURES.contains(structureName)) {
+                AdAstraMekanized.LOGGER.warn("Unknown vanilla structure '{}' for planet '{}'. Valid: {}",
+                    structureName, this.name, VALID_VANILLA_STRUCTURES);
+                return this;
+            }
+            this.vanillaStructures.add(structureName);
             return this;
         }
 
@@ -4914,12 +4939,10 @@ public class PlanetMaker {
         int effectiveSeaLevel = (planet.oceanLevel > 0) ? planet.oceanLevel : planet.seaLevel;
         noiseSettings.addProperty("sea_level", effectiveSeaLevel);
         noiseSettings.addProperty("disable_mob_generation", planet.disableMobGeneration);
-        // Always enable aquifers for proper cave generation
-        boolean enableAquifers = planet.aquifersEnabled ||
-                                (planet.caveFrequency > 0) ||
-                                (planet.enableCheeseCaves || planet.enableSpaghettiCaves || planet.enableNoodleCaves);
-        // Force aquifers on for all planets to ensure cave generation
-        noiseSettings.addProperty("aquifers_enabled", true);
+        // Respect per-planet aquifer setting. Cave generation works via density functions
+        // (cheese/spaghetti/noodle caves) independently of aquifers. Aquifers control
+        // underground water/lava pools - only appropriate for planets with liquid.
+        noiseSettings.addProperty("aquifers_enabled", planet.aquifersEnabled);
         noiseSettings.addProperty("ore_veins_enabled", planet.oreVeinsEnabled);
         noiseSettings.addProperty("legacy_random_source", planet.legacyRandomSource);
 
@@ -6861,6 +6884,14 @@ public class PlanetMaker {
             AdAstraMekanized.LOGGER.info("Generated planet kobold den structure for planet '{}'", planet.name);
         }
 
+        // Generate vanilla structure biome tags (adds planet biomes to minecraft:has_structure/{name})
+        if (!planet.vanillaStructures.isEmpty()) {
+            for (String structure : planet.vanillaStructures) {
+                generateModdedStructureBiomeTag("minecraft", "tags/worldgen/biome/has_structure", structure, planetBiomes);
+            }
+            AdAstraMekanized.LOGGER.info("Generated vanilla structure tags for planet '{}': {}", planet.name, planet.vanillaStructures);
+        }
+
         // Generate WhenDungeonsArise structure biome tags
         if (planet.enableDungeonsAriseStructures) {
             generateDungeonsAriseBiomeTags(planet, planetBiomes);
@@ -7344,8 +7375,14 @@ public class PlanetMaker {
                 // Add vanilla underground features based on generation step
                 switch (i) {
                     case 1: // lakes
-                        stepFeatures.add("minecraft:lake_lava_underground");
-                        stepFeatures.add("minecraft:lake_lava_surface");
+                        // Only add lava lakes on planets with lava configuration
+                        boolean hasLava = planet.lavaLakeFrequency > 0 ||
+                            "minecraft:lava".equals(planet.defaultFluid) ||
+                            "minecraft:lava".equals(planet.oceanFluid);
+                        if (hasLava) {
+                            stepFeatures.add("minecraft:lake_lava_underground");
+                            stepFeatures.add("minecraft:lake_lava_surface");
+                        }
                         break;
                     case 2: // local_modifications
                         stepFeatures.add("minecraft:amethyst_geode");
@@ -7397,8 +7434,17 @@ public class PlanetMaker {
                         stepFeatures.add("minecraft:ore_infested");
                         break;
                     case 8: // fluid_springs
-                        stepFeatures.add("minecraft:spring_water");
-                        stepFeatures.add("minecraft:spring_lava");
+                        // Only add water springs on planets with water (seaLevel > 0 or aquifers)
+                        if (planet.seaLevel > 0 || planet.aquifersEnabled) {
+                            stepFeatures.add("minecraft:spring_water");
+                        }
+                        // Only add lava springs on planets with lava configuration
+                        boolean hasLavaSprings = planet.lavaLakeFrequency > 0 ||
+                            "minecraft:lava".equals(planet.defaultFluid) ||
+                            "minecraft:lava".equals(planet.oceanFluid);
+                        if (hasLavaSprings) {
+                            stepFeatures.add("minecraft:spring_lava");
+                        }
                         break;
                     case 9: // vegetal_decoration
                         // Add vegetation based on biome type
