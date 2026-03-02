@@ -275,7 +275,7 @@ public class PlanetGenerationRunner {
         // Uses vanillaQualityFlat preset for gentle rolling hills, no mountains
         // Caves remain enabled for underground exploration
         PlanetMaker.PlanetBuilder moon = registerPlanet("moon")
-            .vanillaQualityFlat()          // Flat terrain with gentle rolling hills
+            .vanillaQualityLunar()         // Smooth plains with highland areas, paired with crater features
             .coordinateShift(5000, 5000)   // Shift coordinates for unique Moon terrain
             // Physical properties
             .gravity(0.166f)  // Moon has 1/6 Earth gravity
@@ -345,6 +345,9 @@ public class PlanetGenerationRunner {
             )
             .allowPeacefulMobs(false)
             .enableKoboldsStructures()
+            .enableCraters()
+            .craterFloorBlock("adastramekanized:moon_stone")
+            .craterRimBlock("adastramekanized:moon_sand")
             .generate();
 
         // EARTH'S ORBIT - Space station dimension with Earth view below
@@ -581,6 +584,9 @@ public class PlanetGenerationRunner {
             .addSun()
             .addCavePreset("minimal_airless")
             .enableVanillaStructure("mineshaft")
+            .enableCraters("heavy")
+            .craterFloorBlock("minecraft:gray_terracotta")
+            .craterRimBlock("minecraft:light_gray_terracotta")
             .generate();
 
         // ==================== JUPITER'S MOONS ====================
@@ -732,6 +738,9 @@ public class PlanetGenerationRunner {
             .starBrightness(2.0f)
             .addSun()
             .addCavePreset("balanced_vanilla")
+            .enableCraters("light")
+            .craterFloorBlock("minecraft:stone")
+            .craterRimBlock("minecraft:gravel")
             .generate();
 
         // CALLISTO - Ancient heavily cratered moon
@@ -793,6 +802,9 @@ public class PlanetGenerationRunner {
             .addSun()
             .addCavePreset("minimal_airless")
             .enableVanillaStructure("mineshaft")
+            .enableCraters()
+            .craterFloorBlock("minecraft:stone")
+            .craterRimBlock("minecraft:gray_terracotta")
             .generate();
 
         // ==================== SATURN'S MOONS ====================
@@ -992,6 +1004,9 @@ public class PlanetGenerationRunner {
             .addSun()
             .addCavePreset("minimal_airless")
             .enableVanillaStructure("mineshaft")
+            .enableCraters("light")
+            .craterFloorBlock("minecraft:stone")
+            .craterRimBlock("minecraft:gravel")
             .generate();
 
         // PLUTO - Distant frozen dwarf planet

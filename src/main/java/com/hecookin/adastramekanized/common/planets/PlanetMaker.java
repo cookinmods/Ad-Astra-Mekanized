@@ -610,6 +610,13 @@ public class PlanetMaker {
             "desert_pyramid", "igloo", "ancient_city", "trail_ruins", "trial_chambers"
         );
 
+        // Crater feature system
+        private boolean cratersEnabled = false;
+        private String craterFloorBlock = null;   // defaults to planet's defaultBlock
+        private String craterRimBlock = null;     // defaults to planet's surfaceBlock
+        // Crater frequency: "heavy" = 1/2, 1/8, 1/48 | "moderate" = 1/3, 1/12, 1/64 | "light" = 1/4, 1/16, 1/80
+        private String craterFrequency = "moderate";
+
         // Feature placement system (vegetation, rocks, etc.)
         private java.util.List<FeatureEntry> customFeatures = new java.util.ArrayList<>();
         private float treeFrequency = 0.0f;
@@ -1018,6 +1025,21 @@ public class PlanetMaker {
             this.base3DNoiseXZFactor = 100.0f;
             this.jaggednessNoiseScale = 800.0f;  // Frequent peaks (crater rims)
             this.smearScaleMultiplier = 4.0f;    // Sharper features
+            return this;
+        }
+
+        /**
+         * VANILLA-QUALITY: Lunar terrain - smooth plains with highland areas.
+         * Designed to be paired with CraterFeature for impact crater decoration.
+         * Flatter than standard but retains some highland variation.
+         */
+        public PlanetBuilder vanillaQualityLunar() {
+            vanillaQualityStandard();
+            this.terrainFactor = 1.8f;           // Subdued terrain, highlands still present
+            this.base3DNoiseXZFactor = 35.0f;    // Less surface variation
+            this.base3DNoiseYFactor = 60.0f;     // Moderate vertical range
+            this.jaggednessNoiseScale = 2500.0f; // Rare peaks
+            this.smearScaleMultiplier = 10.0f;   // Smooth transitions
             return this;
         }
 
@@ -1691,6 +1713,40 @@ public class PlanetMaker {
                 return this;
             }
             this.vanillaStructures.add(structureName);
+            return this;
+        }
+
+        /**
+         * Enable impact crater generation on this planet's surface.
+         * Generates small, medium, and large bowl-shaped craters with raised rims.
+         * @param frequency "heavy", "moderate", or "light" — controls crater density
+         */
+        public PlanetBuilder enableCraters(String frequency) {
+            this.cratersEnabled = true;
+            this.craterFrequency = frequency;
+            return this;
+        }
+
+        /**
+         * Enable impact crater generation with moderate frequency.
+         */
+        public PlanetBuilder enableCraters() {
+            return enableCraters("moderate");
+        }
+
+        /**
+         * Set the block used for crater floors. Defaults to planet's defaultBlock.
+         */
+        public PlanetBuilder craterFloorBlock(String block) {
+            this.craterFloorBlock = block;
+            return this;
+        }
+
+        /**
+         * Set the block used for crater rims. Defaults to planet's surfaceBlock.
+         */
+        public PlanetBuilder craterRimBlock(String block) {
+            this.craterRimBlock = block;
             return this;
         }
 
@@ -6892,6 +6948,11 @@ public class PlanetMaker {
             AdAstraMekanized.LOGGER.info("Generated vanilla structure tags for planet '{}': {}", planet.name, planet.vanillaStructures);
         }
 
+        // Generate crater features (configured + placed feature JSON)
+        if (planet.cratersEnabled) {
+            generateCraterFeatures(planet);
+        }
+
         // Generate WhenDungeonsArise structure biome tags
         if (planet.enableDungeonsAriseStructures) {
             generateDungeonsAriseBiomeTags(planet, planetBiomes);
@@ -6901,6 +6962,123 @@ public class PlanetMaker {
         if (planet.enableSevenSeasStructures) {
             generateSevenSeasBiomeTags(planet, planetBiomes);
         }
+    }
+
+    /**
+     * Generate crater configured_feature and placed_feature JSON files for a planet.
+     * Creates 3 variants (small, medium, large) with frequency based on planet config.
+     */
+    private static void generateCraterFeatures(PlanetBuilder planet) throws IOException {
+        String cfPath = RESOURCES_PATH + "worldgen/configured_feature/";
+        String pfPath = RESOURCES_PATH + "worldgen/placed_feature/";
+        new File(cfPath).mkdirs();
+        new File(pfPath).mkdirs();
+
+        // Resolve floor/rim blocks
+        String floorBlock = planet.craterFloorBlock != null ? planet.craterFloorBlock : planet.defaultBlock;
+        String rimBlock = planet.craterRimBlock != null ? planet.craterRimBlock : planet.surfaceBlock;
+
+        // Frequency multipliers based on setting
+        int smallRarity, mediumRarity, largeRarity;
+        switch (planet.craterFrequency) {
+            case "heavy":
+                smallRarity = 2; mediumRarity = 8; largeRarity = 48;
+                break;
+            case "light":
+                smallRarity = 4; mediumRarity = 16; largeRarity = 80;
+                break;
+            default: // moderate
+                smallRarity = 3; mediumRarity = 12; largeRarity = 64;
+                break;
+        }
+
+        // Generate 3 crater variants
+        String[][] variants = {
+            {"small",  "4", "8",  "3", "5", "1", "2", String.valueOf(smallRarity)},
+            {"medium", "10", "16", "5", "8", "2", "3", String.valueOf(mediumRarity)},
+            {"large",  "20", "30", "8", "14", "3", "5", String.valueOf(largeRarity)}
+        };
+
+        for (String[] v : variants) {
+            String variantName = v[0];
+            String featureName = planet.name + "_crater_" + variantName;
+
+            // Configured feature JSON
+            JsonObject cf = new JsonObject();
+            cf.addProperty("type", "adastramekanized:crater");
+            JsonObject config = new JsonObject();
+
+            // Radius as uniform int provider
+            JsonObject radius = new JsonObject();
+            radius.addProperty("type", "minecraft:uniform");
+            JsonObject radiusMin = new JsonObject();
+            radiusMin.addProperty("min_inclusive", Integer.parseInt(v[1]));
+            radiusMin.addProperty("max_inclusive", Integer.parseInt(v[2]));
+            // For IntProvider uniform format
+            config.addProperty("radius", 0); // placeholder, replaced below
+            config.remove("radius");
+            JsonObject radiusProvider = new JsonObject();
+            radiusProvider.addProperty("type", "minecraft:uniform");
+            radiusProvider.addProperty("min_inclusive", Integer.parseInt(v[1]));
+            radiusProvider.addProperty("max_inclusive", Integer.parseInt(v[2]));
+            config.add("radius", radiusProvider);
+
+            JsonObject depthProvider = new JsonObject();
+            depthProvider.addProperty("type", "minecraft:uniform");
+            depthProvider.addProperty("min_inclusive", Integer.parseInt(v[3]));
+            depthProvider.addProperty("max_inclusive", Integer.parseInt(v[4]));
+            config.add("depth", depthProvider);
+
+            JsonObject rimProvider = new JsonObject();
+            rimProvider.addProperty("type", "minecraft:uniform");
+            rimProvider.addProperty("min_inclusive", Integer.parseInt(v[5]));
+            rimProvider.addProperty("max_inclusive", Integer.parseInt(v[6]));
+            config.add("rim_height", rimProvider);
+
+            // Block states
+            JsonObject floorState = new JsonObject();
+            floorState.addProperty("Name", floorBlock);
+            config.add("floor_block", floorState);
+
+            JsonObject rimState = new JsonObject();
+            rimState.addProperty("Name", rimBlock);
+            config.add("rim_block", rimState);
+
+            cf.add("config", config);
+            writeJsonFile(cfPath + featureName + ".json", cf);
+
+            // Placed feature JSON
+            JsonObject pf = new JsonObject();
+            pf.addProperty("feature", "adastramekanized:" + featureName);
+            JsonArray placement = new JsonArray();
+
+            // Rarity filter
+            JsonObject rarity = new JsonObject();
+            rarity.addProperty("type", "minecraft:rarity_filter");
+            rarity.addProperty("chance", Integer.parseInt(v[7]));
+            placement.add(rarity);
+
+            // Square spread
+            JsonObject square = new JsonObject();
+            square.addProperty("type", "minecraft:in_square");
+            placement.add(square);
+
+            // Heightmap placement
+            JsonObject heightmap = new JsonObject();
+            heightmap.addProperty("type", "minecraft:heightmap");
+            heightmap.addProperty("heightmap", "WORLD_SURFACE_WG");
+            placement.add(heightmap);
+
+            // Biome filter
+            JsonObject biomeFilter = new JsonObject();
+            biomeFilter.addProperty("type", "minecraft:biome");
+            placement.add(biomeFilter);
+
+            pf.add("placement", placement);
+            writeJsonFile(pfPath + featureName + ".json", pf);
+        }
+
+        AdAstraMekanized.LOGGER.info("Generated crater features for planet '{}' (frequency: {})", planet.name, planet.craterFrequency);
     }
 
     /**
@@ -7386,6 +7564,12 @@ public class PlanetMaker {
                         break;
                     case 2: // local_modifications
                         stepFeatures.add("minecraft:amethyst_geode");
+                        // Add crater features if enabled
+                        if (planet.cratersEnabled) {
+                            stepFeatures.add("adastramekanized:" + planet.name + "_crater_small");
+                            stepFeatures.add("adastramekanized:" + planet.name + "_crater_medium");
+                            stepFeatures.add("adastramekanized:" + planet.name + "_crater_large");
+                        }
                         break;
                     case 3: // underground_structures
                         // Note: minecraft:monster_room and monster_room_deep intentionally excluded

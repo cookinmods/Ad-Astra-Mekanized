@@ -21,7 +21,10 @@
     [],
     [],
     [
-      "minecraft:amethyst_geode"
+      "minecraft:amethyst_geode",
+      "adastramekanized:ganymede_crater_small",
+      "adastramekanized:ganymede_crater_medium",
+      "adastramekanized:ganymede_crater_large"
     ],
     [],
     [],

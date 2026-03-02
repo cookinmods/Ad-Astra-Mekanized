@@ -1,0 +1,26 @@
+{
+  "type": "adastramekanized:crater",
+  "config": {
+    "radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 10,
+      "max_inclusive": 16
+    },
+    "depth": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 5,
+      "max_inclusive": 8
+    },
+    "rim_height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2,
+      "max_inclusive": 3
+    },
+    "floor_block": {
+      "Name": "minecraft:stone"
+    },
+    "rim_block": {
+      "Name": "minecraft:gravel"
+    }
+  }
+}
