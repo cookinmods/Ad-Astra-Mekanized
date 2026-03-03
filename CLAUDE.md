@@ -510,21 +510,24 @@ All spline references are replaced from `minecraft:overworld/` to `adastramekani
 | `jaggednessNoiseScale` | 1500.0 | `.jaggedNoiseScale(float)` | Mountain peak spacing (lower = closer peaks) |
 | `base3DNoiseXZScale` | 0.25 | `.base3dNoiseScale(xz, y)` | Horizontal terrain frequency |
 | `base3DNoiseYScale` | 0.125 | `.base3dNoiseScale(xz, y)` | Vertical terrain frequency |
-| `base3DNoiseXZFactor` | 80.0 | `.base3dNoiseFactor(xz, y)` | Horizontal terrain amplitude |
-| `base3DNoiseYFactor` | 160.0 | `.base3dNoiseFactor(xz, y)` | Vertical terrain amplitude |
+| `base3DNoiseXZFactor` | 80.0 | `.base3dNoiseFactor(xz, y)` | Horizontal smoothing (**higher = smoother**) |
+| `base3DNoiseYFactor` | 160.0 | `.base3dNoiseFactor(xz, y)` | Vertical smoothing (**higher = smoother**) |
 | `smearScaleMultiplier` | 8.0 | `.base3dNoiseSmear(float)` | Terrain smoothing (lower = sharper) |
 | `coordinateShiftX/Z` | auto | `.coordinateShift(x, z)` | Noise space offset for uniqueness |
 
+**IMPORTANT:** Higher `xz_factor` and `y_factor` values produce SMOOTHER terrain. Lower values produce BUMPIER, more dramatic terrain. This is counterintuitive but follows from how `old_blended_noise` divides coordinates by these factors.
+
 #### Preset Parameter Values
 
-| Preset | terrainFactor | jaggedScale | xzFactor | smear |
-|--------|---------------|-------------|----------|-------|
-| Standard | 4.0 | 1500.0 | 80.0 | 8.0 |
-| Flat | 2.0 | 2000.0 | 40.0 | 8.0 |
-| Mountainous | 6.0 | 1000.0 | 120.0 | 8.0 |
-| Alien | 5.0 | 1200.0 | 60.0 | 6.0 |
-| Cratered | 3.0 | 800.0 | 100.0 | 4.0 |
-| Archipelago | 4.0 | 1500.0 | 50.0 | 8.0 |
+| Preset | terrainFactor | jaggedScale | xzFactor | yFactor | smear |
+|--------|---------------|-------------|----------|---------|-------|
+| Standard | 4.0 | 1500.0 | 80.0 | 160.0 | 8.0 |
+| Flat | 2.0 | 2000.0 | 180.0 | 300.0 | 8.0 |
+| Mountainous | 6.0 | 1000.0 | 50.0 | 80.0 | 8.0 |
+| Alien | 5.0 | 1200.0 | 60.0 | 140.0 | 6.0 |
+| Cratered | 3.0 | 800.0 | 100.0 | 160.0 | 4.0 |
+| Lunar | 1.8 | 2500.0 | 160.0 | 300.0 | 8.0 |
+| Archipelago | 4.0 | 1500.0 | 50.0 | 160.0 | 8.0 |
 
 #### Example: Moon with Vanilla-Quality Terrain
 
@@ -553,7 +556,19 @@ worldgen/density_function/{planet}/
 ├── jaggedness.json        # Full vanilla spline (11KB)
 ├── depth.json             # Y-gradient + offset
 ├── base_3d_noise.json     # Configurable 3D noise
-└── sloped_cheese.json     # Core terrain formula
+├── sloped_cheese.json     # Core terrain formula
+├── final_density.json     # Full terrain + cave system composition
+├── caves/
+│   ├── entrances.json              # Coordinate-shifted cave entrances
+│   ├── spaghetti_2d.json           # Coordinate-shifted 2D spaghetti caves
+│   ├── spaghetti_roughness_function.json  # Shifted roughness
+│   ├── spaghetti_2d_thickness_modulator.json  # Shifted thickness
+│   ├── pillars.json                # Coordinate-shifted cave pillars
+│   └── noodle.json                 # Coordinate-shifted noodle caves
+├── aquifer_barrier.json            # (aquifer-enabled planets only)
+├── aquifer_fluid_level_floodedness.json  # (aquifer-enabled planets only)
+├── aquifer_fluid_level_spread.json      # (aquifer-enabled planets only)
+└── aquifer_lava.json                    # (aquifer-enabled planets only)
 ```
 
 ### Available Planets (31 Total)
