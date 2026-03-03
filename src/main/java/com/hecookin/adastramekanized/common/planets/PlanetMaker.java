@@ -4923,11 +4923,63 @@ public class PlanetMaker {
             .replace("minecraft:overworld/sloped_cheese", planetRef + "/sloped_cheese");
         writeStringToFile(path + "final_density.json", finalDensityJson);
 
+        // Generate aquifer density functions if aquifers are enabled
+        generateAquiferDensityFunctions(planet, shiftX, shiftZ);
+
         AdAstraMekanized.LOGGER.info("Generated VANILLA-QUALITY density functions for planet '{}' with shift ({}, {})",
             planet.name, shiftX, shiftZ);
         AdAstraMekanized.LOGGER.info("  - terrainFactor: {}, jaggedNoiseScale: {}", planet.terrainFactor, planet.jaggednessNoiseScale);
         AdAstraMekanized.LOGGER.info("  - base3D: xzScale={}, yScale={}, xzFactor={}, yFactor={}, smear={}",
             planet.base3DNoiseXZScale, planet.base3DNoiseYScale, planet.base3DNoiseXZFactor, planet.base3DNoiseYFactor, planet.smearScaleMultiplier);
+    }
+
+    /**
+     * Generate per-planet aquifer density function files for planets with aquifers enabled.
+     * Uses shifted_noise to produce unique aquifer patterns per planet.
+     */
+    private static void generateAquiferDensityFunctions(PlanetBuilder planet, int shiftX, int shiftZ) throws IOException {
+        if (!planet.aquifersEnabled) return;
+
+        String path = RESOURCES_PATH + "worldgen/density_function/" + planet.name + "/";
+
+        // Vanilla aquifer noise definitions: {fileName, noiseId, xzScale, yScale}
+        Object[][] aquiferNoises = {
+            {"aquifer_barrier",                  "minecraft:aquifer_barrier",                  1.0, 0.5},
+            {"aquifer_fluid_level_floodedness",  "minecraft:aquifer_fluid_level_floodedness",  1.0, 0.67},
+            {"aquifer_fluid_level_spread",       "minecraft:aquifer_fluid_level_spread",       1.0, 0.7142857142857143},
+            {"aquifer_lava",                     "minecraft:aquifer_lava",                     1.0, 1.0}
+        };
+
+        for (Object[] def : aquiferNoises) {
+            String fileName = (String) def[0];
+            String noiseId = (String) def[1];
+            double xzScale = (double) def[2];
+            double yScale = (double) def[3];
+
+            // Build shift_x: minecraft:shift_x + planetShift
+            JsonObject shiftXObj = new JsonObject();
+            shiftXObj.addProperty("type", "minecraft:add");
+            shiftXObj.addProperty("argument1", "minecraft:shift_x");
+            shiftXObj.addProperty("argument2", (double) shiftX);
+
+            // Build shift_z: minecraft:shift_z + planetShift
+            JsonObject shiftZObj = new JsonObject();
+            shiftZObj.addProperty("type", "minecraft:add");
+            shiftZObj.addProperty("argument1", "minecraft:shift_z");
+            shiftZObj.addProperty("argument2", (double) shiftZ);
+
+            // Build shifted_noise
+            JsonObject shiftedNoise = new JsonObject();
+            shiftedNoise.addProperty("type", "minecraft:shifted_noise");
+            shiftedNoise.addProperty("noise", noiseId);
+            shiftedNoise.add("shift_x", shiftXObj);
+            shiftedNoise.addProperty("shift_y", "minecraft:zero");
+            shiftedNoise.add("shift_z", shiftZObj);
+            shiftedNoise.addProperty("xz_scale", xzScale);
+            shiftedNoise.addProperty("y_scale", yScale);
+
+            writeJsonFile(path + fileName + ".json", shiftedNoise);
+        }
     }
 
     /**
@@ -4984,6 +5036,9 @@ public class PlanetMaker {
         // These use coordinate-shifted noise to produce unique terrain per planet
         generateCoordinateShiftedTerrainDensityFunctions(planet, shiftX, shiftZ);
 
+        // Generate aquifer density functions if aquifers are enabled
+        generateAquiferDensityFunctions(planet, shiftX, shiftZ);
+
         AdAstraMekanized.LOGGER.info("Generated {} custom density functions for planet '{}' with coordinate shift ({}, {})",
                 noiseTypes.length, planet.name, shiftX, shiftZ);
     }
@@ -5030,14 +5085,20 @@ public class PlanetMaker {
             // Reference vanilla noise density functions - proven and tested!
             // This creates a noise_router object that references vanilla density functions
             JsonObject noiseRouter = new JsonObject();
-            // Use constant values for aquifer/fluid/biome noise fields
-            // These don't exist as separate density function entries in vanilla
-            // (vanilla defines them inline in NoiseRouterData.java)
-            // Planets use their own ore/fluid systems, so constants are correct
-            noiseRouter.addProperty("barrier", planet.barrierNoise);
-            noiseRouter.addProperty("fluid_level_floodedness", planet.fluidLevelFloodedness);
-            noiseRouter.addProperty("fluid_level_spread", planet.fluidLevelSpread);
-            noiseRouter.addProperty("lava", planet.lavaNoise);
+            // Aquifer noise fields: use per-planet density functions when aquifers are enabled,
+            // otherwise fall back to constants (planets without aquifers don't need fluid simulation)
+            if (planet.aquifersEnabled) {
+                String aquiferRef = "adastramekanized:" + planet.name;
+                noiseRouter.addProperty("barrier",                 aquiferRef + "/aquifer_barrier");
+                noiseRouter.addProperty("fluid_level_floodedness", aquiferRef + "/aquifer_fluid_level_floodedness");
+                noiseRouter.addProperty("fluid_level_spread",      aquiferRef + "/aquifer_fluid_level_spread");
+                noiseRouter.addProperty("lava",                    aquiferRef + "/aquifer_lava");
+            } else {
+                noiseRouter.addProperty("barrier", planet.barrierNoise);
+                noiseRouter.addProperty("fluid_level_floodedness", planet.fluidLevelFloodedness);
+                noiseRouter.addProperty("fluid_level_spread", planet.fluidLevelSpread);
+                noiseRouter.addProperty("lava", planet.lavaNoise);
+            }
             noiseRouter.addProperty("temperature", planet.temperatureNoise);
             noiseRouter.addProperty("vegetation", planet.vegetationNoise);
 
@@ -5209,16 +5270,24 @@ public class PlanetMaker {
         JsonObject router = new JsonObject();
 
         // Noise routing parameters with liquid system integration
-        router.addProperty("barrier", planet.barrierNoise);
+        if (planet.aquifersEnabled) {
+            String aquiferRef = "adastramekanized:" + planet.name;
+            router.addProperty("barrier",                 aquiferRef + "/aquifer_barrier");
+            router.addProperty("fluid_level_floodedness", aquiferRef + "/aquifer_fluid_level_floodedness");
+            router.addProperty("fluid_level_spread",      aquiferRef + "/aquifer_fluid_level_spread");
+            router.addProperty("lava",                    aquiferRef + "/aquifer_lava");
+        } else {
+            router.addProperty("barrier", planet.barrierNoise);
 
-        // Fluid level controls based on liquid system settings
-        router.addProperty("fluid_level_floodedness",
-            planet.oceanFrequency > 0 ? planet.fluidLevelFloodedness * planet.oceanFrequency : 0.0f);
-        router.addProperty("fluid_level_spread",
-            planet.lakeFrequency > 0 ? planet.fluidLevelSpread + (planet.lakeFrequency * 0.2f) : planet.fluidLevelSpread);
+            // Fluid level controls based on liquid system settings
+            router.addProperty("fluid_level_floodedness",
+                planet.oceanFrequency > 0 ? planet.fluidLevelFloodedness * planet.oceanFrequency : 0.0f);
+            router.addProperty("fluid_level_spread",
+                planet.lakeFrequency > 0 ? planet.fluidLevelSpread + (planet.lakeFrequency * 0.2f) : planet.fluidLevelSpread);
 
-        // Lava controlled by lava lake settings
-        router.addProperty("lava", planet.lavaLakeFrequency > 0 ? planet.lavaNoise : 0.0f);
+            // Lava controlled by lava lake settings
+            router.addProperty("lava", planet.lavaLakeFrequency > 0 ? planet.lavaNoise : 0.0f);
+        }
 
         router.addProperty("temperature", planet.temperatureNoise);
         router.addProperty("vegetation", planet.vegetationNoise);
