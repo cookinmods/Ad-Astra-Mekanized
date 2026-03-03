@@ -4789,6 +4789,82 @@ public class PlanetMaker {
     }
 
     /**
+     * Generate constant offset.json for flat terrain.
+     * The blend structure is required for proper chunk border blending.
+     * @param surfaceOffset The offset value (e.g., -0.50375 for Y63)
+     */
+    private static String generateConstantOffsetJson(float surfaceOffset) {
+        return """
+        {
+          "type": "minecraft:flat_cache",
+          "argument": {
+            "type": "minecraft:cache_2d",
+            "argument": {
+              "type": "minecraft:add",
+              "argument1": {
+                "type": "minecraft:mul",
+                "argument1": { "type": "minecraft:blend_offset" },
+                "argument2": {
+                  "type": "minecraft:add",
+                  "argument1": 1.0,
+                  "argument2": {
+                    "type": "minecraft:mul",
+                    "argument1": -1.0,
+                    "argument2": { "type": "minecraft:cache_once", "argument": { "type": "minecraft:blend_alpha" } }
+                  }
+                }
+              },
+              "argument2": {
+                "type": "minecraft:mul",
+                "argument1": %s,
+                "argument2": { "type": "minecraft:cache_once", "argument": { "type": "minecraft:blend_alpha" } }
+              }
+            }
+          }
+        }
+        """.formatted(surfaceOffset);
+    }
+
+    /**
+     * Generate constant factor.json for flat terrain.
+     * Effective factor = 6.0 (high compression = sharp ground/air boundary).
+     */
+    private static String generateConstantFactorJson() {
+        return """
+        {
+          "type": "minecraft:flat_cache",
+          "argument": {
+            "type": "minecraft:cache_2d",
+            "argument": {
+              "type": "minecraft:add",
+              "argument1": 10.0,
+              "argument2": {
+                "type": "minecraft:mul",
+                "argument1": { "type": "minecraft:blend_alpha" },
+                "argument2": -4.0
+              }
+            }
+          }
+        }
+        """;
+    }
+
+    /**
+     * Generate zero jaggedness.json (no mountain peaks).
+     */
+    private static String generateConstantJaggednessJson() {
+        return """
+        {
+          "type": "minecraft:flat_cache",
+          "argument": {
+            "type": "minecraft:cache_2d",
+            "argument": 0.0
+          }
+        }
+        """;
+    }
+
+    /**
      * Generate VANILLA-QUALITY density functions for a planet.
      * This copies the full vanilla density function set (offset, factor, jaggedness splines)
      * and replaces 'minecraft:overworld/' references with planet-specific references.
@@ -4893,20 +4969,27 @@ public class PlanetMaker {
         ridgesFolded.add("argument2", rfAdd);
         writeJsonFile(path + "ridges_folded.json", ridgesFolded);
 
-        // 5. Copy and transform offset.json (replace minecraft:overworld/ with planet ref)
-        String offsetContent = readFileToString(templatePath + "vanilla_offset.json");
-        offsetContent = offsetContent.replace("minecraft:overworld/", planetRef + "/");
-        writeStringToFile(path + "offset.json", offsetContent);
+        // 5-7. Generate offset, factor, jaggedness (constant or vanilla splines)
+        if (planet.useConstantSplines) {
+            // Constant splines for flat/barren terrain
+            // base_3d_noise becomes the sole source of terrain variation
+            writeStringToFile(path + "offset.json", generateConstantOffsetJson(planet.constantSurfaceOffset));
+            writeStringToFile(path + "factor.json", generateConstantFactorJson());
+            writeStringToFile(path + "jaggedness.json", generateConstantJaggednessJson());
+        } else {
+            // Full vanilla splines for complex terrain
+            String offsetContent = readFileToString(templatePath + "vanilla_offset.json");
+            offsetContent = offsetContent.replace("minecraft:overworld/", planetRef + "/");
+            writeStringToFile(path + "offset.json", offsetContent);
 
-        // 6. Copy and transform factor.json
-        String factorContent = readFileToString(templatePath + "vanilla_factor.json");
-        factorContent = factorContent.replace("minecraft:overworld/", planetRef + "/");
-        writeStringToFile(path + "factor.json", factorContent);
+            String factorContent = readFileToString(templatePath + "vanilla_factor.json");
+            factorContent = factorContent.replace("minecraft:overworld/", planetRef + "/");
+            writeStringToFile(path + "factor.json", factorContent);
 
-        // 7. Copy and transform jaggedness.json
-        String jaggednessContent = readFileToString(templatePath + "vanilla_jaggedness.json");
-        jaggednessContent = jaggednessContent.replace("minecraft:overworld/", planetRef + "/");
-        writeStringToFile(path + "jaggedness.json", jaggednessContent);
+            String jaggednessContent = readFileToString(templatePath + "vanilla_jaggedness.json");
+            jaggednessContent = jaggednessContent.replace("minecraft:overworld/", planetRef + "/");
+            writeStringToFile(path + "jaggedness.json", jaggednessContent);
+        }
 
         // 8. Generate depth.json (references planet's offset)
         JsonObject depth = new JsonObject();
