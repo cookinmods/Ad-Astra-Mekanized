@@ -1085,6 +1085,31 @@ public class PlanetMaker {
         }
 
         /**
+         * Barren asteroid/moon terrain preset.
+         * Uses constant splines (flat baseline) with moderate base_3d_noise for gentle hills.
+         * Surface height is configurable via constantSurfaceHeight().
+         * No mountains, no deep valleys — just gentle rolling terrain.
+         *
+         * Expected terrain: flat baseline ~Y63, gentle hills +/- 10 blocks.
+         *
+         * Parameters tuned specifically for the "constant splines + noise hills" approach:
+         * - terrainFactor 3.0: enough amplitude for visible hills from base_3d_noise
+         * - xz_factor 100.0: moderate horizontal smoothing (not too smooth, not too bumpy)
+         * - y_factor 200.0: smooth vertically to avoid overhangs on barren worlds
+         * - smear 6.0: moderate smoothing for natural-looking hills
+         */
+        public PlanetBuilder vanillaQualityBarren() {
+            vanillaQualityStandard();
+            this.useConstantSplines = true;
+            this.terrainFactor = 3.0f;
+            this.base3DNoiseXZFactor = 100.0f;
+            this.base3DNoiseYFactor = 200.0f;
+            this.jaggednessNoiseScale = 2000.0f;
+            this.smearScaleMultiplier = 6.0f;
+            return this;
+        }
+
+        /**
          * VANILLA-QUALITY: Archipelago terrain with lots of water
          * Good for ocean worlds with island chains.
          */
