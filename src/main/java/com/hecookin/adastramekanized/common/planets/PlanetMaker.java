@@ -985,9 +985,10 @@ public class PlanetMaker {
          */
         public PlanetBuilder vanillaQualityFlat() {
             vanillaQualityStandard();
-            this.terrainFactor = 2.0f;       // Less dramatic terrain
-            this.base3DNoiseXZFactor = 40.0f; // Smaller features
-            this.jaggednessNoiseScale = 2000.0f;  // Larger mountain spacing
+            this.terrainFactor = 2.0f;              // Less dramatic terrain
+            this.base3DNoiseXZFactor = 180.0f;      // Very smooth horizontally (higher = smoother)
+            this.base3DNoiseYFactor = 300.0f;       // Very smooth vertically
+            this.jaggednessNoiseScale = 2000.0f;    // Rare mountain peaks
             return this;
         }
 
@@ -997,9 +998,10 @@ public class PlanetMaker {
          */
         public PlanetBuilder vanillaQualityMountainous() {
             vanillaQualityStandard();
-            this.terrainFactor = 6.0f;        // More dramatic terrain
-            this.jaggednessNoiseScale = 1000.0f;  // Closer mountain peaks
-            this.base3DNoiseXZFactor = 120.0f;    // Larger features
+            this.terrainFactor = 6.0f;              // More dramatic terrain
+            this.jaggednessNoiseScale = 1000.0f;    // Closer mountain peaks
+            this.base3DNoiseXZFactor = 50.0f;       // Dramatic features (lower = bumpier)
+            this.base3DNoiseYFactor = 80.0f;        // More vertical variation
             return this;
         }
 
@@ -1037,11 +1039,11 @@ public class PlanetMaker {
          */
         public PlanetBuilder vanillaQualityLunar() {
             vanillaQualityStandard();
-            this.terrainFactor = 1.8f;           // Subdued terrain, highlands still present
-            this.base3DNoiseXZFactor = 35.0f;    // Less surface variation
-            this.base3DNoiseYFactor = 60.0f;     // Moderate vertical range
-            this.jaggednessNoiseScale = 2500.0f; // Rare peaks
-            this.smearScaleMultiplier = 8.0f;    // Max smoothing (codec limit: 1.0-8.0)
+            this.terrainFactor = 1.8f;              // Subdued terrain height
+            this.base3DNoiseXZFactor = 160.0f;      // Smooth rolling plains (higher = smoother)
+            this.base3DNoiseYFactor = 300.0f;       // Very smooth vertically
+            this.jaggednessNoiseScale = 2500.0f;    // Rare peaks
+            this.smearScaleMultiplier = 8.0f;       // Max smoothing (codec limit: 1.0-8.0)
             return this;
         }
 
