@@ -3,7 +3,10 @@ package com.hecookin.adastramekanized.common.planets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.worldgen.config.*;
 
@@ -230,6 +233,34 @@ public class PlanetMaker {
   }
 }
 """;
+
+    // Vanilla cave density function templates (extracted from Minecraft JAR)
+    // These are transformed per-planet by converting minecraft:noise to minecraft:shifted_noise
+    // and replacing minecraft:overworld/caves/ references with planet-specific paths
+
+    // entrances.json
+    private static final String VANILLA_CAVE_ENTRANCES = """
+{"type":"minecraft:cache_once","argument":{"type":"minecraft:min","argument1":{"type":"minecraft:add","argument1":{"type":"minecraft:add","argument1":0.37,"argument2":{"type":"minecraft:noise","noise":"minecraft:cave_entrance","xz_scale":0.75,"y_scale":0.5}},"argument2":{"type":"minecraft:y_clamped_gradient","from_value":0.3,"from_y":-10,"to_value":0.0,"to_y":30}},"argument2":{"type":"minecraft:add","argument1":"minecraft:overworld/caves/spaghetti_roughness_function","argument2":{"type":"minecraft:clamp","input":{"type":"minecraft:add","argument1":{"type":"minecraft:max","argument1":{"type":"minecraft:weird_scaled_sampler","input":{"type":"minecraft:cache_once","argument":{"type":"minecraft:noise","noise":"minecraft:spaghetti_3d_rarity","xz_scale":2.0,"y_scale":1.0}},"noise":"minecraft:spaghetti_3d_1","rarity_value_mapper":"type_1"},"argument2":{"type":"minecraft:weird_scaled_sampler","input":{"type":"minecraft:cache_once","argument":{"type":"minecraft:noise","noise":"minecraft:spaghetti_3d_rarity","xz_scale":2.0,"y_scale":1.0}},"noise":"minecraft:spaghetti_3d_2","rarity_value_mapper":"type_1"}},"argument2":{"type":"minecraft:add","argument1":-0.0765,"argument2":{"type":"minecraft:mul","argument1":-0.011499999999999996,"argument2":{"type":"minecraft:noise","noise":"minecraft:spaghetti_3d_thickness","xz_scale":1.0,"y_scale":1.0}}}},"max":1.0,"min":-1.0}}}}""";
+
+    // spaghetti_2d.json
+    private static final String VANILLA_CAVE_SPAGHETTI_2D = """
+{"type":"minecraft:clamp","input":{"type":"minecraft:max","argument1":{"type":"minecraft:add","argument1":{"type":"minecraft:weird_scaled_sampler","input":{"type":"minecraft:noise","noise":"minecraft:spaghetti_2d_modulator","xz_scale":2.0,"y_scale":1.0},"noise":"minecraft:spaghetti_2d","rarity_value_mapper":"type_2"},"argument2":{"type":"minecraft:mul","argument1":0.083,"argument2":"minecraft:overworld/caves/spaghetti_2d_thickness_modulator"}},"argument2":{"type":"minecraft:cube","argument":{"type":"minecraft:add","argument1":{"type":"minecraft:abs","argument":{"type":"minecraft:add","argument1":{"type":"minecraft:add","argument1":0.0,"argument2":{"type":"minecraft:mul","argument1":8.0,"argument2":{"type":"minecraft:noise","noise":"minecraft:spaghetti_2d_elevation","xz_scale":1.0,"y_scale":0.0}}},"argument2":{"type":"minecraft:y_clamped_gradient","from_value":8.0,"from_y":-64,"to_value":-40.0,"to_y":320}}},"argument2":"minecraft:overworld/caves/spaghetti_2d_thickness_modulator"}}},"max":1.0,"min":-1.0}""";
+
+    // spaghetti_roughness_function.json
+    private static final String VANILLA_CAVE_SPAGHETTI_ROUGHNESS = """
+{"type":"minecraft:cache_once","argument":{"type":"minecraft:mul","argument1":{"type":"minecraft:add","argument1":-0.05,"argument2":{"type":"minecraft:mul","argument1":-0.05,"argument2":{"type":"minecraft:noise","noise":"minecraft:spaghetti_roughness_modulator","xz_scale":1.0,"y_scale":1.0}}},"argument2":{"type":"minecraft:add","argument1":-0.4,"argument2":{"type":"minecraft:abs","argument":{"type":"minecraft:noise","noise":"minecraft:spaghetti_roughness","xz_scale":1.0,"y_scale":1.0}}}}}""";
+
+    // spaghetti_2d_thickness_modulator.json
+    private static final String VANILLA_CAVE_SPAGHETTI_2D_THICKNESS = """
+{"type":"minecraft:cache_once","argument":{"type":"minecraft:add","argument1":-0.95,"argument2":{"type":"minecraft:mul","argument1":-0.35000000000000003,"argument2":{"type":"minecraft:noise","noise":"minecraft:spaghetti_2d_thickness","xz_scale":2.0,"y_scale":1.0}}}}""";
+
+    // pillars.json
+    private static final String VANILLA_CAVE_PILLARS = """
+{"type":"minecraft:cache_once","argument":{"type":"minecraft:mul","argument1":{"type":"minecraft:add","argument1":{"type":"minecraft:mul","argument1":2.0,"argument2":{"type":"minecraft:noise","noise":"minecraft:pillar","xz_scale":25.0,"y_scale":0.3}},"argument2":{"type":"minecraft:add","argument1":-1.0,"argument2":{"type":"minecraft:mul","argument1":-1.0,"argument2":{"type":"minecraft:noise","noise":"minecraft:pillar_rareness","xz_scale":1.0,"y_scale":1.0}}}},"argument2":{"type":"minecraft:cube","argument":{"type":"minecraft:add","argument1":0.55,"argument2":{"type":"minecraft:mul","argument1":0.55,"argument2":{"type":"minecraft:noise","noise":"minecraft:pillar_thickness","xz_scale":1.0,"y_scale":1.0}}}}}}""";
+
+    // noodle.json
+    private static final String VANILLA_CAVE_NOODLE = """
+{"type":"minecraft:range_choice","input":{"type":"minecraft:interpolated","argument":{"type":"minecraft:range_choice","input":"minecraft:y","max_exclusive":321.0,"min_inclusive":-60.0,"when_in_range":{"type":"minecraft:noise","noise":"minecraft:noodle","xz_scale":1.0,"y_scale":1.0},"when_out_of_range":-1.0}},"max_exclusive":0.0,"min_inclusive":-1000000.0,"when_in_range":64.0,"when_out_of_range":{"type":"minecraft:add","argument1":{"type":"minecraft:interpolated","argument":{"type":"minecraft:range_choice","input":"minecraft:y","max_exclusive":321.0,"min_inclusive":-60.0,"when_in_range":{"type":"minecraft:add","argument1":-0.07500000000000001,"argument2":{"type":"minecraft:mul","argument1":-0.025,"argument2":{"type":"minecraft:noise","noise":"minecraft:noodle_thickness","xz_scale":1.0,"y_scale":1.0}}},"when_out_of_range":0.0}},"argument2":{"type":"minecraft:mul","argument1":1.5,"argument2":{"type":"minecraft:max","argument1":{"type":"minecraft:abs","argument":{"type":"minecraft:interpolated","argument":{"type":"minecraft:range_choice","input":"minecraft:y","max_exclusive":321.0,"min_inclusive":-60.0,"when_in_range":{"type":"minecraft:noise","noise":"minecraft:noodle_ridge_a","xz_scale":2.6666666666666665,"y_scale":2.6666666666666665},"when_out_of_range":0.0}}},"argument2":{"type":"minecraft:abs","argument":{"type":"minecraft:interpolated","argument":{"type":"minecraft:range_choice","input":"minecraft:y","max_exclusive":321.0,"min_inclusive":-60.0,"when_in_range":{"type":"minecraft:noise","noise":"minecraft:noodle_ridge_b","xz_scale":2.6666666666666665,"y_scale":2.6666666666666665},"when_out_of_range":0.0}}}}}}}""";
 
     /**
      * Start building a new planet with the given name
@@ -4918,10 +4949,20 @@ public class PlanetMaker {
         //   - y_clamped_gradient for top fade (Y=240 to 256) - prevents terrain at build limit
         //   - range_choice for proper terrain/cave branching based on sloped_cheese threshold
         //   - Full vanilla cave system: cheese caves, entrances, spaghetti_2d, pillars, noodle
-        // Only replaces sloped_cheese references with planet-specific version; cave functions use vanilla
+        // Replaces sloped_cheese and all cave function references with planet-specific versions
+        // NOTE: spaghetti_roughness_function must be replaced BEFORE spaghetti_2d to avoid
+        // partial substring matching on the shared prefix
         String finalDensityJson = VANILLA_FINAL_DENSITY_TEMPLATE
-            .replace("minecraft:overworld/sloped_cheese", planetRef + "/sloped_cheese");
+            .replace("minecraft:overworld/sloped_cheese", planetRef + "/sloped_cheese")
+            .replace("minecraft:overworld/caves/spaghetti_roughness_function", planetRef + "/caves/spaghetti_roughness_function")
+            .replace("minecraft:overworld/caves/spaghetti_2d", planetRef + "/caves/spaghetti_2d")
+            .replace("minecraft:overworld/caves/entrances", planetRef + "/caves/entrances")
+            .replace("minecraft:overworld/caves/pillars", planetRef + "/caves/pillars")
+            .replace("minecraft:overworld/caves/noodle", planetRef + "/caves/noodle");
         writeStringToFile(path + "final_density.json", finalDensityJson);
+
+        // Generate per-planet cave density functions with coordinate shifting
+        generateCaveDensityFunctions(planet, shiftX, shiftZ);
 
         // Generate aquifer density functions if aquifers are enabled
         generateAquiferDensityFunctions(planet, shiftX, shiftZ);
@@ -4979,6 +5020,121 @@ public class PlanetMaker {
             shiftedNoise.addProperty("y_scale", yScale);
 
             writeJsonFile(path + fileName + ".json", shiftedNoise);
+        }
+    }
+
+    /**
+     * Transform a vanilla cave density function JSON by:
+     * 1. Converting all "minecraft:noise" nodes to "minecraft:shifted_noise" with planet coordinate offset
+     * 2. Replacing all "minecraft:overworld/caves/" string references with planet-specific references
+     */
+    private static JsonElement transformCaveJson(JsonElement element, String planetRef, int shiftX, int shiftZ) {
+        if (element.isJsonObject()) {
+            JsonObject obj = element.getAsJsonObject();
+
+            // Check if this is a minecraft:noise node that should be shifted
+            if (obj.has("type") && obj.get("type").getAsString().equals("minecraft:noise")) {
+                JsonObject shifted = new JsonObject();
+                shifted.addProperty("type", "minecraft:shifted_noise");
+                shifted.add("noise", obj.get("noise"));
+
+                // Build shift_x: minecraft:shift_x + planetShift
+                JsonObject shiftXObj = new JsonObject();
+                shiftXObj.addProperty("type", "minecraft:add");
+                shiftXObj.addProperty("argument1", "minecraft:shift_x");
+                shiftXObj.addProperty("argument2", (double) shiftX);
+                shifted.add("shift_x", shiftXObj);
+
+                shifted.addProperty("shift_y", "minecraft:zero");
+
+                // Build shift_z: minecraft:shift_z + planetShift
+                JsonObject shiftZObj = new JsonObject();
+                shiftZObj.addProperty("type", "minecraft:add");
+                shiftZObj.addProperty("argument1", "minecraft:shift_z");
+                shiftZObj.addProperty("argument2", (double) shiftZ);
+                shifted.add("shift_z", shiftZObj);
+
+                shifted.add("xz_scale", obj.get("xz_scale"));
+                shifted.add("y_scale", obj.get("y_scale"));
+                return shifted;
+            }
+
+            // Recursively transform all properties
+            JsonObject result = new JsonObject();
+            for (java.util.Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+                result.add(entry.getKey(), transformCaveJson(entry.getValue(), planetRef, shiftX, shiftZ));
+            }
+            return result;
+        } else if (element.isJsonArray()) {
+            JsonArray result = new JsonArray();
+            for (JsonElement el : element.getAsJsonArray()) {
+                result.add(transformCaveJson(el, planetRef, shiftX, shiftZ));
+            }
+            return result;
+        } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+            // Replace cross-references to overworld caves
+            String str = element.getAsString();
+            if (str.contains("minecraft:overworld/caves/")) {
+                return new JsonPrimitive(str.replace("minecraft:overworld/caves/", planetRef + "/caves/"));
+            }
+        }
+        return element;
+    }
+
+    /**
+     * Generate per-planet cave density function files with coordinate-shifted noise.
+     * Transforms vanilla cave density functions by converting minecraft:noise to
+     * minecraft:shifted_noise with per-planet coordinate offsets.
+     */
+    private static void generateCaveDensityFunctions(PlanetBuilder planet, int shiftX, int shiftZ) throws IOException {
+        String path = RESOURCES_PATH + "worldgen/density_function/" + planet.name + "/caves/";
+        String planetRef = "adastramekanized:" + planet.name;
+
+        // Create caves directory
+        new File(path).mkdirs();
+
+        // Map of filename -> vanilla template constant
+        String[][] caveFiles = {
+            {"entrances.json",                        VANILLA_CAVE_ENTRANCES},
+            {"spaghetti_2d.json",                     VANILLA_CAVE_SPAGHETTI_2D},
+            {"spaghetti_roughness_function.json",     VANILLA_CAVE_SPAGHETTI_ROUGHNESS},
+            {"spaghetti_2d_thickness_modulator.json", VANILLA_CAVE_SPAGHETTI_2D_THICKNESS},
+            {"pillars.json",                          VANILLA_CAVE_PILLARS},
+            {"noodle.json",                           VANILLA_CAVE_NOODLE}
+        };
+
+        for (String[] fileDef : caveFiles) {
+            String fileName = fileDef[0];
+            String vanillaJson = fileDef[1];
+
+            // Handle disabled cave types
+            boolean shouldGenerate = true;
+            if (!planet.enableSpaghettiCaves &&
+                (fileName.equals("spaghetti_2d.json") ||
+                 fileName.equals("spaghetti_roughness_function.json") ||
+                 fileName.equals("spaghetti_2d_thickness_modulator.json"))) {
+                shouldGenerate = false;
+            }
+            if (!planet.enableNoodleCaves && fileName.equals("noodle.json")) {
+                shouldGenerate = false;
+            }
+
+            if (shouldGenerate) {
+                // Parse vanilla JSON, transform noise nodes, write result
+                JsonElement parsed = JsonParser.parseString(vanillaJson);
+                JsonElement transformed = transformCaveJson(parsed, planetRef, shiftX, shiftZ);
+                writeJsonFile(path + fileName, transformed.getAsJsonObject());
+            } else {
+                // Write a constant that effectively disables this cave type
+                // For spaghetti: 1.0 prevents carving (min() in final_density picks terrain)
+                // For noodle: 64.0 prevents carving (same reason)
+                String disabledValue = fileName.equals("noodle.json") ? "64.0" : "1.0";
+                if (fileName.equals("spaghetti_roughness_function.json") ||
+                    fileName.equals("spaghetti_2d_thickness_modulator.json")) {
+                    disabledValue = "0.0";
+                }
+                writeStringToFile(path + fileName, disabledValue);
+            }
         }
     }
 
