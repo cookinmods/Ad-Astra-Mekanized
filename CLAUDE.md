@@ -500,6 +500,9 @@ All spline references are replaced from `minecraft:overworld/` to `adastramekani
 
 // Island chains and water bodies
 .vanillaQualityArchipelago()
+
+// Flat barren terrain for asteroid-like worlds (constant splines + noise hills)
+.vanillaQualityBarren()
 ```
 
 #### Configurable Terrain Parameters
@@ -528,6 +531,9 @@ All spline references are replaced from `minecraft:overworld/` to `adastramekani
 | Cratered | 3.0 | 800.0 | 100.0 | 160.0 | 4.0 |
 | Lunar | 1.8 | 2500.0 | 160.0 | 300.0 | 8.0 |
 | Archipelago | 4.0 | 1500.0 | 50.0 | 160.0 | 8.0 |
+| **Barren** | **3.0** | **2000.0** | **100.0** | **200.0** | **6.0** |
+
+**Note:** The Barren preset uses **constant splines** (flat offset/factor/jaggedness) instead of vanilla splines. This means `base_3d_noise` is the sole terrain driver — the parameters above matter much more for this preset than for spline-based presets.
 
 #### Example: Moon with Vanilla-Quality Terrain
 
