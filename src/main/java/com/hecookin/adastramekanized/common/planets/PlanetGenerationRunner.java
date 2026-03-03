@@ -275,7 +275,7 @@ public class PlanetGenerationRunner {
         // Uses vanillaQualityFlat preset for gentle rolling hills, no mountains
         // Caves remain enabled for underground exploration
         PlanetMaker.PlanetBuilder moon = registerPlanet("moon")
-            .vanillaQualityLunar()         // Smooth plains with highland areas, paired with crater features
+            .vanillaQualityBarren()        // Flat terrain with gentle hills, constant splines + moderate noise
             .coordinateShift(5000, 5000)   // Shift coordinates for unique Moon terrain
             // Physical properties
             .gravity(0.166f)  // Moon has 1/6 Earth gravity
@@ -345,7 +345,8 @@ public class PlanetGenerationRunner {
             )
             .allowPeacefulMobs(false)
             .enableKoboldsStructures()
-            .enableCraters()
+            .addCavePreset("surface_accessible")
+            .enableCraters("light")
             .craterFloorBlock("adastramekanized:moon_stone")
             .craterRimBlock("adastramekanized:moon_sand")
             .generate();
@@ -542,7 +543,7 @@ public class PlanetGenerationRunner {
         // MERCURY - Airless scorched world closest to sun
         // Extreme temperature, fire damage during day, airless, cratered
         registerPlanet("mercury")
-            .vanillaQualityCratered()
+            .vanillaQualityBarren()
             .coordinateShift(45000, 30000)
             .gravity(0.38f)
             .temperature(167) // Mercury average surface temperature
@@ -582,9 +583,9 @@ public class PlanetGenerationRunner {
             .starCount(30000)
             .starBrightness(2.0f)
             .addSun()
-            .addCavePreset("minimal_airless")
+            .addCavePreset("surface_accessible")
             .enableVanillaStructure("mineshaft")
-            .enableCraters("heavy")
+            .enableCraters("light")
             .craterFloorBlock("minecraft:gray_terracotta")
             .craterRimBlock("minecraft:light_gray_terracotta")
             .generate();
@@ -746,7 +747,7 @@ public class PlanetGenerationRunner {
         // CALLISTO - Ancient heavily cratered moon
         // Old surface, very cratered, sparse activity
         registerPlanet("callisto")
-            .vanillaQualityCratered()
+            .vanillaQualityBarren()
             .coordinateShift(30000, 45000)
             .gravity(0.13f)
             .temperature(-139) // Callisto surface temperature
@@ -800,9 +801,9 @@ public class PlanetGenerationRunner {
             .starCount(45000)
             .starBrightness(2.3f)
             .addSun()
-            .addCavePreset("minimal_airless")
+            .addCavePreset("surface_accessible")
             .enableVanillaStructure("mineshaft")
-            .enableCraters()
+            .enableCraters("light")
             .craterFloorBlock("minecraft:stone")
             .craterRimBlock("minecraft:gray_terracotta")
             .generate();
@@ -857,7 +858,7 @@ public class PlanetGenerationRunner {
         // ENCELADUS - Ice moon with geysers
         // Frozen, geyser activity, cratered, potential water
         registerPlanet("enceladus")
-            .vanillaQualityCratered()
+            .vanillaQualityBarren()
             .coordinateShift(60000, 45000)
             .gravity(0.05f)  // Minimum viable gravity
             .temperature(-201) // Enceladus surface temperature
@@ -892,7 +893,7 @@ public class PlanetGenerationRunner {
             .starCount(50000)
             .starBrightness(2.5f)
             .addSun()
-            .addCavePreset("frozen")
+            .addCavePreset("surface_accessible")
             .enableVanillaStructure("igloo")
             .generate();
 
@@ -949,7 +950,7 @@ public class PlanetGenerationRunner {
         // CERES - Asteroid belt dwarf planet
         // Airless, metal-rich, cratered
         registerPlanet("ceres")
-            .vanillaQualityCratered()
+            .vanillaQualityBarren()
             .coordinateShift(90000, 45000)
             .gravity(0.05f)  // Minimum viable gravity
             .temperature(-106) // Ceres average surface
@@ -1002,9 +1003,9 @@ public class PlanetGenerationRunner {
             .starCount(55000)
             .starBrightness(2.6f)
             .addSun()
-            .addCavePreset("minimal_airless")
+            .addCavePreset("surface_accessible")
             .enableVanillaStructure("mineshaft")
-            .enableCraters("light")
+            .enableCraters("sparse")
             .craterFloorBlock("minecraft:stone")
             .craterRimBlock("minecraft:gravel")
             .generate();
@@ -1012,7 +1013,7 @@ public class PlanetGenerationRunner {
         // PLUTO - Distant frozen dwarf planet
         // Very cold, nitrogen ice, heart-shaped terrain
         registerPlanet("pluto")
-            .vanillaQualityFlat()
+            .vanillaQualityBarren()
             .coordinateShift(30000, 60000)
             .gravity(0.06f)
             .temperature(-229) // Pluto frozen surface
@@ -1048,14 +1049,14 @@ public class PlanetGenerationRunner {
             .starCount(70000)
             .starBrightness(3.0f)
             .addSun()
-            .addCavePreset("minimal_airless")
+            .addCavePreset("surface_accessible")
             .enableVanillaStructure("igloo")
             .generate();
 
         // ERIS - Most distant dwarf planet
         // Extremely cold and dark, sparse
         registerPlanet("eris")
-            .vanillaQualityFlat()
+            .vanillaQualityBarren()
             .coordinateShift(45000, 60000)
             .gravity(0.08f)
             .temperature(-231) // Eris extremely cold
@@ -1089,7 +1090,7 @@ public class PlanetGenerationRunner {
             .starCount(80000)
             .starBrightness(3.2f)
             .addSun()
-            .addCavePreset("minimal_airless")
+            .addCavePreset("surface_accessible")
             .generate();
 
         // ==================== HABITABLE EXOPLANETS ====================
