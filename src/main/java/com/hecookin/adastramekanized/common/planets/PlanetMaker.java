@@ -3004,6 +3004,21 @@ public class PlanetMaker {
                     ravineConfig(0.01f, 1.5f); // Rare surface cracks
                     break;
 
+                case "surface_accessible":
+                    // Full vanilla cave frequency for barren planets with constant splines.
+                    // Constant splines make surface height predictable, so entrance caves
+                    // consistently intersect the surface creating visible openings.
+                    // Vanilla noise caves (cheese, spaghetti, noodle) run at full frequency
+                    // since the VANILLA_FINAL_DENSITY_TEMPLATE controls noise cave generation.
+                    // Carvers add physical tunnels from the surface.
+                    caveConfig(1.0f, 1.0f);    // Full vanilla frequency (for carver-based caves)
+                    cheeseCaves(true);
+                    spaghettiCaves(true);
+                    noodleCaves(true);
+                    caveHeightRange(-64, 256);
+                    ravineConfig(0.05f, 2.0f); // Moderate ravines (surface cracks/skylights)
+                    break;
+
                 case "balanced_vanilla":
                     // NORMAL cave generation - not too crazy
                     // Still less than vanilla to avoid swiss cheese planets
