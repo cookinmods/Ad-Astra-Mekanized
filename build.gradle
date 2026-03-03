@@ -284,6 +284,7 @@ tasks.register('makePlanets', JavaExec) {
             include "worldgen/configured_feature/*.json"
             include "worldgen/placed_feature/*.json"
             include "worldgen/biome/*.json"
+            include "worldgen/density_function/**/*.json"
             include "neoforge/biome_modifier/**/*.json"
         }
 
