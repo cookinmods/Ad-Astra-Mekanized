@@ -463,6 +463,12 @@ public class PlanetMaker {
         // Vanilla underground features - when true, adds vanilla ore/geode/dungeon features to biomes
         private boolean useVanillaUndergroundFeatures = false;
 
+        // Constant spline mode - replaces vanilla spline lookups with flat constants
+        // When true, offset/factor/jaggedness are simple constants instead of 60KB+ spline files
+        // base_3d_noise becomes the sole source of terrain variation (gentle hills)
+        private boolean useConstantSplines = false;
+        private float constantSurfaceOffset = -0.50375f; // Default: surface at Y63 (vanilla GLOBAL_OFFSET)
+
         // Frequency modulation for vanilla noise (multiply vanilla noise values to create distinct terrain)
         private double continentsMultiplier = 1.0;
         private double erosionMultiplier = 1.0;
@@ -1086,6 +1092,26 @@ public class PlanetMaker {
             vanillaQualityStandard();
             this.terrainFactor = 4.0f;
             this.base3DNoiseXZFactor = 50.0f;  // Smaller landmasses
+            return this;
+        }
+
+        /**
+         * Enable constant spline mode for flat/barren terrain.
+         * Replaces vanilla's complex spline lookup tables with simple constants.
+         * base_3d_noise becomes the sole source of terrain variation.
+         */
+        public PlanetBuilder useConstantSplines(boolean enabled) {
+            this.useConstantSplines = enabled;
+            return this;
+        }
+
+        /**
+         * Set the surface height for constant-spline planets.
+         * Converts a Y level to the internal offset value.
+         * @param y The desired surface Y level (e.g., 63 for sea level, 80 for elevated)
+         */
+        public PlanetBuilder constantSurfaceHeight(int y) {
+            this.constantSurfaceOffset = (y - 128) / 128.0f;
             return this;
         }
 
