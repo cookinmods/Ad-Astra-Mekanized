@@ -7365,6 +7365,9 @@ public class PlanetMaker {
             case "light":
                 smallRarity = 4; mediumRarity = 16; largeRarity = 80;
                 break;
+            case "sparse":
+                smallRarity = 8; mediumRarity = 32; largeRarity = 128;
+                break;
             default: // moderate
                 smallRarity = 3; mediumRarity = 12; largeRarity = 64;
                 break;
