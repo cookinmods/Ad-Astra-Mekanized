@@ -17,10 +17,10 @@
     "size_vertical": 2
   },
   "noise_router": {
-    "barrier": 0.0,
-    "fluid_level_floodedness": 0.0,
-    "fluid_level_spread": 0.0,
-    "lava": 0.0,
+    "barrier": "adastramekanized:terra_nova/aquifer_barrier",
+    "fluid_level_floodedness": "adastramekanized:terra_nova/aquifer_fluid_level_floodedness",
+    "fluid_level_spread": "adastramekanized:terra_nova/aquifer_fluid_level_spread",
+    "lava": "adastramekanized:terra_nova/aquifer_lava",
     "temperature": 0.0,
     "vegetation": 0.0,
     "continents": "adastramekanized:terra_nova/continents",

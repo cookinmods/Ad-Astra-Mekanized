@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:shifted_noise",
+  "noise": "minecraft:aquifer_fluid_level_floodedness",
+  "shift_x": {
+    "type": "minecraft:add",
+    "argument1": "minecraft:shift_x",
+    "argument2": 60000.0
+  },
+  "shift_y": "minecraft:zero",
+  "shift_z": {
+    "type": "minecraft:add",
+    "argument1": "minecraft:shift_z",
+    "argument2": 90000.0
+  },
+  "xz_scale": 1.0,
+  "y_scale": 0.67
+}

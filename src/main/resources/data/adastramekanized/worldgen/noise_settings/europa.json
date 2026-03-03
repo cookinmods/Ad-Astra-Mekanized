@@ -17,10 +17,10 @@
     "size_vertical": 2
   },
   "noise_router": {
-    "barrier": 0.0,
-    "fluid_level_floodedness": 0.0,
-    "fluid_level_spread": 0.0,
-    "lava": 0.0,
+    "barrier": "adastramekanized:europa/aquifer_barrier",
+    "fluid_level_floodedness": "adastramekanized:europa/aquifer_fluid_level_floodedness",
+    "fluid_level_spread": "adastramekanized:europa/aquifer_fluid_level_spread",
+    "lava": "adastramekanized:europa/aquifer_lava",
     "temperature": 0.0,
     "vegetation": 0.0,
     "continents": "adastramekanized:europa/continents",

@@ -17,10 +17,10 @@
     "size_vertical": 2
   },
   "noise_router": {
-    "barrier": 0.0,
-    "fluid_level_floodedness": 0.0,
-    "fluid_level_spread": 0.0,
-    "lava": 0.0,
+    "barrier": "adastramekanized:proxima_b/aquifer_barrier",
+    "fluid_level_floodedness": "adastramekanized:proxima_b/aquifer_fluid_level_floodedness",
+    "fluid_level_spread": "adastramekanized:proxima_b/aquifer_fluid_level_spread",
+    "lava": "adastramekanized:proxima_b/aquifer_lava",
     "temperature": 0.0,
     "vegetation": 0.0,
     "continents": "adastramekanized:proxima_b/continents",

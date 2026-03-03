@@ -17,10 +17,10 @@
     "size_vertical": 2
   },
   "noise_router": {
-    "barrier": 0.0,
-    "fluid_level_floodedness": 0.0,
-    "fluid_level_spread": 0.0,
-    "lava": 0.0,
+    "barrier": "adastramekanized:kepler442b/aquifer_barrier",
+    "fluid_level_floodedness": "adastramekanized:kepler442b/aquifer_fluid_level_floodedness",
+    "fluid_level_spread": "adastramekanized:kepler442b/aquifer_fluid_level_spread",
+    "lava": "adastramekanized:kepler442b/aquifer_lava",
     "temperature": 0.0,
     "vegetation": 0.0,
     "continents": "adastramekanized:kepler442b/continents",

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:cache_once",
+  "argument": {
+    "type": "minecraft:add",
+    "argument1": -0.95,
+    "argument2": {
+      "type": "minecraft:mul",
+      "argument1": -0.35000000000000003,
+      "argument2": {
+        "type": "minecraft:shifted_noise",
+        "noise": "minecraft:spaghetti_2d_thickness",
+        "shift_x": {
+          "type": "minecraft:add",
+          "argument1": "minecraft:shift_x",
+          "argument2": 120000.0
+        },
+        "shift_y": "minecraft:zero",
+        "shift_z": {
+          "type": "minecraft:add",
+          "argument1": "minecraft:shift_z",
+          "argument2": 120000.0
+        },
+        "xz_scale": 2.0,
+        "y_scale": 1.0
+      }
+    }
+  }
+}

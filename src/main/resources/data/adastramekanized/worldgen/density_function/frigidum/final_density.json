@@ -50,7 +50,7 @@
                           "argument2": {
                             "type": "minecraft:mul",
                             "argument1": 5.0,
-                            "argument2": "minecraft:overworld/caves/entrances"
+                            "argument2": "adastramekanized:frigidum/caves/entrances"
                           }
                         },
                         "when_out_of_range": {
@@ -107,21 +107,21 @@
                                   }
                                 }
                               },
-                              "argument2": "minecraft:overworld/caves/entrances"
+                              "argument2": "adastramekanized:frigidum/caves/entrances"
                             },
                             "argument2": {
                               "type": "minecraft:add",
-                              "argument1": "minecraft:overworld/caves/spaghetti_2d",
-                              "argument2": "minecraft:overworld/caves/spaghetti_roughness_function"
+                              "argument1": "adastramekanized:frigidum/caves/spaghetti_2d",
+                              "argument2": "adastramekanized:frigidum/caves/spaghetti_roughness_function"
                             }
                           },
                           "argument2": {
                             "type": "minecraft:range_choice",
-                            "input": "minecraft:overworld/caves/pillars",
+                            "input": "adastramekanized:frigidum/caves/pillars",
                             "max_exclusive": 0.03,
                             "min_inclusive": -1000000.0,
                             "when_in_range": -1000000.0,
-                            "when_out_of_range": "minecraft:overworld/caves/pillars"
+                            "when_out_of_range": "adastramekanized:frigidum/caves/pillars"
                           }
                         }
                       }
@@ -135,5 +135,5 @@
       }
     }
   },
-  "argument2": "minecraft:overworld/caves/noodle"
+  "argument2": "adastramekanized:frigidum/caves/noodle"
 }
