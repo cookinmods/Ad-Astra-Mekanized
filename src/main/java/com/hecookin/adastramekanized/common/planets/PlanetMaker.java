@@ -482,7 +482,7 @@ public class PlanetMaker {
         private float depthOffset = 0.0f;                  // Baseline terrain elevation offset
         private float terrainFactor = 1.0f;                // Overall terrain intensity multiplier
         private float base3DNoiseXZScale = 0.25f;          // Horizontal terrain frequency
-        private float base3DNoiseYScale = 0.2f;            // Vertical terrain frequency
+        private float base3DNoiseYScale = 0.125f;           // Vertical terrain frequency (vanilla default)
         private float base3DNoiseXZFactor = 80.0f;         // Horizontal terrain amplitude
         private float base3DNoiseYFactor = 90.0f;          // Vertical terrain amplitude
         private float smearScaleMultiplier = 8.0f;         // Terrain smoothing factor
@@ -969,6 +969,8 @@ public class PlanetMaker {
             this.useVanillaNoise = true;
             this.useVanillaCaves = true;
             this.useVanillaUndergroundFeatures = true;
+            this.base3DNoiseXZScale = 0.25f;        // Explicit vanilla default
+            this.base3DNoiseYScale = 0.125f;        // Explicit vanilla default
             this.terrainFactor = 4.0f;
             this.jaggednessNoiseScale = 1500.0f;
             this.base3DNoiseXZFactor = 80.0f;
@@ -1039,7 +1041,7 @@ public class PlanetMaker {
             this.base3DNoiseXZFactor = 35.0f;    // Less surface variation
             this.base3DNoiseYFactor = 60.0f;     // Moderate vertical range
             this.jaggednessNoiseScale = 2500.0f; // Rare peaks
-            this.smearScaleMultiplier = 10.0f;   // Smooth transitions
+            this.smearScaleMultiplier = 8.0f;    // Max smoothing (codec limit: 1.0-8.0)
             return this;
         }
 
@@ -4863,7 +4865,7 @@ public class PlanetMaker {
         // 9. Generate base_3d_noise.json (configurable)
         JsonObject base3dNoise = new JsonObject();
         base3dNoise.addProperty("type", "minecraft:old_blended_noise");
-        base3dNoise.addProperty("smear_scale_multiplier", planet.smearScaleMultiplier);
+        base3dNoise.addProperty("smear_scale_multiplier", Math.max(1.0f, Math.min(8.0f, planet.smearScaleMultiplier)));
         base3dNoise.addProperty("xz_factor", planet.base3DNoiseXZFactor);
         base3dNoise.addProperty("xz_scale", planet.base3DNoiseXZScale);
         base3dNoise.addProperty("y_factor", planet.base3DNoiseYFactor);
