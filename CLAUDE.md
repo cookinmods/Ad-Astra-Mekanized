@@ -729,6 +729,7 @@ registerPlanet("habitable_world")
 - `DEVELOPMENT_HISTORY.md` - Complete development history and lessons learned
 - `TERRABLENDER_INTEGRATION.md` - TerraBlender integration guide and configuration
 - `CELESTIAL_CONFIGURATION.md` - Celestial bodies and sky customization guide
+- `docs/TERRAIN_LESSONS_LEARNED.md` - Hard-won terrain generation knowledge (spline vs noise layers, parameter gotchas, constant splines)
 - Additional working directories with reference implementations:
   - `/home/keroppi/Development/Minecraft/Ad-Astra/` (original Ad Astra reference)
   - `/home/keroppi/Development/Minecraft/Mekanism/` (Mekanism reference)

@@ -346,7 +346,7 @@ public class PlanetGenerationRunner {
             .allowPeacefulMobs(false)
             .enableKoboldsStructures()
             .addCavePreset("surface_accessible")
-            .enableCraters("light")
+            .enableCraters("sparse")
             .craterFloorBlock("adastramekanized:moon_stone")
             .craterRimBlock("adastramekanized:moon_sand")
             .generate();
@@ -585,7 +585,7 @@ public class PlanetGenerationRunner {
             .addSun()
             .addCavePreset("surface_accessible")
             .enableVanillaStructure("mineshaft")
-            .enableCraters("light")
+            .enableCraters("sparse")
             .craterFloorBlock("minecraft:gray_terracotta")
             .craterRimBlock("minecraft:light_gray_terracotta")
             .generate();
@@ -803,7 +803,7 @@ public class PlanetGenerationRunner {
             .addSun()
             .addCavePreset("surface_accessible")
             .enableVanillaStructure("mineshaft")
-            .enableCraters("light")
+            .enableCraters("sparse")
             .craterFloorBlock("minecraft:stone")
             .craterRimBlock("minecraft:gray_terracotta")
             .generate();
@@ -1005,7 +1005,7 @@ public class PlanetGenerationRunner {
             .addSun()
             .addCavePreset("surface_accessible")
             .enableVanillaStructure("mineshaft")
-            .enableCraters("sparse")
+            .enableCraters("minimal")
             .craterFloorBlock("minecraft:stone")
             .craterRimBlock("minecraft:gravel")
             .generate();
