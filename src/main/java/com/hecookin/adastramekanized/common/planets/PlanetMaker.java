@@ -1106,6 +1106,9 @@ public class PlanetMaker {
             this.base3DNoiseYFactor = 200.0f;
             this.jaggednessNoiseScale = 2000.0f;
             this.smearScaleMultiplier = 6.0f;
+            // Barren worlds are airless — no water or lava
+            noLiquids();
+            this.seaLevel = 0;
             return this;
         }
 
@@ -7360,27 +7363,28 @@ public class PlanetMaker {
         int smallRarity, mediumRarity, largeRarity;
         switch (planet.craterFrequency) {
             case "heavy":
-                smallRarity = 2; mediumRarity = 8; largeRarity = 48;
+                smallRarity = 4; mediumRarity = 16; largeRarity = 96;
                 break;
             case "light":
-                smallRarity = 4; mediumRarity = 16; largeRarity = 80;
+                smallRarity = 8; mediumRarity = 32; largeRarity = 160;
                 break;
             case "sparse":
-                smallRarity = 8; mediumRarity = 32; largeRarity = 128;
-                break;
-            case "minimal":
                 smallRarity = 16; mediumRarity = 64; largeRarity = 256;
                 break;
+            case "minimal":
+                smallRarity = 32; mediumRarity = 128; largeRarity = 512;
+                break;
             default: // moderate
-                smallRarity = 3; mediumRarity = 12; largeRarity = 64;
+                smallRarity = 6; mediumRarity = 24; largeRarity = 128;
                 break;
         }
 
         // Generate 3 crater variants
         String[][] variants = {
-            {"small",  "4", "8",  "3", "5", "1", "2", String.valueOf(smallRarity)},
-            {"medium", "10", "16", "5", "8", "2", "3", String.valueOf(mediumRarity)},
-            {"large",  "20", "30", "8", "14", "3", "5", String.valueOf(largeRarity)}
+            // {name, radiusMin, radiusMax, depthMin, depthMax, rimMin, rimMax, rarity}
+            {"small",  "4", "8",  "3", "5", "0", "1", String.valueOf(smallRarity)},
+            {"medium", "10", "16", "5", "8", "1", "2", String.valueOf(mediumRarity)},
+            {"large",  "20", "30", "8", "14", "1", "2", String.valueOf(largeRarity)}
         };
 
         for (String[] v : variants) {

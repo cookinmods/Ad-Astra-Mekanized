@@ -706,11 +706,11 @@ public class PlanetGenerationRunner {
             .coordinateShift(90000, 30000)
             .gravity(0.15f)
             .temperature(-160) // Ganymede surface temperature
-            .surfaceBlock("minecraft:gray_terracotta")
-            .subsurfaceBlock("minecraft:light_gray_terracotta")
+            .surfaceBlock("minecraft:light_gray_terracotta")
+            .subsurfaceBlock("minecraft:white_terracotta")
             .singleLayerSurface(false)  // multi-layer surface
-            .deepBlock("minecraft:stone")
-            .defaultBlock("minecraft:stone")
+            .deepBlock("minecraft:calcite")
+            .defaultBlock("minecraft:calcite")
             .bedrockBlock("minecraft:bedrock")
             .seaLevel(0)
             .disableMobGeneration(false)
@@ -740,8 +740,8 @@ public class PlanetGenerationRunner {
             .addSun()
             .addCavePreset("balanced_vanilla")
             .enableCraters("light")
-            .craterFloorBlock("minecraft:stone")
-            .craterRimBlock("minecraft:gravel")
+            .craterFloorBlock("minecraft:calcite")
+            .craterRimBlock("minecraft:light_gray_terracotta")
             .generate();
 
         // CALLISTO - Ancient heavily cratered moon
@@ -751,11 +751,11 @@ public class PlanetGenerationRunner {
             .coordinateShift(30000, 45000)
             .gravity(0.13f)
             .temperature(-139) // Callisto surface temperature
-            .surfaceBlock("minecraft:gray_terracotta")
-            .subsurfaceBlock("minecraft:brown_terracotta")
+            .surfaceBlock("minecraft:brown_terracotta")
+            .subsurfaceBlock("minecraft:gray_terracotta")
             .singleLayerSurface(false)  // multi-layer surface
-            .deepBlock("minecraft:stone")
-            .defaultBlock("minecraft:stone")
+            .deepBlock("minecraft:deepslate")
+            .defaultBlock("minecraft:deepslate")
             .bedrockBlock("minecraft:bedrock")
             .seaLevel(0)
             .disableMobGeneration(false)
@@ -804,8 +804,8 @@ public class PlanetGenerationRunner {
             .addCavePreset("surface_accessible")
             .enableVanillaStructure("mineshaft")
             .enableCraters("sparse")
-            .craterFloorBlock("minecraft:stone")
-            .craterRimBlock("minecraft:gray_terracotta")
+            .craterFloorBlock("minecraft:deepslate")
+            .craterRimBlock("minecraft:brown_terracotta")
             .generate();
 
         // ==================== SATURN'S MOONS ====================
@@ -954,11 +954,11 @@ public class PlanetGenerationRunner {
             .coordinateShift(90000, 45000)
             .gravity(0.05f)  // Minimum viable gravity
             .temperature(-106) // Ceres average surface
-            .surfaceBlock("minecraft:gray_terracotta")
-            .subsurfaceBlock("minecraft:stone")
+            .surfaceBlock("minecraft:tuff")
+            .subsurfaceBlock("minecraft:andesite")
             .singleLayerSurface(false)  // multi-layer surface
             .deepBlock("minecraft:deepslate")
-            .defaultBlock("minecraft:stone")
+            .defaultBlock("minecraft:andesite")
             .bedrockBlock("minecraft:bedrock")
             .seaLevel(0)
             .disableMobGeneration(false)
@@ -1006,8 +1006,8 @@ public class PlanetGenerationRunner {
             .addCavePreset("surface_accessible")
             .enableVanillaStructure("mineshaft")
             .enableCraters("minimal")
-            .craterFloorBlock("minecraft:stone")
-            .craterRimBlock("minecraft:gravel")
+            .craterFloorBlock("minecraft:andesite")
+            .craterRimBlock("minecraft:tuff")
             .generate();
 
         // PLUTO - Distant frozen dwarf planet
@@ -1060,10 +1060,10 @@ public class PlanetGenerationRunner {
             .coordinateShift(45000, 60000)
             .gravity(0.08f)
             .temperature(-231) // Eris extremely cold
-            .surfaceBlock("minecraft:light_gray_terracotta")
+            .surfaceBlock("minecraft:black_terracotta")
             .subsurfaceBlock("minecraft:gray_terracotta")
             .singleLayerSurface(false)  // multi-layer surface
-            .deepBlock("minecraft:black_terracotta")
+            .deepBlock("minecraft:blackstone")
             .defaultBlock("minecraft:gray_terracotta")
             .bedrockBlock("minecraft:bedrock")
             .seaLevel(0)
@@ -1102,7 +1102,7 @@ public class PlanetGenerationRunner {
             .coordinateShift(60000, 60000)
             .gravity(1.2f)
             .temperature(22) // Warm ocean world
-            .surfaceBlock("minecraft:sand")
+            .surfaceBlock("minecraft:red_sand")
             .subsurfaceBlock("minecraft:dirt")
             .singleLayerSurface(true)  // multi-layer surface
             .deepBlock("minecraft:stone")

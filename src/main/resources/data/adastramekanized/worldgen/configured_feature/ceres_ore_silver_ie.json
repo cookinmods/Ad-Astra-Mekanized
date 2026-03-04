@@ -347,7 +347,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
+          "block": "minecraft:andesite"
         },
         "state": {
           "Name": "immersiveengineering:ore_silver"
@@ -365,7 +365,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
+          "block": "minecraft:andesite"
         },
         "state": {
           "Name": "immersiveengineering:ore_silver"

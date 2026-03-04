@@ -86,7 +86,7 @@
                     "then_run": {
                       "type": "minecraft:block",
                       "result_state": {
-                        "Name": "minecraft:sand"
+                        "Name": "minecraft:red_sand"
                       }
                     }
                   },

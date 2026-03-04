@@ -11,11 +11,15 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 
 /**
- * Places bowl-shaped impact craters on the terrain surface.
+ * Places impact craters carved into the terrain surface.
  * Craters consist of three zones:
  * - Floor zone (0-70% of radius): flat bottom at full depth
  * - Wall zone (70-100%): sloping wall from floor to surface
- * - Rim zone (100-130%): raised rim above the original surface
+ * - Rim zone (100-115%): slight lip that tapers to surface level
+ *
+ * The rim is intentionally subtle — only 1-2 blocks above the local surface
+ * at the crater edge, tapering to zero at the outer boundary. This prevents
+ * craters from appearing as protruding bowls on flat terrain.
  */
 public class CraterFeature extends Feature<CraterConfiguration> {
 
@@ -32,7 +36,9 @@ public class CraterFeature extends Feature<CraterConfiguration> {
 
         int radius = config.radius().sample(random);
         int depth = config.depth().sample(random);
-        int rimHeight = config.rimHeight().sample(random);
+        int rimHeightConfig = config.rimHeight().sample(random);
+        // Clamp rim height to max 2 blocks to prevent protruding bowl structures
+        int rimHeight = Math.min(rimHeightConfig, 2);
         BlockState floorBlock = config.floorBlock();
         BlockState rimBlock = config.rimBlock();
 
@@ -45,7 +51,7 @@ public class CraterFeature extends Feature<CraterConfiguration> {
         }
 
         float radiusSq = radius * radius;
-        float rimOuterRadius = radius * 1.3f;
+        float rimOuterRadius = radius * 1.15f;
         float rimOuterRadiusSq = rimOuterRadius * rimOuterRadius;
         float floorRadius = radius * 0.7f;
         float floorRadiusSq = floorRadius * floorRadius;

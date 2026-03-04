@@ -13,14 +13,14 @@
     },
     "rim_height": {
       "type": "minecraft:uniform",
-      "min_inclusive": 2,
-      "max_inclusive": 3
+      "min_inclusive": 1,
+      "max_inclusive": 2
     },
     "floor_block": {
-      "Name": "minecraft:stone"
+      "Name": "minecraft:andesite"
     },
     "rim_block": {
-      "Name": "minecraft:gravel"
+      "Name": "minecraft:tuff"
     }
   }
 }

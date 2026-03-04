@@ -1,6 +1,6 @@
 {
   "name": "Ceres",
-  "icon": "minecraft:gray_terracotta",
+  "icon": "minecraft:tuff",
   "category": "adastramekanized:known_planets",
   "advancement": "adastramekanized:planets/visited_ceres",
   "pages": [
@@ -29,7 +29,7 @@
     {
       "type": "patchouli:text",
       "title": "Surface Composition",
-      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Gray Terracotta$(br)• $(bold)Subsurface:$() Stone$(br)• $(bold)Deep:$() Deepslate$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
+      "text": "$(bold)Surface Layers:$()$(br)$(br)• $(bold)Surface:$() Tuff$(br)• $(bold)Subsurface:$() Andesite$(br)• $(bold)Deep:$() Deepslate$(br)• $(bold)Bedrock:$() Bedrock$(br)$(br)$(bold)Sea Level:$() Y\u003d0"
     },
     {
       "type": "patchouli:text",

@@ -356,7 +356,7 @@
       {
         "target": {
           "predicate_type": "minecraft:block_match",
-          "block": "minecraft:black_terracotta"
+          "block": "minecraft:blackstone"
         },
         "state": {
           "Name": "minecraft:diamond_ore"
