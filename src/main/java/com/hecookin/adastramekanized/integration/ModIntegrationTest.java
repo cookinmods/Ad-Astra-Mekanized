@@ -20,9 +20,6 @@ public class ModIntegrationTest {
         // Test Mekanism integration
         testMekanismIntegration();
 
-        // Test Create integration
-        testCreateIntegration();
-
         // Test Immersive Engineering integration
         testImmersiveEngineeringIntegration();
 
@@ -41,21 +38,6 @@ public class ModIntegrationTest {
                 AdAstraMekanized.LOGGER.info("✓ Mekanism API classes accessible");
             } catch (ClassNotFoundException e) {
                 AdAstraMekanized.LOGGER.error("✗ Mekanism API classes not accessible: {}", e.getMessage());
-            }
-        }
-    }
-
-    private static void testCreateIntegration() {
-        boolean createLoaded = ModList.get().isLoaded("create");
-        AdAstraMekanized.LOGGER.info("Create loaded: {}", createLoaded);
-
-        if (createLoaded) {
-            try {
-                // Test access to Create API classes (if available)
-                Class.forName("com.simibubi.create.Create");
-                AdAstraMekanized.LOGGER.info("✓ Create main class accessible");
-            } catch (ClassNotFoundException e) {
-                AdAstraMekanized.LOGGER.warn("Create API access limited: {}", e.getMessage());
             }
         }
     }

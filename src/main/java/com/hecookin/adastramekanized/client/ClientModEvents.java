@@ -4,12 +4,13 @@ import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.client.models.armor.SpaceSuitModel;
 import com.hecookin.adastramekanized.client.models.entities.vehicles.RocketModel;
 import com.hecookin.adastramekanized.client.renderers.blocks.GravityNormalizerBlockEntityRenderer;
-import com.hecookin.adastramekanized.client.renderers.blocks.MekanismBasedOxygenDistributorRenderer;
+
 import com.hecookin.adastramekanized.client.renderers.blocks.OxygenDistributorBlockEntityRenderer;
 import com.hecookin.adastramekanized.client.renderers.blocks.SlidingDoorBlockEntityRenderer;
 import com.hecookin.adastramekanized.client.renderers.entities.vehicles.LanderRenderer;
 import com.hecookin.adastramekanized.client.renderers.entities.vehicles.RocketRenderer;
 import com.hecookin.adastramekanized.client.gui.GuiOxygenDistributor;
+import com.hecookin.adastramekanized.client.screens.LanderScreen;
 import com.hecookin.adastramekanized.client.screens.GravityNormalizerScreen;
 import com.hecookin.adastramekanized.client.screens.NasaWorkbenchScreen;
 import com.hecookin.adastramekanized.client.screens.OxygenControllerScreen;
@@ -42,7 +43,6 @@ public class ClientModEvents {
         event.enqueueWork(() -> {
             // Register block entity renderers
             BlockEntityRenderers.register(ModBlockEntityTypes.OXYGEN_DISTRIBUTOR.get(), (context) -> new OxygenDistributorBlockEntityRenderer());
-            BlockEntityRenderers.register(ModBlockEntityTypes.MEKANISM_OXYGEN_DISTRIBUTOR.get(), MekanismBasedOxygenDistributorRenderer::new);
             BlockEntityRenderers.register(ModBlockEntityTypes.SLIDING_DOOR.get(), SlidingDoorBlockEntityRenderer::new);
             BlockEntityRenderers.register(ModBlockEntityTypes.GRAVITY_NORMALIZER.get(), (context) -> new GravityNormalizerBlockEntityRenderer());
 
@@ -181,8 +181,8 @@ public class ClientModEvents {
         event.register(ModMenuTypes.GRAVITY_NORMALIZER.get(), GravityNormalizerScreen::new);
         event.register(ModMenuTypes.NASA_WORKBENCH.get(), NasaWorkbenchScreen::new);
         event.register(ModMenuTypes.ROCKET.get(), RocketScreen::new);
-        // TODO: Create LanderScreen - using RocketScreen as placeholder
-        //event.register(ModMenuTypes.LANDER.get(), RocketScreen::new);
+        // TODO: Create proper lander GUI texture - using placeholder screen
+        event.register(ModMenuTypes.LANDER.get(), LanderScreen::new);
         event.register(ModMenuTypes.PLANETS.get(), PlanetsScreen::new);
     }
 

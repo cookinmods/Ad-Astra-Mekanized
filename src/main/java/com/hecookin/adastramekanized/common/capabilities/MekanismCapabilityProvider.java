@@ -56,19 +56,8 @@ public class MekanismCapabilityProvider {
             }
         );
 
-        // Register Forge Energy capability for Oxygen Distributor
-        event.registerBlockEntity(
-            Capabilities.EnergyStorage.BLOCK,
-            ModBlockEntityTypes.MEKANISM_OXYGEN_DISTRIBUTOR.get(),
-            (blockEntity, side) -> {
-                if (blockEntity instanceof ImprovedOxygenDistributor distributor) {
-                    return distributor.getEnergyStorage();
-                }
-                return null;
-            }
-        );
-
         // Try to register Mekanism capabilities if available
+        // Note: Forge EnergyStorage.BLOCK is registered in OxygenDistributorCapabilityProvider
         try {
             Class<?> mekCapabilities = Class.forName("mekanism.common.capabilities.Capabilities");
             java.lang.reflect.Field strictEnergyField = mekCapabilities.getField("STRICT_ENERGY");
@@ -92,7 +81,7 @@ public class MekanismCapabilityProvider {
                 // Register Mekanism STRICT_ENERGY capability for Oxygen Distributor
                 event.registerBlockEntity(
                     (BlockCapability) strictEnergyBlockCap,
-                    ModBlockEntityTypes.MEKANISM_OXYGEN_DISTRIBUTOR.get(),
+                    ModBlockEntityTypes.OXYGEN_DISTRIBUTOR.get(),
                     (blockEntity, side) -> {
                         if (blockEntity instanceof ImprovedOxygenDistributor distributor) {
                             return distributor.getStrictEnergyHandler();

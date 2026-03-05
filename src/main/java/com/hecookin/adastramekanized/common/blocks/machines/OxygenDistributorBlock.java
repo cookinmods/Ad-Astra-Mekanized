@@ -109,12 +109,6 @@ public class OxygenDistributorBlock extends SidedMachineBlock {
                     entity.tick();
                 }
             };
-        } else if (blockEntityType == ModBlockEntityTypes.MEKANISM_OXYGEN_DISTRIBUTOR.get()) {
-            return (level1, pos, state1, blockEntity) -> {
-                if (blockEntity instanceof ImprovedOxygenDistributor entity) {
-                    entity.tick();
-                }
-            };
         }
         return null;
     }

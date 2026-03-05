@@ -237,6 +237,8 @@ public class OxygenNetworkMonitorBlockEntity extends BlockEntity implements Menu
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+        // Note: The primary code path uses openMenu(ServerPlayer) which has its own guards.
+        // This fallback is safe — NeoForge handles null returns gracefully (no menu opens).
         ItemStack controller = findPairedController(player);
         if (!controller.isEmpty()) {
             return new OxygenMonitorMenu(containerId, playerInventory, createMonitorItem(), controller);

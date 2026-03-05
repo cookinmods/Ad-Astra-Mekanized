@@ -3,7 +3,6 @@ package com.hecookin.adastramekanized.common.commands;
 import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.api.planets.Planet;
 import com.hecookin.adastramekanized.api.planets.PlanetRegistry;
-import com.hecookin.adastramekanized.common.blockentities.machines.MekanismBasedOxygenDistributor;
 import com.hecookin.adastramekanized.common.blockentities.machines.OxygenDistributorBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.machines.ImprovedOxygenDistributor;
 import com.hecookin.adastramekanized.common.atmosphere.GlobalOxygenManager;
@@ -374,7 +373,7 @@ public class PlanetDebugCommands {
                 for (int z = -10; z <= 10; z++) {
                     BlockPos checkPos = pos.offset(x, y, z);
                     BlockEntity check = level.getBlockEntity(checkPos);
-                    if (check instanceof MekanismBasedOxygenDistributor || check instanceof OxygenDistributorBlockEntity) {
+                    if (check instanceof OxygenDistributorBlockEntity) {
                         be = check;
                         distributorPos = checkPos;
                         break;
@@ -409,24 +408,6 @@ public class PlanetDebugCommands {
             source.sendSuccess(() -> Component.literal("§a✓ Respects other distributors' boundaries"), false);
             source.sendSuccess(() -> Component.literal("§a✓ 100-tick pathfinding cache"), false);
             source.sendSuccess(() -> Component.literal("§a✓ Treats claimed blocks as walls"), false);
-        } else if (be instanceof MekanismBasedOxygenDistributor distributor) {
-            final BlockPos finalPos = distributorPos;
-            source.sendSuccess(() -> Component.literal("§6=== Oxygen Distributor Debug ==="), false);
-            source.sendSuccess(() -> Component.literal("§7Position: §f" + finalPos), false);
-            source.sendSuccess(() -> Component.literal("§7Active: " + (distributor.isActive() ? "§aYes" : "§cNo")), false);
-            source.sendSuccess(() -> Component.literal("§7Energy: §f" + distributor.getEnergyForDebug(0) + "/" + distributor.getMaxEnergyForDebug(0) + " FE"), false);
-            source.sendSuccess(() -> Component.literal("§7Oxygenated Blocks: §f" + distributor.getOxygenatedBlockCount()), false);
-
-            // Check Mekanism integration
-            source.sendSuccess(() -> Component.literal("§7Chemical Tank: §aPresent (Mekanism-compatible)"), false);
-            source.sendSuccess(() -> Component.literal("§7Tank Capacity: §f10,000 mB"), false);
-            source.sendSuccess(() -> Component.literal("§7Energy Stored: §fCheck with JADE/TOP"), false);
-            source.sendSuccess(() -> Component.literal("§7Mekanism: §aFully Integrated"), false);
-
-            source.sendSuccess(() -> Component.literal("§6Cable/Tube Connection Info:"), false);
-            source.sendSuccess(() -> Component.literal("§7Universal Cables: §aShould connect on all sides for energy"), false);
-            source.sendSuccess(() -> Component.literal("§7Pressurized Tubes: §aShould connect on all sides for oxygen"), false);
-            source.sendSuccess(() -> Component.literal("§7Note: Place cables/tubes adjacent to the distributor"), false);
         } else {
             source.sendFailure(Component.literal("§cNo oxygen distributor found within 10 blocks"));
             source.sendSuccess(() -> Component.literal("§7Place an oxygen distributor nearby and try again"), false);

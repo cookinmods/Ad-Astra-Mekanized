@@ -31,35 +31,4 @@ public interface IFuelIntegration {
      */
     boolean isValidRocketFuel(ItemStack item);
 
-    /**
-     * Get the energy value of a fuel fluid (for calculating range/consumption)
-     * @param fluid The fuel fluid
-     * @return Energy value per mB, or 0 if not fuel
-     */
-    long getFuelEnergyValue(FluidStack fluid);
-
-    /**
-     * Get the energy value of a fuel item
-     * @param item The fuel item
-     * @return Energy value per item, or 0 if not fuel
-     */
-    long getFuelEnergyValue(ItemStack item);
-
-    /**
-     * Get the primary rocket fuel fluid (IE fuel)
-     * @return FluidStack representing the primary fuel, or empty if not available
-     */
-    FluidStack getPrimaryRocketFuel(int amount);
-
-    /**
-     * Get the secondary rocket fuel fluid (IE biodiesel)
-     * @return FluidStack representing the secondary fuel, or empty if not available
-     */
-    FluidStack getSecondaryRocketFuel(int amount);
-
-    /**
-     * Get all available rocket fuels
-     * @return Array of fuel FluidStacks, may be empty if integration unavailable
-     */
-    FluidStack[] getAvailableRocketFuels();
 }

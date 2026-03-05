@@ -5,7 +5,6 @@ import com.hecookin.adastramekanized.common.blockentities.LaunchPadBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.NasaWorkbenchBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.machines.GravityNormalizerBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.machines.OxygenDistributorBlockEntity;
-import com.hecookin.adastramekanized.common.blockentities.machines.ImprovedOxygenDistributor;
 import com.hecookin.adastramekanized.common.blockentities.machines.WirelessPowerRelayBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.OxygenNetworkMonitorBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.SlidingDoorBlockEntity;
@@ -21,18 +20,10 @@ public class ModBlockEntityTypes {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
         DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, AdAstraMekanized.MOD_ID);
 
-    // Keeping old one temporarily for compatibility
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<OxygenDistributorBlockEntity>> OXYGEN_DISTRIBUTOR =
         BLOCK_ENTITY_TYPES.register("oxygen_distributor",
             () -> createBlockEntityType(
                 OxygenDistributorBlockEntity::new,
-                ModBlocks.OXYGEN_DISTRIBUTOR.get()));
-
-    // Improved oxygen distributor with Mekanism integration
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ImprovedOxygenDistributor>> MEKANISM_OXYGEN_DISTRIBUTOR =
-        BLOCK_ENTITY_TYPES.register("mekanism_oxygen_distributor",
-            () -> createBlockEntityType(
-                ImprovedOxygenDistributor::new,
                 ModBlocks.OXYGEN_DISTRIBUTOR.get()));
 
     // Wireless Power Relay block entity

@@ -6549,11 +6549,6 @@ public class PlanetMaker {
             case "silver" -> "immersiveengineering:ore_silver";
             case "nickel" -> "immersiveengineering:ore_nickel";
 
-            // Ores without blocks in required mods - use vanilla substitutes
-            // NOTE: platinum and tungsten don't exist in Mekanism/IE/Create
-            case "platinum" -> "minecraft:diamond_ore";  // FIXME: No platinum ore exists - replace in planet configs
-            case "tungsten" -> "minecraft:iron_ore";     // FIXME: No tungsten ore exists - replace in planet configs
-
             // Default fallback
             default -> "minecraft:" + oreType + "_ore";
         };
@@ -6590,7 +6585,7 @@ public class PlanetMaker {
                 // Mekanism ores
                 "osmium", "tin", "uranium", "fluorite", "lead",
                 // Other common modded ores
-                "zinc", "platinum", "tungsten"
+                "zinc"
             );
             AdAstraMekanized.LOGGER.info("No ores configured, using comprehensive ore list: {}", oreTypes);
         }

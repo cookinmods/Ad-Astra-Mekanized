@@ -126,11 +126,11 @@ side = "BOTH"
 
 
 
-[[dependencies.adastramekanized]]  # Replace with your mod ID
+[[dependencies.adastramekanized]]
 modId = "chemlibmekanized"
 type = "required"
-versionRange = "[1.0.0,)"
-ordering = "BEFORE"  # CRITICAL: Load ChemLib BEFORE your mod
+versionRange = "[2.2.0,)"
+ordering = "BEFORE"
 side = "BOTH"
 
 # Born in Chaos - Horror mobs (spirits, undead, Halloween mobs)

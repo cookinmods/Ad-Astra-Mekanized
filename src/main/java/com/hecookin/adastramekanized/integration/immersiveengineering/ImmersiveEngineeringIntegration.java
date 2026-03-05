@@ -25,15 +25,12 @@ public class ImmersiveEngineeringIntegration implements IFuelIntegration {
     // Reflected classes (cached for performance)
     private Class<?> ieFluidRegistryClass;
     private Class<?> ieFuelHandlerClass;
-    private Class<?> ieConfigClass;
-
     // Reflected fields for fluids
     private Object dieselFluid;
     private Object biodieselFluid;
 
     // Reflected methods
     private Method getFuelValueMethod;
-    private Method isFuelMethod;
 
     public ImmersiveEngineeringIntegration() {
         this.ieLoaded = ModList.get().isLoaded(IE_MOD_ID);
@@ -127,112 +124,4 @@ public class ImmersiveEngineeringIntegration implements IFuelIntegration {
         }
     }
 
-    @Override
-    public long getFuelEnergyValue(FluidStack fluid) {
-        if (!isFuelSystemAvailable() || fluid.isEmpty()) {
-            return 0;
-        }
-
-        try {
-            Object fluidObject = fluid.getFluid();
-
-            // Define energy values per mB for IE fuels
-            if (fluidObject.equals(dieselFluid)) {
-                return 256; // RF per mB for diesel
-            } else if (fluidObject.equals(biodieselFluid)) {
-                return 192; // RF per mB for biodiesel (slightly less efficient)
-            }
-
-            return 0;
-
-        } catch (Exception e) {
-            AdAstraMekanized.LOGGER.error("Error getting fluid fuel energy value: {}", e.getMessage());
-            return 0;
-        }
-    }
-
-    @Override
-    public long getFuelEnergyValue(ItemStack item) {
-        if (!isFuelSystemAvailable() || item.isEmpty()) {
-            return 0;
-        }
-
-        try {
-            // Use IE's fuel handler to get burn time, convert to energy
-            if (getFuelValueMethod != null) {
-                Integer burnTime = (Integer) getFuelValueMethod.invoke(null, item);
-                if (burnTime != null && burnTime > 0) {
-                    // Convert burn time to energy (rough approximation)
-                    return burnTime * 4L; // 4 RF per tick of burn time
-                }
-            }
-            return 0;
-
-        } catch (Exception e) {
-            AdAstraMekanized.LOGGER.error("Error getting item fuel energy value: {}", e.getMessage());
-            return 0;
-        }
-    }
-
-    @Override
-    public FluidStack getPrimaryRocketFuel(int amount) {
-        if (!isFuelSystemAvailable() || dieselFluid == null) {
-            return FluidStack.EMPTY;
-        }
-
-        try {
-            // Cast reflected fluid object to proper type
-            if (dieselFluid instanceof net.minecraft.world.level.material.Fluid) {
-                return new FluidStack((net.minecraft.world.level.material.Fluid) dieselFluid, amount);
-            }
-            return FluidStack.EMPTY;
-        } catch (Exception e) {
-            AdAstraMekanized.LOGGER.error("Error creating primary fuel stack: {}", e.getMessage());
-            return FluidStack.EMPTY;
-        }
-    }
-
-    @Override
-    public FluidStack getSecondaryRocketFuel(int amount) {
-        if (!isFuelSystemAvailable() || biodieselFluid == null) {
-            return FluidStack.EMPTY;
-        }
-
-        try {
-            // Cast reflected fluid object to proper type
-            if (biodieselFluid instanceof net.minecraft.world.level.material.Fluid) {
-                return new FluidStack((net.minecraft.world.level.material.Fluid) biodieselFluid, amount);
-            }
-            return FluidStack.EMPTY;
-        } catch (Exception e) {
-            AdAstraMekanized.LOGGER.error("Error creating secondary fuel stack: {}", e.getMessage());
-            return FluidStack.EMPTY;
-        }
-    }
-
-    @Override
-    public FluidStack[] getAvailableRocketFuels() {
-        if (!isFuelSystemAvailable()) {
-            return new FluidStack[0];
-        }
-
-        try {
-            FluidStack primary = getPrimaryRocketFuel(1000);
-            FluidStack secondary = getSecondaryRocketFuel(1000);
-
-            if (!primary.isEmpty() && !secondary.isEmpty()) {
-                return new FluidStack[]{primary, secondary};
-            } else if (!primary.isEmpty()) {
-                return new FluidStack[]{primary};
-            } else if (!secondary.isEmpty()) {
-                return new FluidStack[]{secondary};
-            }
-
-            return new FluidStack[0];
-
-        } catch (Exception e) {
-            AdAstraMekanized.LOGGER.error("Error getting available rocket fuels: {}", e.getMessage());
-            return new FluidStack[0];
-        }
-    }
 }

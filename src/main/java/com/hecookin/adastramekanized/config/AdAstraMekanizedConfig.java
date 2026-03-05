@@ -72,11 +72,6 @@ public class AdAstraMekanizedConfig {
         public final ModConfigSpec.IntValue minPlanetDistance;
         public final ModConfigSpec.IntValue maxPlanetDistance;
 
-        // Integration Settings
-        public final ModConfigSpec.BooleanValue enableMekanismIntegration;
-        public final ModConfigSpec.BooleanValue enableImmersiveEngineeringIntegration;
-        public final ModConfigSpec.BooleanValue enableCreateIntegration;
-
         // Creature Mod Spawn Control
         public final ModConfigSpec.BooleanValue restrictBornInChaosSpawns;
         public final ModConfigSpec.BooleanValue restrictKoboldsSpawns;
@@ -180,31 +175,6 @@ public class AdAstraMekanizedConfig {
 
             builder.pop();
 
-            // Integration Section
-            builder.comment("Mod Integration Settings",
-                           "Configure integration with other mods")
-                   .push("mod_integration");
-
-            enableMekanismIntegration = builder
-                    .comment("Enable Mekanism Integration",
-                            "Enable integration with Mekanism's chemical and energy systems")
-                    .translation("adastramekanized.config.enableMekanismIntegration")
-                    .define("enableMekanismIntegration", true);
-
-            enableImmersiveEngineeringIntegration = builder
-                    .comment("Enable Immersive Engineering Integration",
-                            "Enable integration with Immersive Engineering's fuel systems")
-                    .translation("adastramekanized.config.enableImmersiveEngineeringIntegration")
-                    .define("enableImmersiveEngineeringIntegration", true);
-
-            enableCreateIntegration = builder
-                    .comment("Enable Create Integration",
-                            "Enable integration with Create's mechanical systems")
-                    .translation("adastramekanized.config.enableCreateIntegration")
-                    .define("enableCreateIntegration", true);
-
-            builder.pop();
-
             builder.push("Creature Mod Spawn Control");
             builder.comment("Controls whether creature mod spawns are restricted to designated planets only.",
                             "When ON (default): Mobs only spawn on planets they are assigned to.",
@@ -289,18 +259,6 @@ public class AdAstraMekanizedConfig {
 
     public static int getMaxPlanetDistance() {
         return COMMON.maxPlanetDistance.get();
-    }
-
-    public static boolean isMekanismIntegrationEnabled() {
-        return COMMON.enableMekanismIntegration.get();
-    }
-
-    public static boolean isImmersiveEngineeringIntegrationEnabled() {
-        return COMMON.enableImmersiveEngineeringIntegration.get();
-    }
-
-    public static boolean isCreateIntegrationEnabled() {
-        return COMMON.enableCreateIntegration.get();
     }
 
     public static boolean isRestrictBornInChaosEnabled() {
