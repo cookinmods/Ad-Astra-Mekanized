@@ -55,7 +55,7 @@
     "weather": {
       "has_clouds": true,
       "has_rain": true,
-      "has_snow": true,
+      "has_snow": false,
       "has_storms": false,
       "rain_acidity": 0.0
     },

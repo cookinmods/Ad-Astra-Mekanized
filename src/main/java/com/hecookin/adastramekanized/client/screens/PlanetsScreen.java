@@ -1,23 +1,14 @@
 package com.hecookin.adastramekanized.client.screens;
 
-import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.api.planets.Planet;
-import com.hecookin.adastramekanized.api.planets.PlanetRegistry;
 import com.hecookin.adastramekanized.common.entities.vehicles.Rocket;
 import com.hecookin.adastramekanized.common.menus.PlanetsMenu;
 import com.hecookin.adastramekanized.common.network.ModNetworking;
 import com.hecookin.adastramekanized.common.network.ServerboundLandPacket;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -26,9 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Client-side screen for planet selection.
@@ -41,7 +30,6 @@ public class PlanetsScreen extends AbstractContainerScreen<PlanetsMenu> {
     private Button backButton;
     private double scrollAmount;
 
-    private final boolean hasMultipleSolarSystems;
     private int pageIndex;
     private ResourceLocation selectedSolarSystem = ResourceLocation.fromNamespaceAndPath("adastramekanized", "solar_system");
     private Planet selectedPlanet;
@@ -54,22 +42,20 @@ public class PlanetsScreen extends AbstractContainerScreen<PlanetsMenu> {
         this.imageWidth = width;
         this.imageHeight = height;
 
-        var planets = menu.getSortedPlanets();
-        hasMultipleSolarSystems = planets.stream()
-            .map(menu::getSolarSystem)
-            .distinct()
-            .count() > 1;
-        pageIndex = hasMultipleSolarSystems ? 0 : 1;
+        // Always start on planet list: solar system is auto-selected
+        pageIndex = 1;
     }
 
     @Override
     protected void init() {
         super.init();
         buttons.clear();
-        scrollAmount = 0;
+        // Only reset scroll when returning to planet list, not when selecting a planet
+        if (pageIndex <= 1) {
+            scrollAmount = 0;
+        }
 
         switch (pageIndex) {
-            case 0 -> createSolarSystemButtons();
             case 1, 2 -> {
                 createPlanetButtons();
                 if (pageIndex == 2 && (selectedPlanet != null || isEarthSelected)) {
@@ -78,42 +64,16 @@ public class PlanetsScreen extends AbstractContainerScreen<PlanetsMenu> {
             }
         }
 
-        // Back button (left side)
+        // Back button (left side): only show on detail page
         backButton = addRenderableWidget(Button.builder(Component.literal("<"), b -> {
-            if (pageIndex != 2) this.scrollAmount = 0;
-            if (pageIndex == 2) {
-                isEarthSelected = false;
-                selectedPlanet = null;
-                isMysteryPlanet = false;
-            }
-            pageIndex--;
+            isEarthSelected = false;
+            selectedPlanet = null;
+            isMysteryPlanet = false;
+            pageIndex = 1;
             rebuildWidgets();
         }).bounds(10, height / 2 - 85, 20, 20).build());
 
-        backButton.visible = pageIndex > (hasMultipleSolarSystems ? 0 : 1);
-    }
-
-    private void createSolarSystemButtons() {
-        selectedSolarSystem = null;
-
-        // Get unique solar systems
-        List<ResourceLocation> solarSystems = menu.getSortedPlanets().stream()
-            .map(menu::getSolarSystem)
-            .distinct()
-            .sorted(Comparator.comparing(ResourceLocation::getPath))
-            .collect(Collectors.toList());
-
-        for (ResourceLocation solarSystem : solarSystems) {
-            var button = addWidget(Button.builder(
-                Component.literal(capitalize(solarSystem.getPath())),
-                b -> {
-                    pageIndex = 1;
-                    selectedSolarSystem = solarSystem;
-                    rebuildWidgets();
-                }
-            ).bounds(10, 0, 99, 20).build());
-            buttons.add(button);
-        }
+        backButton.visible = pageIndex > 1;
     }
 
     private void createPlanetButtons() {
@@ -198,7 +158,7 @@ public class PlanetsScreen extends AbstractContainerScreen<PlanetsMenu> {
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
         renderButtons(graphics, mouseX, mouseY, partialTick);
-        backButton.visible = pageIndex > (hasMultipleSolarSystems ? 0 : 1);
+        backButton.visible = pageIndex > 1;
 
         // Prevent buttons from being pressed when outside view area
         buttons.forEach(button -> button.active = button.getY() > height / 2 - 63 && button.getY() < height / 2 + 88);
@@ -262,10 +222,8 @@ public class PlanetsScreen extends AbstractContainerScreen<PlanetsMenu> {
             titleText = Component.literal("Earth");
         } else if (pageIndex == 2 && selectedPlanet != null) {
             titleText = Component.literal(selectedPlanet.displayName());
-        } else if (pageIndex == 1 && selectedSolarSystem != null) {
-            titleText = Component.literal(capitalize(selectedSolarSystem.getPath()));
         } else {
-            titleText = Component.literal("Solar System Catalog");
+            titleText = Component.literal("Solar System");
         }
 
         graphics.drawCenteredString(font, titleText, 57, height / 2 - 60, 0xFFFFFF);
@@ -381,10 +339,12 @@ public class PlanetsScreen extends AbstractContainerScreen<PlanetsMenu> {
 
     @Override
     public void onClose() {
-        // Multi-level back navigation
-        if (pageIndex > 0) {
-            if (pageIndex != 2) this.scrollAmount = 0;
-            pageIndex--;
+        // Back navigation from detail page to planet list
+        if (pageIndex > 1) {
+            isEarthSelected = false;
+            selectedPlanet = null;
+            isMysteryPlanet = false;
+            pageIndex = 1;
             rebuildWidgets();
             return;
         }
@@ -408,8 +368,8 @@ public class PlanetsScreen extends AbstractContainerScreen<PlanetsMenu> {
     }
 
     protected void close() {
-        pageIndex = 0;
-        onClose();
+        pageIndex = 1;
+        super.onClose();
     }
 
     private static String capitalize(String string) {

@@ -677,7 +677,7 @@ public class PlanetGenerationRunner {
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:magma_cube", 12, 1, 3)
             .addMobSpawn("monster", "minecraft:zombified_piglin", 8, 1, 2)
-            .addMobSpawn("monster", "minecraft:ghast", 2, 1, 1)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:basalt_deltas", 1.0f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, "Io Volcanic Fields")
@@ -774,7 +774,6 @@ public class PlanetGenerationRunner {
                 new String[][] {
                     {"monster", "minecraft:silverfish", "8", "2", "3"},
                     {"monster", "minecraft:endermite", "5", "1", "2"},
-                    {"monster", "minecraft:ghast", "1", "1", "1"}
                 },
                 new String[][] {
                     {"monster", "kobolds:kobold", "4", "1", "2"},
@@ -784,7 +783,6 @@ public class PlanetGenerationRunner {
                     {"monster", "kobolds:kobold_zombie", "2", "1", "1"},
                     {"monster", "kobolds:kobold_skeleton", "2", "1", "1"},
                     {"monster", "kobolds:witherbold", "1", "1", "1"},
-                    {"monster", "minecraft:ghast", "1", "1", "1"}
                 }
             )
             .allowPeacefulMobs(false)
@@ -879,7 +877,6 @@ public class PlanetGenerationRunner {
             .configureConditionalOre("silver", 20, "immersiveengineering", "copper") // IE: silver replaces copper
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:stray", 10, 1, 2)
-            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, 0.0f, 0.2f, 0.0f, 0.0f, 0.0f, "Enceladus Ice Fields")
@@ -927,7 +924,6 @@ public class PlanetGenerationRunner {
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:stray", 8, 1, 2)
             .addMobSpawn("monster", "minecraft:endermite", 5, 1, 2)
-            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, -0.8f, 0.0f, 0.0f, 0.0f, 0.0f, "Triton Nitrogen Plains")
@@ -989,6 +985,7 @@ public class PlanetGenerationRunner {
                     {"monster", "kobolds:witherbold", "1", "1", "1"}
                 }
             )
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .allowPeacefulMobs(false)
             .enableKoboldsStructures()
             .clearBiomes()
@@ -1035,7 +1032,6 @@ public class PlanetGenerationRunner {
             .configureConditionalOre("silver", 25, "immersiveengineering", "gold") // IE: silver replaces gold
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:endermite", 3, 1, 1)
-            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .allowPeacefulMobs(false)
             .clearBiomes()
             .addBiome("minecraft:snowy_plains", -1.0f, -0.9f, 0.0f, 0.0f, 0.0f, 0.0f, "Pluto Ice Fields")
@@ -1134,6 +1130,7 @@ public class PlanetGenerationRunner {
             .ambientLight(0.0f)  // Must be low for night-time mob spawning (vanilla Overworld = 0.0)
             .cloudsEnabled(true)
             .rainEnabled(true)
+            .snowEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("balanced_vanilla")
@@ -1183,6 +1180,7 @@ public class PlanetGenerationRunner {
             .ambientLight(0.0f)  // Must be low for night-time mob spawning (vanilla Overworld = 0.0)
             .cloudsEnabled(true)
             .rainEnabled(true)
+            .snowEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("balanced_vanilla")
@@ -1233,6 +1231,7 @@ public class PlanetGenerationRunner {
             .ambientLight(0.6f)
             .cloudsEnabled(true)
             .rainEnabled(false)
+            .snowEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("balanced_vanilla")
@@ -1278,6 +1277,7 @@ public class PlanetGenerationRunner {
             .ambientLight(0.75f)
             .cloudsEnabled(true)
             .rainEnabled(true)
+            .snowEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("balanced_vanilla")
@@ -1365,7 +1365,7 @@ public class PlanetGenerationRunner {
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:blaze", 10, 1, 2)
             .addMobSpawn("monster", "minecraft:magma_cube", 12, 1, 3)
-            .addMobSpawn("monster", "minecraft:ghast", 2, 1, 1)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .addBornInChaosMob("seared_spirit", 8, 1, 1)
             .addBornInChaosMob("barrel_zombie", 6, 1, 1)
             .allowPeacefulMobs(false)
@@ -1411,7 +1411,6 @@ public class PlanetGenerationRunner {
             .configureConditionalOre("silver", 25, "immersiveengineering", "gold") // IE: silver replaces gold
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:enderman", 3, 1, 1)
-            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .addModReplacementSpawns("born_in_chaos_v1",
                 new String[][] {
                     {"monster", "minecraft:stray", "12", "1", "2"}
@@ -1488,6 +1487,7 @@ public class PlanetGenerationRunner {
             .ambientLight(0.95f)
             .cloudsEnabled(false)
             .rainEnabled(false)
+            .snowEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addSun()
@@ -1537,6 +1537,7 @@ public class PlanetGenerationRunner {
             .ambientLight(0.4f)
             .cloudsEnabled(true)
             .rainEnabled(true)
+            .snowEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("dramatic_alien")
@@ -1683,7 +1684,7 @@ public class PlanetGenerationRunner {
             .clearAllMobSpawns()
             .addMobSpawn("monster", "minecraft:wither_skeleton", 12, 1, 2)
             .addMobSpawn("monster", "minecraft:magma_cube", 10, 1, 3)
-            .addMobSpawn("monster", "minecraft:ghast", 2, 1, 1)
+            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .addBornInChaosMob("door_knight", 5, 1, 1)
             .addBornInChaosMob("skeleton_thrasher", 6, 1, 1)
             .allowPeacefulMobs(false)
@@ -1739,6 +1740,7 @@ public class PlanetGenerationRunner {
             .ambientLight(0.0f)  // Must be low for night-time mob spawning (vanilla Overworld = 0.0)
             .cloudsEnabled(true)
             .rainEnabled(true)
+            .snowEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("balanced_vanilla")
@@ -1794,6 +1796,7 @@ public class PlanetGenerationRunner {
             .ambientLight(0.7f)
             .cloudsEnabled(true)
             .rainEnabled(true)
+            .snowEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("lush")
@@ -1831,7 +1834,6 @@ public class PlanetGenerationRunner {
             .addMobSpawn("monster", "minecraft:husk", 12, 1, 2)
             .addMobSpawn("monster", "minecraft:enderman", 5, 1, 1)
             .addMobSpawn("monster", "minecraft:piglin", 4, 1, 2)
-            .addMobSpawn("monster", "minecraft:ghast", 1, 1, 1)
             .addBornInChaosMob("pumpkin_dunce", 4, 1, 1)
             .addBornInChaosMob("pumpkin_spirit", 3, 1, 1)
             .allowPeacefulMobs(false)
@@ -1846,6 +1848,7 @@ public class PlanetGenerationRunner {
             .ambientLight(0.9f)
             .cloudsEnabled(true)
             .rainEnabled(false)
+            .snowEnabled(true)
             .starsVisibleDuringDay(false)
             .addSun()
             .addCavePreset("balanced_vanilla")

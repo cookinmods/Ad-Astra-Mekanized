@@ -716,7 +716,7 @@ public class PlanetMaker {
         // Weather configuration
         private boolean cloudsEnabled = true;
         private boolean rainEnabled = true;
-        private boolean snowEnabled = true;
+        private boolean snowEnabled = false;
         private boolean stormsEnabled = false;
         private boolean acidRainDamage = false;
         private float acidRainDamageAmount = 1.0f;
@@ -6511,7 +6511,13 @@ public class PlanetMaker {
     }
 
     private static String capitalizeFirst(String str) {
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
+        String[] words = str.split("_");
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            if (i > 0) result.append(" ");
+            result.append(words[i].substring(0, 1).toUpperCase()).append(words[i].substring(1));
+        }
+        return result.toString();
     }
 
     /**

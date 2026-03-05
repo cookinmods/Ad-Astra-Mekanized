@@ -1,11 +1,14 @@
 package com.hecookin.adastramekanized.client.overlay;
 
+import com.hecookin.adastramekanized.AdAstraMekanized;
+import com.hecookin.adastramekanized.common.constants.RocketConstants;
 import com.hecookin.adastramekanized.common.entities.vehicles.Lander;
 import com.hecookin.adastramekanized.common.entities.vehicles.Rocket;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -16,6 +19,11 @@ import java.util.Locale;
  * Includes launch countdown, altitude indicator, and landing warnings.
  */
 public class VehicleOverlayRenderer {
+
+    private static final ResourceLocation ROCKET_BAR = ResourceLocation.fromNamespaceAndPath(
+        AdAstraMekanized.MOD_ID, "overlay/rocket_bar");
+    private static final ResourceLocation ROCKET_ICON = ResourceLocation.fromNamespaceAndPath(
+        AdAstraMekanized.MOD_ID, "overlay/rocket");
 
     /**
      * Main render method called from client render events
@@ -55,7 +63,16 @@ public class VehicleOverlayRenderer {
             poseStack.popPose();
         }
 
-        // TODO: Add altitude indicator bar (like Ad Astra's rocket bar)
+        // Altitude indicator bar (left side of screen with padding)
+        int barPadding = 4;
+        graphics.blitSprite(ROCKET_BAR, barPadding, height / 2, 16, 128);
+
+        // Rocket icon moves up the bar from y=100 to y=600 (matches Ad Astra formula)
+        poseStack.pushPose();
+        double y = Mth.clamp(rocket.getY(), 100, 600);
+        poseStack.translate(0.3f, (600 - y - 500) / 4.5, 0);
+        graphics.blitSprite(ROCKET_ICON, barPadding + 3, height / 2 + 113, 8, 11);
+        poseStack.popPose();
     }
 
     /**
