@@ -4,19 +4,13 @@ import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.common.blockentities.machines.GravityNormalizerBlockEntity;
 import com.hecookin.adastramekanized.common.blockentities.machines.ImprovedOxygenDistributor;
 import com.hecookin.adastramekanized.common.blockentities.machines.WirelessPowerRelayBlockEntity;
-import com.hecookin.adastramekanized.common.blocks.SlidingDoorBlock;
-import com.hecookin.adastramekanized.common.blocks.SteelDoorBlock;
-import com.hecookin.adastramekanized.common.blocks.SteelTrapdoorBlock;
 import com.hecookin.adastramekanized.common.blocks.machines.WirelessPowerRelayBlock;
-import com.hecookin.adastramekanized.common.blocks.properties.SlidingDoorPartProperty;
 import com.hecookin.adastramekanized.common.data.DistributorLinkData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -30,12 +24,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import com.hecookin.adastramekanized.common.blocks.RedstoneToggleRelay;
 import com.hecookin.adastramekanized.common.blocks.OxygenNetworkMonitorBlock;
 import com.hecookin.adastramekanized.common.data.ButtonControllerManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -63,36 +54,6 @@ public class OxygenNetworkController extends Item {
         }
 
         BlockState state = level.getBlockState(pos);
-
-        // Sneak+right-click on doors to toggle redstone requirement
-        if (player.isShiftKeyDown()) {
-            if (state.getBlock() instanceof SteelDoorBlock) {
-                if (!level.isClientSide) {
-                    toggleDoorRedstoneMode(level, pos, state, player, SteelDoorBlock.REQUIRES_REDSTONE);
-                }
-                return InteractionResult.sidedSuccess(level.isClientSide);
-            }
-            if (state.getBlock() instanceof SteelTrapdoorBlock) {
-                if (!level.isClientSide) {
-                    boolean newValue = !state.getValue(SteelTrapdoorBlock.REQUIRES_REDSTONE);
-                    level.setBlock(pos, state.setValue(SteelTrapdoorBlock.REQUIRES_REDSTONE, newValue), Block.UPDATE_ALL);
-                    player.displayClientMessage(
-                        Component.literal("Redstone required: ")
-                            .withStyle(ChatFormatting.GRAY)
-                            .append(Component.literal(newValue ? "ON" : "OFF")
-                                .withStyle(newValue ? ChatFormatting.GREEN : ChatFormatting.RED)),
-                        true
-                    );
-                }
-                return InteractionResult.sidedSuccess(level.isClientSide);
-            }
-            if (state.getBlock() instanceof SlidingDoorBlock) {
-                if (!level.isClientSide) {
-                    toggleSlidingDoorRedstoneMode(level, pos, state, player);
-                }
-                return InteractionResult.sidedSuccess(level.isClientSide);
-            }
-        }
 
         // Check if this is a monitor block - let the block handle it for now
         if (state.getBlock() instanceof OxygenNetworkMonitorBlock) {
@@ -343,63 +304,6 @@ public class OxygenNetworkController extends Item {
         );
 
         AdAstraMekanized.LOGGER.info("Bound oxygen controller to relay at {}", pos);
-    }
-
-    /**
-     * Update all linked distributors with current status from the level
-     */
-    /**
-     * Toggle redstone requirement on a steel door (both halves)
-     */
-    private void toggleDoorRedstoneMode(Level level, BlockPos pos, BlockState state, Player player, BooleanProperty property) {
-        boolean newValue = !state.getValue(property);
-        // Update both halves of the door
-        level.setBlock(pos, state.setValue(property, newValue), Block.UPDATE_ALL);
-        BlockPos otherHalf = state.getValue(net.minecraft.world.level.block.DoorBlock.HALF) ==
-            net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER ? pos.above() : pos.below();
-        BlockState otherState = level.getBlockState(otherHalf);
-        if (otherState.getBlock() instanceof SteelDoorBlock) {
-            level.setBlock(otherHalf, otherState.setValue(property, newValue), Block.UPDATE_ALL);
-        }
-        player.displayClientMessage(
-            Component.literal("Redstone required: ")
-                .withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(newValue ? "ON" : "OFF")
-                    .withStyle(newValue ? ChatFormatting.GREEN : ChatFormatting.RED)),
-            true
-        );
-    }
-
-    /**
-     * Toggle redstone requirement on a sliding door (all 9 parts)
-     */
-    private void toggleSlidingDoorRedstoneMode(Level level, BlockPos pos, BlockState state, Player player) {
-        // Find the controller block
-        SlidingDoorPartProperty part = state.getValue(SlidingDoorBlock.PART);
-        Direction direction = state.getValue(SlidingDoorBlock.FACING).getClockWise();
-        BlockPos controllerPos = pos.relative(direction, -part.xOffset()).below(part.yOffset());
-        BlockState controllerState = level.getBlockState(controllerPos);
-
-        if (!(controllerState.getBlock() instanceof SlidingDoorBlock)) return;
-
-        boolean newValue = !controllerState.getValue(SlidingDoorBlock.REQUIRES_REDSTONE);
-
-        // Update all parts
-        for (SlidingDoorPartProperty doorPart : SlidingDoorPartProperty.values()) {
-            BlockPos partPos = controllerPos.relative(direction, doorPart.xOffset()).above(doorPart.yOffset());
-            BlockState partState = level.getBlockState(partPos);
-            if (partState.getBlock() instanceof SlidingDoorBlock) {
-                level.setBlock(partPos, partState.setValue(SlidingDoorBlock.REQUIRES_REDSTONE, newValue), Block.UPDATE_ALL);
-            }
-        }
-
-        player.displayClientMessage(
-            Component.literal("Redstone required: ")
-                .withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(newValue ? "ON" : "OFF")
-                    .withStyle(newValue ? ChatFormatting.GREEN : ChatFormatting.RED)),
-            true
-        );
     }
 
     public static void updateDistributorStatuses(Level level, DistributorLinkData linkData) {

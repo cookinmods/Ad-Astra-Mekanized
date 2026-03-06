@@ -5,6 +5,7 @@ import com.hecookin.adastramekanized.common.constants.RocketConstants;
 import com.hecookin.adastramekanized.common.menus.PlanetsMenu;
 import com.hecookin.adastramekanized.common.menus.PlanetsMenuProvider;
 import com.hecookin.adastramekanized.common.registry.ModItems;
+import com.hecookin.adastramekanized.common.registry.ModSounds;
 import com.hecookin.adastramekanized.common.tags.ModFluidTags;
 import com.hecookin.adastramekanized.common.utils.FluidUtils;
 import net.minecraft.core.BlockPos;
@@ -194,6 +195,10 @@ public class Rocket extends Vehicle {
             if (launchTicks() <= 0) launch();
             spawnSmokeParticles();
         } else if (hasLaunched()) {
+            if (level().isClientSide() && !startedRocketSound) {
+                startedRocketSound = true;
+                com.hecookin.adastramekanized.client.sounds.SoundUtils.playRocketSound(this);
+            }
             flightTick();
         } else if (isLanding()) {
             landingTick();
@@ -311,7 +316,7 @@ public class Rocket extends Vehicle {
     public void initiateLaunchSequence() {
         entityData.set(IS_LAUNCHING, true);
         entityData.set(LAUNCH_TICKS, RocketConstants.COUNTDOWN_LENGTH);
-        level().playSound(null, blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.AMBIENT, 10, 1);
+        level().playSound(null, blockPosition(), ModSounds.ROCKET_LAUNCH.get(), SoundSource.AMBIENT, 10, 1);
         consumeFuel(false);
     }
 

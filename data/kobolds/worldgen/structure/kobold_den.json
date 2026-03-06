@@ -1,0 +1,18 @@
+{
+  "type": "kobolds:kobold_den",
+  "start_pool": "kobolds:kobold_den",
+  "biomes": "#minecraft:is_overworld",
+  "step": "underground_structures",
+  "terrain_adaptation": "encapsulate",
+  "liquid_settings": "ignore_waterlogging",
+  "start_height": {
+    "type": "minecraft:uniform",
+    "min_inclusive": {
+      "absolute": 12
+    },
+    "max_inclusive": {
+      "absolute": 32
+    }
+  },
+  "spawn_overrides": {}
+}

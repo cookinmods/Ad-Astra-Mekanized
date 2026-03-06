@@ -3,7 +3,6 @@ package com.hecookin.adastramekanized.common.blockentities;
 import com.hecookin.adastramekanized.common.blockentities.base.TickableBlockEntity;
 import com.hecookin.adastramekanized.common.blocks.SlidingDoorBlock;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -78,28 +77,6 @@ public class SlidingDoorBlockEntity extends BlockEntity implements TickableBlock
     }
 
     public AABB getRenderBoundingBox() {
-        // Calculate the actual door bounds including animation
-        BlockPos pos = this.getBlockPos();
-        Direction facing = getBlockState().getValue(SlidingDoorBlock.FACING);
-
-        // The door is 3 blocks wide (perpendicular to facing) and 3 blocks tall
-        // We need to account for the sliding animation which moves blocks horizontally
-        double expand = 2.0; // Extra space for animation
-
-        // Start with the base position and expand based on door orientation
-        AABB bounds = new AABB(pos);
-
-        if (facing == Direction.NORTH || facing == Direction.SOUTH) {
-            // Door extends east-west when facing north-south
-            bounds = bounds.expandTowards(-1 - expand, 2, 0)
-                          .expandTowards(1 + expand, 0, 0);
-        } else {
-            // Door extends north-south when facing east-west
-            bounds = bounds.expandTowards(0, 2, -1 - expand)
-                          .expandTowards(0, 0, 1 + expand);
-        }
-
-        // Add extra padding to ensure visibility from all angles
-        return bounds.inflate(1.0);
+        return new AABB(this.getBlockPos()).inflate(3);
     }
 }

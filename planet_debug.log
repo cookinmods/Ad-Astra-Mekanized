@@ -1,9 +1,0 @@
-[23:13:03] [Render thread/INFO] [co.he.ad.AdAstraMekanized/]: Registered planetary dimension effects: 7 templates
-[23:13:03] [Render thread/INFO] [co.he.ad.AdAstraMekanized/]: Registering custom dimension effects for planets...
-[23:13:03] [Render thread/INFO] [co.he.ad.AdAstraMekanized/]: Registering dimension effects from planet JSON data...
-[23:13:03] [Render thread/DEBUG] [co.he.ad.AdAstraMekanized/]: Registered dimension effects for: moon
-[23:13:03] [Render thread/DEBUG] [co.he.ad.AdAstraMekanized/]: Registered dimension effects for: venus
-[23:13:03] [Render thread/DEBUG] [co.he.ad.AdAstraMekanized/]: Registered dimension effects for: mercury
-[23:13:03] [Render thread/DEBUG] [co.he.ad.AdAstraMekanized/]: Registered dimension effects for: glacio
-[23:13:03] [Render thread/DEBUG] [co.he.ad.AdAstraMekanized/]: Registered dimension effects for: earth_example
-[23:13:03] [Render thread/DEBUG] [co.he.ad.AdAstraMekanized/]: Registered dimension effects for: binary_world

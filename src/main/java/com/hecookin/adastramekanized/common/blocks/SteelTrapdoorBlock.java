@@ -22,7 +22,7 @@ public class SteelTrapdoorBlock extends TrapDoorBlock {
 
     public SteelTrapdoorBlock(BlockSetType blockSetType, Properties properties) {
         super(blockSetType, properties);
-        registerDefaultState(defaultBlockState().setValue(REQUIRES_REDSTONE, true));
+        registerDefaultState(defaultBlockState().setValue(REQUIRES_REDSTONE, false));
     }
 
     @Override

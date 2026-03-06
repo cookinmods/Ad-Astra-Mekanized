@@ -1,6 +1,5 @@
 package com.hecookin.adastramekanized.common.entities.vehicles;
 
-import com.hecookin.adastramekanized.common.menus.LanderMenu;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -165,7 +164,7 @@ public class Lander extends Vehicle {
             // Sound will be handled by client-side sound instance
             if (level().isClientSide() && !startedRocketSound) {
                 startedRocketSound = true;
-                // TODO: Add lander sound instance
+                com.hecookin.adastramekanized.client.sounds.SoundUtils.playLanderSound(this);
             }
         } else if (speed > -1.1) {
             // Free fall - accelerate downward (up to terminal velocity)
@@ -253,7 +252,12 @@ public class Lander extends Vehicle {
     }
 
     @Override
+    public void openCustomInventoryScreen(Player player) {
+        // Lander has no GUI: it's purely a descent vehicle
+    }
+
+    @Override
     public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
-        return new LanderMenu(containerId, inventory, this);
+        return null;
     }
 }

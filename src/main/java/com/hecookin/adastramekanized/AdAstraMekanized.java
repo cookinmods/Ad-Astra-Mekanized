@@ -9,6 +9,7 @@ import com.hecookin.adastramekanized.common.registry.ModBlockEntityTypes;
 import com.hecookin.adastramekanized.common.registry.ModBlocks;
 import com.hecookin.adastramekanized.common.registry.ModChunkGenerators;
 import com.hecookin.adastramekanized.common.registry.ModCreativeTabs;
+import com.hecookin.adastramekanized.common.registry.ModSounds;
 import com.hecookin.adastramekanized.common.registry.ModEntityTypes;
 import com.hecookin.adastramekanized.common.registry.ModItems;
 import com.hecookin.adastramekanized.common.registry.ModMenuTypes;
@@ -69,6 +70,7 @@ public class AdAstraMekanized {
         ModRecipeTypes.register(modEventBus);
         ModRecipeSerializers.register(modEventBus);
         ModCreativeTabs.register(modEventBus);
+        ModSounds.register(modEventBus);
         ModFeatures.register(modEventBus);
 
         // Register chunk generators

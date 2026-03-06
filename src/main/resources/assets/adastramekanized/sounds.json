@@ -1,0 +1,14 @@
+{
+  "rocket_launch": {
+    "sounds": [
+      "adastramekanized:rocket_launch"
+    ],
+    "subtitle": "subtitles.adastramekanized.entity.rocket_launch"
+  },
+  "rocket": {
+    "sounds": [
+      "adastramekanized:rocket"
+    ],
+    "subtitle": "subtitles.adastramekanized.entity.rocket"
+  }
+}

@@ -118,16 +118,4 @@ public class SlidingDoorBlockEntityRenderer implements BlockEntityRenderer<Slidi
         poseStack.popPose();
     }
 
-    @Override
-    public boolean shouldRenderOffScreen(SlidingDoorBlockEntity blockEntity) {
-        // Always render the sliding door, even when the block position is off-screen
-        // This prevents the door from disappearing when the player gets close
-        return true;
-    }
-
-    @Override
-    public int getViewDistance() {
-        // Increase the view distance for sliding doors to prevent early culling
-        return 256;
-    }
 }
