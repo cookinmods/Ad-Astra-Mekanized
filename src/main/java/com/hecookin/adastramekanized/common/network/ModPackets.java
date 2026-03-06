@@ -39,16 +39,6 @@ public class ModPackets {
             )
         );
 
-        // Register oxygen controller packet (client -> server)
-        registrar.playToServer(
-            OxygenControllerPacket.TYPE,
-            OxygenControllerPacket.CODEC,
-            new DirectionalPayloadHandler<>(
-                null, // No client handler needed
-                OxygenControllerPacket::handle
-            )
-        );
-
         // Register vehicle control packet (client -> server)
         registrar.playToServer(
             VehicleControlPacket.TYPE,

@@ -10,10 +10,8 @@ import com.hecookin.adastramekanized.client.renderers.blocks.SlidingDoorBlockEnt
 import com.hecookin.adastramekanized.client.renderers.entities.vehicles.LanderRenderer;
 import com.hecookin.adastramekanized.client.renderers.entities.vehicles.RocketRenderer;
 import com.hecookin.adastramekanized.client.gui.GuiOxygenDistributor;
-import com.hecookin.adastramekanized.client.screens.LanderScreen;
 import com.hecookin.adastramekanized.client.screens.GravityNormalizerScreen;
 import com.hecookin.adastramekanized.client.screens.NasaWorkbenchScreen;
-import com.hecookin.adastramekanized.client.screens.OxygenControllerScreen;
 import com.hecookin.adastramekanized.client.screens.OxygenMonitorScreen;
 import com.hecookin.adastramekanized.client.screens.PlanetsScreen;
 import com.hecookin.adastramekanized.client.screens.RocketScreen;
@@ -175,14 +173,11 @@ public class ClientModEvents {
     public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
         // Register menu screens
         event.register(ModMenuTypes.OXYGEN_DISTRIBUTOR.get(), GuiOxygenDistributor::new);
-        event.register(ModMenuTypes.OXYGEN_CONTROLLER.get(), OxygenControllerScreen::new);
         event.register(ModMenuTypes.WIRELESS_POWER_RELAY.get(), WirelessPowerRelayScreen::new);
         event.register(ModMenuTypes.OXYGEN_MONITOR.get(), OxygenMonitorScreen::new);
         event.register(ModMenuTypes.GRAVITY_NORMALIZER.get(), GravityNormalizerScreen::new);
         event.register(ModMenuTypes.NASA_WORKBENCH.get(), NasaWorkbenchScreen::new);
         event.register(ModMenuTypes.ROCKET.get(), RocketScreen::new);
-        // TODO: Create proper lander GUI texture - using placeholder screen
-        event.register(ModMenuTypes.LANDER.get(), LanderScreen::new);
         event.register(ModMenuTypes.PLANETS.get(), PlanetsScreen::new);
     }
 

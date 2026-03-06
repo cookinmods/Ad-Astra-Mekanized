@@ -8,6 +8,8 @@ import com.hecookin.adastramekanized.common.network.ServerboundLandPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -355,6 +357,9 @@ public class PlanetsScreen extends AbstractContainerScreen<PlanetsMenu> {
             super.onClose();
         } else if (!(player.getVehicle() instanceof Rocket)) {
             super.onClose();
+        } else {
+            // In a rocket on page 1: open pause menu instead of silently swallowing ESC
+            Minecraft.getInstance().setScreen(new PauseScreen(true));
         }
     }
 

@@ -45,6 +45,7 @@ public class SlidingDoorBlock extends BasicEntityBlock {
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final EnumProperty<SlidingDoorPartProperty> PART = EnumProperty.create("part", SlidingDoorPartProperty.class);
+    public static final BooleanProperty REQUIRES_REDSTONE = BooleanProperty.create("requires_redstone");
 
     private static final VoxelShape NORTH_SHAPE = Block.box(0, 0, 1, 16, 16, 4);
     private static final VoxelShape EAST_SHAPE = Block.box(12, 0, 0, 15, 16, 16);
@@ -58,7 +59,8 @@ public class SlidingDoorBlock extends BasicEntityBlock {
             .setValue(FACING, Direction.NORTH)
             .setValue(OPEN, false)
             .setValue(POWERED, false)
-            .setValue(PART, SlidingDoorPartProperty.BOTTOM));
+            .setValue(PART, SlidingDoorPartProperty.BOTTOM)
+            .setValue(REQUIRES_REDSTONE, false));
     }
 
     @Override
@@ -68,7 +70,7 @@ public class SlidingDoorBlock extends BasicEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, OPEN, POWERED, PART);
+        builder.add(FACING, OPEN, POWERED, PART, REQUIRES_REDSTONE);
     }
 
     @Override
@@ -136,6 +138,9 @@ public class SlidingDoorBlock extends BasicEntityBlock {
         var controllerPos = getController(state, pos);
         var controllerState = level.getBlockState(controllerPos);
         if (controllerState.isAir()) return InteractionResult.PASS;
+
+        // If requires redstone, don't allow hand-opening
+        if (controllerState.getValue(REQUIRES_REDSTONE)) return InteractionResult.PASS;
 
         if (level.isClientSide()) return InteractionResult.SUCCESS;
 

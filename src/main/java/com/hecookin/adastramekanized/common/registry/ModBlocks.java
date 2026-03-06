@@ -418,12 +418,12 @@ public class ModBlocks {
     // ========== DOORS & ACCESS BLOCKS ==========
 
     public static final Supplier<Block> STEEL_DOOR = registerBlock("steel_door",
-            () -> new net.minecraft.world.level.block.DoorBlock(
+            () -> new com.hecookin.adastramekanized.common.blocks.SteelDoorBlock(
                     net.minecraft.world.level.block.state.properties.BlockSetType.IRON,
                     BlockProperties.INDUSTRIAL_BLOCK.noOcclusion()));
 
     public static final Supplier<Block> STEEL_TRAPDOOR = registerBlock("steel_trapdoor",
-            () -> new net.minecraft.world.level.block.TrapDoorBlock(
+            () -> new com.hecookin.adastramekanized.common.blocks.SteelTrapdoorBlock(
                     net.minecraft.world.level.block.state.properties.BlockSetType.IRON,
                     BlockProperties.INDUSTRIAL_BLOCK.noOcclusion()));
 

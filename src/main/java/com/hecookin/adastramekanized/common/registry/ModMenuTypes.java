@@ -2,12 +2,10 @@ package com.hecookin.adastramekanized.common.registry;
 
 import com.hecookin.adastramekanized.AdAstraMekanized;
 import com.hecookin.adastramekanized.common.menus.GravityNormalizerMenu;
-import com.hecookin.adastramekanized.common.menus.LanderMenu;
 import com.hecookin.adastramekanized.common.menus.NasaWorkbenchMenu;
 import com.hecookin.adastramekanized.common.menus.OxygenDistributorMenu;
 import com.hecookin.adastramekanized.common.menus.PlanetsMenu;
 import com.hecookin.adastramekanized.common.menus.RocketMenu;
-import com.hecookin.adastramekanized.common.menus.OxygenControllerMenu;
 import com.hecookin.adastramekanized.common.menus.OxygenMonitorMenu;
 import com.hecookin.adastramekanized.common.menus.WirelessPowerRelayMenu;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,10 +24,6 @@ public class ModMenuTypes {
     public static final Supplier<MenuType<OxygenDistributorMenu>> OXYGEN_DISTRIBUTOR =
             MENUS.register("oxygen_distributor",
                 () -> IMenuTypeExtension.create(OxygenDistributorMenu::new));
-
-    public static final Supplier<MenuType<OxygenControllerMenu>> OXYGEN_CONTROLLER =
-            MENUS.register("oxygen_controller",
-                () -> IMenuTypeExtension.create(OxygenControllerMenu::new));
 
     public static final Supplier<MenuType<WirelessPowerRelayMenu>> WIRELESS_POWER_RELAY =
             MENUS.register("wireless_power_relay",
@@ -50,10 +44,6 @@ public class ModMenuTypes {
     public static final Supplier<MenuType<RocketMenu>> ROCKET =
             MENUS.register("rocket",
                 () -> IMenuTypeExtension.create(RocketMenu::new));
-
-    public static final Supplier<MenuType<LanderMenu>> LANDER =
-            MENUS.register("lander",
-                () -> IMenuTypeExtension.create(LanderMenu::new));
 
     public static final Supplier<MenuType<PlanetsMenu>> PLANETS =
             MENUS.register("planets",
